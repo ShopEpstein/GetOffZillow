@@ -205,7 +205,14 @@ function renderListing() {
   ];
   const fallbackSrc = FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
   const mainSrc = photos.length > 0 ? photos[0] : fallbackSrc;
-  mainEl.innerHTML = `<img src="${mainSrc}" alt="${listing.address}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.src='${fallbackSrc}'" />`;
+  // Build img element in JS to avoid HTML attribute escaping issues with URLs containing & chars
+  const img = document.createElement('img');
+  img.src = mainSrc;
+  img.alt = listing.address;
+  img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+  img.onerror = () => { img.onerror = null; img.src = fallbackSrc; };
+  mainEl.innerHTML = '';
+  mainEl.appendChild(img);
   if (photos.length > 1) {
     document.getElementById('photoStrip').innerHTML = photos.map((p, i) =>
       `<div class="photo-thumb ${i === 0 ? 'active' : ''}" onclick="switchPhoto(${i}, this)">
