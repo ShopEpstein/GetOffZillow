@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listing — GetOffZillow AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root { --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --white:#fff; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); }
+
+  nav { background:white; border-bottom:1px solid var(--border); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; text-decoration:none; color:var(--text); }
+  .nav-logo span { color:var(--blue); }
+  .nav-logo em { color:var(--red); font-style:normal; }
+  .nav-logo sup { color:var(--ai-green); font-size:14px; }
+  .nav-back { font-size:13px; color:var(--blue); text-decoration:none; font-weight:700; }
+
+  .page { max-width:1100px; margin:0 auto; padding:32px 24px; display:grid; grid-template-columns:1fr 360px; gap:28px; align-items:start; }
+
+  /* PHOTOS */
+  .photo-main { border-radius:12px; overflow:hidden; background:#c8d8f0; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:80px; margin-bottom:12px; }
+  .photo-main img { width:100%; height:100%; object-fit:cover; }
+  .photo-strip { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; }
+  .photo-thumb { width:80px; height:60px; border-radius:6px; overflow:hidden; flex-shrink:0; cursor:pointer; border:2px solid transparent; transition:border-color 0.15s; }
+  .photo-thumb.active { border-color:var(--blue); }
+  .photo-thumb img { width:100%; height:100%; object-fit:cover; }
+
+  /* DETAILS */
+  .listing-details { margin-top:24px; }
+  .listing-price { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--text); line-height:1; }
+  .listing-commission { display:inline-flex; align-items:center; gap:6px; background:#E8FBF0; color:var(--green); font-size:13px; font-weight:700; padding:4px 12px; border-radius:6px; margin-top:6px; }
+  .listing-address { font-size:18px; font-weight:700; margin-top:8px; }
+  .listing-city { font-size:14px; color:var(--gray); margin-top:2px; }
+
+  .specs-row { display:flex; gap:24px; margin:20px 0; padding:16px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .spec { text-align:center; }
+  .spec-val { font-family:'Nunito',sans-serif; font-weight:900; font-size:22px; }
+  .spec-label { font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+
+  .description { font-size:15px; line-height:1.7; color:var(--text); margin-top:16px; }
+  .description h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; margin-bottom:8px; }
+
+  .listing-link { display:inline-flex; align-items:center; gap:6px; color:var(--blue); font-weight:700; font-size:14px; text-decoration:none; margin-top:12px; }
+  .listing-link:hover { text-decoration:underline; }
+
+  /* CONTACT CARD */
+  .contact-card { background:white; border-radius:16px; padding:28px; box-shadow:0 4px 24px rgba(0,0,0,0.1); position:sticky; top:76px; }
+
+  .agent-block { display:flex; gap:14px; align-items:center; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+  .agent-avi { width:56px; height:56px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; overflow:hidden; }
+  .agent-avi img { width:100%; height:100%; object-fit:cover; }
+  .agent-name { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; }
+  .agent-brokerage { font-size:12px; color:var(--gray); margin-top:1px; }
+  .agent-badge { font-size:11px; color:var(--green); font-weight:700; margin-top:4px; }
+  .agent-direct { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+  .agent-direct a { font-size:13px; color:var(--blue); text-decoration:none; font-weight:600; display:flex; align-items:center; gap:6px; }
+  .agent-direct a:hover { text-decoration:underline; }
+
+  .contact-form-title { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; margin-bottom:4px; }
+  .contact-form-sub { font-size:12px; color:var(--gray); margin-bottom:16px; }
+
+  .form-group { margin-bottom:12px; }
+  .form-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .form-group input, .form-group textarea {
+    width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:8px;
+    font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
+  .form-group textarea { resize:none; height:70px; }
+
+  .contact-btn { width:100%; background:var(--blue); color:white; border:none; padding:13px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:background 0.2s; margin-top:4px; }
+  .contact-btn:hover { background:var(--dark-blue); }
+  .contact-btn:disabled { background:var(--border); cursor:not-allowed; }
+
+  .no-fee-note { font-size:11px; color:var(--gray); text-align:center; margin-top:8px; line-height:1.5; }
+  .no-fee-note strong { color:var(--green); }
+
+  .contact-success { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:14px; border-radius:8px; font-size:13px; display:none; text-align:center; }
+  .contact-error { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:10px; border-radius:8px; font-size:12px; display:none; margin-bottom:10px; }
+
+  .loading { text-align:center; padding:80px; }
+  .not-found { text-align:center; padding:80px; }
+
+  @media(max-width:900px) { .page { grid-template-columns:1fr; } .contact-card { position:static; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a>
+  <a href="index.html" class="nav-back">← Back to Search</a>
+</nav>
+
+<div id="loadingState" class="loading">Loading listing...</div>
+<div id="notFoundState" class="not-found" style="display:none">
+  <h2>Listing not found</h2>
+  <p><a href="index.html">← Back to search</a></p>
+</div>
+
+<div class="page" id="listingPage" style="display:none">
+  <!-- LEFT: PHOTOS + DETAILS -->
+  <div>
+    <div id="photoMain" class="photo-main">🏡</div>
+    <div class="photo-strip" id="photoStrip"></div>
+
+    <div class="listing-details">
+      <div class="listing-price" id="detPrice"></div>
+      <div class="listing-commission" id="detCommission"></div>
+      <div class="listing-address" id="detAddress"></div>
+      <div class="listing-city" id="detCity"></div>
+
+      <div class="specs-row" id="specsRow"></div>
+
+      <div class="description">
+        <h3>About this property</h3>
+        <p id="detDescription">No description provided.</p>
+      </div>
+
+      <div id="detWebsite"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: CONTACT CARD -->
+  <div>
+    <div class="contact-card">
+      <div class="agent-block" id="agentBlock">Loading agent...</div>
+
+      <div class="contact-form-title">Contact Agent Directly</div>
+      <div class="contact-form-sub">Your message goes straight to them — zero middleman. No lead tax charged.</div>
+
+      <div class="contact-error" id="contactError"></div>
+      <div class="contact-success" id="contactSuccess">
+        ✅ Message sent! The agent will contact you directly. Check your email for confirmation.
+      </div>
+
+      <form id="contactForm" onsubmit="sendMessage(event)">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="buyerName" placeholder="John Buyer" required />
+        </div>
+        <div class="form-group">
+          <label>Your Email *</label>
+          <input type="email" id="buyerEmail" placeholder="john@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Your Phone</label>
+          <input type="tel" id="buyerPhone" placeholder="(850) 555-0100" />
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea>
+        </div>
+        <button type="submit" class="contact-btn" id="contactBtn">Send Message →</button>
+      </form>
+
+      <p class="no-fee-note">
+        <strong>Free lead for this agent.</strong> GetOffZillow AI charges agents 1% only at closing — never per lead. Your inquiry goes directly to them.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://pneixwmkphakoxmzkblx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0';
+
+let listing = null;
+let agent = null;
+
+async function loadListing() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) { showNotFound(); return; }
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/listings?id=eq.${id}&select=*,agents(id,first_name,last_name,email,phone,photo_url,website,brokerage,commission_rate)&limit=1`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    const data = await res.json();
+    if (!data.length) { showNotFound(); return; }
+
+    listing = data[0];
+    agent = listing.agents;
+
+    document.title = `${listing.address}, ${listing.city} — GetOffZillow AI`;
+    renderListing();
+  } catch (e) {
+    showNotFound();
+  }
+}
+
+function renderListing() {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('listingPage').style.display = 'grid';
+
+  // Photos
+  const photos = listing.photos || [];
+  const mainEl = document.getElementById('photoMain');
+  if (photos.length) {
+    mainEl.innerHTML = `<img src="${photos[0]}" alt="${listing.address}" />`;
+    if (photos.length > 1) {
+      document.getElementById('photoStrip').innerHTML = photos.map((p, i) =>
+        `<div class="photo-thumb ${i === 0 ? 'active' : ''}" onclick="switchPhoto(${i}, this)">
+          <img src="${p}" alt="photo ${i+1}" />
+        </div>`
+      ).join('');
+    }
+  }
+
+  document.getElementById('detPrice').textContent = '$' + Number(listing.price).toLocaleString();
+  document.getElementById('detCommission').innerHTML = `✓ ${listing.commission_rate || '2.5%'} buyer's agent commission — shown publicly`;
+  document.getElementById('detAddress').textContent = listing.address;
+  document.getElementById('detCity').textContent = `${listing.city}, ${listing.state}${listing.zip ? ' ' + listing.zip : ''}`;
+
+  const specs = [];
+  if (listing.beds) specs.push(`<div class="spec"><div class="spec-val">${listing.beds}</div><div class="spec-label">Bedrooms</div></div>`);
+  if (listing.baths) specs.push(`<div class="spec"><div class="spec-val">${listing.baths}</div><div class="spec-label">Bathrooms</div></div>`);
+  if (listing.sqft) specs.push(`<div class="spec"><div class="spec-val">${Number(listing.sqft).toLocaleString()}</div><div class="spec-label">Sq Ft</div></div>`);
+  if (listing.property_type) specs.push(`<div class="spec"><div class="spec-val" style="font-size:14px;font-weight:700">${listing.property_type}</div><div class="spec-label">Type</div></div>`);
+  document.getElementById('specsRow').innerHTML = specs.join('');
+
+  if (listing.description) {
+    document.getElementById('detDescription').textContent = listing.description;
+  }
+
+  if (listing.website_url) {
+    document.getElementById('detWebsite').innerHTML = `<a href="${listing.website_url}" target="_blank" class="listing-link">🔗 View full listing / virtual tour →</a>`;
+  }
+
+  // Agent block
+  if (agent) {
+    const avi = agent.photo_url
+      ? `<img src="${agent.photo_url}" alt="${agent.first_name}" />`
+      : (agent.first_name?.[0] || '') + (agent.last_name?.[0] || '');
+
+    document.getElementById('agentBlock').innerHTML = `
+      <div class="agent-avi">${avi}</div>
+      <div>
+        <div class="agent-name">${agent.first_name} ${agent.last_name}</div>
+        <div class="agent-brokerage">${agent.brokerage || 'Independent Agent'}</div>
+        <div class="agent-badge">🤖 GOZ AI Agent · 1% fee</div>
+        <div class="agent-direct">
+          ${agent.phone ? `<a href="tel:${agent.phone}">📞 ${agent.phone}</a>` : ''}
+          ${agent.email ? `<a href="mailto:${agent.email}">📧 ${agent.email}</a>` : ''}
+          ${agent.website ? `<a href="${agent.website}" target="_blank">🌐 ${agent.website}</a>` : ''}
+        </div>
+      </div>
+    `;
+  }
+}
+
+function switchPhoto(i, el) {
+  const photos = listing.photos || [];
+  if (!photos[i]) return;
+  document.getElementById('photoMain').innerHTML = `<img src="${photos[i]}" alt="photo ${i+1}" />`;
+  document.querySelectorAll('.photo-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function sendMessage(e) {
+  e.preventDefault();
+  const btn = document.getElementById('contactBtn');
+  const errEl = document.getElementById('contactError');
+  errEl.style.display = 'none';
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try {
+    const res = await fetch('/api/contact-agent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agent_id: agent?.id,
+        listing_id: listing?.id,
+        agent_email: agent?.email,
+        agent_name: agent ? `${agent.first_name} ${agent.last_name}` : '',
+        listing_address: listing?.address,
+        buyer_name: document.getElementById('buyerName').value.trim(),
+        buyer_email: document.getElementById('buyerEmail').value.trim(),
+        buyer_phone: document.getElementById('buyerPhone').value.trim(),
+        message: document.getElementById('buyerMessage').value.trim()
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
+
+  } catch (err) {
+    errEl.textContent = err.message || 'Failed to send. Please try again.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Send Message →';
+  }
+}
+
+function showNotFound() {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('notFoundState').style.display = 'block';
+}
+
+loadListing();
+</script>
+</body>
+</html>
