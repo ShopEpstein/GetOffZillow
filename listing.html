@@ -163,7 +163,14 @@ function parsePhotos(raw) {
   if (!raw) return [];
   if (Array.isArray(raw)) return raw.filter(Boolean);
   if (typeof raw === 'string') {
-    // Postgres array format: {url1,url2}
+    if (raw.startsWith('[')) { try { const p=JSON.parse(raw); return Array.isArray(p)?p.filter(Boolean):[]; } catch(e){} }
+    if (raw.startsWith('{') && raw.endsWith('}')) {
+      return raw.slice(1,-1).split(',').map(s=>s.trim().replace(/^"|"$/g,'')).filter(s=>s.startsWith('http'));
+    }
+    if (raw.startsWith('http')) return [raw];
+  }
+  return [];
+}
     if (raw.startsWith('{') && raw.endsWith('}')) {
       return raw.slice(1, -1).split(',').map(s => s.trim().replace(/^"|"$/g, '')).filter(Boolean);
     }
@@ -196,19 +203,24 @@ function renderListing() {
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('listingPage').style.display = 'grid';
 
-  // Parse photos — handle both JS array and Postgres array string
+  // Parse photos
   const photos = parsePhotos(listing.photos);
   const mainEl = document.getElementById('photoMain');
-
-  if (photos.length > 0) {
-    mainEl.innerHTML = `<img src="${photos[0]}" alt="${listing.address}" onerror="this.parentElement.innerHTML='<div class=photo-placeholder><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z\\'/><polyline points=\\'9 22 9 12 15 12 15 22\\'/></svg>No photo available</div>'" />`;
-    if (photos.length > 1) {
-      document.getElementById('photoStrip').innerHTML = photos.map((p, i) =>
-        `<div class="photo-thumb ${i === 0 ? 'active' : ''}" onclick="switchPhoto(${i}, this)">
-          <img src="${p}" alt="photo ${i+1}" />
-        </div>`
-      ).join('');
-    }
+  // Real Pexels house photos as fallback (never show broken image)
+  const FALLBACK = [
+    'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=675&fit=crop',
+    'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=1200&h=675&fit=crop',
+    'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1200&h=675&fit=crop',
+  ];
+  const fallbackSrc = FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
+  const mainSrc = photos.length > 0 ? photos[0] : fallbackSrc;
+  mainEl.innerHTML = `<img src="${mainSrc}" alt="${listing.address}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.src='${fallbackSrc}'" />`;
+  if (photos.length > 1) {
+    document.getElementById('photoStrip').innerHTML = photos.map((p, i) =>
+      `<div class="photo-thumb ${i === 0 ? 'active' : ''}" onclick="switchPhoto(${i}, this)">
+        <img src="${p}" alt="photo ${i+1}" />
+      </div>`
+    ).join('');
   }
 
   document.getElementById('detPrice').textContent = '$' + Number(listing.price).toLocaleString();
@@ -239,7 +251,7 @@ function renderListing() {
       <div>
         <div class="agent-name">${agent.first_name} ${agent.last_name}</div>
         <div class="agent-brokerage">${agent.brokerage || 'Independent Agent'}</div>
-        <div class="agent-badge">GOZ AI Agent · 1% fee</div>
+        <div class="agent-badge">GOZ Agent · 1% marketplace fee</div>
         <div class="agent-direct">
           ${agent.phone ? `<a href="tel:${agent.phone}">📞 ${agent.phone}</a>` : ''}
           ${agent.email ? `<a href="mailto:${agent.email}">📧 ${agent.email}</a>` : ''}
