@@ -7,16 +7,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blue:#006AFF; --navy:#0a1f44; --green:#00C853;
-    --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7;
-    --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8;
-  }
+  :root { --blue:#006AFF; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; }
-  nav { background:var(--navy); height:56px; display:flex; align-items:center; padding:0 24px; }
+  nav { background:var(--navy); height:56px; display:flex; align-items:center; padding:0 24px; justify-content:space-between; }
   .logo { font-family:'Bebas Neue',sans-serif; font-size:22px; color:white; text-decoration:none; }
   .logo span { color:var(--blue); } .logo em { color:var(--red); font-style:normal; } .logo sup { color:var(--ai-green); font-size:13px; }
+  .nav-home { font-size:13px; color:rgba(255,255,255,0.7); text-decoration:none; font-weight:600; }
+  .nav-home:hover { color:white; }
   .wrap { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 24px; }
   .card { background:white; border-radius:16px; padding:40px; width:100%; max-width:440px; box-shadow:0 4px 24px rgba(0,0,0,0.1); }
   .tabs { display:flex; margin-bottom:28px; border-bottom:2px solid var(--border); }
@@ -42,14 +40,21 @@
   .link:hover { text-decoration:underline; }
   .bottom-link { text-align:center; margin-top:16px; font-size:13px; color:var(--gray); }
   .bottom-link a, .bottom-link span { color:var(--blue); font-weight:700; text-decoration:none; cursor:pointer; }
+  /* Mobile: single column on small screens */
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media(max-width:480px) { .two-col { grid-template-columns:1fr; } .card { padding:28px 20px; } }
 </style>
 </head>
 <body>
-<nav><a href="index.html" class="logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a></nav>
+<nav>
+  <a href="index.html" class="logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a>
+  <a href="index.html" class="nav-home">← Back to home</a>
+</nav>
 <div class="wrap">
   <div class="card">
-    <div class="tabs">
+
+    <!-- TABS — hidden when in password reset mode -->
+    <div class="tabs" id="mainTabs">
       <div class="tab active" onclick="showTab('signup')">Create Account</div>
       <div class="tab" onclick="showTab('signin')">Sign In</div>
     </div>
@@ -62,12 +67,12 @@
       <div class="success" id="su-ok"></div>
       <div id="su-form">
         <div class="two-col">
-          <div class="field"><label>First Name *</label><input id="su-first" type="text" placeholder="Jane" /></div>
-          <div class="field"><label>Last Name *</label><input id="su-last" type="text" placeholder="Smith" /></div>
+          <div class="field"><label>First Name *</label><input id="su-first" type="text" placeholder="Jane" autocomplete="given-name" /></div>
+          <div class="field"><label>Last Name *</label><input id="su-last" type="text" placeholder="Smith" autocomplete="family-name" /></div>
         </div>
-        <div class="field"><label>Email *</label><input id="su-email" type="email" placeholder="jane@realty.com" /></div>
-        <div class="field"><label>Password * (min 8 chars)</label><input id="su-pw" type="password" placeholder="••••••••" /></div>
-        <div class="field"><label>Phone</label><input id="su-phone" type="tel" placeholder="(850) 555-0100" /></div>
+        <div class="field"><label>Email *</label><input id="su-email" type="email" placeholder="jane@realty.com" autocomplete="email" /></div>
+        <div class="field"><label>Password * (min 8 characters)</label><input id="su-pw" type="password" placeholder="••••••••" autocomplete="new-password" /></div>
+        <div class="field"><label>Phone</label><input id="su-phone" type="tel" placeholder="(850) 555-0100" autocomplete="tel" /></div>
         <div class="field"><label>License #</label><input id="su-lic" type="text" placeholder="FL-BK12345678" /></div>
         <div class="field"><label>Brokerage</label><input id="su-brok" type="text" placeholder="Smith Realty Group" /></div>
         <button class="btn btn-green" id="su-btn" onclick="doSignup()">Create Free Account →</button>
@@ -81,15 +86,14 @@
       <p class="sub">Sign in to your agent dashboard.</p>
       <div class="error" id="si-err"></div>
       <div class="success" id="si-ok"></div>
-      <div class="field"><label>Email</label><input id="si-email" type="email" placeholder="jane@realty.com" /></div>
-      <div class="field"><label>Password</label><input id="si-pw" type="password" placeholder="••••••••" onkeypress="if(event.key==='Enter')doSignin()" /></div>
+      <div class="field"><label>Email</label><input id="si-email" type="email" placeholder="jane@realty.com" autocomplete="email" /></div>
+      <div class="field"><label>Password</label><input id="si-pw" type="password" placeholder="••••••••" autocomplete="current-password" onkeypress="if(event.key==='Enter')doSignin()" /></div>
       <div style="text-align:right;margin-bottom:14px"><span class="link" onclick="showTab('reset')" style="font-size:12px">Forgot password?</span></div>
       <button class="btn btn-primary" id="si-btn" onclick="doSignin()">Sign In →</button>
       <div class="bottom-link" style="margin-top:14px">No account? <span onclick="showTab('signup')">Create one free →</span></div>
-      <div class="bottom-link"><a href="index.html">← Back to home</a></div>
     </div>
 
-    <!-- RESET -->
+    <!-- FORGOT PASSWORD -->
     <div class="form-section" id="tab-reset">
       <h2>Reset Password</h2>
       <p class="sub">Enter your email and we'll send a reset link. Arrives in under a minute.</p>
@@ -97,8 +101,20 @@
       <div class="success" id="re-ok"></div>
       <div class="field"><label>Email</label><input id="re-email" type="email" placeholder="jane@realty.com" /></div>
       <button class="btn btn-primary" id="re-btn" onclick="doReset()">Send Reset Link →</button>
-      <div class="bottom-link"><span onclick="showTab('signin')">← Back to sign in</span></div>
+      <div class="bottom-link" style="margin-top:16px"><span onclick="showTab('signin')">← Back to sign in</span></div>
     </div>
+
+    <!-- SET NEW PASSWORD (shown when arriving from reset email link) -->
+    <div class="form-section" id="tab-newpw">
+      <h2>Set New Password</h2>
+      <p class="sub">Choose a new password for your account.</p>
+      <div class="error" id="np-err"></div>
+      <div class="success" id="np-ok"></div>
+      <div class="field"><label>New Password * (min 8 characters)</label><input id="np-pw" type="password" placeholder="••••••••" autocomplete="new-password" /></div>
+      <div class="field"><label>Confirm New Password *</label><input id="np-pw2" type="password" placeholder="••••••••" autocomplete="new-password" onkeypress="if(event.key==='Enter')doSetNewPassword()" /></div>
+      <button class="btn btn-primary" id="np-btn" onclick="doSetNewPassword()">Set New Password →</button>
+    </div>
+
   </div>
 </div>
 
@@ -109,18 +125,52 @@ const sb = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
 );
 
-// Already logged in? Go straight to dashboard
-sb.auth.getSession().then(({ data }) => {
-  if (data.session) window.location.href = 'dashboard.html';
-});
+// ── ON PAGE LOAD: check URL hash for recovery or already logged in ──
+async function init() {
+  const hash = window.location.hash;
+
+  // Arriving from password reset email — show set new password form
+  if (hash.includes('type=recovery') || hash.includes('type=email_change')) {
+    // Parse the session from the hash
+    const params = new URLSearchParams(hash.substring(1));
+    const accessToken = params.get('access_token');
+    const refreshToken = params.get('refresh_token');
+
+    if (accessToken) {
+      // Set the session so we can call updateUser
+      await sb.auth.setSession({ access_token: accessToken, refresh_token: refreshToken || '' });
+      // Hide tabs, show new password form
+      document.getElementById('mainTabs').style.display = 'none';
+      showFormOnly('newpw');
+      // Clean the URL
+      window.history.replaceState(null, '', window.location.pathname);
+      return;
+    }
+  }
+
+  // Already logged in? Go to dashboard
+  const { data } = await sb.auth.getSession();
+  if (data.session) {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+}
 
 function showTab(name) {
-  ['signup','signin','reset'].forEach((t, i) => {
-    document.querySelectorAll('.tab')[i]?.classList.toggle('active', t === name);
+  ['signup','signin','reset','newpw'].forEach((t,i) => {
+    const tabEl = document.querySelectorAll('.tab')[i];
+    if (tabEl) tabEl.classList.toggle('active', t === name);
     document.getElementById('tab-' + t).classList.toggle('active', t === name);
   });
 }
 
+function showFormOnly(name) {
+  ['signup','signin','reset','newpw'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('active', t === name);
+  });
+}
+
+// ── SIGN UP ──
 async function doSignup() {
   const btn = document.getElementById('su-btn');
   const err = document.getElementById('su-err');
@@ -135,8 +185,14 @@ async function doSignup() {
   const lic   = document.getElementById('su-lic').value.trim();
   const brok  = document.getElementById('su-brok').value.trim();
 
-  if (!first || !last || !email || !pw) { err.textContent = 'First name, last name, email and password are required.'; err.style.display='block'; return; }
-  if (pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display='block'; return; }
+  if (!first || !last || !email || !pw) {
+    err.textContent = 'First name, last name, email and password are required.';
+    err.style.display = 'block'; return;
+  }
+  if (pw.length < 8) {
+    err.textContent = 'Password must be at least 8 characters.';
+    err.style.display = 'block'; return;
+  }
 
   btn.disabled = true; btn.textContent = 'Creating account...';
 
@@ -147,32 +203,48 @@ async function doSignup() {
 
   if (authErr) {
     err.textContent = authErr.message.includes('already registered')
-      ? 'Account already exists. Sign in instead.'
+      ? 'An account with this email already exists. Sign in instead.'
       : authErr.message;
     err.style.display = 'block';
     btn.disabled = false; btn.textContent = 'Create Free Account →';
     return;
   }
 
-  // Insert agent profile
+  // Insert agent profile (only works if email confirmation is OFF in Supabase)
   if (authData.user?.id) {
-    await sb.from('agents').insert({
+    const { error: profileErr } = await sb.from('agents').insert({
       user_id: authData.user.id,
-      first_name: first, last_name: last,
+      first_name: first,
+      last_name: last,
       email: email.toLowerCase(),
       phone: phone || null,
       license_number: lic || null,
       brokerage: brok || null
     });
+    if (profileErr) console.error('Profile insert error:', profileErr.message);
   }
 
   localStorage.setItem('goz_name', `${first} ${last}`);
   document.getElementById('su-form').style.display = 'none';
-  ok.innerHTML = `🎉 <strong>Account created, ${first}!</strong><br>Check your email for a confirmation link, then <span class="link" onclick="showTab('signin')">sign in here →</span>`;
-  ok.style.display = 'block';
+
+  // If user has a session already (email confirmation OFF), go to dashboard
+  if (authData.session) {
+    // Store agent id for dashboard
+    const { data: agent } = await sb.from('agents').select('id').eq('user_id', authData.user.id).single();
+    if (agent) localStorage.setItem('goz_agent_id', agent.id);
+    ok.innerHTML = `🎉 <strong>Welcome, ${first}!</strong> Taking you to your dashboard...`;
+    ok.style.display = 'block';
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+  } else {
+    // Email confirmation is ON — tell them to check email
+    ok.innerHTML = `🎉 <strong>Account created, ${first}!</strong><br>Check your email for a confirmation link, then <span class="link" onclick="showTab('signin')">sign in here →</span>`;
+    ok.style.display = 'block';
+  }
+
   btn.disabled = false; btn.textContent = 'Create Free Account →';
 }
 
+// ── SIGN IN ──
 async function doSignin() {
   const btn = document.getElementById('si-btn');
   const err = document.getElementById('si-err');
@@ -181,7 +253,7 @@ async function doSignin() {
   const email = document.getElementById('si-email').value.trim();
   const pw    = document.getElementById('si-pw').value;
 
-  if (!email || !pw) { err.textContent = 'Email and password required.'; err.style.display='block'; return; }
+  if (!email || !pw) { err.textContent = 'Email and password required.'; err.style.display = 'block'; return; }
 
   btn.disabled = true; btn.textContent = 'Signing in...';
 
@@ -189,8 +261,8 @@ async function doSignin() {
 
   if (error) {
     let msg = error.message;
-    if (msg.includes('Invalid login')) msg = 'Incorrect email or password.';
-    if (msg.includes('Email not confirmed')) msg = 'Please confirm your email first — check your inbox for a confirmation link.';
+    if (msg.includes('Invalid login')) msg = 'Incorrect email or password. Double-check and try again.';
+    if (msg.includes('Email not confirmed')) msg = 'Please confirm your email first — check your inbox for a verification link from GetOffZillow AI.';
     err.textContent = msg;
     err.style.display = 'block';
     btn.disabled = false; btn.textContent = 'Sign In →';
@@ -207,6 +279,7 @@ async function doSignin() {
   window.location.href = 'dashboard.html';
 }
 
+// ── FORGOT PASSWORD ──
 async function doReset() {
   const btn = document.getElementById('re-btn');
   const err = document.getElementById('re-err');
@@ -214,7 +287,7 @@ async function doReset() {
   err.style.display = 'none'; ok.style.display = 'none';
 
   const email = document.getElementById('re-email').value.trim();
-  if (!email) { err.textContent = 'Please enter your email.'; err.style.display='block'; return; }
+  if (!email) { err.textContent = 'Please enter your email address.'; err.style.display = 'block'; return; }
 
   btn.disabled = true; btn.textContent = 'Sending...';
 
@@ -222,11 +295,42 @@ async function doReset() {
     redirectTo: 'https://get-off-zillow.vercel.app/signup.html'
   });
 
-  // Always show success — never reveal if email exists
-  ok.textContent = `✅ If that email is in our system, a reset link is on its way.`;
+  // Always show success — never reveal whether email exists
+  ok.textContent = `✅ If ${email} is in our system, a reset link is on its way. Check your inbox and spam folder.`;
   ok.style.display = 'block';
   btn.disabled = false; btn.textContent = 'Send Reset Link →';
 }
+
+// ── SET NEW PASSWORD (from reset link) ──
+async function doSetNewPassword() {
+  const btn = document.getElementById('np-btn');
+  const err = document.getElementById('np-err');
+  const ok  = document.getElementById('np-ok');
+  err.style.display = 'none'; ok.style.display = 'none';
+
+  const pw  = document.getElementById('np-pw').value;
+  const pw2 = document.getElementById('np-pw2').value;
+
+  if (!pw || pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display = 'block'; return; }
+  if (pw !== pw2) { err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return; }
+
+  btn.disabled = true; btn.textContent = 'Setting password...';
+
+  const { error } = await sb.auth.updateUser({ password: pw });
+
+  if (error) {
+    err.textContent = error.message;
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Set New Password →';
+    return;
+  }
+
+  ok.innerHTML = `✅ <strong>Password updated!</strong> Taking you to your dashboard...`;
+  ok.style.display = 'block';
+  setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
+}
+
+init();
 </script>
 </body>
 </html>
