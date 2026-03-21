@@ -11,7 +11,7 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; }
   nav { background:var(--navy); height:56px; display:flex; align-items:center; padding:0 24px; justify-content:space-between; }
-  .logo { font-family:'Bebas Neue',sans-serif; font-size:22px; color:white; text-decoration:none; }
+  .logo { text-decoration:none; display:flex; align-items:center; gap:10px; }
   .logo span { color:var(--blue); } .logo em { color:var(--red); font-style:normal; } .logo sup { color:var(--ai-green); font-size:13px; }
   .nav-home { font-size:13px; color:rgba(255,255,255,0.7); text-decoration:none; font-weight:600; }
   .nav-home:hover { color:white; }
@@ -47,7 +47,29 @@
 </head>
 <body>
 <nav>
-  <a href="index.html" class="logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon" style="width:36px;height:36px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #00FF9D,0 0 10px rgba(0,255,157,0.2);flex-shrink:0">
+      <svg width="22" height="22" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+        <polyline points="38,19 42,22" fill="none" stroke="#E8341C" stroke-width="2.2" stroke-linecap="round" opacity="0.9"/>
+        <line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/>
+        <line x1="38" y1="22" x2="38" y2="32" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" opacity="0.7"/>
+        <polyline points="38,32 41,37 37,40" fill="none" stroke="#00FF9D" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/>
+        <circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/>
+        <circle cx="23" cy="30" r="1.2" fill="#00FF9D"/>
+        <rect x="4" y="23.5" width="38" height="2" fill="#E8341C" opacity="0.15"/>
+      </svg>
+    </div>
+    <div style="display:flex;flex-direction:column;line-height:1;gap:0;margin-left:2px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.1em;color:white;line-height:1">GET OFF</div>
+      <div style="display:flex;align-items:center;gap:5px">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);position:relative;display:inline-block">ZILLOW<span style="position:absolute;left:-2px;top:52%;width:calc(100% + 4px);height:2px;background:#E8341C;transform:rotate(-5deg) translateY(-50%);display:block;box-shadow:0 0 4px rgba(232,52,28,0.6)"></span></span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:#E8341C;line-height:1">✕</span>
+      </div>
+      <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:0.18em;padding:1px 6px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start;line-height:1.4">AI</div>
+    </div>
+  </a>
   <a href="index.html" class="nav-home">← Back to home</a>
 </nav>
 <div class="wrap">
