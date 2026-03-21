@@ -106,7 +106,7 @@
   .listings-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
   .listing-card { background:white; border-radius:10px; overflow:hidden; cursor:pointer; box-shadow:0 1px 6px rgba(0,0,0,0.08); transition:transform 0.2s,box-shadow 0.2s; position:relative; }
   .listing-card:hover { transform:translateY(-3px); box-shadow:0 6px 24px rgba(0,0,0,0.12); }
-  .listing-img { height:175px; position:relative; display:flex; align-items:center; justify-content:center; font-size:52px; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); }
+  .listing-img { height:175px; position:relative; overflow:hidden; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); }
   .listing-img::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.25)); }
   .status-pill { position:absolute; top:10px; left:10px; z-index:1; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; padding:3px 9px; border-radius:4px; }
   .status-pill.sale { background:var(--blue); color:white; }
@@ -301,8 +301,25 @@
     .footer-top { grid-template-columns:1fr 1fr 1fr; }
     .features-grid { grid-template-columns:1fr 1fr; }
   }
+  /* HAMBURGER */
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:8px; background:none; border:none; z-index:300; }
+  .hamburger span { display:block; width:22px; height:2px; background:white; border-radius:2px; transition:all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity:0; }
+  .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu { display:none; position:fixed; inset:0; top:60px; background:#111; z-index:250; padding:20px 24px; flex-direction:column; gap:0; overflow-y:auto; }
+  .mobile-menu.open { display:flex; }
+  .mobile-menu a, .mobile-menu span { display:block; padding:16px 0; font-size:18px; font-weight:700; color:rgba(255,255,255,0.85); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.07); cursor:pointer; font-family:'Nunito',sans-serif; }
+  .mobile-menu a:hover, .mobile-menu span:hover { color:var(--ai-green); }
+  .mobile-menu .mob-cta { margin-top:20px; background:var(--ai-green); color:#111; padding:16px; border-radius:8px; text-align:center; font-size:16px; font-weight:900; border:none; display:block; text-decoration:none; }
+
   @media(max-width:768px) {
+    .ann-bar { font-size:11px; padding:7px 12px; }
+    header { height:60px; }
     .header-search { display:none; }
+    .header-nav { display:none; }
+    .hamburger { display:flex; margin-left:auto; }
     .listings-grid { grid-template-columns:1fr 1fr; }
     .steps-grid { grid-template-columns:1fr; }
     .reviews-grid { grid-template-columns:1fr; }
@@ -311,7 +328,43 @@
     .fee-table { font-size:12px; }
     .fee-table th,.fee-table td { padding:12px 10px; }
     .final-cta-btns { flex-direction:column; align-items:center; }
+    .hero-title { font-size:clamp(42px,11vw,70px); }
+    .hero-sub { font-size:15px; }
+    .hero-tabs { gap:4px; }
+    .hero-tab { padding:8px 14px; font-size:13px; }
+    .hero-search { flex-direction:column; gap:6px; }
+    .hero-search input { width:100%; }
+    .hero-search-btn { width:100%; padding:14px; }
+    .hero-pill { font-size:11px; padding:6px 12px; }
+    .referral-grid { grid-template-columns:1fr; gap:32px; }
+    .agent-inner { grid-template-columns:1fr; gap:32px; }
+    .mortgage-inner { grid-template-columns:1fr; gap:32px; }
+    .compare-section > div:last-child { grid-template-columns:1fr; }
+    .hero-logo-treatment { padding:0 16px; }
+    .hero-logo-icon { width:60px; height:60px; }
+    .hero-logo-getoff { font-size:52px; }
+    .hero-logo-zillow { font-size:52px; }
   }
+  @media(max-width:480px) {
+    .listings-grid { grid-template-columns:1fr; }
+    .stats-row { grid-template-columns:repeat(2,1fr); }
+    .fee-table th:nth-child(3), .fee-table td:nth-child(3),
+    .fee-table th:nth-child(4), .fee-table td:nth-child(4),
+    .fee-table th:nth-child(5), .fee-table td:nth-child(5) { display:none; }
+  }
+
+  /* HERO LOGO TREATMENT */
+  .hero-logo-treatment { margin-bottom:28px; display:flex; flex-direction:column; align-items:center; gap:0; }
+  .hero-logo-icon { width:80px; height:80px; background:#111; border-radius:18px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px #00FF9D, 0 0 30px rgba(0,255,157,0.3); margin-bottom:16px; }
+  .hero-logo-getoff { font-family:'Bebas Neue',sans-serif; font-size:clamp(56px,10vw,90px); letter-spacing:0.08em; color:white; line-height:0.95; }
+  .hero-logo-zillow-row { display:flex; align-items:center; gap:16px; }
+  .hero-logo-zillow { font-family:'Bebas Neue',sans-serif; font-size:clamp(56px,10vw,90px); letter-spacing:0.08em; color:rgba(255,255,255,0.3); position:relative; display:inline-block; line-height:0.95; }
+  .hero-logo-zillow::after { content:''; position:absolute; left:-4px; top:52%; width:calc(100% + 8px); height:5px; background:#E8341C; transform:rotate(-4deg) translateY(-50%); box-shadow:0 0 12px rgba(232,52,28,0.7); }
+  .hero-logo-x { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,7vw,64px); color:#E8341C; filter:drop-shadow(0 0 8px rgba(232,52,28,0.7)); animation:xpulse 3s ease-in-out infinite; }
+  @keyframes xpulse { 0%,100%{opacity:1}50%{opacity:0.55} }
+  .hero-logo-ai-row { display:flex; align-items:center; gap:12px; margin-top:4px; }
+  .hero-logo-ai-badge { background:var(--ai-green); color:#111; font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:0.2em; padding:4px 20px 3px; clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); box-shadow:0 0 20px rgba(0,255,157,0.4); }
+  .hero-logo-tagline { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(255,255,255,0.45); text-transform:uppercase; margin-top:8px; }
 </style>
 </head>
 <body>
@@ -361,28 +414,66 @@
     <li><a href="#listings">Buy</a></li>
     <li><span onclick="showToast('🔑 Rental search coming soon!')">Rent</span></li>
     <li><a href="signup.html">Sell / List Free</a></li>
-    <li><a href="signup.html">For Agents</a></li>
-    <li><span onclick="scrollTo('#mortgage')">Loans</span></li>
+    <li><a href="#agents">For Agents</a></li>
     <li style="margin-left:8px"><a href="signup.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Sign In</a></li>
     <li style="margin-left:6px"><a href="signup.html" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">List Free</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+
+<!-- MOBILE MENU -->
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="#listings">🏠 Buy a Home</a>
+  <span onclick="showToast('🔑 Rental search coming soon!');closeMobileMenu()">🔑 Rent</span>
+  <a href="signup.html">💰 Sell / List Free</a>
+  <a href="#agents" onclick="closeMobileMenu()">🤝 For Agents — 1% fee</a>
+  <a href="signup.html">📊 My Dashboard</a>
+  <a href="#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
+  <a href="signup.html" class="mob-cta">List Free — Lock In 1% →</a>
+  <div style="text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
+    <a href="signup.html" style="color:rgba(255,255,255,0.5);font-size:13px;border:none">Already have an account? Sign in →</a>
+  </div>
+</nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
-    <div class="hero-pill">
-      <div class="pill-dot"></div>
-      Industry's Lowest Fee — 1% at Closing. Agents keep 99%.
+    <div class="hero-logo-treatment">
+      <div class="hero-logo-icon">
+        <svg width="50" height="50" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><filter id="gh"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#gh)"/>
+          <polyline points="38,19 42,22" fill="none" stroke="#E8341C" stroke-width="2.2" stroke-linecap="round" opacity="0.9"/>
+          <line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" filter="url(#gh)"/>
+          <line x1="38" y1="22" x2="38" y2="32" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" opacity="0.7"/>
+          <polyline points="38,32 41,37 37,40" fill="none" stroke="#00FF9D" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" filter="url(#gh)"/>
+          <line x1="14" y1="27" x2="32" y2="27" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+          <line x1="14" y1="33" x2="32" y2="33" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+          <line x1="20" y1="27" x2="20" y2="33" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+          <line x1="26" y1="27" x2="26" y2="33" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+          <circle cx="20" cy="27" r="2.2" fill="#00FF9D" filter="url(#gh)"/>
+          <circle cx="26" cy="27" r="2.2" fill="#00FF9D" filter="url(#gh)"/>
+          <circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/>
+          <circle cx="23" cy="30" r="1.2" fill="#00FF9D"/>
+          <rect x="4" y="23.5" width="38" height="2" fill="#E8341C" opacity="0.18"/>
+        </svg>
+      </div>
+      <div class="hero-logo-getoff">GET OFF</div>
+      <div class="hero-logo-zillow-row">
+        <span class="hero-logo-zillow">ZILLOW</span>
+        <span class="hero-logo-x">✕</span>
+      </div>
+      <div class="hero-logo-ai-row">
+        <div class="hero-logo-ai-badge">AI</div>
+      </div>
+      <div class="hero-logo-tagline">Real Estate Intelligence — No Middlemen</div>
     </div>
-    <h1 class="hero-title">
-      Real Estate<br>
-      <span class="accent">Without The</span><br>
-      <span class="red">B.S.</span>
-    </h1>
     <p class="hero-sub">
-      Free listings. Transparent commissions. Direct agent contact. Zero lead auctions. Zero data selling. 1% referral fee — only when you close.
+      Free listings. Transparent commissions. Direct contact. 1% referral fee — only when you close.
     </p>
     <div class="hero-tabs">
       <div class="hero-tab active" onclick="setHeroTab(this,'buy')">🏠 Buy</div>
@@ -903,9 +994,12 @@ async function loadListings() {
 
 function getPhoto(listing, index) {
   const photos = parsePhotos(listing.photos);
-  if (photos.length > 0) return `<img src="${photos[0]}" alt="${listing.address}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.style.display='none'" />`;
-  // Fallback: real house photo from Unsplash based on listing index
-  return `<img src="${DEMO_PHOTOS[index % DEMO_PHOTOS.length]}" alt="${listing.address}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" />`;
+  const style = 'width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0';
+  if (photos.length > 0) {
+    // onerror falls back to demo photo
+    return `<img src="${photos[0]}" alt="${listing.address}" style="${style}" onerror="this.src='${DEMO_PHOTOS[index % DEMO_PHOTOS.length]}'" />`;
+  }
+  return `<img src="${DEMO_PHOTOS[index % DEMO_PHOTOS.length]}" alt="${listing.address}" style="${style}" />`;
 }
 
 function renderListings() {
@@ -930,7 +1024,7 @@ function renderListings() {
     <div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'" style="cursor:pointer">
       <div class="listing-img" style="position:relative;overflow:hidden">
         ${getPhoto(l, i)}
-        <div class="status-pill ${statusClass(l.status)}">${statusLabel(l.status)}</div>
+        <div class="status-pill ${statusClass(l.status)}" style="z-index:2">${statusLabel(l.status)}</div>
         <div class="save-btn" onclick="event.stopPropagation();this.textContent=this.textContent==='🤍'?'❤️':'🤍'">🤍</div>
       </div>
       <div class="listing-body">
@@ -1045,15 +1139,49 @@ function setHeroTab(el,type) {
   if (msgs[type]) showToast(msgs[type]);
 }
 
-function doSearch() {
+async function doSearch() {
   const q = (document.getElementById('heroSearchInput').value||document.getElementById('hSearch').value).trim();
-  if (!q) { showToast('Enter a location to search'); return; }
-  const count = liveListings.length;
-  showToast(count > 0 ? `🔍 Found ${count} listing${count!==1?'s':''} — scroll down to view` : `🔍 No listings match "${q}" yet. Be the first to list!`);
+  if (!q) { showToast('Enter a city, ZIP, or address to search'); return; }
   document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+
+  const { data } = await sb
+    .from('listings')
+    .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, agents(first_name, last_name)')
+    .eq('status', 'active')
+    .or(`city.ilike.%${q}%,address.ilike.%${q}%,state.ilike.%${q}%,zip.ilike.%${q}%`)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  liveListings = data || [];
+  renderListings();
+  const count = liveListings.length;
+  showToast(count > 0 ? `🔍 ${count} listing${count!==1?'s':''} found for "${q}"` : `🔍 No listings found for "${q}" yet.`);
 }
 
 function scrollTo(id) { document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close mobile menu on outside click
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+    closeMobileMenu();
+  }
+});
 
 function showToast(msg) {
   const t = document.getElementById('toast');
