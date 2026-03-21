@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GetOffZillow AI — Free listings. Transparent commissions. Direct agent contact. 1% marketplace fee at closing vs. Zillow's 40%. Real estate without the B.S.">
+<meta property="og:title" content="GetOffZillow AI — Real Estate Without The B.S.">
+<meta property="og:description" content="Free listings. Transparent commissions. Direct contact. 1% fee at closing vs. Zillow's 40%. Agents keep 99%.">
+<meta property="og:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
+<meta property="og:url" content="https://get-off-zillow.vercel.app">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GetOffZillow AI — Real Estate Without The B.S.">
+<meta name="twitter:description" content="1% marketplace fee vs. Zillow's 40%. Free listings. Transparent commissions. Direct agent contact.">
+<meta name="twitter:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 <title>GetOffZillow AI — Real Estate. No Extraction.</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -412,7 +422,6 @@
   </div>
   <ul class="header-nav">
     <li><a href="#listings">Buy</a></li>
-    <li><span onclick="showToast('🔑 Rental search coming soon!')">Rent</span></li>
     <li><a href="signup.html">Sell / List Free</a></li>
     <li><a href="#agents">For Agents</a></li>
     <li style="margin-left:8px"><a href="signup.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Sign In</a></li>
@@ -426,7 +435,6 @@
 <!-- MOBILE MENU -->
 <nav class="mobile-menu" id="mobileMenu">
   <a href="#listings">🏠 Buy a Home</a>
-  <span onclick="showToast('🔑 Rental search coming soon!');closeMobileMenu()">🔑 Rent</span>
   <a href="signup.html">💰 Sell / List Free</a>
   <a href="#agents" onclick="closeMobileMenu()">🤝 For Agents — 1% fee</a>
   <a href="signup.html">📊 My Dashboard</a>
@@ -473,11 +481,10 @@
       <div class="hero-logo-tagline">Real Estate Intelligence — No Middlemen</div>
     </div>
     <p class="hero-sub">
-      Free listings. Transparent commissions. Direct contact. 1% referral fee — only when you close.
+      List free. Buyers find and contact you directly. We charge 1% when you close — vs. Zillow's 40% and Agent Pronto's 35%.
     </p>
     <div class="hero-tabs">
       <div class="hero-tab active" onclick="setHeroTab(this,'buy')">🏠 Buy</div>
-      <div class="hero-tab" onclick="setHeroTab(this,'rent')">🔑 Rent</div>
       <div class="hero-tab" onclick="setHeroTab(this,'sell')">💰 Sell</div>
       <div class="hero-tab" onclick="setHeroTab(this,'agent')">🤝 Agents</div>
     </div>
@@ -629,8 +636,8 @@
     <div class="step">
       <span class="step-num">02</span>
       <span class="step-icon">🔍</span>
-      <h3>Buyer Searches Honestly</h3>
-      <p>Buyers see real prices, real commission rates, and direct agent contact info. No algorithm hiding better-value agents because they won't pay for Premier status.</p>
+      <h3>Buyer Searches & Finds You</h3>
+      <p>Buyers see real prices, real commission rates, and your direct contact info. No algorithm hiding better-value agents because they paid for Premier status.</p>
     </div>
     <div class="step">
       <span class="step-num">03</span>
@@ -690,7 +697,7 @@
         <div class="feature-icon purple">📊</div>
         <div class="feature-content">
           <div class="feature-title">Home Value Estimator</div>
-          <div class="feature-desc">Estimate your home's value based on comparable sales data. Full AI-powered accuracy with MLS comps is in development.</div>
+          <div class="feature-desc">Estimate your home's value based on comparable sales. MLS comp integration in development — currently uses market data inputs.</div>
           <div class="coming-badge">🔧 In Development</div>
         </div>
       </div>
@@ -698,7 +705,7 @@
         <div class="feature-icon red">🤖</div>
         <div class="feature-content">
           <div class="feature-title">AI Agent Matching</div>
-          <div class="feature-desc">Smart matching based on buyer needs, agent expertise, and market performance. Currently powered by our team — AI automation coming.</div>
+          <div class="feature-desc">Our team manually reviews and matches buyer inquiries to agents by market, expertise, and responsiveness. Algorithmic matching in development.</div>
           <div class="coming-badge">🔧 In Development</div>
         </div>
       </div>
@@ -782,7 +789,7 @@
         <li>Commission rate displayed publicly (NAR settlement compliant)</li>
         <li><strong>1% referral fee ONLY when the deal closes</strong> — zero upfront cost</li>
         <li>Agent dashboard with your listings and leads</li>
-        <li>No "Premier Agent" pay-to-rank — listings sorted by activity and reviews</li>
+        <li>No pay-to-rank — listings sorted by recency and activity, not ad spend</li>
         <li>Welcome email and lead notifications via Brevo</li>
       </ul>
       <div style="background:#E8FBF0;border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.6">
@@ -794,7 +801,7 @@
     <div class="agent-cta-card">
       <h3>Create Your Free Agent Account</h3>
       <p>No credit card. No upfront fee. No commitment until you close a deal.</p>
-      <div class="agent-cta-note">⚡ First 500 agents: 1% referral rate locked for life. Never goes up.</div>
+      <div class="agent-cta-note">⚡ Early agents: 1% marketplace fee locked in — never increases as the platform grows.</div>
       <a href="signup.html" class="cta-btn-big">Create Free Account — Lock In 1% →</a>
       <p style="font-size:11px;color:var(--gray);margin-top:14px">Already have an account? <a href="signup.html" style="color:var(--blue);font-weight:700">Sign in →</a></p>
     </div>
@@ -910,8 +917,8 @@
         <h4>Company</h4>
         <ul>
           <li><a href="#">About Us</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
       </div>
@@ -1041,7 +1048,7 @@ function renderListings() {
           <div class="agent-avi" style="font-size:13px">${agentInit}</div>
           <div class="agent-info">
             <div class="agent-name-small">${agentName}</div>
-            <div class="agent-fee-tag">GOZ AI agent · Direct contact</div>
+            <div class="agent-fee-tag">GOZ Agent · Direct contact</div>
           </div>
           <div style="font-size:11px;color:var(--gray)">${daysAgo(l.created_at)}</div>
         </div>
@@ -1135,7 +1142,7 @@ const reviews = [
 function setHeroTab(el,type) {
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  const msgs = {rent:'🔑 Rental search coming soon!',sell:'💰 Sell — list free in minutes',agent:'🤝 Agents: 1% fee, free listings'};
+  const msgs = {sell:'💰 Sell — list free in minutes',agent:'🤝 Agents: 1% fee, free listings'};
   if (msgs[type]) showToast(msgs[type]);
 }
 
