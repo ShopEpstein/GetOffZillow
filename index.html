@@ -793,67 +793,149 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const listings = [
-  { price:'$349,000',addr:'2847 Bayou Blvd',city:'Pensacola, FL 32503',beds:3,baths:2,sqft:'1,840',status:'sale',statusLabel:'For Sale',agent:'Alysa A.',agentInit:'A',commission:'2.5%',days:4,emoji:'🏡',saved:false },
-  { price:'$524,900',addr:'1102 Gulf Shore Dr',city:'Navarre, FL 32566',beds:4,baths:3,sqft:'2,650',status:'new',statusLabel:'New',agent:'Mike R.',agentInit:'M',commission:'2.75%',days:1,emoji:'🌊',saved:false },
-  { price:'$189,500',addr:'445 Creekwood Ln',city:'Milton, FL 32571',beds:3,baths:2,sqft:'1,420',status:'pending',statusLabel:'Pending',agent:'Sarah T.',agentInit:'S',commission:'3%',days:12,emoji:'🌳',saved:false },
-  { price:'$775,000',addr:'88 Emerald Bay Ct',city:'Destin, FL 32541',beds:5,baths:4,sqft:'3,900',status:'new',statusLabel:'New',agent:'Alysa A.',agentInit:'A',commission:'2.5%',days:0,emoji:'🏖️',saved:false },
-  { price:'$265,000',addr:'730 Magnolia St',city:'Pace, FL 32571',beds:3,baths:2,sqft:'1,680',status:'sale',statusLabel:'For Sale',agent:'Dana W.',agentInit:'D',commission:'3%',days:7,emoji:'🌺',saved:false },
-  { price:'$412,000',addr:'19 Harbor View Rd',city:'Fort Walton Beach, FL',beds:4,baths:2.5,sqft:'2,210',status:'reduced',statusLabel:'Reduced',agent:'Carlos M.',agentInit:'C',commission:'2.5%',days:18,emoji:'⚓',saved:false },
-  { price:'$899,000',addr:'5 Beachfront Paradise Ln',city:'Seaside, FL 32459',beds:6,baths:5,sqft:'4,800',status:'new',statusLabel:'New',agent:'Alysa A.',agentInit:'A',commission:'2.5%',days:0,emoji:'🌴',saved:false },
-  { price:'$158,000',addr:'302 Pine Ridge Rd',city:'Cantonment, FL 32533',beds:2,baths:1,sqft:'980',status:'sale',statusLabel:'For Sale',agent:'Dana W.',agentInit:'D',commission:'3%',days:31,emoji:'🏘️',saved:false },
+const { createClient } = supabase;
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
+
+// Real Unsplash house photos used when no listing photo exists
+// Each is a real house/property exterior photo
+const DEMO_PHOTOS = [
+  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80',
+  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+  'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80',
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80',
+  'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=600&q=80',
+  'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600&q=80',
+  'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80',
+  'https://images.unsplash.com/photo-1575517111839-3a3843ee7f5d?w=600&q=80',
 ];
 
-const reviews = [
-  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $100 on a $10,000 commission. The direct contact with buyers is night and day.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
-  { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"👩" },
-  { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"👩" },
-  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $100. That's not a typo. One hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
-  { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"👩" },
-  { stars:5, text:"GOZ sent the lead directly to my phone. No 'accept within 30 seconds or we give it to someone else' games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"👨" },
-];
+// Parse Supabase postgres array string or JS array
+function parsePhotos(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw.filter(Boolean);
+  if (typeof raw === 'string') {
+    if (raw.startsWith('{') && raw.endsWith('}')) {
+      return raw.slice(1,-1).split(',').map(s=>s.trim().replace(/^"|"$/g,'')).filter(s=>s.startsWith('http'));
+    }
+    if (raw.startsWith('http')) return [raw];
+  }
+  return [];
+}
+
+function daysAgo(dateStr) {
+  const diff = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
+  if (diff === 0) return '🔥 Today';
+  if (diff === 1) return '1d ago';
+  return diff + 'd ago';
+}
+
+function statusLabel(status) {
+  const map = { active:'FOR SALE', pending:'PENDING', reduced:'REDUCED', new:'NEW' };
+  return map[status] || 'FOR SALE';
+}
+
+function statusClass(status) {
+  const map = { active:'sale', pending:'pending', reduced:'reduced' };
+  return map[status] || 'sale';
+}
+
+// ── LIVE LISTINGS FROM SUPABASE ──
+let liveListings = [];
+
+async function loadListings() {
+  const { data, error } = await sb
+    .from('listings')
+    .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, agents(first_name, last_name)')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(8);
+
+  liveListings = data || [];
+  renderListings();
+  renderMapList();
+}
+
+function getPhoto(listing, index) {
+  const photos = parsePhotos(listing.photos);
+  if (photos.length > 0) return `<img src="${photos[0]}" alt="${listing.address}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.style.display='none'" />`;
+  // Fallback: real house photo from Unsplash based on listing index
+  return `<img src="${DEMO_PHOTOS[index % DEMO_PHOTOS.length]}" alt="${listing.address}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" />`;
+}
 
 function renderListings() {
-  document.getElementById('listingGrid').innerHTML = listings.map((l,i) => `
-    <div class="listing-card" onclick="window.location.href='signup.html'">
-      <div class="listing-img">
-        ${l.emoji}
-        <div class="status-pill ${l.status}">${l.statusLabel.toUpperCase()}</div>
-        <div class="save-btn" onclick="event.stopPropagation();toggleSave(${i},this)">🤍</div>
+  const grid = document.getElementById('listingGrid');
+
+  if (!liveListings.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 24px;color:var(--gray)">
+        <div style="font-size:48px;margin-bottom:16px">🏡</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:var(--text);margin-bottom:8px">No listings yet</h3>
+        <p style="font-size:14px;margin-bottom:20px">Be the first agent to list on GetOffZillow AI — free forever.</p>
+        <a href="signup.html" style="background:var(--ai-green);color:#000;padding:12px 28px;border-radius:8px;text-decoration:none;font-family:'Nunito',sans-serif;font-weight:900">List Your First Property →</a>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = liveListings.map((l, i) => {
+    const agentName = l.agents ? `${l.agents.first_name} ${l.agents.last_name[0]}.` : 'GOZ Agent';
+    const agentInit = l.agents ? l.agents.first_name[0] + l.agents.last_name[0] : 'G';
+    const sqft = l.sqft ? Number(l.sqft).toLocaleString() : null;
+    return `
+    <div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'" style="cursor:pointer">
+      <div class="listing-img" style="position:relative;overflow:hidden">
+        ${getPhoto(l, i)}
+        <div class="status-pill ${statusClass(l.status)}">${statusLabel(l.status)}</div>
+        <div class="save-btn" onclick="event.stopPropagation();this.textContent=this.textContent==='🤍'?'❤️':'🤍'">🤍</div>
       </div>
       <div class="listing-body">
-        <div class="listing-price">${l.price}</div>
-        <div class="commission-tag">✓ ${l.commission} commission</div>
-        <div class="listing-address">${l.addr}</div>
-        <div class="listing-city">${l.city}</div>
+        <div class="listing-price">$${Number(l.price).toLocaleString()}</div>
+        <div class="commission-tag">✓ ${l.commission_rate || '2.5%'} commission</div>
+        <div class="listing-address">${l.address}</div>
+        <div class="listing-city">${l.city}, ${l.state}${l.zip ? ' ' + l.zip : ''}</div>
         <div class="listing-specs">
-          <span>🛏 ${l.beds}bd</span><span>🚿 ${l.baths}ba</span><span>📐 ${l.sqft}</span>
+          ${l.beds ? `<span>🛏 ${l.beds}bd</span>` : ''}
+          ${l.baths ? `<span>🚿 ${l.baths}ba</span>` : ''}
+          ${sqft ? `<span>📐 ${sqft}</span>` : ''}
         </div>
         <div class="listing-agent">
-          <div class="agent-avi">${l.agentInit}</div>
+          <div class="agent-avi" style="font-size:13px">${agentInit}</div>
           <div class="agent-info">
-            <div class="agent-name-small">${l.agent}</div>
+            <div class="agent-name-small">${agentName}</div>
             <div class="agent-fee-tag">GOZ AI agent · Direct contact</div>
           </div>
-          <div style="font-size:11px;color:var(--gray)">${l.days===0?'🔥 Today':l.days+'d ago'}</div>
+          <div style="font-size:11px;color:var(--gray)">${daysAgo(l.created_at)}</div>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function renderMapList() {
-  document.getElementById('mapListEl').innerHTML = listings.slice(0,6).map(l => `
-    <div class="map-list-item" onclick="showToast('📞 Sign in to contact ${l.agent} directly')">
-      <div class="map-thumb">${l.emoji}</div>
+  const el = document.getElementById('mapListEl');
+  const items = liveListings.slice(0, 6);
+  if (!items.length) { el.innerHTML = '<div style="padding:20px;text-align:center;color:#999;font-size:13px">No listings yet</div>'; return; }
+  el.innerHTML = items.map((l, i) => {
+    const photos = parsePhotos(l.photos);
+    const thumb = photos.length > 0
+      ? `<img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'" />`
+      : `<img src="${DEMO_PHOTOS[i % DEMO_PHOTOS.length]}" style="width:100%;height:100%;object-fit:cover" />`;
+    return `
+    <div class="map-list-item" onclick="window.location.href='listing.html?id=${l.id}'">
+      <div class="map-thumb" style="overflow:hidden;position:relative">${thumb}</div>
       <div>
-        <div class="mli-price">${l.price}</div>
-        <div class="mli-addr">${l.addr}</div>
-        <div class="mli-addr" style="color:#999">${l.city}</div>
-        <div class="mli-specs">🛏 ${l.beds}bd · 🚿 ${l.baths}ba · 📐 ${l.sqft}</div>
-        <div class="mli-commission">✓ ${l.commission} commission</div>
+        <div class="mli-price">$${Number(l.price).toLocaleString()}</div>
+        <div class="mli-addr">${l.address}</div>
+        <div class="mli-addr" style="color:#999">${l.city}, ${l.state}</div>
+        ${l.beds || l.baths ? `<div class="mli-specs">${l.beds?l.beds+'bd':''} ${l.baths?'· '+l.baths+'ba':''} ${l.sqft?'· '+Number(l.sqft).toLocaleString()+' sqft':''}</div>` : ''}
+        <div class="mli-commission">✓ ${l.commission_rate || '2.5%'} commission</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function renderReviews() {
@@ -906,11 +988,14 @@ function runCalc() {
     `P&I $${Math.round(payment).toLocaleString()} + Taxes $${Math.round(estTax).toLocaleString()} + Insurance $${Math.round(estIns).toLocaleString()} · ${rate}% ${term}yr`;
 }
 
-function toggleSave(i,el) {
-  listings[i].saved = !listings[i].saved;
-  el.textContent = listings[i].saved ? '❤️' : '🤍';
-  showToast(listings[i].saved ? '❤️ Saved! Sign in to manage your saved homes.' : '💔 Removed.');
-}
+const reviews = [
+  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $100 on a $10,000 commission. The direct contact with buyers is night and day.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
+  { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"👩" },
+  { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"👩" },
+  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $100. That's not a typo. One hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
+  { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"👩" },
+  { stars:5, text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"👨" },
+];
 
 function setHeroTab(el,type) {
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.remove('active'));
@@ -922,7 +1007,8 @@ function setHeroTab(el,type) {
 function doSearch() {
   const q = (document.getElementById('heroSearchInput').value||document.getElementById('hSearch').value).trim();
   if (!q) { showToast('Enter a location to search'); return; }
-  showToast(`🔍 Searching "${q}"... ${listings.length} sample listings shown. Sign up to access full database.`);
+  const count = liveListings.length;
+  showToast(count > 0 ? `🔍 Found ${count} listing${count!==1?'s':''} — scroll down to view` : `🔍 No listings match "${q}" yet. Be the first to list!`);
   document.getElementById('listings').scrollIntoView({behavior:'smooth'});
 }
 
@@ -936,8 +1022,19 @@ function showToast(msg) {
   t._t = setTimeout(()=>t.classList.remove('show'),4500);
 }
 
-renderListings();
-renderMapList();
+function renderReviews() {
+  document.getElementById('reviewsGrid').innerHTML = reviews.map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.stars)}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.emoji}</div>
+        <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
+      </div>
+    </div>`).join('');
+}
+
+loadListings();
 renderReviews();
 buildTicker();
 </script>
