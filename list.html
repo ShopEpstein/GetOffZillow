@@ -4,111 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Submit a Listing — GetOffZillow AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44;
-    --green:#00C853; --ai-green:#00FF9D; --red:#E8341C;
-    --bg:#F7F7F7; --white:#fff; --text:#1A1A1A;
-    --gray:#6B6B6B; --border:#D8D8D8;
-  }
+  :root { --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --white:#fff; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); }
-
-  nav {
-    background:white; border-bottom:1px solid var(--border);
-    padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between;
-    position:sticky; top:0; z-index:100;
-  }
+  nav { background:white; border-bottom:1px solid var(--border); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
   .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; text-decoration:none; color:var(--text); }
-  .nav-logo span { color:var(--blue); }
-  .nav-logo em { color:var(--red); font-style:normal; }
-  .nav-logo sup { color:var(--ai-green); font-size:14px; }
+  .nav-logo span { color:var(--blue); } .nav-logo em { color:var(--red); font-style:normal; } .nav-logo sup { color:var(--ai-green); font-size:14px; }
   .nav-links { display:flex; gap:16px; align-items:center; }
   .nav-links a { font-size:13px; color:var(--blue); text-decoration:none; font-weight:700; }
-
   .page { max-width:800px; margin:0 auto; padding:48px 24px; }
-
   .page-header { margin-bottom:36px; }
   .page-header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,52px); line-height:0.95; margin-bottom:8px; }
   .page-header h1 .blue { color:var(--blue); }
   .page-header p { font-size:15px; color:var(--gray); line-height:1.6; }
-
-  .auth-check { background:white; border-radius:12px; padding:32px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.08); display:none; }
-  .auth-check h3 { font-family:'Nunito',sans-serif; font-weight:900; margin-bottom:8px; }
-  .auth-check a { background:var(--blue); color:white; padding:10px 24px; border-radius:8px; text-decoration:none; font-weight:700; display:inline-block; margin-top:12px; }
-
   .form-card { background:white; border-radius:16px; padding:36px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
-
   .section-label { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--blue); margin-bottom:16px; display:block; padding-bottom:8px; border-bottom:2px solid var(--blue); }
-
   .form-section { margin-bottom:32px; }
-
   .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
   .form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-
   .form-group { margin-bottom:14px; }
   .form-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
-  .form-group input, .form-group select, .form-group textarea {
-    width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:8px;
-    font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none;
-    transition:border-color 0.2s, box-shadow 0.2s;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1);
-  }
+  .form-group input, .form-group select, .form-group textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:8px; font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s, box-shadow 0.2s; background:white; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
   .form-group textarea { resize:vertical; min-height:100px; }
   .form-group .hint { font-size:11px; color:var(--gray); margin-top:4px; }
-
-  /* PHOTO UPLOAD */
-  .photo-zone {
-    border:2px dashed var(--border); border-radius:10px; padding:24px;
-    text-align:center; cursor:pointer; transition:all 0.2s; position:relative;
-    background: var(--bg);
-  }
+  .photo-zone { border:2px dashed var(--border); border-radius:10px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; background:var(--bg); }
   .photo-zone.dragover { border-color:var(--blue); background:#EBF3FF; }
   .photo-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
   .photo-zone-icon { font-size:36px; margin-bottom:8px; }
   .photo-zone-text { font-size:14px; font-weight:600; color:var(--text); margin-bottom:4px; }
   .photo-zone-hint { font-size:12px; color:var(--gray); }
-
   .photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:10px; margin-top:16px; }
   .photo-thumb { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:1; }
   .photo-thumb img { width:100%; height:100%; object-fit:cover; }
-  .photo-thumb .remove-btn {
-    position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.6);
-    color:white; border:none; border-radius:50%; width:22px; height:22px;
-    cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center;
-  }
+  .photo-thumb .remove-btn { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; }
   .photo-count { font-size:12px; color:var(--gray); margin-top:8px; }
-
   .upload-progress { display:none; margin-top:12px; }
   .progress-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
   .progress-fill { height:100%; background:var(--ai-green); border-radius:2px; transition:width 0.3s; width:0%; }
   .progress-text { font-size:11px; color:var(--gray); margin-top:4px; }
-
-  .submit-btn {
-    width:100%; background:var(--ai-green); color:#000; border:none;
-    padding:15px; border-radius:8px; font-family:'Nunito',sans-serif;
-    font-weight:900; font-size:16px; cursor:pointer;
-    transition:all 0.2s; box-shadow:0 0 20px rgba(0,255,157,0.3);
-  }
+  .submit-btn { width:100%; background:var(--ai-green); color:#000; border:none; padding:15px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; cursor:pointer; transition:all 0.2s; box-shadow:0 0 20px rgba(0,255,157,0.3); }
   .submit-btn:hover { background:#00e88a; }
   .submit-btn:disabled { background:var(--border); color:var(--gray); box-shadow:none; cursor:not-allowed; }
-
   .error-msg { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; display:none; }
-  .success-box { background:#f0fff8; border:2px solid var(--ai-green); border-radius:12px; padding:28px; text-align:center; display:none; }
-  .success-box h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:22px; margin-bottom:8px; }
-  .success-box p { color:var(--gray); margin-bottom:16px; }
-  .success-box a { background:var(--blue); color:white; padding:10px 24px; border-radius:8px; text-decoration:none; font-weight:700; margin:0 6px; display:inline-block; }
-
-  @media(max-width:600px) {
-    .form-grid-2, .form-grid-3 { grid-template-columns:1fr; }
-  }
+  @media(max-width:600px) { .form-grid-2, .form-grid-3 { grid-template-columns:1fr; } .form-card { padding:24px 16px; } }
 </style>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="nav-logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a>
   <div class="nav-links">
@@ -123,23 +68,8 @@
     <p>Photos upload directly to secure cloud storage. Your listing goes live immediately and your commission rate is shown publicly — exactly how it should be.</p>
   </div>
 
-  <!-- Auth check -->
-  <div class="auth-check" id="authCheck">
-    <h3>Sign in to submit a listing</h3>
-    <p>You need an agent account to list a property on GetOffZillow AI.</p>
-    <a href="signup.html">Create Free Agent Account →</a>
-    <a href="dashboard.html" style="background:transparent;color:var(--blue);border:2px solid var(--blue);margin-left:8px">Sign In</a>
-  </div>
-
-  <div class="form-card" id="listingForm">
+  <div class="form-card">
     <div class="error-msg" id="errorMsg"></div>
-    <div class="success-box" id="successBox">
-      <div style="font-size:48px;margin-bottom:12px">🎉</div>
-      <h3>Listing Submitted!</h3>
-      <p>Your property is now live on GetOffZillow AI. Buyers can contact you directly — zero lead tax.</p>
-      <a href="dashboard.html">View Dashboard</a>
-      <a href="list.html" style="background:transparent;color:var(--blue);border:2px solid var(--blue)">Add Another Listing</a>
-    </div>
 
     <form id="theForm" onsubmit="submitListing(event)">
 
@@ -198,24 +128,18 @@
             <label>Bedrooms</label>
             <select id="beds">
               <option value="">—</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3" selected>3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6+</option>
+              <option value="1">1</option><option value="2">2</option>
+              <option value="3" selected>3</option><option value="4">4</option>
+              <option value="5">5</option><option value="6">6+</option>
             </select>
           </div>
           <div class="form-group">
             <label>Bathrooms</label>
             <select id="baths">
               <option value="">—</option>
-              <option value="1">1</option>
-              <option value="1.5">1.5</option>
-              <option value="2" selected>2</option>
-              <option value="2.5">2.5</option>
-              <option value="3">3</option>
-              <option value="4">4+</option>
+              <option value="1">1</option><option value="1.5">1.5</option>
+              <option value="2" selected>2</option><option value="2.5">2.5</option>
+              <option value="3">3</option><option value="4">4+</option>
             </select>
           </div>
           <div class="form-group">
@@ -280,19 +204,44 @@
 </div>
 
 <script>
-const SUPABASE_URL = 'https://pneixwmkphakoxmzkblx.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0';
+const { createClient } = supabase;
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
 
 let selectedPhotos = [];
+let currentSession = null;
+let agentId = null;
 
-// Check if agent is logged in
-const agentId = localStorage.getItem('goz_agent_id');
-const authToken = localStorage.getItem('goz_auth_token');
-if (!agentId) {
-  document.getElementById('authCheck').style.display = 'block';
-  document.getElementById('listingForm').style.display = 'none';
+// ── AUTH CHECK — redirect if not logged in ──
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+
+  if (!session) {
+    window.location.href = 'signup.html';
+    return;
+  }
+
+  currentSession = session;
+
+  // Get agent profile
+  const { data: agent } = await sb
+    .from('agents')
+    .select('id')
+    .eq('user_id', session.user.id)
+    .single();
+
+  if (!agent) {
+    // Auth exists but no agent profile — go to dashboard to create it
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  agentId = agent.id;
 }
 
+// ── PHOTO HANDLING ──
 function handlePhotoSelect(e) {
   addPhotos(Array.from(e.target.files));
 }
@@ -305,22 +254,20 @@ function handleDrop(e) {
 
 function addPhotos(files) {
   const remaining = 20 - selectedPhotos.length;
-  const toAdd = files.slice(0, remaining);
-  selectedPhotos = [...selectedPhotos, ...toAdd];
+  selectedPhotos = [...selectedPhotos, ...files.slice(0, remaining)];
   renderPhotoGrid();
 }
 
 function renderPhotoGrid() {
-  const grid = document.getElementById('photoGrid');
-  grid.innerHTML = selectedPhotos.map((f, i) => {
+  document.getElementById('photoGrid').innerHTML = selectedPhotos.map((f, i) => {
     const url = URL.createObjectURL(f);
     return `<div class="photo-thumb">
       <img src="${url}" alt="photo ${i+1}" />
       <button class="remove-btn" onclick="removePhoto(${i})" type="button">✕</button>
     </div>`;
   }).join('');
-  document.getElementById('photoCount').textContent =
-    selectedPhotos.length > 0 ? `${selectedPhotos.length} photo${selectedPhotos.length !== 1 ? 's' : ''} selected` : '';
+  const n = selectedPhotos.length;
+  document.getElementById('photoCount').textContent = n > 0 ? `${n} photo${n !== 1 ? 's' : ''} selected` : '';
 }
 
 function removePhoto(i) {
@@ -328,98 +275,111 @@ function removePhoto(i) {
   renderPhotoGrid();
 }
 
-async function uploadPhotos(agentId) {
+// ── PHOTO UPLOAD — direct to Supabase Storage using session token ──
+async function uploadPhotos() {
   if (selectedPhotos.length === 0) return [];
+
   const progress = document.getElementById('uploadProgress');
   const fill = document.getElementById('progressFill');
   const text = document.getElementById('progressText');
   progress.style.display = 'block';
 
+  const token = currentSession.access_token;
   const urls = [];
+
   for (let i = 0; i < selectedPhotos.length; i++) {
     const file = selectedPhotos[i];
-    const ext = file.name.split('.').pop();
+    const ext = file.name.split('.').pop().toLowerCase();
     const path = `listings/${agentId}/${Date.now()}_${i}.${ext}`;
 
     text.textContent = `Uploading photo ${i + 1} of ${selectedPhotos.length}...`;
-    fill.style.width = `${Math.round(((i) / selectedPhotos.length) * 100)}%`;
+    fill.style.width = `${Math.round((i / selectedPhotos.length) * 100)}%`;
 
-    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/listing-photos/${path}`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${authToken || SUPABASE_ANON_KEY}`,
-        'Content-Type': file.type,
-        'x-upsert': 'true'
-      },
-      body: file
-    });
+    const { data, error } = await sb.storage
+      .from('listing-photos')
+      .upload(path, file, { upsert: true, contentType: file.type });
 
-    if (res.ok) {
-      urls.push(`${SUPABASE_URL}/storage/v1/object/public/listing-photos/${path}`);
+    if (!error) {
+      const { data: urlData } = sb.storage
+        .from('listing-photos')
+        .getPublicUrl(path);
+      if (urlData?.publicUrl) urls.push(urlData.publicUrl);
+    } else {
+      console.error('Photo upload error:', error.message);
     }
   }
 
   fill.style.width = '100%';
-  text.textContent = `${urls.length} photos uploaded ✓`;
+  text.textContent = `${urls.length} photo${urls.length !== 1 ? 's' : ''} uploaded ✓`;
   return urls;
 }
 
+// ── SUBMIT LISTING — direct Supabase insert ──
 async function submitListing(e) {
   e.preventDefault();
+
   const btn = document.getElementById('submitBtn');
   const errorEl = document.getElementById('errorMsg');
   errorEl.style.display = 'none';
 
-  if (!agentId) {
-    errorEl.textContent = 'Please sign in to submit a listing.';
+  // Re-check session
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    window.location.href = 'signup.html';
+    return;
+  }
+  currentSession = session;
+
+  const address = document.getElementById('address').value.trim();
+  const city = document.getElementById('city').value.trim();
+  const price = parseFloat(document.getElementById('price').value);
+
+  if (!address || !city || !price) {
+    errorEl.textContent = 'Address, city, and price are required.';
     errorEl.style.display = 'block';
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = 'Uploading photos and submitting...';
+  btn.textContent = 'Uploading photos...';
 
-  try {
-    // Upload photos first
-    const photoUrls = await uploadPhotos(agentId);
+  // 1. Upload photos
+  const photoUrls = await uploadPhotos();
 
-    // Submit listing
-    const res = await fetch('/api/list-home', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        agent_id: agentId,
-        auth_token: authToken,
-        address: document.getElementById('address').value.trim(),
-        city: document.getElementById('city').value.trim(),
-        state: document.getElementById('state').value,
-        zip: document.getElementById('zip').value.trim(),
-        price: document.getElementById('price').value,
-        beds: document.getElementById('beds').value,
-        baths: document.getElementById('baths').value,
-        sqft: document.getElementById('sqft').value,
-        description: document.getElementById('description').value.trim(),
-        commission_rate: document.getElementById('commission_rate').value,
-        property_type: document.getElementById('property_type').value,
-        website_url: document.getElementById('website_url').value.trim(),
-        photos: photoUrls
-      })
-    });
+  // 2. Insert listing directly into Supabase
+  btn.textContent = 'Submitting listing...';
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Submission failed');
+  const { data: listing, error } = await sb.from('listings').insert({
+    agent_id: agentId,
+    address,
+    city,
+    state: document.getElementById('state').value,
+    zip: document.getElementById('zip').value.trim() || null,
+    price,
+    beds: parseInt(document.getElementById('beds').value) || null,
+    baths: parseFloat(document.getElementById('baths').value) || null,
+    sqft: parseInt(document.getElementById('sqft').value) || null,
+    description: document.getElementById('description').value.trim() || null,
+    commission_rate: document.getElementById('commission_rate').value,
+    property_type: document.getElementById('property_type').value,
+    website_url: document.getElementById('website_url').value.trim() || null,
+    photos: photoUrls,
+    status: 'active'
+  }).select().single();
 
-    document.getElementById('theForm').style.display = 'none';
-    document.getElementById('successBox').style.display = 'block';
-
-  } catch (err) {
-    errorEl.textContent = err.message;
+  if (error) {
+    errorEl.textContent = 'Submission failed: ' + error.message;
     errorEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'Submit Listing — Go Live Now →';
+    return;
   }
+
+  // 3. Redirect to live listing page
+  window.location.href = `listing.html?id=${listing.id}`;
 }
+
+init();
 </script>
 </body>
 </html>
