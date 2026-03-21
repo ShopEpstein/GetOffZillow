@@ -5,145 +5,159 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent Dashboard — GetOffZillow AI</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root { --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --white:#fff; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; --yellow:#FFB800; --orange:#FF6B00; }
+  :root {
+    --blue:#006AFF; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D;
+    --red:#E8341C; --bg:#F7F7F7; --white:#fff; --text:#1A1A1A;
+    --gray:#6B6B6B; --border:#D8D8D8; --yellow:#FFB800;
+  }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
+  /* NAV */
   nav { background:#111; padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(0,255,157,0.12); }
-  .logo { text-decoration:none; display:flex; align-items:center; gap:10px; }
-  .logo span { color:var(--blue); } .logo em { color:var(--red); font-style:normal; } .logo sup { color:var(--ai-green); font-size:13px; }
-  .nav-right { display:flex; align-items:center; gap:14px; }
-  .nav-name { color:rgba(255,255,255,0.8); font-size:13px; font-weight:600; }
-  .nav-btn { padding:8px 16px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:none; font-family:'Nunito Sans',sans-serif; text-decoration:none; display:inline-block; }
+  .nav-logo { text-decoration:none; display:flex; align-items:center; gap:10px; }
+  .nav-right { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .nav-name { color:rgba(255,255,255,0.75); font-size:13px; font-weight:600; font-family:'Space Mono',monospace; }
+  .nav-btn { padding:7px 14px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; border:none; font-family:'Nunito',sans-serif; text-decoration:none; display:inline-block; transition:all 0.2s; }
   .nav-btn.green { background:var(--ai-green); color:#000; }
-  .nav-btn.outline { background:transparent; color:white; border:1px solid rgba(255,255,255,0.3); }
-  .nav-btn.outline:hover { background:rgba(255,255,255,0.1); }
-
-  /* PAGE STATES */
-  .page-state { display:none; }
-  .page-state.active { display:block; }
+  .nav-btn.green:hover { background:#00e88a; }
+  .nav-btn.outline { background:transparent; color:rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.25); }
+  .nav-btn.outline:hover { border-color:var(--ai-green); color:var(--ai-green); }
 
   /* LOADING */
-  #state-loading { display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 60px); }
-  .spinner { width:40px; height:40px; border:4px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+  .loading-screen { display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 60px); flex-direction:column; gap:16px; }
+  .spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--ai-green); border-radius:50%; animation:spin 0.7s linear infinite; }
   @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-screen p { font-size:13px; color:var(--gray); font-family:'Space Mono',monospace; }
 
-  /* NOT LOGGED IN */
-  #state-auth { display:flex; align-items:center; justify-content:center; padding:40px 24px; }
+  /* AUTH SCREEN */
+  .auth-screen { display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 60px); padding:40px 24px; }
   .auth-card { background:white; border-radius:16px; padding:40px; max-width:420px; width:100%; box-shadow:0 4px 24px rgba(0,0,0,0.1); text-align:center; }
   .auth-card h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:24px; margin-bottom:8px; }
   .auth-card p { color:var(--gray); margin-bottom:24px; font-size:14px; line-height:1.5; }
-  .auth-card a { display:inline-block; background:var(--blue); color:white; padding:12px 32px; border-radius:8px; text-decoration:none; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; }
+  .auth-card a { display:inline-block; background:var(--ai-green); color:#000; padding:13px 32px; border-radius:8px; text-decoration:none; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; }
 
   /* DASHBOARD */
-  #state-dashboard { padding:32px 24px; max-width:1100px; margin:0 auto; }
-  .dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
+  .dashboard { max-width:1100px; margin:0 auto; padding:32px 24px; }
+  .dash-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
   .dash-greeting h1 { font-family:'Nunito',sans-serif; font-weight:900; font-size:26px; }
   .dash-greeting p { font-size:13px; color:var(--gray); margin-top:3px; }
-  .dash-new-listing { background:var(--ai-green); color:#000; padding:12px 24px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; text-decoration:none; box-shadow:0 0 16px rgba(0,255,157,0.25); }
+  .dash-new-listing { background:var(--ai-green); color:#000; padding:12px 24px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; text-decoration:none; white-space:nowrap; }
 
-  /* STATS */
-  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
-  .stat-card { background:white; border-radius:12px; padding:20px 24px; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
-  .stat-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--gray); font-weight:700; margin-bottom:6px; }
-  .stat-value { font-family:'Bebas Neue',sans-serif; font-size:36px; line-height:1; }
-  .stat-value.blue { color:var(--blue); }
-  .stat-value.green { color:var(--green); }
-  .stat-value.ai { color:var(--ai-green); text-shadow:0 0 12px rgba(0,255,157,0.3); }
-  .stat-sub { font-size:11px; color:var(--gray); margin-top:4px; }
-
-  /* SECTIONS */
-  .section { margin-bottom:36px; }
-  .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
-  .section-head h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; }
-  .section-head a { font-size:13px; color:var(--blue); text-decoration:none; font-weight:700; }
-
-  /* INCOMPLETE PROFILE */
-  .profile-alert { background:#fff8e1; border:1px solid var(--yellow); border-radius:10px; padding:14px 18px; margin-bottom:24px; font-size:13px; display:none; }
+  /* PROFILE ALERT */
+  .profile-alert { background:#fff8e1; border:1px solid var(--yellow); border-radius:10px; padding:12px 16px; margin-bottom:20px; font-size:13px; }
   .profile-alert a { color:var(--blue); font-weight:700; }
 
+  /* STATS */
+  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+  .stat-card { background:white; border-radius:12px; padding:18px 20px; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
+  .stat-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--gray); font-weight:700; margin-bottom:5px; font-family:'Space Mono',monospace; }
+  .stat-value { font-family:'Bebas Neue',sans-serif; font-size:34px; line-height:1; }
+  .stat-value.blue { color:var(--blue); }
+  .stat-value.green { color:var(--green); }
+  .stat-value.ai { color:var(--ai-green); }
+  .stat-sub { font-size:11px; color:var(--gray); margin-top:3px; }
+
+  /* SECTIONS */
+  .section { margin-bottom:32px; }
+  .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .section-head h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:17px; }
+  .section-head a, .section-head button { font-size:13px; color:var(--blue); font-weight:700; text-decoration:none; background:none; border:none; cursor:pointer; }
+
   /* PROFILE CARD */
-  .profile-card { background:white; border-radius:12px; padding:24px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap; }
-  .profile-avi { width:72px; height:72px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:white; flex-shrink:0; overflow:hidden; }
+  .profile-card { background:white; border-radius:12px; padding:22px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; }
+  .profile-avi { width:64px; height:64px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:white; flex-shrink:0; overflow:hidden; }
   .profile-avi img { width:100%; height:100%; object-fit:cover; }
-  .profile-info h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; }
-  .profile-meta { font-size:13px; color:var(--gray); margin-top:4px; line-height:1.7; }
-  .profile-badge { display:inline-flex; align-items:center; gap:4px; background:#E8FBF0; color:var(--green); font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px; margin-top:6px; }
-  .profile-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
-  .profile-actions a { padding:8px 16px; border-radius:6px; font-size:13px; font-weight:700; text-decoration:none; }
-  .pa-primary { background:var(--blue); color:white; }
-  .pa-outline { background:transparent; color:var(--blue); border:1.5px solid var(--blue); }
+  .profile-info h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:17px; }
+  .profile-meta { font-size:12px; color:var(--gray); margin-top:4px; line-height:1.7; }
+  .profile-badge { display:inline-flex; align-items:center; gap:4px; background:#E8FBF0; color:var(--green); font-size:11px; font-weight:700; padding:2px 8px; border-radius:4px; margin-top:5px; }
+  .profile-actions { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .pa-primary { background:var(--blue); color:white; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; }
+  .pa-outline { background:transparent; color:var(--blue); border:1.5px solid var(--blue); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; }
 
   /* LISTINGS */
-  .listings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .listing-item { background:white; border-radius:10px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
-  .li-img { height:140px; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); display:flex; align-items:center; justify-content:center; font-size:36px; position:relative; overflow:hidden; }
-  .li-img img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
-  .li-status { position:absolute; top:8px; left:8px; font-size:10px; font-weight:800; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:var(--blue); color:white; }
+  .listings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .li-card { background:white; border-radius:10px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
+  .li-img { height:140px; position:relative; overflow:hidden; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); }
+  .li-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .li-img-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:32px; }
+  .li-status { position:absolute; top:8px; left:8px; font-size:9px; font-weight:800; text-transform:uppercase; padding:2px 7px; border-radius:3px; color:white; }
+  .li-status.active { background:var(--blue); }
   .li-status.pending { background:var(--yellow); color:#000; }
   .li-status.deleted { background:var(--gray); }
-  .li-body { padding:14px; }
-  .li-price { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; }
-  .li-commission { font-size:11px; color:var(--green); font-weight:700; margin-top:2px; }
-  .li-addr { font-size:12px; color:var(--gray); margin-top:4px; }
-  .li-specs { font-size:11px; color:var(--gray); margin-top:4px; }
-  .li-actions { display:flex; gap:12px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
-  .li-actions a { font-size:12px; color:var(--blue); font-weight:700; text-decoration:none; }
-  .li-actions button { font-size:12px; color:var(--red); font-weight:700; background:none; border:none; cursor:pointer; padding:0; }
+  .li-body { padding:12px; }
+  .li-price { font-family:'Nunito',sans-serif; font-weight:900; font-size:17px; }
+  .li-commission { font-size:10px; color:var(--green); font-weight:700; margin-top:2px; }
+  .li-addr { font-size:11px; color:var(--gray); margin-top:3px; }
+  .li-specs { font-size:11px; color:var(--gray); margin-top:3px; }
+  .li-actions { display:flex; gap:10px; margin-top:9px; padding-top:9px; border-top:1px solid var(--border); flex-wrap:wrap; }
+  .li-actions a { font-size:11px; color:var(--blue); font-weight:700; text-decoration:none; }
+  .li-actions button { font-size:11px; font-weight:700; background:none; border:none; cursor:pointer; padding:0; }
+  .li-actions .btn-edit { color:var(--blue); }
+  .li-actions .btn-toggle { color:var(--gray); }
+  .li-actions .btn-delete { color:var(--red); }
 
   /* LEADS */
-  .leads-list { display:flex; flex-direction:column; gap:12px; }
-  .lead-item { background:white; border-radius:10px; padding:16px 20px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:16px; align-items:flex-start; }
-  .lead-avi { width:40px; height:40px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; }
+  .leads-list { display:flex; flex-direction:column; gap:10px; }
+  .lead-item { background:white; border-radius:10px; padding:14px 18px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:14px; align-items:flex-start; }
+  .lead-avi { width:36px; height:36px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; }
   .lead-info { flex:1; min-width:0; }
-  .lead-name { font-weight:700; font-size:14px; }
-  .lead-contact { font-size:12px; color:var(--gray); margin-top:2px; }
-  .lead-msg { font-size:12px; color:var(--text); margin-top:6px; font-style:italic; }
-  .lead-time { font-size:11px; color:var(--gray); white-space:nowrap; }
-  .lead-reply { background:var(--blue); color:white; padding:6px 14px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; display:inline-block; margin-top:8px; }
+  .lead-name { font-weight:700; font-size:13px; }
+  .lead-contact { font-size:11px; color:var(--gray); margin-top:2px; }
+  .lead-contact a { color:var(--blue); }
+  .lead-msg { font-size:12px; color:var(--text); margin-top:4px; font-style:italic; }
+  .lead-time { font-size:11px; color:var(--gray); white-space:nowrap; font-family:'Space Mono',monospace; }
+  .lead-reply { background:var(--blue); color:white; padding:5px 12px; border-radius:5px; font-size:11px; font-weight:700; text-decoration:none; display:inline-block; margin-top:6px; }
 
-  .empty-state { text-align:center; padding:40px; color:var(--gray); }
-  .empty-state .icon { font-size:40px; margin-bottom:12px; }
-  .empty-state h3 { font-family:'Nunito',sans-serif; font-weight:800; margin-bottom:6px; color:var(--text); }
-  .empty-state a { display:inline-block; margin-top:12px; background:var(--blue); color:white; padding:10px 24px; border-radius:8px; text-decoration:none; font-weight:700; }
+  /* EDIT MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:500; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+  .modal-overlay.open { display:flex; }
+  .modal-box { background:white; border-radius:14px; padding:32px; width:100%; max-width:600px; position:relative; animation:fadeUp 0.2s ease; max-height:90vh; overflow-y:auto; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .modal-title { font-family:'Nunito',sans-serif; font-weight:900; font-size:20px; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .modal-close { width:30px; height:30px; border-radius:50%; border:none; background:#f0f0f0; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .form-group { margin-bottom:12px; }
+  .form-group label { display:block; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; color:var(--text); }
+  .form-group input, .form-group select, .form-group textarea { width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:7px; font-family:'Nunito Sans',sans-serif; font-size:13px; outline:none; transition:border-color 0.2s; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
+  .form-group textarea { min-height:80px; resize:vertical; }
+  .modal-err { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:10px 12px; border-radius:7px; font-size:12px; display:none; margin-bottom:12px; }
+  .modal-ok { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:10px 12px; border-radius:7px; font-size:12px; display:none; margin-bottom:12px; }
+  .save-btn { background:var(--ai-green); color:#000; border:none; padding:12px 28px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; cursor:pointer; }
+  .cancel-btn { background:transparent; color:var(--gray); border:1.5px solid var(--border); padding:11px 20px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; cursor:pointer; margin-left:10px; }
 
-  .loading-text { text-align:center; padding:32px; color:var(--gray); font-size:14px; }
-
-  /* SESSION EXPIRED */
-  .session-banner { background:var(--red); color:white; text-align:center; padding:10px; font-size:13px; font-weight:700; display:none; }
+  /* EMPTY STATES */
+  .empty-state { text-align:center; padding:36px; color:var(--gray); }
+  .empty-state .icon { font-size:36px; margin-bottom:10px; }
+  .empty-state h3 { font-family:'Nunito',sans-serif; font-weight:800; margin-bottom:5px; color:var(--text); font-size:16px; }
+  .empty-state p { font-size:13px; }
+  .empty-state a { display:inline-block; margin-top:12px; background:var(--blue); color:white; padding:9px 22px; border-radius:7px; text-decoration:none; font-weight:700; font-size:13px; }
+  .loading-text { text-align:center; padding:28px; color:var(--gray); font-size:13px; }
+  .session-banner { background:var(--red); color:white; text-align:center; padding:8px; font-size:12px; font-weight:700; display:none; }
   .session-banner a { color:var(--yellow); text-decoration:underline; cursor:pointer; }
 
-  @media(max-width:900px) { .stats-row { grid-template-columns:repeat(2,1fr); } .listings-grid { grid-template-columns:repeat(2,1fr); } }
-  @media(max-width:600px) { .listings-grid { grid-template-columns:1fr; } .stats-row { grid-template-columns:repeat(2,1fr); } .profile-card { flex-direction:column; } }
+  @media(max-width:900px) { .stats-row{grid-template-columns:repeat(2,1fr);} .listings-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px) { .listings-grid{grid-template-columns:1fr;} .stats-row{grid-template-columns:repeat(2,1fr);} .profile-card{flex-direction:column;} .form-grid{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
 
 <div class="session-banner" id="sessionBanner">
-  Your session expired. <a onclick="window.location.href='signup.html'">Sign in again →</a>
+  Session expired. <a onclick="window.location.href='signup.html'">Sign in again →</a>
 </div>
 
 <nav>
   <a href="index.html" class="nav-logo">
-    <div class="logo-icon" style="width:36px;height:36px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #00FF9D,0 0 10px rgba(0,255,157,0.2);flex-shrink:0">
-      <svg width="22" height="22" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
-        <polyline points="38,19 42,22" fill="none" stroke="#E8341C" stroke-width="2.2" stroke-linecap="round" opacity="0.9"/>
-        <line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/>
-        <line x1="38" y1="22" x2="38" y2="32" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" opacity="0.7"/>
-        <polyline points="38,32 41,37 37,40" fill="none" stroke="#00FF9D" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-        <line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/>
-        <circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/>
-        <circle cx="23" cy="30" r="1.2" fill="#00FF9D"/>
-        <rect x="4" y="23.5" width="38" height="2" fill="#E8341C" opacity="0.15"/>
-      </svg>
+    <div style="width:36px;height:36px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #00FF9D,0 0 10px rgba(0,255,157,0.2);flex-shrink:0">
+      <svg width="22" height="22" viewBox="0 0 46 46" fill="none"><polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/><polyline points="38,19 42,22" fill="none" stroke="#E8341C" stroke-width="2.2" stroke-linecap="round" opacity="0.9"/><line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/><circle cx="23" cy="30" r="1.2" fill="#00FF9D"/><rect x="4" y="23.5" width="38" height="2" fill="#E8341C" opacity="0.15"/></svg>
     </div>
     <div style="display:flex;flex-direction:column;line-height:1;gap:0;margin-left:2px">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.1em;color:white;line-height:1">GET OFF</div>
       <div style="display:flex;align-items:center;gap:5px">
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);position:relative;display:inline-block">ZILLOW<span style="position:absolute;left:-2px;top:52%;width:calc(100% + 4px);height:2px;background:#E8341C;transform:rotate(-5deg) translateY(-50%);display:block;box-shadow:0 0 4px rgba(232,52,28,0.6)"></span></span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);position:relative;display:inline-block">ZILLOW<span style="position:absolute;left:-2px;top:52%;width:calc(100% + 4px);height:2px;background:#E8341C;transform:rotate(-5deg) translateY(-50%);display:block"></span></span>
         <span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:#E8341C;line-height:1">✕</span>
       </div>
       <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:0.18em;padding:1px 6px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start;line-height:1.4">AI</div>
@@ -156,46 +170,102 @@
   </div>
 </nav>
 
-<!-- LOADING -->
-<div class="page-state active" id="state-loading">
-  <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px)">
-    <div class="spinner"></div>
+<!-- EDIT LISTING MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <div class="modal-title">
+      Edit Listing
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-err" id="editErr"></div>
+    <div class="modal-ok" id="editOk"></div>
+    <input type="hidden" id="editListingId" />
+    <div class="form-grid">
+      <div class="form-group" style="grid-column:1/-1"><label>Street Address *</label><input id="el_address" type="text" /></div>
+      <div class="form-group"><label>City *</label><input id="el_city" type="text" /></div>
+      <div class="form-group"><label>State</label>
+        <select id="el_state">
+          <option value="FL">Florida</option><option value="AL">Alabama</option>
+          <option value="GA">Georgia</option><option value="TN">Tennessee</option>
+          <option value="TX">Texas</option><option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label>ZIP Code</label><input id="el_zip" type="text" /></div>
+      <div class="form-group"><label>Asking Price ($) *</label><input id="el_price" type="number" /></div>
+      <div class="form-group"><label>Commission Rate</label>
+        <select id="el_commission">
+          <option value="2%">2%</option><option value="2.5%">2.5%</option>
+          <option value="2.75%">2.75%</option><option value="3%">3%</option>
+          <option value="Negotiable">Negotiable</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Bedrooms</label>
+        <select id="el_beds">
+          <option value="">—</option><option>1</option><option>2</option>
+          <option>3</option><option>4</option><option>5</option><option>6+</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Bathrooms</label>
+        <select id="el_baths">
+          <option value="">—</option><option>1</option><option>1.5</option>
+          <option>2</option><option>2.5</option><option>3</option><option>4+</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Sq Ft</label><input id="el_sqft" type="number" /></div>
+      <div class="form-group"><label>Property Type</label>
+        <select id="el_type">
+          <option>Single Family</option><option>Condo</option><option>Townhouse</option>
+          <option>Multi-Family</option><option>Land</option><option>Commercial</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="el_desc"></textarea></div>
+    <div class="form-group"><label>Listing Website URL (optional)</label><input id="el_url" type="url" placeholder="https://yourmls.com/listing/..." /></div>
+    <div style="margin-top:4px">
+      <button class="save-btn" onclick="saveEditListing()">Save Changes →</button>
+      <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+    </div>
   </div>
 </div>
 
-<!-- NOT LOGGED IN -->
-<div class="page-state" id="state-auth">
-  <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);padding:40px 24px">
+<!-- MAIN CONTENT — single div, JS shows/hides sections -->
+<div id="mainContent">
+  <!-- Loading -->
+  <div class="loading-screen" id="screenLoading">
+    <div class="spinner"></div>
+    <p>Loading dashboard...</p>
+  </div>
+
+  <!-- Not logged in -->
+  <div class="auth-screen" id="screenAuth" style="display:none">
     <div class="auth-card">
       <h2>Agent Sign In</h2>
       <p>Access your listings, leads, and agent profile. Don't have an account? It's free.</p>
       <a href="signup.html">Sign In / Create Account →</a>
     </div>
   </div>
-</div>
 
-<!-- DASHBOARD -->
-<div class="page-state" id="state-dashboard">
-  <div style="max-width:1100px;margin:0 auto;padding:32px 24px">
+  <!-- Dashboard -->
+  <div class="dashboard" id="screenDashboard" style="display:none">
 
-    <div class="profile-alert" id="profileAlert">
-      ⚠️ <strong>Your profile is incomplete.</strong> Add your phone, license number, and bio so buyers can find and trust you. <a href="agent.html?edit=true" id="profileAlertLink">Complete profile →</a>
+    <div class="profile-alert" id="profileAlert" style="display:none">
+      ⚠️ <strong>Profile incomplete.</strong> Add your phone and license number so buyers can reach you.
+      <a id="profileAlertLink" href="#">Complete it →</a>
     </div>
 
     <div class="dash-header">
       <div class="dash-greeting">
         <h1 id="dashGreeting">Welcome back! 👋</h1>
-        <p>Your GetOffZillow AI dashboard — 1% fee locked for life.</p>
+        <p>Your GetOffZillow AI dashboard — 1% marketplace fee, only at closing.</p>
       </div>
-      <a href="list.html" class="dash-new-listing">+ Submit New Listing</a>
+      <a href="list.html" class="dash-new-listing">+ New Listing</a>
     </div>
 
-    <!-- STATS -->
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-label">Active Listings</div>
         <div class="stat-value blue" id="statListings">—</div>
-        <div class="stat-sub">Live and visible</div>
+        <div class="stat-sub">Live and searchable</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Total Leads</div>
@@ -203,29 +273,25 @@
         <div class="stat-sub">Buyers who contacted you</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Your Referral Rate</div>
+        <div class="stat-label">Your Marketplace Fee</div>
         <div class="stat-value ai">1%</div>
-        <div class="stat-sub">Locked for life</div>
+        <div class="stat-sub">Only when you close</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Saved vs Zillow</div>
+        <div class="stat-label">Saved vs Zillow Flex</div>
         <div class="stat-value green" id="statSaved">$0</div>
-        <div class="stat-sub">vs. Zillow Flex (40%)</div>
+        <div class="stat-sub">Estimated on active listings</div>
       </div>
     </div>
 
-    <!-- PROFILE -->
     <div class="section">
       <div class="section-head">
         <h2>Your Agent Profile</h2>
-        <a href="#" id="editProfileLink">Edit Profile →</a>
+        <a id="editProfileLink" href="#">Edit Profile →</a>
       </div>
-      <div class="profile-card" id="profileCard">
-        <div class="loading-text">Loading profile...</div>
-      </div>
+      <div class="profile-card" id="profileCard"><div class="loading-text">Loading...</div></div>
     </div>
 
-    <!-- LISTINGS -->
     <div class="section">
       <div class="section-head">
         <h2>Your Listings</h2>
@@ -234,11 +300,10 @@
       <div id="listingsContainer"><div class="loading-text">Loading listings...</div></div>
     </div>
 
-    <!-- LEADS -->
     <div class="section">
       <div class="section-head">
         <h2>Recent Leads</h2>
-        <span style="font-size:12px;color:var(--gray)">Zero per-lead charge — ever</span>
+        <span style="font-size:11px;color:var(--gray);font-weight:400">No per-lead charge — ever</span>
       </div>
       <div id="leadsContainer"><div class="loading-text">Loading leads...</div></div>
     </div>
@@ -253,52 +318,88 @@ const sb = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
 );
 
-let currentSession = null;
 let agentId = null;
+let currentListingForEdit = null;
+
+// Parse Postgres array or JS array
+function parsePhotos(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw.filter(Boolean);
+  if (typeof raw === 'string') {
+    if (raw.startsWith('{') && raw.endsWith('}')) {
+      return raw.slice(1,-1).split(',').map(s=>s.trim().replace(/^"|"$/g,'')).filter(s=>s.startsWith('http'));
+    }
+    if (raw.startsWith('http')) return [raw];
+  }
+  return [];
+}
+
+function show(id) { document.getElementById(id).style.display = id === 'screenDashboard' ? 'block' : 'flex'; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
 
 // ── INIT ──
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
+  // Listen for auth changes immediately
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') window.location.href = 'index.html';
+  });
 
-  if (!session) {
-    showState('auth');
+  const { data: { session }, error: sessionError } = await sb.auth.getSession();
+
+  if (sessionError || !session) {
+    hide('screenLoading');
+    show('screenAuth');
     return;
   }
 
-  currentSession = session;
-  showState('dashboard');
-  document.getElementById('navListBtn').style.display = 'inline-block';
-  document.getElementById('navSignOutBtn').style.display = 'inline-block';
-
-  // Get agent profile
-  const { data: agent, error } = await sb
+  // Session exists — get agent profile
+  const { data: agent, error: agentError } = await sb
     .from('agents')
     .select('*')
     .eq('user_id', session.user.id)
     .single();
 
-  if (error || !agent) {
-    // Auth user exists but no agent profile — create one
-    const meta = session.user.user_metadata || {};
-    const { data: newAgent } = await sb.from('agents').insert({
-      user_id: session.user.id,
-      first_name: meta.first_name || 'Agent',
-      last_name: meta.last_name || '',
-      email: session.user.email
-    }).select().single();
+  if (agentError && agentError.code !== 'PGRST116') {
+    // Real error (not just "row not found")
+    console.error('Agent fetch error:', agentError);
+  }
 
-    if (newAgent) {
+  if (!agent) {
+    // Auth user exists but no agent row — create one now
+    const meta = session.user.user_metadata || {};
+    const { data: newAgent, error: createError } = await sb
+      .from('agents')
+      .insert({
+        user_id: session.user.id,
+        first_name: meta.first_name || session.user.email.split('@')[0],
+        last_name: meta.last_name || '',
+        email: session.user.email
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error('Could not create agent profile:', createError);
+      // Still show dashboard — agent can complete profile
+      agentId = null;
+    } else {
       agentId = newAgent.id;
       localStorage.setItem('goz_agent_id', agentId);
+      localStorage.setItem('goz_name', `${newAgent.first_name} ${newAgent.last_name}`.trim() || session.user.email);
     }
   } else {
     agentId = agent.id;
     localStorage.setItem('goz_agent_id', agentId);
-    localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`);
+    localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`.trim());
   }
 
-  // Set greeting
-  const name = localStorage.getItem('goz_name') || 'Agent';
+  // Show dashboard
+  hide('screenLoading');
+  show('screenDashboard');
+  document.getElementById('navListBtn').style.display = 'inline-block';
+  document.getElementById('navSignOutBtn').style.display = 'inline-block';
+
+  const name = localStorage.getItem('goz_name') || session.user.email;
   document.getElementById('navName').textContent = name;
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
@@ -306,77 +407,64 @@ async function init() {
 
   if (agentId) {
     document.getElementById('editProfileLink').href = `agent.html?id=${agentId}&edit=true`;
-    loadProfile();
+    document.getElementById('profileAlertLink').href = `agent.html?id=${agentId}&edit=true`;
+    loadProfile(agent);
     loadListings();
     loadLeads();
+  } else {
+    document.getElementById('profileCard').innerHTML = `<div class="loading-text">Could not load profile. <a href="agent.html" style="color:var(--blue)">Try refreshing →</a></div>`;
   }
-
-  // Listen for auth state changes (token refresh handled by Supabase SDK automatically)
-  sb.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_OUT') {
-      window.location.href = 'signup.html';
-    }
-    if (event === 'TOKEN_REFRESHED') {
-      currentSession = session;
-    }
-  });
 }
 
-function showState(name) {
-  document.querySelectorAll('.page-state').forEach(s => s.classList.remove('active'));
-  document.getElementById('state-' + name).classList.add('active');
-}
-
-// ── LOAD PROFILE ──
-async function loadProfile() {
-  const { data: agent } = await sb.from('agents').select('*').eq('id', agentId).single();
+// ── PROFILE ──
+function loadProfile(agent) {
   if (!agent) return;
 
-  // Show incomplete alert if missing key fields
   if (!agent.phone || !agent.license_number) {
     document.getElementById('profileAlert').style.display = 'block';
-    document.getElementById('profileAlertLink').href = `agent.html?id=${agentId}&edit=true`;
   }
 
   const avi = agent.photo_url
     ? `<img src="${agent.photo_url}" alt="${agent.first_name}" />`
-    : (agent.first_name?.[0] || '') + (agent.last_name?.[0] || '');
+    : (agent.first_name?.[0]||'') + (agent.last_name?.[0]||'');
 
   document.getElementById('profileCard').innerHTML = `
     <div class="profile-avi">${avi}</div>
     <div class="profile-info">
       <h3>${agent.first_name} ${agent.last_name}</h3>
       <div class="profile-meta">
-        ${agent.brokerage ? agent.brokerage : ''}${agent.brokerage && agent.state ? ' · ' : ''}${agent.state || ''}
+        ${[agent.brokerage, agent.state].filter(Boolean).join(' · ')}
         ${agent.license_number ? `<br>License: ${agent.license_number}` : ''}
-        ${agent.phone ? `<br>📞 ${agent.phone}` : ''}
+        ${agent.phone ? `<br>📞 <a href="tel:${agent.phone}" style="color:var(--blue)">${agent.phone}</a>` : ''}
         ${agent.markets_served ? `<br>📍 ${agent.markets_served}` : ''}
-        ${agent.website ? `<br><a href="${agent.website}" target="_blank" style="color:var(--blue)">${agent.website}</a>` : ''}
+        ${agent.commission_rate ? `<br>💰 Typical rate: ${agent.commission_rate}` : ''}
+        ${agent.website ? `<br><a href="${agent.website}" target="_blank" style="color:var(--blue)">${agent.website.replace(/^https?:\/\//,'')}</a>` : ''}
       </div>
-      <div class="profile-badge">GOZ AI Agent · 1% rate locked</div>
+      <div class="profile-badge">GOZ Agent · 1% marketplace fee</div>
       <div class="profile-actions">
-        <a href="agent.html?id=${agentId}" class="pa-primary" target="_blank">View Public Profile →</a>
+        <a href="agent.html?id=${agentId}" class="pa-primary" target="_blank">Public Profile →</a>
         <a href="agent.html?id=${agentId}&edit=true" class="pa-outline">Edit Profile</a>
+        <a href="list.html" class="pa-outline">+ Add Listing</a>
       </div>
     </div>`;
 }
 
-// ── LOAD LISTINGS ──
+// ── LISTINGS ──
 async function loadListings() {
   const { data: listings, error } = await sb
     .from('listings')
     .select('*')
     .eq('agent_id', agentId)
+    .neq('status', 'deleted')
     .order('created_at', { ascending: false });
 
-  if (error) { console.error(error); return; }
+  if (error) { console.error('Listings error:', error); return; }
 
-  const active = (listings || []).filter(l => l.status === 'active');
+  const active = (listings||[]).filter(l => l.status === 'active');
   document.getElementById('statListings').textContent = active.length;
 
-  // Savings calc
-  const totalComm = active.reduce((sum, l) => sum + (Number(l.price) || 0), 0) * 0.025;
-  const saved = Math.round(totalComm * 0.39); // 40% zillow vs 1% ours
+  // Savings estimate
+  const saved = Math.round(active.reduce((s,l) => s + (Number(l.price)||0), 0) * 0.025 * 0.39);
   document.getElementById('statSaved').textContent = saved > 0 ? '$' + saved.toLocaleString() : '$0';
 
   if (!listings || !listings.length) {
@@ -384,35 +472,41 @@ async function loadListings() {
       <div class="empty-state">
         <div class="icon">🏡</div>
         <h3>No listings yet</h3>
-        <p>Submit your first listing — free, goes live immediately.</p>
-        <a href="list.html">Submit First Listing →</a>
+        <p>Free to list. Goes live immediately. Commission shown publicly.</p>
+        <a href="list.html">Submit Your First Listing →</a>
       </div>`;
     return;
   }
 
   document.getElementById('listingsContainer').innerHTML = `<div class="listings-grid">` +
-    listings.map(l => `
-      <div class="listing-item">
+    listings.map(l => {
+      const photos = parsePhotos(l.photos);
+      const imgHtml = photos.length
+        ? `<img src="${photos[0]}" alt="${l.address}" onerror="this.style.display='none'" />`
+        : `<div class="li-img-placeholder">🏡</div>`;
+      return `
+      <div class="li-card">
         <div class="li-img">
-          ${l.photos && l.photos.length ? `<img src="${l.photos[0]}" alt="${l.address}" />` : '🏡'}
+          ${imgHtml}
           <div class="li-status ${l.status}">${l.status.toUpperCase()}</div>
         </div>
         <div class="li-body">
           <div class="li-price">$${Number(l.price).toLocaleString()}</div>
-          <div class="li-commission">✓ ${l.commission_rate} commission — public</div>
+          <div class="li-commission">✓ ${l.commission_rate} commission — shown publicly</div>
           <div class="li-addr">${l.address}, ${l.city}, ${l.state}</div>
-          <div class="li-specs">${l.beds ? l.beds + 'bd' : ''} ${l.baths ? l.baths + 'ba' : ''} ${l.sqft ? Number(l.sqft).toLocaleString() + ' sqft' : ''}</div>
+          <div class="li-specs">${[l.beds&&l.beds+'bd', l.baths&&l.baths+'ba', l.sqft&&Number(l.sqft).toLocaleString()+' sqft'].filter(Boolean).join(' · ')}</div>
           <div class="li-actions">
             <a href="listing.html?id=${l.id}" target="_blank">View →</a>
-            <button onclick="toggleStatus('${l.id}','${l.status}')">${l.status === 'active' ? 'Deactivate' : 'Reactivate'}</button>
-            <button onclick="deleteListing('${l.id}')">Delete</button>
+            <button class="btn-edit" onclick="openEditModal(${JSON.stringify(l).replace(/"/g,'&quot;')})">Edit</button>
+            <button class="btn-toggle" onclick="toggleStatus('${l.id}','${l.status}')">${l.status==='active'?'Deactivate':'Reactivate'}</button>
+            <button class="btn-delete" onclick="deleteListing('${l.id}')">Delete</button>
           </div>
         </div>
-      </div>`
-    ).join('') + `</div>`;
+      </div>`;
+    }).join('') + `</div>`;
 }
 
-// ── LOAD LEADS ──
+// ── LEADS ──
 async function loadLeads() {
   const { data: leads, error } = await sb
     .from('leads')
@@ -421,16 +515,16 @@ async function loadLeads() {
     .order('created_at', { ascending: false })
     .limit(20);
 
-  if (error) { console.error(error); return; }
+  if (error) { console.error('Leads error:', error); return; }
 
-  document.getElementById('statLeads').textContent = (leads || []).length;
+  document.getElementById('statLeads').textContent = (leads||[]).length;
 
   if (!leads || !leads.length) {
     document.getElementById('leadsContainer').innerHTML = `
       <div class="empty-state">
         <div class="icon">📬</div>
         <h3>No leads yet</h3>
-        <p>When buyers contact you through your listings, they appear here. Zero per-lead charge.</p>
+        <p>When buyers contact you from your listings, they appear here. You pay nothing per lead.</p>
       </div>`;
     return;
   }
@@ -438,12 +532,12 @@ async function loadLeads() {
   document.getElementById('leadsContainer').innerHTML = `<div class="leads-list">` +
     leads.map(l => `
       <div class="lead-item">
-        <div class="lead-avi">${l.buyer_name?.[0]?.toUpperCase() || '?'}</div>
+        <div class="lead-avi">${(l.buyer_name?.[0]||'?').toUpperCase()}</div>
         <div class="lead-info">
           <div class="lead-name">${l.buyer_name}</div>
           <div class="lead-contact">
-            📧 <a href="mailto:${l.buyer_email}" style="color:var(--blue)">${l.buyer_email}</a>
-            ${l.buyer_phone ? ` · 📞 <a href="tel:${l.buyer_phone}" style="color:var(--blue)">${l.buyer_phone}</a>` : ''}
+            📧 <a href="mailto:${l.buyer_email}">${l.buyer_email}</a>
+            ${l.buyer_phone ? ` · 📞 <a href="tel:${l.buyer_phone}">${l.buyer_phone}</a>` : ''}
           </div>
           ${l.message ? `<div class="lead-msg">"${l.message}"</div>` : ''}
           <a href="mailto:${l.buyer_email}?subject=Re: Your inquiry on GetOffZillow AI" class="lead-reply">Reply →</a>
@@ -451,6 +545,85 @@ async function loadLeads() {
         <div class="lead-time">${timeSince(new Date(l.created_at))}</div>
       </div>`
     ).join('') + `</div>`;
+}
+
+// ── EDIT LISTING MODAL ──
+function openEditModal(listing) {
+  currentListingForEdit = listing;
+  document.getElementById('editListingId').value = listing.id;
+  document.getElementById('el_address').value = listing.address || '';
+  document.getElementById('el_city').value = listing.city || '';
+  document.getElementById('el_state').value = listing.state || 'FL';
+  document.getElementById('el_zip').value = listing.zip || '';
+  document.getElementById('el_price').value = listing.price || '';
+  document.getElementById('el_commission').value = listing.commission_rate || '2.5%';
+  document.getElementById('el_beds').value = listing.beds || '';
+  document.getElementById('el_baths').value = listing.baths || '';
+  document.getElementById('el_sqft').value = listing.sqft || '';
+  document.getElementById('el_type').value = listing.property_type || 'Single Family';
+  document.getElementById('el_desc').value = listing.description || '';
+  document.getElementById('el_url').value = listing.website_url || '';
+  document.getElementById('editErr').style.display = 'none';
+  document.getElementById('editOk').style.display = 'none';
+  document.getElementById('editModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('open');
+  document.body.style.overflow = '';
+  currentListingForEdit = null;
+}
+
+document.getElementById('editModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('editModal')) closeEditModal();
+});
+
+async function saveEditListing() {
+  const errEl = document.getElementById('editErr');
+  const okEl = document.getElementById('editOk');
+  errEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  const id = document.getElementById('editListingId').value;
+  const address = document.getElementById('el_address').value.trim();
+  const city = document.getElementById('el_city').value.trim();
+  const price = parseFloat(document.getElementById('el_price').value);
+
+  if (!address || !city || !price) {
+    errEl.textContent = 'Address, city, and price are required.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const updates = {
+    address, city,
+    state: document.getElementById('el_state').value,
+    zip: document.getElementById('el_zip').value.trim() || null,
+    price,
+    commission_rate: document.getElementById('el_commission').value,
+    beds: parseInt(document.getElementById('el_beds').value) || null,
+    baths: parseFloat(document.getElementById('el_baths').value) || null,
+    sqft: parseInt(document.getElementById('el_sqft').value) || null,
+    property_type: document.getElementById('el_type').value,
+    description: document.getElementById('el_desc').value.trim() || null,
+    website_url: document.getElementById('el_url').value.trim() || null,
+  };
+
+  const { error } = await sb.from('listings').update(updates).eq('id', id);
+
+  if (error) {
+    errEl.textContent = 'Save failed: ' + error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+
+  okEl.textContent = '✅ Listing updated!';
+  okEl.style.display = 'block';
+  setTimeout(() => {
+    closeEditModal();
+    loadListings();
+  }, 1200);
 }
 
 // ── LISTING ACTIONS ──
@@ -461,7 +634,7 @@ async function toggleStatus(id, current) {
 }
 
 async function deleteListing(id) {
-  if (!confirm('Delete this listing? It will be removed from public search.')) return;
+  if (!confirm('Remove this listing from public search?')) return;
   await sb.from('listings').update({ status: 'deleted' }).eq('id', id);
   loadListings();
 }
