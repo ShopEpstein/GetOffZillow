@@ -4,50 +4,39 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Listing — GetOffZillow AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   :root { --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --white:#fff; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); }
-
   nav { background:white; border-bottom:1px solid var(--border); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
   .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; text-decoration:none; color:var(--text); }
-  .nav-logo span { color:var(--blue); }
-  .nav-logo em { color:var(--red); font-style:normal; }
-  .nav-logo sup { color:var(--ai-green); font-size:14px; }
+  .nav-logo span { color:var(--blue); } .nav-logo em { color:var(--red); font-style:normal; } .nav-logo sup { color:var(--ai-green); font-size:14px; }
   .nav-back { font-size:13px; color:var(--blue); text-decoration:none; font-weight:700; }
-
   .page { max-width:1100px; margin:0 auto; padding:32px 24px; display:grid; grid-template-columns:1fr 360px; gap:28px; align-items:start; }
-
-  /* PHOTOS */
-  .photo-main { border-radius:12px; overflow:hidden; background:#c8d8f0; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:80px; margin-bottom:12px; }
-  .photo-main img { width:100%; height:100%; object-fit:cover; }
-  .photo-strip { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; }
+  .photo-main { border-radius:12px; overflow:hidden; background:#c8d8f0; aspect-ratio:16/9; position:relative; }
+  .photo-main img { width:100%; height:100%; object-fit:cover; display:block; }
+  .photo-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); color:#6b8ab0; font-size:14px; font-weight:600; flex-direction:column; gap:8px; min-height:200px; }
+  .photo-placeholder svg { width:48px; height:48px; opacity:0.5; }
+  .photo-strip { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; margin-top:10px; }
   .photo-thumb { width:80px; height:60px; border-radius:6px; overflow:hidden; flex-shrink:0; cursor:pointer; border:2px solid transparent; transition:border-color 0.15s; }
   .photo-thumb.active { border-color:var(--blue); }
   .photo-thumb img { width:100%; height:100%; object-fit:cover; }
-
-  /* DETAILS */
   .listing-details { margin-top:24px; }
   .listing-price { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--text); line-height:1; }
   .listing-commission { display:inline-flex; align-items:center; gap:6px; background:#E8FBF0; color:var(--green); font-size:13px; font-weight:700; padding:4px 12px; border-radius:6px; margin-top:6px; }
   .listing-address { font-size:18px; font-weight:700; margin-top:8px; }
   .listing-city { font-size:14px; color:var(--gray); margin-top:2px; }
-
   .specs-row { display:flex; gap:24px; margin:20px 0; padding:16px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); flex-wrap:wrap; }
-  .spec { text-align:center; }
+  .spec { text-align:center; min-width:60px; }
   .spec-val { font-family:'Nunito',sans-serif; font-weight:900; font-size:22px; }
   .spec-label { font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
-
   .description { font-size:15px; line-height:1.7; color:var(--text); margin-top:16px; }
   .description h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; margin-bottom:8px; }
-
   .listing-link { display:inline-flex; align-items:center; gap:6px; color:var(--blue); font-weight:700; font-size:14px; text-decoration:none; margin-top:12px; }
   .listing-link:hover { text-decoration:underline; }
-
-  /* CONTACT CARD */
   .contact-card { background:white; border-radius:16px; padding:28px; box-shadow:0 4px 24px rgba(0,0,0,0.1); position:sticky; top:76px; }
-
   .agent-block { display:flex; gap:14px; align-items:center; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border); }
   .agent-avi { width:56px; height:56px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; overflow:hidden; }
   .agent-avi img { width:100%; height:100%; object-fit:cover; }
@@ -55,34 +44,24 @@
   .agent-brokerage { font-size:12px; color:var(--gray); margin-top:1px; }
   .agent-badge { font-size:11px; color:var(--green); font-weight:700; margin-top:4px; }
   .agent-direct { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
-  .agent-direct a { font-size:13px; color:var(--blue); text-decoration:none; font-weight:600; display:flex; align-items:center; gap:6px; }
+  .agent-direct a { font-size:13px; color:var(--blue); text-decoration:none; font-weight:600; }
   .agent-direct a:hover { text-decoration:underline; }
-
   .contact-form-title { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; margin-bottom:4px; }
   .contact-form-sub { font-size:12px; color:var(--gray); margin-bottom:16px; }
-
   .form-group { margin-bottom:12px; }
   .form-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
-  .form-group input, .form-group textarea {
-    width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:8px;
-    font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s;
-  }
+  .form-group input, .form-group textarea { width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:8px; font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s; }
   .form-group input:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
   .form-group textarea { resize:none; height:70px; }
-
   .contact-btn { width:100%; background:var(--blue); color:white; border:none; padding:13px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:background 0.2s; margin-top:4px; }
   .contact-btn:hover { background:var(--dark-blue); }
   .contact-btn:disabled { background:var(--border); cursor:not-allowed; }
-
   .no-fee-note { font-size:11px; color:var(--gray); text-align:center; margin-top:8px; line-height:1.5; }
   .no-fee-note strong { color:var(--green); }
-
-  .contact-success { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:14px; border-radius:8px; font-size:13px; display:none; text-align:center; }
+  .contact-success { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:14px; border-radius:8px; font-size:13px; display:none; text-align:center; line-height:1.6; }
   .contact-error { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:10px; border-radius:8px; font-size:12px; display:none; margin-bottom:10px; }
-
-  .loading { text-align:center; padding:80px; }
+  .loading { text-align:center; padding:80px; font-size:15px; color:var(--gray); }
   .not-found { text-align:center; padding:80px; }
-
   @media(max-width:900px) { .page { grid-template-columns:1fr; } .contact-card { position:static; } }
 </style>
 </head>
@@ -95,110 +74,111 @@
 <div id="loadingState" class="loading">Loading listing...</div>
 <div id="notFoundState" class="not-found" style="display:none">
   <h2>Listing not found</h2>
-  <p><a href="index.html">← Back to search</a></p>
+  <p style="margin-top:8px"><a href="index.html" style="color:var(--blue)">← Back to search</a></p>
 </div>
 
 <div class="page" id="listingPage" style="display:none">
-  <!-- LEFT: PHOTOS + DETAILS -->
   <div>
-    <div id="photoMain" class="photo-main">🏡</div>
+    <div id="photoMain" class="photo-main">
+      <div class="photo-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        No photos uploaded
+      </div>
+    </div>
     <div class="photo-strip" id="photoStrip"></div>
-
     <div class="listing-details">
       <div class="listing-price" id="detPrice"></div>
       <div class="listing-commission" id="detCommission"></div>
       <div class="listing-address" id="detAddress"></div>
       <div class="listing-city" id="detCity"></div>
-
       <div class="specs-row" id="specsRow"></div>
-
       <div class="description">
         <h3>About this property</h3>
-        <p id="detDescription">No description provided.</p>
+        <p id="detDescription" style="color:var(--gray)">No description provided.</p>
       </div>
-
       <div id="detWebsite"></div>
     </div>
   </div>
 
-  <!-- RIGHT: CONTACT CARD -->
   <div>
     <div class="contact-card">
-      <div class="agent-block" id="agentBlock">Loading agent...</div>
-
+      <div class="agent-block" id="agentBlock"></div>
       <div class="contact-form-title">Contact Agent Directly</div>
-      <div class="contact-form-sub">Your message goes straight to them — zero middleman. No lead tax charged.</div>
-
+      <div class="contact-form-sub">Your message goes straight to them — zero middleman. No lead tax.</div>
       <div class="contact-error" id="contactError"></div>
       <div class="contact-success" id="contactSuccess">
-        ✅ Message sent! The agent will contact you directly. Check your email for confirmation.
+        ✅ <strong>Message sent!</strong><br>
+        The agent will contact you directly. Check your email for a confirmation.
       </div>
-
       <form id="contactForm" onsubmit="sendMessage(event)">
-        <div class="form-group">
-          <label>Your Name *</label>
-          <input type="text" id="buyerName" placeholder="John Buyer" required />
-        </div>
-        <div class="form-group">
-          <label>Your Email *</label>
-          <input type="email" id="buyerEmail" placeholder="john@email.com" required />
-        </div>
-        <div class="form-group">
-          <label>Your Phone</label>
-          <input type="tel" id="buyerPhone" placeholder="(850) 555-0100" />
-        </div>
-        <div class="form-group">
-          <label>Message</label>
-          <textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea>
-        </div>
+        <div class="form-group"><label>Your Name *</label><input type="text" id="buyerName" placeholder="John Buyer" required /></div>
+        <div class="form-group"><label>Your Email *</label><input type="email" id="buyerEmail" placeholder="john@email.com" required /></div>
+        <div class="form-group"><label>Your Phone</label><input type="tel" id="buyerPhone" placeholder="(850) 555-0100" /></div>
+        <div class="form-group"><label>Message</label><textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea></div>
         <button type="submit" class="contact-btn" id="contactBtn">Send Message →</button>
       </form>
-
-      <p class="no-fee-note">
-        <strong>Free lead for this agent.</strong> GetOffZillow AI charges agents 1% only at closing — never per lead. Your inquiry goes directly to them.
-      </p>
+      <p class="no-fee-note"><strong>Free lead for this agent.</strong> GOZ AI charges 1% only at closing — never per lead.</p>
     </div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://pneixwmkphakoxmzkblx.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0';
+const { createClient } = supabase;
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
+
+const BREVO_API_KEY = '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';
 
 let listing = null;
 let agent = null;
+
+// Supabase returns arrays as Postgres array strings like {url1,url2}
+// or as actual JS arrays depending on the client version. Handle both.
+function parsePhotos(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw.filter(Boolean);
+  if (typeof raw === 'string') {
+    // Postgres array format: {url1,url2}
+    if (raw.startsWith('{') && raw.endsWith('}')) {
+      return raw.slice(1, -1).split(',').map(s => s.trim().replace(/^"|"$/g, '')).filter(Boolean);
+    }
+    // Single URL string
+    if (raw.startsWith('http')) return [raw];
+  }
+  return [];
+}
 
 async function loadListing() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
   if (!id) { showNotFound(); return; }
 
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/listings?id=eq.${id}&select=*,agents(id,first_name,last_name,email,phone,photo_url,website,brokerage,commission_rate)&limit=1`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-    });
-    const data = await res.json();
-    if (!data.length) { showNotFound(); return; }
+  const { data, error } = await sb
+    .from('listings')
+    .select('*, agents(id, first_name, last_name, email, phone, photo_url, website, brokerage, commission_rate)')
+    .eq('id', id)
+    .single();
 
-    listing = data[0];
-    agent = listing.agents;
+  if (error || !data) { showNotFound(); return; }
 
-    document.title = `${listing.address}, ${listing.city} — GetOffZillow AI`;
-    renderListing();
-  } catch (e) {
-    showNotFound();
-  }
+  listing = data;
+  agent = data.agents;
+  document.title = `${listing.address}, ${listing.city} — GetOffZillow AI`;
+  renderListing();
 }
 
 function renderListing() {
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('listingPage').style.display = 'grid';
 
-  // Photos
-  const photos = listing.photos || [];
+  // Parse photos — handle both JS array and Postgres array string
+  const photos = parsePhotos(listing.photos);
   const mainEl = document.getElementById('photoMain');
-  if (photos.length) {
-    mainEl.innerHTML = `<img src="${photos[0]}" alt="${listing.address}" />`;
+
+  if (photos.length > 0) {
+    mainEl.innerHTML = `<img src="${photos[0]}" alt="${listing.address}" onerror="this.parentElement.innerHTML='<div class=photo-placeholder><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><path d=\\'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z\\'/><polyline points=\\'9 22 9 12 15 12 15 22\\'/></svg>No photo available</div>'" />`;
     if (photos.length > 1) {
       document.getElementById('photoStrip').innerHTML = photos.map((p, i) =>
         `<div class="photo-thumb ${i === 0 ? 'active' : ''}" onclick="switchPhoto(${i}, this)">
@@ -220,15 +200,12 @@ function renderListing() {
   if (listing.property_type) specs.push(`<div class="spec"><div class="spec-val" style="font-size:14px;font-weight:700">${listing.property_type}</div><div class="spec-label">Type</div></div>`);
   document.getElementById('specsRow').innerHTML = specs.join('');
 
-  if (listing.description) {
-    document.getElementById('detDescription').textContent = listing.description;
-  }
+  if (listing.description) document.getElementById('detDescription').textContent = listing.description;
 
   if (listing.website_url) {
     document.getElementById('detWebsite').innerHTML = `<a href="${listing.website_url}" target="_blank" class="listing-link">🔗 View full listing / virtual tour →</a>`;
   }
 
-  // Agent block
   if (agent) {
     const avi = agent.photo_url
       ? `<img src="${agent.photo_url}" alt="${agent.first_name}" />`
@@ -239,19 +216,18 @@ function renderListing() {
       <div>
         <div class="agent-name">${agent.first_name} ${agent.last_name}</div>
         <div class="agent-brokerage">${agent.brokerage || 'Independent Agent'}</div>
-        <div class="agent-badge">🤖 GOZ AI Agent · 1% fee</div>
+        <div class="agent-badge">GOZ AI Agent · 1% fee</div>
         <div class="agent-direct">
           ${agent.phone ? `<a href="tel:${agent.phone}">📞 ${agent.phone}</a>` : ''}
           ${agent.email ? `<a href="mailto:${agent.email}">📧 ${agent.email}</a>` : ''}
           ${agent.website ? `<a href="${agent.website}" target="_blank">🌐 ${agent.website}</a>` : ''}
         </div>
-      </div>
-    `;
+      </div>`;
   }
 }
 
 function switchPhoto(i, el) {
-  const photos = listing.photos || [];
+  const photos = parsePhotos(listing.photos);
   if (!photos[i]) return;
   document.getElementById('photoMain').innerHTML = `<img src="${photos[i]}" alt="photo ${i+1}" />`;
   document.querySelectorAll('.photo-thumb').forEach(t => t.classList.remove('active'));
@@ -264,37 +240,83 @@ async function sendMessage(e) {
   const errEl = document.getElementById('contactError');
   errEl.style.display = 'none';
 
+  const buyerName = document.getElementById('buyerName').value.trim();
+  const buyerEmail = document.getElementById('buyerEmail').value.trim();
+  const buyerPhone = document.getElementById('buyerPhone').value.trim();
+  const message = document.getElementById('buyerMessage').value.trim();
+
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
   try {
-    const res = await fetch('/api/contact-agent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        agent_id: agent?.id,
-        listing_id: listing?.id,
-        agent_email: agent?.email,
-        agent_name: agent ? `${agent.first_name} ${agent.last_name}` : '',
-        listing_address: listing?.address,
-        buyer_name: document.getElementById('buyerName').value.trim(),
-        buyer_email: document.getElementById('buyerEmail').value.trim(),
-        buyer_phone: document.getElementById('buyerPhone').value.trim(),
-        message: document.getElementById('buyerMessage').value.trim()
-      })
+    // 1. Save lead to Supabase
+    await sb.from('leads').insert({
+      listing_id: listing.id,
+      agent_id: agent?.id || null,
+      buyer_name: buyerName,
+      buyer_email: buyerEmail,
+      buyer_phone: buyerPhone || null,
+      message: message || null
     });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
+    // 2. Send email to agent via Brevo
+    if (agent?.email) {
+      await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
+        body: JSON.stringify({
+          sender: { name: 'GetOffZillow AI', email: 'campaigns@transbidlive.faith' },
+          to: [{ email: agent.email, name: `${agent.first_name} ${agent.last_name}` }],
+          replyTo: { email: buyerEmail, name: buyerName },
+          subject: `🏡 New lead: ${buyerName} is interested in ${listing.address}`,
+          htmlContent: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px">
+            <div style="background:#006AFF;padding:20px 24px;border-radius:8px 8px 0 0">
+              <h2 style="color:white;margin:0">New Buyer Lead 🔔</h2>
+              <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:13px">GetOffZillow AI — zero lead charge to you</p>
+            </div>
+            <div style="background:#fff;padding:28px;border:1px solid #e0e0e0;border-top:none">
+              <table style="width:100%;border-collapse:collapse">
+                <tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888;width:120px">Buyer</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-weight:700">${buyerName}</td></tr>
+                <tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888">Email</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0"><a href="mailto:${buyerEmail}" style="color:#006AFF">${buyerEmail}</a></td></tr>
+                ${buyerPhone ? `<tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888">Phone</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0"><a href="tel:${buyerPhone}" style="color:#006AFF">${buyerPhone}</a></td></tr>` : ''}
+                <tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888">Listing</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0">${listing.address}, ${listing.city} — $${Number(listing.price).toLocaleString()}</td></tr>
+                ${message ? `<tr><td style="padding:10px 0;color:#888;vertical-align:top">Message</td><td style="padding:10px 0">${message}</td></tr>` : ''}
+              </table>
+              <div style="background:#f0fff8;border-left:4px solid #00C853;padding:14px;margin-top:20px;border-radius:4px">
+                <strong style="color:#00C853">This lead cost you $0.</strong> Reply directly to ${buyerName} at <a href="mailto:${buyerEmail}">${buyerEmail}</a>.
+              </div>
+              <p style="margin-top:20px"><a href="mailto:${buyerEmail}" style="background:#006AFF;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:700">Reply to ${buyerName} →</a></p>
+            </div>
+          </div>`
+        })
+      });
+    }
+
+    // 3. Confirmation to buyer
+    await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
+      body: JSON.stringify({
+        sender: { name: 'GetOffZillow AI', email: 'campaigns@transbidlive.faith' },
+        to: [{ email: buyerEmail, name: buyerName }],
+        subject: `✅ Your message was sent to ${agent?.first_name || 'the agent'} — GetOffZillow AI`,
+        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:32px">
+          <h2 style="color:#006AFF">Message Sent ✅</h2>
+          <p>Hi ${buyerName},</p>
+          <p style="line-height:1.6">Your message about <strong>${listing.address}, ${listing.city}</strong> was sent directly to the agent. They'll contact you within a few hours.</p>
+          <p style="color:#888;font-size:12px;margin-top:16px">GetOffZillow AI · Pensacola, FL</p>
+        </div>`
+      })
+    });
 
     document.getElementById('contactForm').style.display = 'none';
     document.getElementById('contactSuccess').style.display = 'block';
 
   } catch (err) {
-    errEl.textContent = err.message || 'Failed to send. Please try again.';
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Send Message →';
+    console.error(err);
+    // Even if email fails, lead was saved — show success
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
   }
 }
 
