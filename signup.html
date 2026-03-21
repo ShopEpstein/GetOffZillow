@@ -3,351 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Signup — GetOffZillow AI</title>
+<title>Sign Up / Sign In — GetOffZillow AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   :root {
-    --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44;
-    --green:#00C853; --ai-green:#00FF9D; --red:#E8341C;
-    --bg:#F7F7F7; --white:#fff; --text:#1A1A1A;
-    --gray:#6B6B6B; --border:#D8D8D8;
+    --blue:#006AFF; --navy:#0a1f44; --green:#00C853;
+    --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7;
+    --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-
-  nav { background:white; border-bottom:1px solid var(--border); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; text-decoration:none; color:var(--text); }
-  .nav-logo span { color:var(--blue); }
-  .nav-logo em { color:var(--red); font-style:normal; }
-  .nav-logo sup { color:var(--ai-green); font-size:14px; }
-  .nav-back { font-size:13px; color:var(--blue); text-decoration:none; font-weight:700; }
-
-  .page { max-width:1100px; margin:0 auto; padding:48px 24px; display:grid; grid-template-columns:1fr 480px; gap:48px; align-items:start; }
-
-  .pitch h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,64px); line-height:0.95; margin-bottom:16px; }
-  .pitch h1 .blue { color:var(--blue); }
-  .pitch h1 .green { color:var(--ai-green); text-shadow:0 0 20px rgba(0,255,157,0.3); }
-  .pitch-sub { font-size:15px; color:var(--gray); line-height:1.7; margin-bottom:28px; }
-  .fee-compare { display:flex; flex-direction:column; gap:0; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:28px; }
-  .fee-row { display:flex; align-items:center; padding:14px 18px; gap:12px; border-bottom:1px solid var(--border); }
-  .fee-row:last-child { border-bottom:none; }
-  .fee-row.bad { background:#fff5f5; }
-  .fee-row.good { background:#f0fff8; }
-  .fee-label { flex:1; font-size:14px; font-weight:600; }
-  .fee-label span { display:block; font-size:11px; color:var(--gray); font-weight:400; margin-top:1px; }
-  .fee-pct { font-family:'Bebas Neue',sans-serif; font-size:28px; min-width:60px; text-align:right; }
-  .fee-row.bad .fee-pct { color:var(--red); }
-  .fee-row.good .fee-pct { color:var(--ai-green); text-shadow:0 0 12px rgba(0,255,157,0.4); }
-  .bullets { list-style:none; }
-  .bullets li { display:flex; gap:10px; align-items:flex-start; font-size:14px; margin-bottom:10px; line-height:1.5; }
-  .bullets li::before { content:'✓'; color:var(--green); font-weight:900; font-size:15px; flex-shrink:0; }
-
-  /* FORM CARD */
-  .form-card { background:white; border-radius:16px; padding:36px; box-shadow:0 4px 24px rgba(0,0,0,0.1); position:sticky; top:80px; }
-  .form-card h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:22px; margin-bottom:4px; }
-  .form-card .form-sub { font-size:13px; color:var(--gray); margin-bottom:16px; }
-  .promo-note { font-size:12px; color:var(--red); font-weight:700; background:#fff8f6; padding:10px 14px; border-radius:8px; border-left:3px solid var(--red); margin-bottom:20px; }
-
-  /* OAuth */
-  .oauth-btn { width:100%; padding:12px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; border:1.5px solid var(--border); background:white; display:flex; align-items:center; justify-content:center; gap:10px; transition:all 0.2s; margin-bottom:10px; font-family:'Nunito Sans',sans-serif; }
-  .oauth-btn:hover { border-color:#aaa; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-  .divider { display:flex; align-items:center; gap:12px; margin:16px 0; color:var(--gray); font-size:12px; }
-  .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
-
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .form-group { margin-bottom:14px; }
-  .form-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; color:var(--text); }
-  .form-group input, .form-group select, .form-group textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:8px; font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s, box-shadow 0.2s; background:white; }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
-  .form-group textarea { resize:vertical; min-height:80px; }
-  .form-group .hint { font-size:11px; color:var(--gray); margin-top:4px; }
-
-  /* password strength */
-  .pw-strength { height:3px; border-radius:2px; margin-top:6px; transition:all 0.3s; background:var(--border); overflow:hidden; }
-  .pw-strength-fill { height:100%; border-radius:2px; transition:width 0.3s, background 0.3s; width:0%; }
-  .pw-hint { font-size:11px; color:var(--gray); margin-top:3px; }
-
-  .photo-upload { border:2px dashed var(--border); border-radius:8px; padding:20px; text-align:center; cursor:pointer; transition:border-color 0.2s; position:relative; }
-  .photo-upload:hover { border-color:var(--blue); }
-  .photo-upload input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-  .photo-upload-icon { font-size:28px; margin-bottom:6px; }
-  .photo-upload-text { font-size:13px; color:var(--gray); }
-  .photo-preview { width:72px; height:72px; border-radius:50%; object-fit:cover; margin:0 auto 8px; display:block; border:3px solid var(--blue); }
-
-  .submit-btn { width:100%; background:var(--ai-green); color:#000; border:none; padding:15px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; cursor:pointer; transition:all 0.2s; margin-top:4px; box-shadow:0 0 20px rgba(0,255,157,0.3); }
-  .submit-btn:hover { background:#00e88a; }
-  .submit-btn:disabled { background:var(--border); color:var(--gray); box-shadow:none; cursor:not-allowed; }
-
-  .error-msg { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; display:none; }
-  .success-msg { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:16px; border-radius:8px; font-size:14px; margin-bottom:16px; display:none; text-align:center; }
-  .legal { font-size:11px; color:var(--gray); text-align:center; margin-top:10px; line-height:1.5; }
-  .legal a { color:var(--blue); }
-  .signin-link { text-align:center; margin-top:14px; font-size:13px; color:var(--gray); }
-  .signin-link a { color:var(--blue); font-weight:700; text-decoration:none; }
-
-  @media(max-width:900px) { .page { grid-template-columns:1fr; } .form-card { position:static; } .form-row { grid-template-columns:1fr; } }
+  body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; }
+  nav { background:var(--navy); height:56px; display:flex; align-items:center; padding:0 24px; }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:22px; color:white; text-decoration:none; }
+  .logo span { color:var(--blue); } .logo em { color:var(--red); font-style:normal; } .logo sup { color:var(--ai-green); font-size:13px; }
+  .wrap { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 24px; }
+  .card { background:white; border-radius:16px; padding:40px; width:100%; max-width:440px; box-shadow:0 4px 24px rgba(0,0,0,0.1); }
+  .tabs { display:flex; margin-bottom:28px; border-bottom:2px solid var(--border); }
+  .tab { flex:1; text-align:center; padding:10px; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; cursor:pointer; color:var(--gray); border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.2s; }
+  .tab.active { color:var(--blue); border-bottom-color:var(--blue); }
+  .form-section { display:none; }
+  .form-section.active { display:block; }
+  h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:22px; margin-bottom:4px; }
+  .sub { font-size:13px; color:var(--gray); margin-bottom:22px; line-height:1.5; }
+  .field { margin-bottom:14px; }
+  .field label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
+  .field input { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px; font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s; background:white; }
+  .field input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
+  .btn { width:100%; padding:13px; border:none; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:all 0.2s; margin-top:4px; }
+  .btn-primary { background:var(--blue); color:white; }
+  .btn-primary:hover { background:#0050CC; }
+  .btn-green { background:var(--ai-green); color:#000; box-shadow:0 0 16px rgba(0,255,157,0.3); }
+  .btn-green:hover { background:#00e88a; }
+  .btn:disabled { background:var(--border); color:var(--gray); cursor:not-allowed; box-shadow:none; }
+  .error { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; display:none; }
+  .success { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:12px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; display:none; line-height:1.6; }
+  .link { color:var(--blue); cursor:pointer; font-weight:700; }
+  .link:hover { text-decoration:underline; }
+  .bottom-link { text-align:center; margin-top:16px; font-size:13px; color:var(--gray); }
+  .bottom-link a, .bottom-link span { color:var(--blue); font-weight:700; text-decoration:none; cursor:pointer; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 </style>
 </head>
 <body>
-<script src="auth.js"></script>
-
-<nav>
-  <a href="index.html" class="nav-logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a>
-  <a href="dashboard.html" class="nav-back">Already have an account? Sign in →</a>
-</nav>
-
-<div class="page">
-  <div class="pitch">
-    <h1>List Free.<br>Pay <span class="blue">1%</span><br>Keep <span class="green">99%.</span></h1>
-    <p class="pitch-sub">Agent Pronto and Zillow Flex extract 25–40% of your commission. We charge 1% at closing — only when you close.</p>
-    <div class="fee-compare">
-      <div class="fee-row bad"><div class="fee-label">Zillow Flex <span>Up to 40% — and rising. Just raised it in 6 markets.</span></div><div class="fee-pct">40%</div></div>
-      <div class="fee-row bad"><div class="fee-label">Agent Pronto <span>25–35% of gross commission, applies for 2 years</span></div><div class="fee-pct">35%</div></div>
-      <div class="fee-row bad"><div class="fee-label">OpCity / Realtor.com <span>Timed auction + 30–38% at close</span></div><div class="fee-pct">38%</div></div>
-      <div class="fee-row good"><div class="fee-label">GetOffZillow AI <span>Pay only at close. AI-matched leads. No auction.</span></div><div class="fee-pct">1%</div></div>
+<nav><a href="index.html" class="logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a></nav>
+<div class="wrap">
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('signup')">Create Account</div>
+      <div class="tab" onclick="showTab('signin')">Sign In</div>
     </div>
-    <ul class="bullets">
-      <li>Unlimited listings — free forever, no credit card</li>
-      <li>Buyers see your direct phone and email immediately</li>
-      <li>AI Smart Matcher sends warm, qualified leads — no ghost leads</li>
-      <li>Commission shown publicly on every listing</li>
-      <li>AI Fraud Shield scans every listing</li>
-      <li>Public agent profile with photo, bio, website, and listings</li>
-      <li>First 500 agents: Pro features free 12 months + 1% locked for life</li>
-    </ul>
-  </div>
 
-  <div class="form-card">
-    <h2>Create Your Agent Account</h2>
-    <p class="form-sub">Takes 3 minutes. No credit card required.</p>
-    <div class="promo-note">⚡ First 500 agents — 1% referral rate locked for life. Never goes up.</div>
-
-    <div class="error-msg" id="errorMsg"></div>
-    <div class="success-msg" id="successMsg"></div>
-
-    <!-- Google OAuth -->
-    <button class="oauth-btn" onclick="GOZ_AUTH.signInWithGoogle()">
-      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Sign up with Google
-    </button>
-
-    <div class="divider">or create account with email</div>
-
-    <form id="signupForm" onsubmit="submitSignup(event)">
-      <div class="form-row">
-        <div class="form-group"><label>First Name *</label><input type="text" id="first_name" placeholder="Jane" required autocomplete="given-name" /></div>
-        <div class="form-group"><label>Last Name *</label><input type="text" id="last_name" placeholder="Smith" required autocomplete="family-name" /></div>
-      </div>
-      <div class="form-group"><label>Email *</label><input type="email" id="email" placeholder="jane@realty.com" required autocomplete="email" /></div>
-      <div class="form-group">
-        <label>Password *</label>
-        <input type="password" id="password" placeholder="Min 8 characters" required minlength="8" autocomplete="new-password" oninput="checkPwStrength(this.value)" />
-        <div class="pw-strength"><div class="pw-strength-fill" id="pwFill"></div></div>
-        <div class="pw-hint" id="pwHint">Use 8+ characters with a mix of letters and numbers</div>
-      </div>
-      <div class="form-group"><label>Phone</label><input type="tel" id="phone" placeholder="(850) 555-0100" autocomplete="tel" /></div>
-      <div class="form-row">
-        <div class="form-group"><label>License # *</label><input type="text" id="license_number" placeholder="FL-BK12345678" required /></div>
-        <div class="form-group"><label>State *</label>
-          <select id="state" required>
-            <option value="">Select...</option>
-            <option value="FL">Florida</option><option value="AL">Alabama</option>
-            <option value="GA">Georgia</option><option value="TN">Tennessee</option>
-            <option value="TX">Texas</option><option value="CA">California</option>
-            <option value="NC">North Carolina</option><option value="SC">South Carolina</option>
-            <option value="Other">Other</option>
-          </select>
+    <!-- SIGN UP -->
+    <div class="form-section active" id="tab-signup">
+      <h2>Join GetOffZillow AI</h2>
+      <p class="sub">Free forever. 1% referral fee locked for life.</p>
+      <div class="error" id="su-err"></div>
+      <div class="success" id="su-ok"></div>
+      <div id="su-form">
+        <div class="two-col">
+          <div class="field"><label>First Name *</label><input id="su-first" type="text" placeholder="Jane" /></div>
+          <div class="field"><label>Last Name *</label><input id="su-last" type="text" placeholder="Smith" /></div>
         </div>
+        <div class="field"><label>Email *</label><input id="su-email" type="email" placeholder="jane@realty.com" /></div>
+        <div class="field"><label>Password * (min 8 chars)</label><input id="su-pw" type="password" placeholder="••••••••" /></div>
+        <div class="field"><label>Phone</label><input id="su-phone" type="tel" placeholder="(850) 555-0100" /></div>
+        <div class="field"><label>License #</label><input id="su-lic" type="text" placeholder="FL-BK12345678" /></div>
+        <div class="field"><label>Brokerage</label><input id="su-brok" type="text" placeholder="Smith Realty Group" /></div>
+        <button class="btn btn-green" id="su-btn" onclick="doSignup()">Create Free Account →</button>
       </div>
-      <div class="form-group"><label>Brokerage</label><input type="text" id="brokerage" placeholder="Smith Realty Group" /></div>
-      <div class="form-group">
-        <label>Your Website / Personal Page</label>
-        <input type="url" id="website" placeholder="https://yoursite.com" />
-        <div class="hint">Shown on your public agent profile and all listings</div>
-      </div>
-      <div class="form-group"><label>Markets You Serve</label><input type="text" id="markets_served" placeholder="Pensacola, Navarre, Destin, Fort Walton Beach" /></div>
-      <div class="form-group"><label>Commission Rate You Typically Offer</label>
-        <select id="commission_rate">
-          <option value="2%">2%</option><option value="2.5%" selected>2.5%</option>
-          <option value="2.75%">2.75%</option><option value="3%">3%</option>
-          <option value="Negotiable">Negotiable</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Bio (optional)</label>
-        <textarea id="bio" placeholder="Tell buyers about yourself — experience, specialty areas, why you're the right agent..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Profile Photo (optional)</label>
-        <div class="photo-upload" id="photoUploadArea">
-          <input type="file" id="profilePhoto" accept="image/*" onchange="previewPhoto(event)" />
-          <div id="photoPlaceholder">
-            <div class="photo-upload-icon">📸</div>
-            <div class="photo-upload-text">Click to upload your profile photo<br><span style="font-size:11px">JPG, PNG — max 5MB</span></div>
-          </div>
-          <img id="photoPreviewImg" class="photo-preview" style="display:none" />
-        </div>
-      </div>
-      <button type="submit" class="submit-btn" id="submitBtn">Create Free Account — Lock In 1% →</button>
-    </form>
+      <div class="bottom-link"><a href="index.html">← Back to home</a></div>
+    </div>
 
-    <p class="legal">By creating an account you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. We never sell your data.</p>
-    <div class="signin-link">Already have an account? <a href="dashboard.html">Sign in →</a></div>
+    <!-- SIGN IN -->
+    <div class="form-section" id="tab-signin">
+      <h2>Welcome Back</h2>
+      <p class="sub">Sign in to your agent dashboard.</p>
+      <div class="error" id="si-err"></div>
+      <div class="success" id="si-ok"></div>
+      <div class="field"><label>Email</label><input id="si-email" type="email" placeholder="jane@realty.com" /></div>
+      <div class="field"><label>Password</label><input id="si-pw" type="password" placeholder="••••••••" onkeypress="if(event.key==='Enter')doSignin()" /></div>
+      <div style="text-align:right;margin-bottom:14px"><span class="link" onclick="showTab('reset')" style="font-size:12px">Forgot password?</span></div>
+      <button class="btn btn-primary" id="si-btn" onclick="doSignin()">Sign In →</button>
+      <div class="bottom-link" style="margin-top:14px">No account? <span onclick="showTab('signup')">Create one free →</span></div>
+      <div class="bottom-link"><a href="index.html">← Back to home</a></div>
+    </div>
+
+    <!-- RESET -->
+    <div class="form-section" id="tab-reset">
+      <h2>Reset Password</h2>
+      <p class="sub">Enter your email and we'll send a reset link. Arrives in under a minute.</p>
+      <div class="error" id="re-err"></div>
+      <div class="success" id="re-ok"></div>
+      <div class="field"><label>Email</label><input id="re-email" type="email" placeholder="jane@realty.com" /></div>
+      <button class="btn btn-primary" id="re-btn" onclick="doReset()">Send Reset Link →</button>
+      <div class="bottom-link"><span onclick="showTab('signin')">← Back to sign in</span></div>
+    </div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://pneixwmkphakoxmzkblx.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0';
+const { createClient } = supabase;
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
 
-// Redirect if already logged in
-if (GOZ_AUTH.isLoggedIn()) window.location.href = 'dashboard.html';
+// Already logged in? Go straight to dashboard
+sb.auth.getSession().then(({ data }) => {
+  if (data.session) window.location.href = 'dashboard.html';
+});
 
-// Password strength
-function checkPwStrength(pw) {
-  const fill = document.getElementById('pwFill');
-  const hint = document.getElementById('pwHint');
-  let score = 0;
-  if (pw.length >= 8) score++;
-  if (pw.length >= 12) score++;
-  if (/[A-Z]/.test(pw)) score++;
-  if (/[0-9]/.test(pw)) score++;
-  if (/[^A-Za-z0-9]/.test(pw)) score++;
-
-  const colors = ['#E02020','#E02020','#FFB800','#00C853','#00C853'];
-  const labels = ['Too short','Weak','Fair','Good','Strong'];
-  fill.style.width = (score * 20) + '%';
-  fill.style.background = colors[score] || '#E0E0E0';
-  hint.textContent = score > 0 ? labels[score] : 'Use 8+ characters with a mix of letters and numbers';
-  hint.style.color = colors[score] || '#888';
-}
-
-function previewPhoto(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('photoPlaceholder').style.display = 'none';
-    const img = document.getElementById('photoPreviewImg');
-    img.src = ev.target.result;
-    img.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-}
-
-async function uploadProfilePhoto(file, agentId, token) {
-  if (!file || !agentId) return null;
-  const ext = file.name.split('.').pop().toLowerCase();
-  const path = `agents/${agentId}/profile.${ext}`;
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/listing-photos/${path}`, {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${token || SUPABASE_ANON_KEY}`,
-      'Content-Type': file.type,
-      'x-upsert': 'true'
-    },
-    body: file
+function showTab(name) {
+  ['signup','signin','reset'].forEach((t, i) => {
+    document.querySelectorAll('.tab')[i]?.classList.toggle('active', t === name);
+    document.getElementById('tab-' + t).classList.toggle('active', t === name);
   });
-  if (!res.ok) return null;
+}
 
-  const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/listing-photos/${path}`;
+async function doSignup() {
+  const btn = document.getElementById('su-btn');
+  const err = document.getElementById('su-err');
+  const ok = document.getElementById('su-ok');
+  err.style.display = 'none'; ok.style.display = 'none';
 
-  // Update agent record with photo_url
-  await fetch(`${SUPABASE_URL}/rest/v1/agents?id=eq.${agentId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${token || SUPABASE_ANON_KEY}`
-    },
-    body: JSON.stringify({ photo_url: photoUrl })
+  const first = document.getElementById('su-first').value.trim();
+  const last  = document.getElementById('su-last').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pw    = document.getElementById('su-pw').value;
+  const phone = document.getElementById('su-phone').value.trim();
+  const lic   = document.getElementById('su-lic').value.trim();
+  const brok  = document.getElementById('su-brok').value.trim();
+
+  if (!first || !last || !email || !pw) { err.textContent = 'First name, last name, email and password are required.'; err.style.display='block'; return; }
+  if (pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display='block'; return; }
+
+  btn.disabled = true; btn.textContent = 'Creating account...';
+
+  const { data: authData, error: authErr } = await sb.auth.signUp({
+    email, password: pw,
+    options: { data: { first_name: first, last_name: last } }
   });
 
-  return photoUrl;
-}
-
-async function submitSignup(e) {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const errorEl = document.getElementById('errorMsg');
-  const successEl = document.getElementById('successMsg');
-  errorEl.style.display = 'none';
-  successEl.style.display = 'none';
-
-  const password = document.getElementById('password').value;
-  if (password.length < 8) {
-    errorEl.textContent = 'Password must be at least 8 characters.';
-    errorEl.style.display = 'block';
+  if (authErr) {
+    err.textContent = authErr.message.includes('already registered')
+      ? 'Account already exists. Sign in instead.'
+      : authErr.message;
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Create Free Account →';
     return;
   }
 
-  btn.disabled = true;
-  btn.textContent = 'Creating your account...';
-
-  const payload = {
-    first_name: document.getElementById('first_name').value.trim(),
-    last_name: document.getElementById('last_name').value.trim(),
-    email: document.getElementById('email').value.trim().toLowerCase(),
-    password,
-    phone: document.getElementById('phone').value.trim(),
-    license_number: document.getElementById('license_number').value.trim(),
-    state: document.getElementById('state').value,
-    brokerage: document.getElementById('brokerage').value.trim(),
-    website: document.getElementById('website').value.trim(),
-    markets_served: document.getElementById('markets_served').value.trim(),
-    commission_rate: document.getElementById('commission_rate').value,
-    bio: document.getElementById('bio').value.trim()
-  };
-
-  try {
-    const res = await fetch('/api/agent-signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+  // Insert agent profile
+  if (authData.user?.id) {
+    await sb.from('agents').insert({
+      user_id: authData.user.id,
+      first_name: first, last_name: last,
+      email: email.toLowerCase(),
+      phone: phone || null,
+      license_number: lic || null,
+      brokerage: brok || null
     });
-
-    const data = await res.json();
-
-    if (res.status === 409) {
-      errorEl.innerHTML = `An account with this email already exists. <a href="dashboard.html" style="color:var(--blue);font-weight:700">Sign in instead →</a>`;
-      errorEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Create Free Account — Lock In 1% →';
-      return;
-    }
-
-    if (!res.ok) throw new Error(data.error || 'Signup failed. Please try again.');
-
-    // FIX: Save session immediately from signup response (auto-login)
-    if (data.access_token) {
-      GOZ_AUTH.saveSession({ access_token: data.access_token, expires_in: 3600 });
-    }
-    if (data.agent_id) localStorage.setItem('goz_agent_id', data.agent_id);
-    localStorage.setItem('goz_agent_email', payload.email);
-    localStorage.setItem('goz_agent_name', `${payload.first_name} ${payload.last_name}`);
-
-    // Upload profile photo if provided
-    const photoFile = document.getElementById('profilePhoto').files[0];
-    if (photoFile && data.agent_id) {
-      btn.textContent = 'Uploading photo...';
-      await uploadProfilePhoto(photoFile, data.agent_id, data.access_token);
-    }
-
-    successEl.innerHTML = `
-      🎉 <strong>Welcome to GetOffZillow AI, ${payload.first_name}!</strong><br>
-      A welcome email is on its way. Taking you to your dashboard...
-    `;
-    successEl.style.display = 'block';
-    document.getElementById('signupForm').style.display = 'none';
-
-    setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
-
-  } catch (err) {
-    errorEl.textContent = err.message;
-    errorEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Create Free Account — Lock In 1% →';
   }
+
+  localStorage.setItem('goz_name', `${first} ${last}`);
+  document.getElementById('su-form').style.display = 'none';
+  ok.innerHTML = `🎉 <strong>Account created, ${first}!</strong><br>Check your email for a confirmation link, then <span class="link" onclick="showTab('signin')">sign in here →</span>`;
+  ok.style.display = 'block';
+  btn.disabled = false; btn.textContent = 'Create Free Account →';
+}
+
+async function doSignin() {
+  const btn = document.getElementById('si-btn');
+  const err = document.getElementById('si-err');
+  err.style.display = 'none';
+
+  const email = document.getElementById('si-email').value.trim();
+  const pw    = document.getElementById('si-pw').value;
+
+  if (!email || !pw) { err.textContent = 'Email and password required.'; err.style.display='block'; return; }
+
+  btn.disabled = true; btn.textContent = 'Signing in...';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+
+  if (error) {
+    let msg = error.message;
+    if (msg.includes('Invalid login')) msg = 'Incorrect email or password.';
+    if (msg.includes('Email not confirmed')) msg = 'Please confirm your email first — check your inbox for a confirmation link.';
+    err.textContent = msg;
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Sign In →';
+    return;
+  }
+
+  // Get agent profile
+  const { data: agent } = await sb.from('agents').select('id,first_name,last_name').eq('user_id', data.user.id).single();
+  if (agent) {
+    localStorage.setItem('goz_agent_id', agent.id);
+    localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`);
+  }
+
+  window.location.href = 'dashboard.html';
+}
+
+async function doReset() {
+  const btn = document.getElementById('re-btn');
+  const err = document.getElementById('re-err');
+  const ok  = document.getElementById('re-ok');
+  err.style.display = 'none'; ok.style.display = 'none';
+
+  const email = document.getElementById('re-email').value.trim();
+  if (!email) { err.textContent = 'Please enter your email.'; err.style.display='block'; return; }
+
+  btn.disabled = true; btn.textContent = 'Sending...';
+
+  await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://get-off-zillow.vercel.app/signup.html'
+  });
+
+  // Always show success — never reveal if email exists
+  ok.textContent = `✅ If that email is in our system, a reset link is on its way.`;
+  ok.style.display = 'block';
+  btn.disabled = false; btn.textContent = 'Send Reset Link →';
 }
 </script>
 </body>
