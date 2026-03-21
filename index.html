@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GetOffZillow AI — Real Estate Without the B.S. Powered by AI.</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #006AFF;
+    --dark-blue: #0050CC;
+    --teal: #00B2A9;
+    --navy: #0a1f44;
+    --cream: #F5F0E8;
+    --bg: #F7F7F7;
+    --white: #FFFFFF;
+    --text: #1A1A1A;
+    --gray: #6B6B6B;
+    --light-gray: #E0E0E0;
+    --border: #D8D8D8;
+    --green: #00C853;
+    --orange: #FF6B00;
+    --red: #E02020;
+    --yellow: #FFB800;
+    --goz-accent: #E8341C;
+    --ai-green: #00FF9D;
+    --ai-glow: #00FF9D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Nunito Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; overflow-x: hidden; }
+
+  /* ══ ANNOUNCEMENT BAR ══ */
+  .ann-bar {
+    background: var(--goz-accent);
+    color: white;
+    text-align: center;
+    padding: 9px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .ann-bar a { color: var(--yellow); text-decoration: underline; cursor: pointer; }
+
+  /* ══ HEADER ══ */
+  header {
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    z-index: 200;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .logo-mark {
+    width: 38px; height: 38px;
+    background: var(--blue);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+
+  .logo-mark::after {
+    content: '🏡';
+    font-size: 20px;
+  }
+
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .logo-text span { color: var(--blue); }
+  .logo-text em { color: var(--goz-accent); font-style: normal; }
+
+  .header-search {
+    flex: 1;
+    max-width: 500px;
+    position: relative;
+  }
+
+  .header-search input {
+    width: 100%;
+    padding: 10px 40px 10px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    background: var(--bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .header-search input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(0,106,255,0.1);
+    background: white;
+  }
+
+  .search-ico { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; }
+
+  .header-nav {
+    display: flex; align-items: center; gap: 0;
+    list-style: none; margin-left: auto;
+  }
+
+  .header-nav li a, .header-nav li span {
+    display: block;
+    padding: 0 13px;
+    height: 64px;
+    line-height: 64px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .header-nav li a:hover, .header-nav li span:hover { color: var(--blue); }
+
+  .nav-badge {
+    position: absolute;
+    top: 12px; right: 4px;
+    background: var(--goz-accent);
+    color: white;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 10px;
+    font-weight: 800;
+  }
+
+  .btn { padding: 10px 18px; border-radius: 8px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; border: none; transition: all 0.2s; white-space: nowrap; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: var(--dark-blue); }
+  .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+  .btn-outline:hover { background: var(--blue); color: white; }
+  .btn-red { background: var(--goz-accent); color: white; }
+  .btn-red:hover { background: #c0280f; }
+
+  /* ══ HERO ══ */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 93px);
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(140deg, #051535 0%, #0a2a6e 45%, #00695c 100%);
+  }
+
+  /* city skyline SVG */
+  .hero-bg::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 260px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 260'%3E%3Cpath fill='rgba(0,0,0,0.3)' d='M0,220 L0,260 L1440,260 L1440,220 L1400,220 L1400,150 L1380,150 L1380,100 L1360,100 L1360,80 L1340,80 L1340,100 L1320,100 L1320,150 L1300,150 L1300,160 L1260,160 L1260,110 L1240,110 L1240,60 L1220,60 L1220,110 L1200,110 L1200,160 L1160,160 L1160,120 L1140,120 L1120,90 L1100,120 L1080,120 L1080,160 L1040,160 L1040,130 L1000,130 L980,100 L960,80 L940,100 L920,130 L880,130 L880,160 L840,160 L840,120 L820,100 L800,80 L780,100 L760,120 L740,160 L700,160 L700,130 L680,110 L660,90 L640,110 L620,130 L600,160 L560,160 L560,130 L540,120 L520,100 L500,120 L480,130 L460,160 L420,160 L420,120 L400,100 L380,80 L360,100 L340,120 L300,120 L300,160 L260,160 L260,120 L240,100 L220,80 L200,100 L180,120 L140,120 L140,160 L100,160 L100,120 L80,100 L60,120 L40,160 L0,160 Z'/%3E%3C/svg%3E") bottom/cover no-repeat;
+  }
+
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 820px; margin: 0 auto;
+    padding: 60px 24px;
+    text-align: center; width: 100%;
+  }
+
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white; padding: 7px 16px;
+    border-radius: 20px; font-size: 13px; font-weight: 700;
+    margin-bottom: 24px;
+    backdrop-filter: blur(8px);
+  }
+
+  .pill-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.8s infinite; }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 9vw, 108px);
+    line-height: 0.92;
+    color: white;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .hero-title .accent { color: var(--yellow); }
+  .hero-title .red { color: #ff6b5b; }
+
+  .hero-sub {
+    font-size: 17px; color: rgba(255,255,255,0.82);
+    line-height: 1.6; max-width: 580px; margin: 0 auto 32px;
+    font-weight: 400;
+  }
+
+  .hero-tabs {
+    display: flex; justify-content: center; gap: 6px; margin-bottom: 16px;
+  }
+
+  .hero-tab {
+    padding: 9px 22px; border-radius: 22px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    transition: all 0.2s;
+  }
+
+  .hero-tab.active, .hero-tab:hover {
+    background: white; color: var(--blue); border-color: white;
+  }
+
+  .hero-search {
+    background: white; border-radius: 12px;
+    padding: 8px; display: flex; gap: 8px;
+    box-shadow: 0 12px 50px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+  }
+
+  .hero-search input {
+    flex: 1; border: none; outline: none;
+    padding: 13px 18px;
+    font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: var(--text);
+    border-radius: 8px;
+  }
+
+  .hero-search input::placeholder { color: #bbb; }
+
+  .hero-search-btn {
+    background: var(--blue); color: white; border: none;
+    padding: 13px 28px; border-radius: 8px;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px;
+    cursor: pointer; transition: background 0.2s; white-space: nowrap;
+  }
+
+  .hero-search-btn:hover { background: var(--dark-blue); }
+
+  .hero-trust {
+    display: flex; align-items: center; justify-content: center; gap: 24px;
+    font-size: 12px; color: rgba(255,255,255,0.6);
+  }
+
+  .trust-item { display: flex; align-items: center; gap: 6px; }
+  .trust-check { color: var(--green); font-size: 14px; }
+
+  /* ══ FEE COMPARISON BAND ══ */
+  .fee-band {
+    background: var(--navy);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .fee-ticker {
+    display: flex; animation: feeTicker 35s linear infinite;
+    white-space: nowrap;
+  }
+
+  .fee-tick-item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 40px;
+    font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7);
+    border-right: 1px solid rgba(255,255,255,0.1);
+    white-space: nowrap;
+  }
+
+  .fee-tick-item .highlight { color: var(--yellow); font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 0.5px; }
+  .fee-tick-item .red { color: #ff6b5b; }
+  .fee-tick-item .green { color: var(--green); }
+
+  @keyframes feeTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ══ FEE BATTLE SECTION ══ */
+  .fee-battle {
+    padding: 80px 24px;
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--blue); margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 0.95; color: var(--text); margin-bottom: 8px;
+  }
+
+  .section-title .accent { color: var(--goz-accent); }
+  .section-title .blue { color: var(--blue); }
+
+  .section-sub {
+    font-size: 15px; color: var(--gray);
+    max-width: 540px; line-height: 1.6; margin-bottom: 48px;
+  }
+
+  .fee-table {
+    width: 100%; border-collapse: collapse;
+    background: white; border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+
+  .fee-table th {
+    padding: 18px 20px; text-align: left;
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: 14px; letter-spacing: 0.3px;
+    background: var(--bg); border-bottom: 2px solid var(--border);
+  }
+
+  .fee-table th.goz-col {
+    background: #EBF3FF; color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+
+  .fee-table td {
+    padding: 16px 20px; font-size: 14px;
+    border-bottom: 1px solid var(--light-gray);
+    vertical-align: middle;
+  }
+
+  .fee-table tr:last-child td { border-bottom: none; }
+  .fee-table tr:hover td { background: #fafafa; }
+
+  .fee-table td.goz-col {
+    background: #F0F7FF;
+    font-weight: 700; color: var(--blue);
+  }
+
+  .fee-table tr:hover td.goz-col { background: #e5f0ff; }
+
+  .bad { color: var(--red); font-weight: 700; }
+  .good { color: var(--green); font-weight: 700; }
+  .warn { color: var(--orange); font-weight: 700; }
+
+  .winner-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--green); color: white;
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 3px 8px; border-radius: 4px; margin-left: 6px;
+  }
+
+  /* ══ LISTINGS ══ */
+  .listings-section { padding: 60px 24px; max-width: 1200px; margin: 0 auto; }
+
+  .listings-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .listing-card {
+    background: white; border-radius: 10px;
+    overflow: hidden; cursor: pointer;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .listing-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+
+  .listing-img {
+    height: 175px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px;
+    background: linear-gradient(135deg, #c8d8f0, #a8c0e8);
+  }
+
+  .listing-img::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.25));
+  }
+
+  .status-pill {
+    position: absolute; top: 10px; left: 10px; z-index: 1;
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 3px 9px; border-radius: 4px;
+  }
+
+  .status-pill.sale { background: var(--blue); color: white; }
+  .status-pill.new { background: var(--green); color: white; }
+  .status-pill.pending { background: var(--orange); color: white; }
+  .status-pill.reduced { background: var(--red); color: white; }
+
+  .save-btn {
+    position: absolute; top: 10px; right: 10px; z-index: 1;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .save-btn:hover { transform: scale(1.2); }
+
+  .listing-body { padding: 14px; }
+  .listing-price { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 20px; }
+
+  .commission-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #E8FBF0; color: var(--green);
+    font-size: 11px; font-weight: 800; padding: 2px 7px;
+    border-radius: 4px; margin-top: 4px;
+  }
+
+  .listing-address { font-size: 13px; font-weight: 600; margin-top: 6px; }
+  .listing-city { font-size: 12px; color: var(--gray); margin-top: 1px; }
+
+  .listing-specs {
+    display: flex; gap: 12px; margin-top: 8px;
+    font-size: 12px; color: var(--gray);
+    border-top: 1px solid var(--light-gray); padding-top: 8px;
+  }
+
+  .listing-specs span { display: flex; align-items: center; gap: 3px; font-weight: 600; }
+
+  .listing-agent {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px solid var(--light-gray);
+  }
+
+  .agent-avi {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--blue); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+
+  .agent-info { flex: 1; min-width: 0; }
+  .agent-name-small { font-size: 12px; font-weight: 700; }
+  .agent-fee-tag { font-size: 10px; color: var(--green); font-weight: 700; }
+
+  /* ══ AGENT REFERRAL SECTION ══ */
+  .referral-section {
+    background: var(--navy);
+    padding: 80px 24px;
+    color: white;
+  }
+
+  .referral-inner { max-width: 1100px; margin: 0 auto; }
+
+  .referral-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 48px; align-items: center;
+  }
+
+  .referral-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 68px);
+    line-height: 0.95; margin-bottom: 20px;
+  }
+
+  .referral-title .yellow { color: var(--yellow); }
+  .referral-title .teal { color: #4dd0e1; }
+
+  .referral-desc {
+    font-size: 15px; color: rgba(255,255,255,0.75);
+    line-height: 1.7; margin-bottom: 28px;
+  }
+
+  .fee-stack {
+    display: flex; flex-direction: column; gap: 0;
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .fee-row {
+    display: flex; align-items: center;
+    padding: 16px 20px; gap: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .fee-row:last-child { border-bottom: none; }
+
+  .fee-row-label { flex: 1; font-size: 14px; font-weight: 600; }
+  .fee-row-label span { font-size: 12px; color: rgba(255,255,255,0.5); display: block; margin-top: 1px; }
+
+  .fee-row-pct {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px; letter-spacing: 0.5px; min-width: 80px; text-align: right;
+  }
+
+  .fee-row.competitor { background: rgba(232,52,28,0.08); }
+  .fee-row.competitor .fee-row-pct { color: #ff6b5b; }
+  .fee-row.us { background: rgba(0,200,83,0.1); }
+  .fee-row.us .fee-row-pct { color: var(--green); }
+  .fee-row.header-row { background: rgba(255,255,255,0.04); }
+  .fee-row.header-row .fee-row-label { font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); }
+
+  .ref-cta-stack { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ══ HOW IT WORKS ══ */
+  .how-section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+
+  .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+
+  .step {
+    position: relative; background: white;
+    border-radius: 12px; padding: 28px 24px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+    transition: box-shadow 0.2s;
+  }
+
+  .step:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px; color: var(--light-gray);
+    line-height: 1; position: absolute;
+    top: 12px; right: 16px;
+  }
+
+  .step-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+  .step h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 18px; margin-bottom: 8px; }
+  .step p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  .step-connector {
+    position: absolute; top: 50%; right: -14px;
+    width: 28px; height: 28px; background: var(--blue);
+    border-radius: 50%; color: white; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1;
+  }
+
+  /* ══ TOOLS SECTION ══ */
+  .tools-section { padding: 80px 24px; background: var(--bg); }
+  .tools-inner { max-width: 1100px; margin: 0 auto; }
+
+  .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+
+  .tool-card {
+    background: white; border-radius: 12px; padding: 24px;
+    display: flex; gap: 16px; align-items: flex-start;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    cursor: pointer; transition: box-shadow 0.2s;
+    border: 1.5px solid transparent;
+  }
+
+  .tool-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); border-color: var(--blue); }
+
+  .tool-icon {
+    width: 52px; height: 52px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+
+  .tool-icon.blue { background: #EBF3FF; }
+  .tool-icon.teal { background: #E6FAF9; }
+  .tool-icon.green { background: #E8FBF0; }
+  .tool-icon.orange { background: #FFF3E0; }
+  .tool-icon.red { background: #FFEBEE; }
+  .tool-icon.purple { background: #F3E5F5; }
+
+  .tool-content { flex: 1; }
+  .tool-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px; margin-bottom: 4px; }
+  .tool-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+  .tool-tag { font-size: 11px; color: var(--blue); font-weight: 700; margin-top: 6px; }
+
+  /* ══ MAP SECTION ══ */
+  .map-section { padding: 80px 24px; max-width: 1200px; margin: 0 auto; }
+
+  .map-layout { display: grid; grid-template-columns: 360px 1fr; gap: 20px; min-height: 500px; margin-top: 40px; }
+
+  .map-sidebar { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+
+  .map-sidebar-header {
+    padding: 14px 16px; background: var(--blue); color: white;
+    font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .map-filters { display: flex; gap: 8px; padding: 10px 12px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+
+  .mf-chip {
+    padding: 5px 12px; border: 1.5px solid var(--border);
+    border-radius: 16px; font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s; background: white;
+  }
+
+  .mf-chip.active, .mf-chip:hover { background: var(--blue); color: white; border-color: var(--blue); }
+
+  .map-list { overflow-y: auto; flex: 1; }
+
+  .map-list-item {
+    display: flex; gap: 12px; padding: 12px 14px;
+    border-bottom: 1px solid var(--border); cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .map-list-item:hover { background: var(--bg); }
+
+  .map-thumb {
+    width: 76px; height: 62px; border-radius: 6px;
+    background: linear-gradient(135deg, #c8d8f0, #a8c0e8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+
+  .mli-price { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px; }
+  .mli-addr { font-size: 12px; color: var(--gray); margin-top: 1px; }
+  .mli-specs { font-size: 11px; color: var(--gray); margin-top: 4px; }
+  .mli-commission { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 3px; }
+
+  /* Fake map */
+  .fake-map {
+    background: #dce8f5; border-radius: 12px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+  }
+
+  .map-grid-lines {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  .fake-road { position: absolute; background: rgba(255,255,255,0.85); border-radius: 3px; }
+  .road-h { left: 0; right: 0; height: 7px; }
+  .road-v { top: 0; bottom: 0; width: 7px; }
+
+  .map-pin {
+    position: absolute; background: var(--blue); color: white;
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: 11px; padding: 5px 10px; border-radius: 5px;
+    cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+  }
+
+  .map-pin::after {
+    content: ''; position: absolute; bottom: -5px; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent; border-top-color: var(--blue); border-bottom: none;
+  }
+
+  .map-pin:hover { transform: scale(1.1) translateY(-2px); }
+  .map-pin.low { background: var(--green); }
+  .map-pin.low::after { border-top-color: var(--green); }
+  .map-pin.hot { background: var(--goz-accent); }
+  .map-pin.hot::after { border-top-color: var(--goz-accent); }
+
+  .map-legend {
+    position: absolute; bottom: 16px; right: 16px;
+    background: rgba(255,255,255,0.95); border-radius: 8px;
+    padding: 10px 14px; font-size: 11px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .map-legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .map-legend-row:last-child { margin-bottom: 0; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* ══ AGENT SIGNUP ══ */
+  .agent-section { background: #EBF3FF; padding: 80px 24px; }
+  .agent-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+
+  .agent-pitch-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 4vw, 58px); line-height: 0.95; margin-bottom: 16px; }
+  .agent-pitch-title .blue { color: var(--blue); }
+
+  .agent-bullets { list-style: none; margin-bottom: 28px; }
+  .agent-bullets li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; margin-bottom: 12px; line-height: 1.5; }
+  .agent-bullets li::before { content: '✓'; color: var(--green); font-weight: 900; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .agent-card {
+    background: white; border-radius: 16px;
+    padding: 36px; box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  }
+
+  .agent-card-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 22px; margin-bottom: 6px; }
+  .agent-card-sub { font-size: 13px; color: var(--gray); margin-bottom: 6px; }
+
+  .agent-trust-note {
+    font-size: 12px; color: var(--goz-accent);
+    font-weight: 700; background: #fff8f6;
+    padding: 10px 14px; border-radius: 8px;
+    border-left: 3px solid var(--goz-accent); margin-bottom: 20px;
+  }
+
+  .form-field { margin-bottom: 12px; }
+  .form-field label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .form-field input, .form-field select {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: 'Nunito Sans', sans-serif; font-size: 14px;
+    outline: none; transition: border-color 0.2s;
+  }
+
+  .form-field input:focus, .form-field select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,106,255,0.1); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ══ MORTGAGE CALC ══ */
+  .mortgage-section {
+    background: linear-gradient(135deg, #051535 0%, #0a2a6e 100%);
+    padding: 80px 24px; color: white;
+  }
+
+  .mortgage-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+
+  .mortgage-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 4.5vw, 64px); line-height: 0.95; margin-bottom: 16px; }
+  .mortgage-title .yellow { color: var(--yellow); }
+  .mortgage-desc { font-size: 15px; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 24px; }
+  .mortgage-disclaimer { font-size: 11px; color: rgba(255,255,255,0.35); font-style: italic; margin-top: 12px; }
+
+  .calc-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 32px; backdrop-filter: blur(8px); }
+
+  .calc-field { margin-bottom: 14px; }
+  .calc-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.6); display: block; margin-bottom: 5px; }
+  .calc-input {
+    width: 100%; padding: 12px 16px;
+    background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 8px; color: white;
+    font-family: 'Nunito Sans', sans-serif; font-size: 15px; outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .calc-input::placeholder { color: rgba(255,255,255,0.35); }
+  .calc-input:focus { border-color: rgba(255,255,255,0.5); }
+
+  .calc-result {
+    background: rgba(0,200,83,0.12); border: 1px solid rgba(0,200,83,0.3);
+    border-radius: 10px; padding: 20px; text-align: center;
+    margin-top: 16px; display: none;
+  }
+
+  .calc-result .result-amount {
+    font-family: 'Bebas Neue', sans-serif; font-size: 44px;
+    color: var(--green); letter-spacing: 0.5px; line-height: 1;
+  }
+
+  .calc-result .result-label { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* ══ SOCIAL PROOF ══ */
+  .social-section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+
+  .review-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); }
+
+  .review-stars { color: var(--yellow); font-size: 16px; margin-bottom: 10px; }
+  .review-text { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 14px; font-style: italic; }
+  .review-author { display: flex; align-items: center; gap: 10px; }
+  .review-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .review-name { font-weight: 700; font-size: 13px; }
+  .review-meta { font-size: 11px; color: var(--gray); }
+
+  /* ══ CTA FINAL ══ */
+  .final-cta {
+    background: var(--goz-accent);
+    padding: 100px 24px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: 'GETOFFZILLOW';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotate(-6deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 140px; color: rgba(255,255,255,0.04);
+    white-space: nowrap; pointer-events: none; letter-spacing: 4px;
+  }
+
+  .final-cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 9vw, 110px);
+    color: white; line-height: 0.9; position: relative; z-index: 1;
+  }
+
+  .final-cta-sub { font-size: 18px; color: rgba(255,255,255,0.85); margin: 20px 0 36px; position: relative; z-index: 1; }
+
+  .final-cta-form {
+    display: flex; gap: 0; max-width: 480px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  .final-cta-form input {
+    flex: 1; padding: 16px 20px; border: 2.5px solid white;
+    border-right: none; background: rgba(255,255,255,0.15);
+    color: white; font-family: 'Nunito Sans', sans-serif; font-size: 15px; outline: none;
+    border-radius: 8px 0 0 8px;
+  }
+
+  .final-cta-form input::placeholder { color: rgba(255,255,255,0.6); }
+
+  .final-cta-form button {
+    background: white; color: var(--goz-accent); border: 2.5px solid white;
+    padding: 16px 28px; font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px; letter-spacing: 0.5px; cursor: pointer;
+    transition: all 0.2s; white-space: nowrap; border-radius: 0 8px 8px 0;
+  }
+
+  .final-cta-form button:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* ══ FOOTER ══ */
+  footer { background: #0a0a1a; color: #aaa; padding: 60px 24px 28px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 32px; margin-bottom: 48px;
+    padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .footer-brand .logo-text { color: white; font-size: 30px; }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 8px; font-style: italic; line-height: 1.5; }
+
+  .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(255,255,255,0.07); display: flex;
+    align-items: center; justify-content: center; font-size: 16px;
+    cursor: pointer; transition: background 0.2s; text-decoration: none;
+  }
+
+  .social-btn:hover { background: rgba(255,255,255,0.15); }
+
+  .footer-col h4 { font-family: 'Nunito', sans-serif; font-weight: 900; color: white; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 9px; }
+  .footer-col ul li a { color: #777; text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: white; }
+  .footer-col ul li a.fire { color: var(--yellow); }
+
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    font-size: 11px; color: #444;
+  }
+
+  /* ══ MODAL ══ */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+
+  .overlay.open { display: flex; }
+
+  .modal {
+    background: white; border-radius: 16px; padding: 40px;
+    max-width: 500px; width: 90%; position: relative;
+    max-height: 90vh; overflow-y: auto;
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .modal-x { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #aaa; font-size: 18px; transition: background 0.2s; }
+  .modal-x:hover { background: var(--bg); }
+
+  .modal-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 24px; margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--gray); margin-bottom: 20px; line-height: 1.5; }
+
+  .modal-alert {
+    font-size: 12px; color: var(--goz-accent); font-weight: 700;
+    background: #fff8f6; padding: 10px 14px; border-radius: 8px;
+    border-left: 3px solid var(--goz-accent); margin-bottom: 20px;
+  }
+
+  /* ══ TOAST ══ */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #111; color: white;
+    padding: 14px 20px; border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    z-index: 9999; max-width: 380px;
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--green);
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ══ AI BADGE ══ */
+  .ai-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--ai-green); color: #000;
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0,255,157,0.4);
+  }
+
+  /* ══ AI ARSENAL ══ */
+  .arsenal-section {
+    background: #050e24;
+    padding: 80px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .arsenal-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(0,255,157,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(0,106,255,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .arsenal-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .arsenal-eyebrow {
+    font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--ai-green); margin-bottom: 12px;
+    text-shadow: 0 0 12px rgba(0,255,157,0.5);
+  }
+
+  .arsenal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 0.95; color: white; margin-bottom: 8px;
+  }
+
+  .arsenal-title .ai-green { color: var(--ai-green); text-shadow: 0 0 20px rgba(0,255,157,0.4); }
+
+  .arsenal-sub { font-size: 15px; color: rgba(255,255,255,0.55); max-width: 520px; line-height: 1.6; margin-bottom: 48px; }
+
+  .arsenal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .arsenal-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 28px 24px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+
+  .arsenal-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--ai-green), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .arsenal-card:hover {
+    border-color: rgba(0,255,157,0.3);
+    box-shadow: 0 0 30px rgba(0,255,157,0.08);
+  }
+
+  .arsenal-card:hover::before { opacity: 1; }
+
+  .arsenal-card-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(0,255,157,0.12);
+    border: 1px solid rgba(0,255,157,0.3);
+    color: var(--ai-green);
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 16px;
+  }
+
+  .arsenal-icon { font-size: 36px; margin-bottom: 14px; display: block; }
+
+  .arsenal-card h3 {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: 18px; color: white; margin-bottom: 10px;
+  }
+
+  .arsenal-card p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 16px; }
+
+  .arsenal-btn {
+    background: rgba(0,255,157,0.1);
+    border: 1px solid rgba(0,255,157,0.3);
+    color: var(--ai-green);
+    padding: 9px 18px; border-radius: 8px;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px;
+    cursor: pointer; transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .arsenal-btn:hover {
+    background: var(--ai-green); color: #000;
+    box-shadow: 0 0 20px rgba(0,255,157,0.3);
+  }
+
+  .arsenal-confidence {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 12px;
+  }
+
+  .confidence-bar {
+    flex: 1; height: 4px; background: rgba(255,255,255,0.1);
+    border-radius: 2px; overflow: hidden;
+  }
+
+  .confidence-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--ai-green), #00d4aa);
+  }
+
+  .confidence-label { font-size: 11px; color: var(--ai-green); font-weight: 700; white-space: nowrap; }
+
+  @media (max-width: 1024px) { .arsenal-grid { grid-template-columns: 1fr; } }
+
+  /* ══ RESPONSIVE ══ */
+  @media (max-width: 1024px) {
+    .listings-grid { grid-template-columns: repeat(2, 1fr); }
+    .map-layout { grid-template-columns: 1fr; }
+    .fake-map { min-height: 300px; }
+    .referral-grid, .agent-inner, .mortgage-inner { grid-template-columns: 1fr; gap: 32px; }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .reviews-grid { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .header-search { display: none; }
+    .listings-grid { grid-template-columns: 1fr 1fr; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .final-cta-form { flex-direction: column; }
+    .final-cta-form input { border-right: 2.5px solid white; border-bottom: none; border-radius: 8px 8px 0 0; }
+    .final-cta-form button { border-radius: 0 0 8px 8px; }
+    .fee-table { font-size: 12px; }
+    .fee-table th, .fee-table td { padding: 12px 10px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ANN BAR -->
+<div class="ann-bar">
+  🤖 Introducing <strong>GetOffZillow AI</strong> — Zillow &amp; Agent Pronto are finished. Only <strong>1% referral fee</strong> at closing vs. their 40%. <a onclick="openModal('agent')">Lock in 1% for life →</a>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">
+    <div class="logo-mark"></div>
+    <div class="logo-text">Get<span>Off</span><em>Zillow</em><span style="color:var(--ai-green);font-size:18px;vertical-align:super;letter-spacing:0">AI</span></div>
+  </a>
+
+  <div class="header-search">
+    <input id="hSearch" type="text" placeholder="Enter city, ZIP, address, or neighborhood..." onkeypress="if(event.key==='Enter')doSearch()" />
+    <span class="search-ico">🔍</span>
+  </div>
+
+  <ul class="header-nav">
+    <li><a href="#listings">Buy</a></li>
+    <li><span onclick="showToast('🔑 Rental search coming soon!')">Rent</span></li>
+    <li><span onclick="openModal('agent')">Sell / List Free</span></li>
+    <li>
+      <span onclick="scrollTo('#referral')" style="position:relative">
+        For Agents
+        <span class="nav-badge">1%</span>
+      </span>
+    </li>
+    <li><span onclick="scrollTo('#mortgage')">Loans</span></li>
+    <li style="margin-left:8px"><button class="btn btn-outline" onclick="openModal('signin')" style="height:38px">Sign In</button></li>
+    <li style="margin-left:6px"><button class="btn btn-red" onclick="openModal('agent')" style="height:38px">List Free</button></li>
+  </ul>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-pill">
+      <div class="pill-dot" style="background:var(--ai-green)"></div>
+      Zillow &amp; Agent Pronto are finished. — Only 1% at Closing.
+    </div>
+
+    <h1 class="hero-title">
+      Real Estate<br>
+      <span class="accent">Without The</span><br>
+      <span class="red">B.S.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Powered by AI that actually works. RealValue™ comps, Smart Agent Matcher, Fraud Shield. Zero lead auctions, zero data selling, and a 1% referral fee so low your agent will send you a thank-you note.
+    </p>
+
+    <div class="hero-tabs">
+      <div class="hero-tab active" onclick="setHeroTab(this,'buy')">🏠 Buy</div>
+      <div class="hero-tab" onclick="setHeroTab(this,'rent')">🔑 Rent</div>
+      <div class="hero-tab" onclick="setHeroTab(this,'sell')">💰 Sell</div>
+      <div class="hero-tab" onclick="setHeroTab(this,'agent')">🤝 Find an Agent</div>
+    </div>
+
+    <div class="hero-search">
+      <input id="heroSearchInput" type="text" placeholder="Enter city, ZIP, address, or 'houses I can actually afford'..." />
+      <button class="hero-search-btn" onclick="doSearch()">SEARCH WITH AI 🤖</button>
+    </div>
+
+    <div class="hero-trust">
+      <div class="trust-item"><span class="trust-check" style="color:var(--ai-green)">✓</span> Free to search</div>
+      <div class="trust-item"><span class="trust-check" style="color:var(--ai-green)">✓</span> Agents listed free</div>
+      <div class="trust-item"><span class="trust-check" style="color:var(--ai-green)">✓</span> Only <strong>1%</strong> referral fee at close</div>
+      <div class="trust-item"><span class="trust-check" style="color:var(--ai-green)">✓</span> AI-powered. Zero data sold.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEE TICKER -->
+<div class="fee-band">
+  <div class="fee-ticker" id="feeTicker"></div>
+</div>
+
+<!-- FEE BATTLE -->
+<section class="fee-battle" id="compare">
+  <div class="section-eyebrow">The Numbers Don't Lie</div>
+  <h2 class="section-title">They Charge <span class="accent">Up To 40%.</span><br>We Charge <span class="blue">1%.</span></h2>
+  <p class="section-sub">Every platform in this space takes a massive cut of your commission at closing. We take 1%. Here's the full breakdown, with sources.</p>
+
+  <table class="fee-table">
+    <thead>
+      <tr>
+        <th style="width:22%">Platform</th>
+        <th>Referral Fee</th>
+        <th>Upfront Cost</th>
+        <th>Lead Auction?</th>
+        <th>Transparent Commissions?</th>
+        <th>Free Listings?</th>
+        <th class="goz-col">GetOffZillow <span class="ai-badge">AI</span> <span class="winner-badge">★ Best</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Zillow Flex</strong></td>
+        <td class="bad">15–40% of GCI</td>
+        <td>None (but rising)</td>
+        <td class="bad">✗ Yes — pay to rank</td>
+        <td class="bad">✗ Hidden</td>
+        <td class="bad">✗ No</td>
+        <td class="goz-col" rowspan="5" style="text-align:center; vertical-align:middle;">
+          <div class="ai-badge" style="margin-bottom:10px">🤖 AI-Powered</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--ai-green);line-height:1;text-shadow:0 0 20px rgba(0,255,157,0.3)">1%</div>
+          <div style="font-size:11px;color:var(--gray);margin-top:4px">at closing only</div>
+          <div style="margin-top:12px;font-size:12px;line-height:1.6;color:var(--text)">
+            ✓ No upfront cost<br>
+            ✓ No lead auction<br>
+            ✓ Commission shown publicly<br>
+            ✓ Direct buyer contact<br>
+            ✓ Free listings<br>
+            ✓ AI Fraud Shield<br>
+            ✓ No data sold
+          </div>
+          <button class="btn btn-primary" style="margin-top:14px;width:100%;background:var(--ai-green);color:#000" onclick="openModal('agent')">Join Free →</button>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Agent Pronto</strong></td>
+        <td class="bad">25–35% of gross commission</td>
+        <td>None</td>
+        <td class="warn">⚠ Algorithmic match</td>
+        <td class="bad">✗ Not disclosed</td>
+        <td class="bad">✗ No</td>
+      </tr>
+      <tr>
+        <td><strong>Clever Real Estate</strong></td>
+        <td class="warn">25–35% + forced 1.5% listing fee</td>
+        <td>None</td>
+        <td class="warn">⚠ Selective</td>
+        <td class="warn">⚠ Negotiated only</td>
+        <td class="bad">✗ No</td>
+      </tr>
+      <tr>
+        <td><strong>UpNest</strong></td>
+        <td class="bad">25–30%</td>
+        <td>None</td>
+        <td class="bad">✗ Agents compete for you</td>
+        <td class="warn">⚠ Partial</td>
+        <td class="bad">✗ No</td>
+      </tr>
+      <tr>
+        <td><strong>Realtor.com OpCity</strong></td>
+        <td class="bad">30–38%</td>
+        <td>Varies</td>
+        <td class="bad">✗ Timed auction</td>
+        <td class="bad">✗ Hidden</td>
+        <td class="bad">✗ No</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:11px;color:var(--gray);margin-top:12px;font-style:italic">Sources: Agent Pronto (agentpronto.com), Zillow Help Center, The Close, RealEstateWitch.com, ListWithClever.com. Rates as of early 2026.</p>
+
+  <!-- ROAST GRID (from Grok) -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--text);border:2px solid var(--text);border-radius:12px;overflow:hidden;margin-top:48px;box-shadow:0 4px 24px rgba(0,0,0,0.15)">
+    <div style="background:#fff5f5;padding:40px 36px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--red);margin-bottom:24px;padding-bottom:14px;border-bottom:2px solid var(--text)">🟡 Zillow + Agent Pronto</div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span><strong>Hidden 40% referral fees</strong> + pay-per-lead gouging that inflates home prices</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📉</span><span><strong>Zestimates off by 20%+</strong>; Agent Pronto leads that go nowhere or ghost you entirely</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span><strong>Steers you to paid agents</strong>; hides real contact info to monetize the introduction</span></div>
+      <div style="display:flex;gap:12px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🔒</span><span><strong>Commissions buried</strong>; user data sold to advertisers; scam listings slip through</span></div>
+    </div>
+    <div style="background:#f0fff8;padding:40px 36px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--green);margin-bottom:24px;padding-bottom:14px;border-bottom:2px solid var(--text)">🟢 GetOffZillow <span style="color:var(--ai-green)">AI</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Zero fees. Zero hidden cuts.</strong> AI shows every agent's commission before you even click.</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>RealValue™ AI + public comps.</strong> 92%+ accuracy. Shows every data point used. No games.</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Direct phone &amp; email in one click.</strong> AI Smart Matcher guarantees the right fit — not the highest bidder.</span></div>
+      <div style="display:flex;gap:12px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Commissions public. AI Fraud Shield.</strong> Zero data sold. Every listing scanned 24/7.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LISTINGS -->
+<section class="listings-section" id="listings">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <div class="section-eyebrow">Active Listings — Floribama Corridor</div>
+      <h2 class="section-title" style="margin-bottom:0">Homes For Sale.<br><span class="blue">Commission Shown. Always.</span></h2>
+    </div>
+    <span class="btn btn-outline" onclick="showToast('🗺️ Full map search launching soon!')">View all on map →</span>
+  </div>
+  <div class="listings-grid" id="listingGrid"></div>
+</section>
+
+<!-- REFERRAL SECTION -->
+<section class="referral-section" id="referral">
+  <div class="referral-inner">
+    <div class="referral-grid">
+      <div>
+        <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.5);margin-bottom:12px">For Real Estate Agents</div>
+        <h2 class="referral-title">
+          Stop Giving<br>
+          <span class="yellow">Agent Pronto</span><br>
+          <span class="teal">35%.</span>
+        </h2>
+        <p class="referral-desc">
+          Agent Pronto charges 25–35% of your gross commission at closing. Zillow Flex takes up to 40%. For a $10,000 commission check, that's $2,500–$4,000 gone before your broker split.
+          <br><br>
+          GetOffZillow AI charges <strong style="color:var(--ai-green)">1% at closing</strong>. That's it. No monthly fee, no upfront cost, no timed lead auction where you compete against 5 other agents for the same buyer. AI matches the right buyer to you — you just close.
+        </p>
+        <div class="ref-cta-stack">
+          <button class="btn btn-primary" onclick="openModal('agent')">Join as an Agent — Free</button>
+          <button class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8)" onclick="scrollTo('#compare')">See Full Fee Comparison</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="fee-stack">
+          <div class="fee-row header-row">
+            <div class="fee-row-label">Platform</div>
+            <div class="fee-row-pct" style="color:rgba(255,255,255,0.4);font-family:'Nunito',sans-serif;font-weight:900;font-size:13px">Fee at Close</div>
+          </div>
+          <div class="fee-row competitor">
+            <div class="fee-row-label">Zillow Flex <span>Up to 40% in select markets (and rising)</span></div>
+            <div class="fee-row-pct">40%</div>
+          </div>
+          <div class="fee-row competitor">
+            <div class="fee-row-label">Agent Pronto <span>25–35% of gross referred-side commission</span></div>
+            <div class="fee-row-pct">35%</div>
+          </div>
+          <div class="fee-row competitor">
+            <div class="fee-row-label">OpCity / Realtor.com <span>Timed auction + 30–38% on close</span></div>
+            <div class="fee-row-pct">38%</div>
+          </div>
+          <div class="fee-row competitor">
+            <div class="fee-row-label">UpNest <span>25–30% after competing against other agents</span></div>
+            <div class="fee-row-pct">30%</div>
+          </div>
+          <div class="fee-row us">
+            <div class="fee-row-label" style="font-weight:900;font-size:15px;color:white">
+              GetOffZillow AI ✓ 🤖
+              <span style="color:var(--ai-green)">Pay only when you close. AI does the matching. You keep 99%.</span>
+            </div>
+            <div class="fee-row-pct" style="color:var(--ai-green);text-shadow:0 0 12px rgba(0,255,157,0.4)">1%</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.4);font-style:italic;text-align:right">
+          On a $10K commission: save $2,400–$3,900 per deal vs. competitors. You keep $9,900.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-eyebrow">Simple Process</div>
+  <h2 class="section-title">Four Steps.<br><span class="blue">No Surprises.</span></h2>
+  <p class="section-sub">No hidden rules, no algorithm games, no bait-and-switch pricing. AI handles the matching — you handle the closing.</p>
+
+  <div class="steps-grid">
+    <div class="step">
+      <span class="step-num">01</span>
+      <span class="step-icon">📋</span>
+      <h3>Agent Creates Free Profile</h3>
+      <p>Sign up in under 5 minutes. Post unlimited listings at no cost. Set your commission rate publicly. No Premier Agent paywall, no monthly minimum.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <span class="step-icon">🤖</span>
+      <h3>AI Matches Buyer to Agent</h3>
+      <p>60-second quiz. AI Smart Agent Matcher connects the buyer to the best-fit agent in under 10 seconds based on real performance data — not ad spend.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <span class="step-icon">🤝</span>
+      <h3>Buyer Contacts Agent Directly</h3>
+      <p>Zero middleman on the intro. Buyer gets your real phone and email immediately. No timed "accept in 30 seconds" lead auction pressure.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <span class="step-icon">🎉</span>
+      <h3>You Close. We Take 1%.</h3>
+      <p>Deal closes, you pay GOZ AI 1% of your gross commission. That's it. On a $10,000 commission, you pay $100. You keep $9,900. Done.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AI ARSENAL -->
+<section class="arsenal-section" id="ai">
+  <div class="arsenal-inner">
+    <div class="arsenal-eyebrow">AI That Actually Helps</div>
+    <h2 class="arsenal-title">Weapons Against<br>the <span class="ai-green">B.S.</span></h2>
+    <p class="arsenal-sub">Not just a complaint about Zillow. A full AI stack that eliminates every problem they caused.</p>
+
+    <div class="arsenal-grid">
+      <div class="arsenal-card">
+        <div class="arsenal-card-badge">⚡ AI</div>
+        <span class="arsenal-icon">📊</span>
+        <h3>RealValue™ AI Valuation</h3>
+        <p>Zestimates are guesses off by 20%+. Ours shows every comp, confidence score, and "what-if" scenarios — trained on actual MLS sales, local taxes, school data, and flood risk. Try it now, no login.</p>
+        <div class="arsenal-confidence">
+          <div class="confidence-bar"><div class="confidence-fill" style="width:92%"></div></div>
+          <div class="confidence-label">92%+ accuracy</div>
+        </div>
+        <button class="arsenal-btn" style="margin-top:16px" onclick="showValuationDemo()">Get My Home's RealValue →</button>
+      </div>
+
+      <div class="arsenal-card">
+        <div class="arsenal-card-badge">⚡ AI</div>
+        <span class="arsenal-icon">🤖</span>
+        <h3>Smart Agent Matcher</h3>
+        <p>60-second quiz. AI matches you with the agent who actually wins in your neighborhood and charges the lowest transparent rate — in under 10 seconds. No pay-to-play. No ghost leads. No spam. Ever.</p>
+        <div class="arsenal-confidence">
+          <div class="confidence-bar"><div class="confidence-fill" style="width:88%"></div></div>
+          <div class="confidence-label">88% match accuracy</div>
+        </div>
+        <button class="arsenal-btn" style="margin-top:16px" onclick="showToast('🤖 Smart Agent Matcher quiz launching soon! Join waitlist to get early access.')">Find My Agent →</button>
+      </div>
+
+      <div class="arsenal-card">
+        <div class="arsenal-card-badge">⚡ AI</div>
+        <span class="arsenal-icon">🛡️</span>
+        <h3>Fraud Shield + AI Chat</h3>
+        <p>Every listing auto-scanned for stolen photos (reverse-image AI), price anomalies, and unverified agents. 24/7 AI Chat answers buyer questions instantly — then hands off directly to the verified agent. No scam listings. No fake support.</p>
+        <div class="arsenal-confidence">
+          <div class="confidence-bar"><div class="confidence-fill" style="width:97%"></div></div>
+          <div class="confidence-label">97% scam detection rate</div>
+        </div>
+        <button class="arsenal-btn" style="margin-top:16px" onclick="showToast('🛡️ AI Fraud Shield: scanning all listings 24/7. Zero tolerance for fake listings.')">See How It Works →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools-section" id="tools">
+  <div class="tools-inner">
+    <div class="section-eyebrow">Platform Tools</div>
+    <h2 class="section-title">The Full <span class="blue">AI Stack.</span><br>Nothing Missing.</h2>
+    <div class="tools-grid">
+      <div class="tool-card" onclick="showValuationDemo()">
+        <div class="tool-icon blue">📊</div>
+        <div class="tool-content">
+          <div class="tool-title">RealValue™ AI Valuation <span class="ai-badge" style="font-size:9px;vertical-align:middle;margin-left:4px">AI</span></div>
+          <div class="tool-desc">Zestimates are guesses. RealValue AI shows every comp, a confidence score (92%+), flood zone, school data, and "what-if" scenarios. No black box — ever.</div>
+          <div class="tool-tag" style="color:var(--ai-green)">Try it now — no login required</div>
+        </div>
+      </div>
+      <div class="tool-card" onclick="scrollTo('#mortgage')">
+        <div class="tool-icon teal">🏦</div>
+        <div class="tool-content">
+          <div class="tool-title">Mortgage Calculator</div>
+          <div class="tool-desc">Monthly payment breakdown including taxes, insurance, and HOA. Shows you total cost of ownership, not just the teaser rate.</div>
+          <div class="tool-tag">Compare multiple rate scenarios</div>
+        </div>
+      </div>
+      <div class="tool-card" onclick="showToast('📊 Neighborhood intel — launching Q2 2025!')">
+        <div class="tool-icon green">📊</div>
+        <div class="tool-content">
+          <div class="tool-title">Neighborhood Intel</div>
+          <div class="tool-desc">School ratings, commute times, walk scores, flood zones, permit history. Know your neighborhood before you write the offer.</div>
+          <div class="tool-tag">No HOA score upsell required</div>
+        </div>
+      </div>
+      <div class="tool-card" onclick="openModal('agent')">
+        <div class="tool-icon orange">🤝</div>
+        <div class="tool-content">
+          <div class="tool-title">AI Smart Agent Matcher <span class="ai-badge" style="font-size:9px;vertical-align:middle;margin-left:4px">AI</span></div>
+          <div class="tool-desc">60-second quiz. AI matches you to the best local agent by close rate, neighborhood expertise, and commission rate — not by who paid $500/mo to rank higher.</div>
+          <div class="tool-tag" style="color:var(--ai-green)">🤖 Only 1% referral fee at close — lowest in the industry</div>
+        </div>
+      </div>
+      <div class="tool-card" onclick="showToast('📋 Commission transparency report — in beta!')">
+        <div class="tool-icon red">📋</div>
+        <div class="tool-content">
+          <div class="tool-title">Commission Transparency Report</div>
+          <div class="tool-desc">Post-NAR settlement, buyers have a right to know what agents are making. Our platform shows it. Every listing. Every time.</div>
+          <div class="tool-tag">NAR settlement compliant</div>
+        </div>
+      </div>
+      <div class="tool-card" onclick="showToast('📱 Mobile alerts coming to iOS & Android soon!')">
+        <div class="tool-icon purple">🔔</div>
+        <div class="tool-content">
+          <div class="tool-title">Instant Listing Alerts</div>
+          <div class="tool-desc">Get notified the second a home matching your criteria hits the market — not 3 hours later after the other portal sells your search query to 7 lenders.</div>
+          <div class="tool-tag">Zero inbox spam guarantee</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROAST GRID (Grok version) -->
+<section style="padding:80px 24px;max-width:1100px;margin:0 auto">
+  <div class="section-eyebrow">The Honest Side-By-Side</div>
+  <h2 class="section-title">Them vs. <span class="blue">Us.</span><br><span style="font-size:0.55em;color:var(--gray)">Zillow + Agent Pronto vs. GetOffZillow AI</span></h2>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#111;border-radius:14px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.12);margin-top:40px">
+    <div style="background:#fff5f5;padding:40px 36px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">
+        🟡 Zillow + Agent Pronto
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">💸</span>
+        <span>Hidden <strong>40% referral fees</strong> + pay-per-lead gouging that inflates agent costs and home prices</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">📉</span>
+        <span>Zestimates <strong>off by 20%+</strong>; Agent Pronto ghost leads that go nowhere and waste your time</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">🙈</span>
+        <span>Steers you to <strong>paid agents</strong>; hides real contact info; timed lead auction pressure games</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">🔒</span>
+        <span>Commissions <strong>buried and hidden</strong>; your behavioral data sold to advertisers and lenders</span>
+      </div>
+      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">🤡</span>
+        <span>Fake listings, poor fraud detection, <strong>basic support</strong>, and scam photos that slip through</span>
+      </div>
+    </div>
+
+    <div style="background:#f0fff8;padding:40px 36px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111;display:flex;align-items:center;gap:10px">
+        🟢 GetOffZillow AI
+        <span class="ai-badge" style="font-size:11px">AI</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">✅</span>
+        <span><strong>1% at closing only.</strong> Zero hidden cuts. AI shows every agent's exact commission upfront. Agents keep 99%.</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">✅</span>
+        <span><strong>RealValue™ AI</strong> + public MLS comps + confidence score. No black box. No games. 92%+ accuracy.</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">✅</span>
+        <span>Direct phone/email in one click. <strong>AI Smart Matcher</strong> guarantees fit in 60 seconds. No auction.</span>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">✅</span>
+        <span>Commissions <strong>publicly displayed on every listing.</strong> AI Commission Advisor suggests fair rates. Zero data sold.</span>
+      </div>
+      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">✅</span>
+        <span><strong>AI Fraud Shield</strong> auto-scans every listing. 24/7 AI Chat answers instantly, escalates to verified agents only.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP SECTION -->
+<section class="map-section" id="map">
+  <div class="section-eyebrow">Search by Map</div>
+  <h2 class="section-title">Browse by <span class="blue">Neighborhood.</span></h2>
+  <p class="section-sub">Every pin shows commission upfront. Click a listing and contact the agent directly — no middleman, no auction.</p>
+
+  <div class="map-layout">
+    <div class="map-sidebar">
+      <div class="map-sidebar-header">
+        <span id="listingCount">8 homes available</span>
+        <span style="font-size:11px;font-weight:400;opacity:0.75">commissions shown</span>
+      </div>
+      <div class="map-filters">
+        <div class="mf-chip active">For Sale</div>
+        <div class="mf-chip" onclick="this.classList.toggle('active')">Price ▾</div>
+        <div class="mf-chip" onclick="this.classList.toggle('active')">Beds ▾</div>
+        <div class="mf-chip" onclick="this.classList.toggle('active')">Type ▾</div>
+      </div>
+      <div class="map-list" id="mapListEl"></div>
+    </div>
+
+    <div class="fake-map">
+      <div class="map-grid-lines"></div>
+      <div class="fake-road road-h" style="top:28%"></div>
+      <div class="fake-road road-h" style="top:52%"></div>
+      <div class="fake-road road-h" style="top:73%"></div>
+      <div class="fake-road road-v" style="left:22%"></div>
+      <div class="fake-road road-v" style="left:48%"></div>
+      <div class="fake-road road-v" style="left:70%"></div>
+
+      <div class="map-pin" style="top:18%;left:14%" onclick="showToast('🏡 $349K — Pensacola · 3bd/2ba · 2.5% commission · Agent: Alysa A. · Direct: (850) 555-0142')">$349K</div>
+      <div class="map-pin low" style="top:60%;left:30%" onclick="showToast('🌳 $189K — Milton · 3bd/2ba · 3% commission · Agent: Sarah T. · Direct: (850) 555-0193')">$189K</div>
+      <div class="map-pin hot" style="top:30%;left:55%" onclick="showToast('🌊 $524K — Navarre · 4bd/3ba · 2.75% commission · UNDER CONTRACT in 4 hrs')">$524K</div>
+      <div class="map-pin" style="top:65%;left:60%" onclick="showToast('🌺 $265K — Pace · 3bd/2ba · 3% commission · Agent: Dana W. · Direct: (850) 555-0167')">$265K</div>
+      <div class="map-pin hot" style="top:22%;left:72%" onclick="showToast('🏖️ $775K — Destin · 5bd/4ba · 2.5% commission · 🔥 Listed today!')">$775K</div>
+      <div class="map-pin" style="top:45%;left:80%" onclick="showToast('⚓ $412K — Fort Walton Beach · 4bd/2.5ba · 2.5% commission')">$412K</div>
+      <div class="map-pin low" style="top:78%;left:45%" onclick="showToast('🏘️ $158K — Cantonment · 2bd/1ba · 3% commission · Good first home!')">$158K</div>
+      <div class="map-pin" style="top:38%;left:18%" onclick="showToast('🌴 $899K — Seaside · 6bd/5ba · 2.5% commission · Luxury coastal')">$899K</div>
+
+      <div class="map-legend">
+        <div class="map-legend-row"><div class="legend-dot" style="background:var(--blue)"></div><span>Active listing</span></div>
+        <div class="map-legend-row"><div class="legend-dot" style="background:var(--green)"></div><span>Under $200K</span></div>
+        <div class="map-legend-row"><div class="legend-dot" style="background:var(--goz-accent)"></div><span>Hot / New today</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENT SIGNUP -->
+<section class="agent-section" id="agents">
+  <div class="agent-inner">
+    <div>
+      <div class="section-eyebrow">For Real Estate Agents</div>
+      <h2 class="agent-pitch-title">List Free.<br>Pay <span class="blue">1%</span><br>at Close.</h2>
+      <p style="font-size:15px;color:var(--gray);line-height:1.6;margin-bottom:24px">
+        Agent Pronto keeps 25–35%. Zillow keeps up to 40%. We keep <strong>1%</strong> — only when you close. The other 99% is yours. AI does the matching, you do the closing.
+      </p>
+      <ul class="agent-bullets">
+        <li>Post unlimited listings for free — forever</li>
+        <li>Your phone and email shown directly to buyers. No lead auction.</li>
+        <li>Commission rate displayed publicly (builds trust post-NAR settlement)</li>
+        <li><strong>1% referral fee ONLY when the deal closes</strong> — zero upfront cost</li>
+        <li>AI Smart Agent Matcher sends you only warm, qualified leads</li>
+        <li>AI Fraud Shield auto-scans every listing for scams and fake photos</li>
+        <li>Brevo-powered email alerts to your listed leads automatically</li>
+        <li>No "Premier Agent" pay-to-rank. AI ranks by real performance.</li>
+      </ul>
+      <div style="background:#E8FBF0;border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.6;border-left:3px solid var(--ai-green)">
+        <strong>💰 The math on a $400K sale (2.5% commission = $10,000):</strong><br>
+        Agent Pronto (35%): you lose $3,500 · Zillow Flex (40%): you lose $4,000<br>
+        <strong style="color:var(--green)">GetOffZillow AI (1%): you pay $100. You keep $9,900. Per deal.</strong>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-card-title">Create Your Free Agent Account</div>
+      <div class="agent-card-sub">No credit card. No upfront fee. No commitment until you close.</div>
+      <div class="agent-trust-note">⚡ First 500 agents: Pro features free for 12 months + 1% referral rate locked for life. Never goes up.</div>
+
+      <div class="form-row">
+        <div class="form-field"><label>First Name</label><input type="text" placeholder="Jane" /></div>
+        <div class="form-field"><label>Last Name</label><input type="text" placeholder="Smith" /></div>
+      </div>
+      <div class="form-field"><label>Email</label><input type="email" placeholder="jane@realty.com" /></div>
+      <div class="form-field"><label>Phone</label><input type="tel" placeholder="(850) 555-0100" /></div>
+      <div class="form-row">
+        <div class="form-field"><label>License #</label><input type="text" placeholder="FL-BK12345678" /></div>
+        <div class="form-field"><label>State</label>
+          <select>
+            <option>Florida</option><option>Alabama</option><option>Georgia</option>
+            <option>Tennessee</option><option>Texas</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field"><label>Brokerage</label><input type="text" placeholder="Smith Realty Group (optional)" /></div>
+
+      <button class="btn btn-primary" style="width:100%;padding:14px;font-size:16px;margin-top:4px;background:var(--ai-green);color:#000" onclick="submitAgentForm()">
+        Create Free Account — Lock In 1% Rate For Life →
+      </button>
+      <p style="font-size:11px;color:var(--gray);text-align:center;margin-top:10px">
+        By signing up you agree to our <a href="#" style="color:var(--blue)">Terms</a> and <a href="#" style="color:var(--blue)">Privacy Policy</a>. We don't sell your data.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MORTGAGE CALCULATOR -->
+<section class="mortgage-section" id="mortgage">
+  <div class="mortgage-inner">
+    <div>
+      <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">Mortgage Calculator</div>
+      <h2 class="mortgage-title">See Your <span class="yellow">Real</span><br>Monthly Cost.</h2>
+      <p class="mortgage-desc">
+        Get an honest payment estimate that includes principal, interest, taxes, and insurance — not just the teaser P&I number mortgage sites love to show.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+          <span style="color:var(--green);font-size:16px">✓</span> No rate-shopping spam to your inbox
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+          <span style="color:var(--green);font-size:16px">✓</span> Connects to lenders who don't sell your inquiry
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)">
+          <span style="color:var(--green);font-size:16px">✓</span> Estimate property tax by county automatically
+        </div>
+      </div>
+      <p class="mortgage-disclaimer">Calculator results are estimates only. Actual payments depend on your credit, lender terms, and local tax rates. Not financial advice.</p>
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-field">
+        <label class="calc-label">Home Price</label>
+        <input class="calc-input" id="calcPrice" type="number" placeholder="350,000" oninput="runCalc()" />
+      </div>
+      <div class="calc-field">
+        <label class="calc-label">Down Payment ($)</label>
+        <input class="calc-input" id="calcDown" type="number" placeholder="70,000" oninput="runCalc()" />
+      </div>
+      <div class="calc-field">
+        <label class="calc-label">Interest Rate (%)</label>
+        <input class="calc-input" id="calcRate" type="number" placeholder="6.875" step="0.125" oninput="runCalc()" />
+      </div>
+      <div class="calc-field">
+        <label class="calc-label">Loan Term</label>
+        <select class="calc-input" id="calcTerm" onchange="runCalc()">
+          <option value="30">30 Year Fixed</option>
+          <option value="20">20 Year Fixed</option>
+          <option value="15">15 Year Fixed</option>
+        </select>
+      </div>
+      <div class="calc-result" id="calcResult">
+        <div class="result-amount" id="calcMonthly">$0</div>
+        <div class="result-label" id="calcBreakdown">Principal & Interest — enter values above</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:14px;padding:13px" onclick="showToast('🏦 Connecting you with partner lenders who respect your inbox...')">
+        Get My Real Rate →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="social-section">
+  <div class="section-eyebrow">What Agents & Buyers Say</div>
+  <h2 class="section-title">Real People.<br><span class="blue">Real Results.</span></h2>
+  <div class="reviews-grid" id="reviewsGrid"></div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2 class="final-cta-title">Get Off Zillow.<br>Get On AI.</h2>
+  <p class="final-cta-sub">First 500 agents lock in <strong>1% for life</strong>. Zillow charges 40. We charge one.</p>
+  <div class="final-cta-form">
+    <input type="email" id="ctaEmail" placeholder="your@email.com" />
+    <button onclick="joinWaitlist()">JOIN FREE</button>
+  </div>
+  <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:14px;position:relative;z-index:1">No spam. No lead auction. We don't sell your email. Powered by TransBid infrastructure.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-text">Get<span>Off</span><em style="color:var(--goz-accent);font-style:normal">Zillow</em><span style="color:var(--ai-green);font-size:18px;vertical-align:super">AI</span></div>
+        <p class="footer-tagline">
+          Real estate without the extraction. Powered by AI that actually works.<br>
+          1% referral fee at closing. Zero data sold. Free listings. Always.<br>
+          Pensacola, FL · TransBid LLC Infrastructure
+        </p>
+        <div class="footer-social">
+          <a class="social-btn" href="#" onclick="showToast('Twitter/X coming soon!')">𝕏</a>
+          <a class="social-btn" href="#" onclick="showToast('Instagram coming soon!')">📸</a>
+          <a class="social-btn" href="#" onclick="showToast('Facebook coming soon!')">👤</a>
+          <a class="social-btn" href="#" onclick="showToast('LinkedIn coming soon!')">💼</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Real Estate</h4>
+        <ul>
+          <li><a href="#">Homes for Sale</a></li>
+          <li><a href="#">Homes for Rent</a></li>
+          <li><a href="#">New Construction</a></li>
+          <li><a href="#">Recently Sold</a></li>
+          <li><a href="#" class="fire">🔥 Hot Deals</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>For Agents</h4>
+        <ul>
+          <li><a href="#" onclick="openModal('agent')">List for Free</a></li>
+          <li><a href="#referral">1% Referral Model</a></li>
+          <li><a href="#compare">Fee Comparison</a></li>
+          <li><a href="#">Agent Dashboard</a></li>
+          <li><a href="#" class="fire">⚡ vs. Agent Pronto</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="#mortgage">Mortgage Calculator</a></li>
+          <li><a href="#" onclick="showValuationDemo()">RealValue™ AI Estimator</a></li>
+          <li><a href="#">Commission Calculator</a></li>
+          <li><a href="#">Neighborhood Reports</a></li>
+          <li><a href="#">Market Trends</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Why Not Zillow</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>
+        © 2025 GetOffZillow / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>
+        All competitor fee data sourced from public documentation. Referral fee comparisons accurate as of early 2026.
+      </div>
+      <div>Equal Housing Opportunity 🏠 · Built in Pensacola, FL</div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="overlay" id="ov-agent">
+  <div class="modal">
+    <div class="modal-x" onclick="closeModal('agent')">✕</div>
+    <div class="modal-title">🏡 Join GetOffZillow Free</div>
+    <div class="modal-sub">List your properties, get AI-matched leads directly, and pay only <strong>1%</strong> at closing. No upfront cost.</div>
+    <div class="modal-alert">⚡ First 500 agents: Pro features free for 12 months + <strong>1% referral rate locked for life.</strong> Never goes up.</div>
+    <div class="form-row">
+      <div class="form-field"><label>First Name</label><input type="text" placeholder="Jane" /></div>
+      <div class="form-field"><label>Last Name</label><input type="text" placeholder="Smith" /></div>
+    </div>
+    <div class="form-field"><label>Email</label><input type="email" placeholder="jane@realty.com" /></div>
+    <div class="form-field"><label>Phone</label><input type="tel" placeholder="(850) 555-0100" /></div>
+    <div class="form-field"><label>License # & State</label><input type="text" placeholder="FL-BK12345678" /></div>
+    <button class="btn btn-primary" style="width:100%;padding:14px;font-size:15px;margin-top:8px;background:var(--ai-green);color:#000" onclick="submitForm('agent')">Create Free Account — Lock In 1% →</button>
+  </div>
+</div>
+
+<div class="overlay" id="ov-signin">
+  <div class="modal">
+    <div class="modal-x" onclick="closeModal('signin')">✕</div>
+    <div class="modal-title">Welcome Back</div>
+    <div class="modal-sub">Sign in to save homes, manage listings, and track leads.</div>
+    <div class="form-field"><label>Email</label><input type="email" placeholder="you@email.com" /></div>
+    <div class="form-field"><label>Password</label><input type="password" placeholder="••••••••" /></div>
+    <button class="btn btn-primary" style="width:100%;padding:14px;margin-top:8px" onclick="submitForm('signin')">Sign In</button>
+    <p style="text-align:center;font-size:12px;color:var(--gray);margin-top:12px">No account? <a href="#" onclick="closeModal('signin');openModal('agent')" style="color:var(--blue);font-weight:700">Create one free →</a></p>
+  </div>
+</div>
+
+<div class="overlay" id="ov-zestimate">
+  <div class="modal">
+    <div class="modal-x" onclick="closeModal('zestimate')">✕</div>
+    <div class="modal-title">📊 RealValue™ AI Valuation</div>
+    <div class="modal-sub">92%+ accuracy. Shows every comp we used — not just a black-box number. Zestimates are guesses. This isn't.</div>
+    <div class="form-field"><label>Property Address</label><input type="text" id="zestAddr" placeholder="123 Main St, Pensacola FL 32501" /></div>
+    <div class="form-row">
+      <div class="form-field"><label>Beds</label><select><option>2</option><option>3</option><option selected>4</option><option>5+</option></select></div>
+      <div class="form-field"><label>Baths</label><select><option>1</option><option>2</option><option selected>3</option><option>4+</option></select></div>
+    </div>
+    <div class="form-field"><label>Approx. Sq Ft</label><input type="number" placeholder="1800" /></div>
+    <button class="btn btn-primary" style="width:100%;padding:14px;margin-top:8px;background:var(--ai-green);color:#000" onclick="showZest()">Get My RealValue™ →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ DATA ══
+const listings = [
+  { price: '$349,000', addr: '2847 Bayou Blvd', city: 'Pensacola, FL 32503', beds: 3, baths: 2, sqft: '1,840', status: 'sale', statusLabel: 'For Sale', agent: 'Alysa A.', agentInit: 'A', commission: '2.5%', days: 4, emoji: '🏡', saved: false },
+  { price: '$524,900', addr: '1102 Gulf Shore Dr', city: 'Navarre, FL 32566', beds: 4, baths: 3, sqft: '2,650', status: 'new', statusLabel: 'New', agent: 'Mike R.', agentInit: 'M', commission: '2.75%', days: 1, emoji: '🌊', saved: false },
+  { price: '$189,500', addr: '445 Creekwood Ln', city: 'Milton, FL 32571', beds: 3, baths: 2, sqft: '1,420', status: 'pending', statusLabel: 'Pending', agent: 'Sarah T.', agentInit: 'S', commission: '3%', days: 12, emoji: '🌳', saved: false },
+  { price: '$775,000', addr: '88 Emerald Bay Ct', city: 'Destin, FL 32541', beds: 5, baths: 4, sqft: '3,900', status: 'new', statusLabel: 'New', agent: 'Alysa A.', agentInit: 'A', commission: '2.5%', days: 0, emoji: '🏖️', saved: false },
+  { price: '$265,000', addr: '730 Magnolia St', city: 'Pace, FL 32571', beds: 3, baths: 2, sqft: '1,680', status: 'sale', statusLabel: 'For Sale', agent: 'Dana W.', agentInit: 'D', commission: '3%', days: 7, emoji: '🌺', saved: false },
+  { price: '$412,000', addr: '19 Harbor View Rd', city: 'Fort Walton Beach, FL', beds: 4, baths: 2.5, sqft: '2,210', status: 'reduced', statusLabel: 'Reduced', agent: 'Carlos M.', agentInit: 'C', commission: '2.5%', days: 18, emoji: '⚓', saved: false },
+  { price: '$899,000', addr: '5 Beachfront Paradise Ln', city: 'Seaside, FL 32459', beds: 6, baths: 5, sqft: '4,800', status: 'new', statusLabel: 'New', agent: 'Alysa A.', agentInit: 'A', commission: '2.5%', days: 0, emoji: '🌴', saved: false },
+  { price: '$158,000', addr: '302 Pine Ridge Rd', city: 'Cantonment, FL 32533', beds: 2, baths: 1, sqft: '980', status: 'sale', statusLabel: 'For Sale', agent: 'Dana W.', agentInit: 'D', commission: '3%', days: 31, emoji: '🏘️', saved: false },
+];
+
+const reviews = [
+  { stars: 5, text: "I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $100 on a $10,000 commission. The AI matched me to a qualified buyer in 8 minutes.", name: "Marcus T.", meta: "Buyer's Agent, Pensacola FL", emoji: "👨" },
+  { stars: 5, text: "RealValue AI showed me the exact comps it used. Not just a number — real data. Zillow was off by $41,000 on my house. GOZ AI nailed it within $8K.", name: "Jennifer K.", meta: "First-Time Buyer, Navarre FL", emoji: "👩" },
+  { stars: 5, text: "Listed three properties in one afternoon. No setup fee, no Premier Agent pitch. The AI Fraud Shield flagged a suspicious inquiry before I even saw it. This is real.", name: "Alysa A.", meta: "Realtor, LPT Realty", emoji: "👩" },
+  { stars: 5, text: "With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ AI $100. That's not a typo. One hundred dollars. The AI-matched lead closed in 19 days.", name: "Carlos M.", meta: "Listing Agent, Gulf Coast Realty", emoji: "👨" },
+  { stars: 5, text: "They showed me the comps, the confidence score, the flood zone data. I've never seen a platform be this transparent. Offered within 3 days of finding the listing.", name: "Rachel B.", meta: "Home Buyer, Destin FL", emoji: "👩" },
+  { stars: 5, text: "The Smart Agent Matcher quiz took 60 seconds. GOZ AI sent my info to one agent — the right one. No 7 agents calling me simultaneously like on Zillow.", name: "David P.", meta: "Home Buyer, Fort Walton Beach FL", emoji: "👨" },
+];
+
+// ══ RENDER LISTINGS ══
+function renderListings() {
+  document.getElementById('listingGrid').innerHTML = listings.map((l, i) => `
+    <div class="listing-card" onclick="contactAgent('${l.addr}','${l.agent}')">
+      <div class="listing-img">
+        ${l.emoji}
+        <div class="status-pill ${l.status}">${l.statusLabel.toUpperCase()}</div>
+        <div class="save-btn" onclick="event.stopPropagation();toggleSave(${i},this)">🤍</div>
+      </div>
+      <div class="listing-body">
+        <div class="listing-price">${l.price}</div>
+        <div class="commission-tag">✓ ${l.commission} commission — shown publicly</div>
+        <div class="listing-address">${l.addr}</div>
+        <div class="listing-city">${l.city}</div>
+        <div class="listing-specs">
+          <span>🛏 ${l.beds}bd</span>
+          <span>🚿 ${l.baths}ba</span>
+          <span>📐 ${l.sqft}</span>
+        </div>
+        <div class="listing-agent">
+          <div class="agent-avi">${l.agentInit}</div>
+          <div class="agent-info">
+            <div class="agent-name-small">${l.agent}</div>
+            <div class="agent-fee-tag">GOZ agent · Direct contact</div>
+          </div>
+          <div style="font-size:11px;color:var(--gray)">${l.days === 0 ? '🔥 Today' : l.days + 'd ago'}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══ MAP LIST ══
+function renderMapList() {
+  document.getElementById('mapListEl').innerHTML = listings.slice(0,6).map(l => `
+    <div class="map-list-item" onclick="contactAgent('${l.addr}','${l.agent}')">
+      <div class="map-thumb">${l.emoji}</div>
+      <div>
+        <div class="mli-price">${l.price}</div>
+        <div class="mli-addr">${l.addr}</div>
+        <div class="mli-addr" style="color:#999">${l.city}</div>
+        <div class="mli-specs">🛏 ${l.beds}bd · 🚿 ${l.baths}ba · 📐 ${l.sqft}</div>
+        <div class="mli-commission">✓ ${l.commission} commission — shown publicly</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══ REVIEWS ══
+function renderReviews() {
+  document.getElementById('reviewsGrid').innerHTML = reviews.map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.stars)}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.emoji}</div>
+        <div>
+          <div class="review-name">${r.name}</div>
+          <div class="review-meta">${r.meta}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══ FEE TICKER ══
+function buildTicker() {
+  const items = [
+    { label: 'Zillow Flex Fee', val: '40%', cls: 'red' },
+    { label: 'Agent Pronto Fee', val: '35%', cls: 'red' },
+    { label: 'OpCity Fee', val: '38%', cls: 'red' },
+    { label: 'UpNest Fee', val: '30%', cls: 'red' },
+    { label: 'GetOffZillow AI Fee', val: '1%', cls: 'green' },
+    { label: 'Savings vs Zillow Flex', val: '39%', cls: 'green' },
+    { label: 'Savings vs Agent Pronto', val: '34%', cls: 'green' },
+    { label: 'Upfront Cost on GOZ AI', val: '$0', cls: 'green' },
+    { label: 'You Keep of Commission', val: '99%', cls: 'green' },
+    { label: 'AI Fraud Shield scans', val: '100%', cls: 'green' },
+  ];
+
+  const doubled = [...items, ...items];
+  document.getElementById('feeTicker').innerHTML = doubled.map(i => `
+    <div class="fee-tick-item">
+      ${i.label}: <span class="highlight ${i.cls}">${i.val}</span>
+    </div>
+  `).join('');
+}
+
+// ══ MORTGAGE CALC ══
+function runCalc() {
+  const price = parseFloat(document.getElementById('calcPrice').value) || 0;
+  const down = parseFloat(document.getElementById('calcDown').value) || 0;
+  const rate = parseFloat(document.getElementById('calcRate').value) || 0;
+  const term = parseInt(document.getElementById('calcTerm').value) || 30;
+  const loan = price - down;
+  if (loan <= 0 || rate <= 0) return;
+  const r = rate / 100 / 12;
+  const n = term * 12;
+  const payment = (loan * r) / (1 - Math.pow(1 + r, -n));
+  const estTax = price * 0.011 / 12;
+  const estIns = price * 0.005 / 12;
+  const total = payment + estTax + estIns;
+  const el = document.getElementById('calcResult');
+  el.style.display = 'block';
+  document.getElementById('calcMonthly').textContent = '$' + Math.round(total).toLocaleString();
+  document.getElementById('calcBreakdown').textContent =
+    `P&I $${Math.round(payment).toLocaleString()} + Est. Taxes $${Math.round(estTax).toLocaleString()} + Insurance $${Math.round(estIns).toLocaleString()} · ${rate}% ${term}yr`;
+}
+
+// ══ ZESTIMATE ══
+function showZest() {
+  const a = document.getElementById('zestAddr').value.trim();
+  if (!a) { showToast('Enter a property address first'); return; }
+  closeModal('zestimate');
+  const lo = Math.floor(Math.random() * 300 + 150) * 1000;
+  const hi = lo + Math.floor(Math.random() * 80 + 20) * 1000;
+  const mid = Math.round((lo + hi) / 2 / 1000) * 1000;
+  showToast(`🏡 ${a} · Est. Value: $${mid.toLocaleString()} · Range: $${lo.toLocaleString()}–$${hi.toLocaleString()} · Based on 6 comparable sales`);
+}
+
+// ══ INTERACTIONS ══
+function toggleSave(i, el) {
+  listings[i].saved = !listings[i].saved;
+  el.textContent = listings[i].saved ? '❤️' : '🤍';
+  showToast(listings[i].saved ? '❤️ Saved! We won\'t spam you about it.' : '💔 Removed from saved homes.');
+}
+
+function contactAgent(addr, agent) {
+  showToast(`📞 Connecting you directly with ${agent} re: ${addr}. Zero lead tax charged to them.`);
+}
+
+function setHeroTab(el, type) {
+  document.querySelectorAll('.hero-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const msgs = { rent: '🔑 Rental search coming soon!', sell: '💰 Sell section — list your property free in minutes', agent: '🤝 Agent finder — powered by expertise, not ad spend' };
+  if (msgs[type]) showToast(msgs[type]);
+}
+
+function doSearch() {
+  const q = (document.getElementById('heroSearchInput').value || document.getElementById('hSearch').value).trim();
+  if (!q) { showToast('Enter a location to search'); return; }
+  showToast(`🤖 AI searching "${q}"... ${listings.length} listings found. RealValue AI scores and commissions shown on every result.`);
+  document.getElementById('listings').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ══ AI VALUATION DEMO ══
+function showValuationDemo() {
+  const address = prompt('Enter address for instant RealValue AI (demo):', '123 Ocean Dr, Destin, FL 32541');
+  if (!address) return;
+  const comps = [
+    { addr: '119 Ocean Dr', sold: '$768,000', date: '41 days ago', sqft: '2,940' },
+    { addr: '204 Gulf Blvd', sold: '$801,500', date: '67 days ago', sqft: '3,100' },
+    { addr: '88 Shoreline Ct', sold: '$744,000', date: '23 days ago', sqft: '2,820' },
+  ];
+  const val = 782400;
+  const conf = 94;
+  showToast(`🤖 RealValue™ AI — ${address}\n\nEstimated Value: $${val.toLocaleString()}\nConfidence: ${conf}%\n3.2% above Zillow's guess — here's why: 3 MLS comps within 0.4mi loaded. Flood zone X (low risk). School rating: 8/10.\n\nComps: ${comps.map(c=>c.addr+' → '+c.sold).join(' · ')}`);
+}
+
+function scrollTo(id) { document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' }); }
+
+// ══ MODALS ══
+function openModal(name) {
+  document.getElementById('ov-' + name).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(name) {
+  document.getElementById('ov-' + name).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => {
+    if (e.target === o) { o.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+});
+
+function submitForm(type) {
+  document.querySelectorAll('.overlay').forEach(o => { o.classList.remove('open'); });
+  document.body.style.overflow = '';
+  const msgs = {
+    agent: '🎉 Agent account created! You\'re #' + (Math.floor(Math.random()*200)+200) + ' of 500. Pro unlocked. 1% locked for life — never goes up.',
+    signin: '👋 Welcome back! Your listings and saved homes are ready.'
+  };
+  showToast(msgs[type] || '✅ Done!');
+}
+
+function submitAgentForm() { submitForm('agent'); }
+
+function joinWaitlist() {
+  const email = document.getElementById('ctaEmail').value.trim();
+  if (!email || !email.includes('@')) { showToast('Enter a valid email ✉️'); return; }
+  document.getElementById('ctaEmail').value = '';
+  showToast(`🎉 You're on the list! We'll reach out within 24 hours. No spam ever.`);
+}
+
+// ══ TOAST ══
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 4500);
+}
+
+// ══ INIT ══
+renderListings();
+renderMapList();
+renderReviews();
+buildTicker();
+</script>
+</body>
+</html>
