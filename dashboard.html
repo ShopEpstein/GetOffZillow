@@ -4,151 +4,114 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent Dashboard — GetOffZillow AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44;
-    --green:#00C853; --ai-green:#00FF9D; --red:#E8341C;
-    --bg:#F7F7F7; --white:#fff; --text:#1A1A1A;
-    --gray:#6B6B6B; --border:#D8D8D8; --yellow:#FFB800;
-  }
+  :root { --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --white:#fff; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; --yellow:#FFB800; --orange:#FF6B00; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
-  nav { background:var(--navy); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; }
-  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; text-decoration:none; color:white; }
-  .nav-logo span { color:var(--blue); }
-  .nav-logo em { color:var(--red); font-style:normal; }
-  .nav-logo sup { color:var(--ai-green); font-size:14px; }
+  nav { background:var(--navy); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:22px; color:white; text-decoration:none; }
+  .logo span { color:var(--blue); } .logo em { color:var(--red); font-style:normal; } .logo sup { color:var(--ai-green); font-size:13px; }
   .nav-right { display:flex; align-items:center; gap:14px; }
-  .nav-agent-name { color:rgba(255,255,255,0.8); font-size:13px; font-weight:600; }
-  .nav-btn { padding:8px 16px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; text-decoration:none; border:none; font-family:'Nunito Sans',sans-serif; }
-  .nav-btn.primary { background:var(--ai-green); color:#000; }
+  .nav-name { color:rgba(255,255,255,0.8); font-size:13px; font-weight:600; }
+  .nav-btn { padding:8px 16px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:none; font-family:'Nunito Sans',sans-serif; text-decoration:none; display:inline-block; }
+  .nav-btn.green { background:var(--ai-green); color:#000; }
   .nav-btn.outline { background:transparent; color:white; border:1px solid rgba(255,255,255,0.3); }
   .nav-btn.outline:hover { background:rgba(255,255,255,0.1); }
 
-  /* ── LOGIN SCREEN ── */
-  .login-wrap { min-height:calc(100vh - 60px); display:flex; align-items:center; justify-content:center; padding:24px; }
-  .login-card { background:white; border-radius:16px; padding:40px; box-shadow:0 4px 24px rgba(0,0,0,0.1); width:100%; max-width:420px; }
-  .login-card h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:26px; margin-bottom:4px; }
-  .login-card .sub { font-size:13px; color:var(--gray); margin-bottom:24px; }
+  /* PAGE STATES */
+  .page-state { display:none; min-height:calc(100vh - 60px); }
+  .page-state.active { display:block; }
 
-  .oauth-btn {
-    width:100%; padding:12px; border-radius:8px; font-size:14px; font-weight:700;
-    cursor:pointer; border:1.5px solid var(--border); background:white;
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    transition:border-color 0.2s, box-shadow 0.2s; margin-bottom:10px;
-    font-family:'Nunito Sans',sans-serif;
-  }
-  .oauth-btn:hover { border-color:#aaa; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-  .oauth-btn img { width:20px; height:20px; }
+  /* LOADING */
+  #state-loading { display:flex; align-items:center; justify-content:center; }
+  .spinner { width:40px; height:40px; border:4px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-  .divider { display:flex; align-items:center; gap:12px; margin:16px 0; color:var(--gray); font-size:12px; }
-  .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
+  /* NOT LOGGED IN */
+  #state-auth { display:flex; align-items:center; justify-content:center; padding:40px 24px; }
+  .auth-card { background:white; border-radius:16px; padding:40px; max-width:420px; width:100%; box-shadow:0 4px 24px rgba(0,0,0,0.1); text-align:center; }
+  .auth-card h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:24px; margin-bottom:8px; }
+  .auth-card p { color:var(--gray); margin-bottom:24px; font-size:14px; line-height:1.5; }
+  .auth-card a { display:inline-block; background:var(--blue); color:white; padding:12px 32px; border-radius:8px; text-decoration:none; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; }
 
-  .form-group { margin-bottom:14px; }
-  .form-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
-  .form-group input {
-    width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px;
-    font-family:'Nunito Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s;
-  }
-  .form-group input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
-
-  .forgot-link { font-size:12px; color:var(--blue); cursor:pointer; float:right; margin-top:-10px; margin-bottom:10px; }
-  .forgot-link:hover { text-decoration:underline; }
-
-  .submit-btn {
-    width:100%; background:var(--blue); color:white; border:none; padding:13px;
-    border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px;
-    cursor:pointer; transition:background 0.2s; margin-top:4px;
-  }
-  .submit-btn:hover { background:var(--dark-blue); }
-  .submit-btn:disabled { background:var(--border); cursor:not-allowed; color:var(--gray); }
-
-  .error-msg { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; display:none; }
-  .success-msg { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; display:none; }
-
-  .signup-link { text-align:center; margin-top:16px; font-size:13px; color:var(--gray); }
-  .signup-link a { color:var(--blue); font-weight:700; text-decoration:none; }
-
-  /* ── FORGOT PASSWORD MODAL ── */
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:500; align-items:center; justify-content:center; }
-  .modal-overlay.open { display:flex; }
-  .modal-box { background:white; border-radius:14px; padding:36px; max-width:420px; width:90%; position:relative; animation:fadeUp 0.25s ease; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-  .modal-close { position:absolute; top:14px; right:14px; cursor:pointer; font-size:18px; color:#aaa; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
-  .modal-close:hover { background:#f0f0f0; }
-  .modal-title { font-family:'Nunito',sans-serif; font-weight:900; font-size:20px; margin-bottom:6px; }
-  .modal-sub { font-size:13px; color:var(--gray); margin-bottom:20px; line-height:1.5; }
-
-  /* ── DASHBOARD ── */
-  .dashboard { max-width:1100px; margin:0 auto; padding:32px 24px; display:none; }
+  /* DASHBOARD */
+  #state-dashboard { padding:32px 24px; max-width:1100px; margin:0 auto; }
   .dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
   .dash-greeting h1 { font-family:'Nunito',sans-serif; font-weight:900; font-size:26px; }
-  .dash-greeting p { font-size:13px; color:var(--gray); margin-top:2px; }
+  .dash-greeting p { font-size:13px; color:var(--gray); margin-top:3px; }
+  .dash-new-listing { background:var(--ai-green); color:#000; padding:12px 24px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; text-decoration:none; box-shadow:0 0 16px rgba(0,255,157,0.25); }
 
+  /* STATS */
   .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
   .stat-card { background:white; border-radius:12px; padding:20px 24px; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
   .stat-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--gray); font-weight:700; margin-bottom:6px; }
-  .stat-value { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--text); line-height:1; }
-  .stat-value.green { color:var(--green); }
+  .stat-value { font-family:'Bebas Neue',sans-serif; font-size:36px; line-height:1; }
   .stat-value.blue { color:var(--blue); }
+  .stat-value.green { color:var(--green); }
   .stat-value.ai { color:var(--ai-green); text-shadow:0 0 12px rgba(0,255,157,0.3); }
   .stat-sub { font-size:11px; color:var(--gray); margin-top:4px; }
 
+  /* SECTIONS */
   .section { margin-bottom:36px; }
   .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
   .section-head h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; }
-  .section-head a, .section-head span { font-size:13px; color:var(--blue); text-decoration:none; cursor:pointer; font-weight:700; }
+  .section-head a { font-size:13px; color:var(--blue); text-decoration:none; font-weight:700; }
 
-  .listings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .listing-item { background:white; border-radius:10px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
-  .listing-img { height:140px; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); display:flex; align-items:center; justify-content:center; font-size:36px; position:relative; overflow:hidden; }
-  .listing-img img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
-  .listing-status { position:absolute; top:8px; left:8px; font-size:10px; font-weight:800; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:var(--blue); color:white; z-index:1; }
-  .listing-status.pending { background:var(--yellow); color:#000; }
-  .listing-status.deleted { background:var(--gray); }
-  .listing-body { padding:14px; }
-  .listing-price { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; }
-  .listing-commission { font-size:11px; color:var(--green); font-weight:700; margin-top:2px; }
-  .listing-addr { font-size:12px; color:var(--gray); margin-top:4px; }
-  .listing-specs { font-size:11px; color:var(--gray); margin-top:4px; }
-  .listing-actions { display:flex; gap:12px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
-  .listing-actions a { font-size:12px; color:var(--blue); font-weight:700; text-decoration:none; }
-  .listing-actions button { font-size:12px; color:var(--red); font-weight:700; background:none; border:none; cursor:pointer; padding:0; }
+  /* INCOMPLETE PROFILE */
+  .profile-alert { background:#fff8e1; border:1px solid var(--yellow); border-radius:10px; padding:14px 18px; margin-bottom:24px; font-size:13px; display:none; }
+  .profile-alert a { color:var(--blue); font-weight:700; }
 
-  .leads-list { display:flex; flex-direction:column; gap:12px; }
-  .lead-item { background:white; border-radius:10px; padding:16px 20px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:16px; align-items:flex-start; }
-  .lead-avatar { width:40px; height:40px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; }
-  .lead-info { flex:1; min-width:0; }
-  .lead-name { font-weight:700; font-size:14px; }
-  .lead-contact { font-size:12px; color:var(--gray); margin-top:2px; }
-  .lead-message { font-size:12px; color:var(--text); margin-top:6px; font-style:italic; }
-  .lead-time { font-size:11px; color:var(--gray); white-space:nowrap; }
-  .lead-reply { background:var(--blue); color:white; padding:6px 14px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; display:inline-block; margin-top:8px; }
-
-  .profile-card { background:white; border-radius:12px; padding:24px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:20px; align-items:flex-start; }
+  /* PROFILE CARD */
+  .profile-card { background:white; border-radius:12px; padding:24px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap; }
   .profile-avi { width:72px; height:72px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:white; flex-shrink:0; overflow:hidden; }
   .profile-avi img { width:100%; height:100%; object-fit:cover; }
   .profile-info h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; }
-  .profile-meta { font-size:13px; color:var(--gray); margin-top:3px; line-height:1.6; }
+  .profile-meta { font-size:13px; color:var(--gray); margin-top:4px; line-height:1.7; }
   .profile-badge { display:inline-flex; align-items:center; gap:4px; background:#E8FBF0; color:var(--green); font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px; margin-top:6px; }
   .profile-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
   .profile-actions a { padding:8px 16px; border-radius:6px; font-size:13px; font-weight:700; text-decoration:none; }
-  .profile-actions .pa-primary { background:var(--blue); color:white; }
-  .profile-actions .pa-outline { background:transparent; color:var(--blue); border:1.5px solid var(--blue); }
+  .pa-primary { background:var(--blue); color:white; }
+  .pa-outline { background:transparent; color:var(--blue); border:1.5px solid var(--blue); }
 
-  /* Incomplete profile banner */
-  .profile-incomplete { background:#fff8e1; border:1px solid var(--yellow); border-radius:10px; padding:14px 18px; margin-bottom:20px; font-size:13px; display:none; }
-  .profile-incomplete strong { color:#b45309; }
-  .profile-incomplete a { color:var(--blue); font-weight:700; }
+  /* LISTINGS */
+  .listings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .listing-item { background:white; border-radius:10px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
+  .li-img { height:140px; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); display:flex; align-items:center; justify-content:center; font-size:36px; position:relative; overflow:hidden; }
+  .li-img img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+  .li-status { position:absolute; top:8px; left:8px; font-size:10px; font-weight:800; text-transform:uppercase; padding:2px 8px; border-radius:3px; background:var(--blue); color:white; }
+  .li-status.pending { background:var(--yellow); color:#000; }
+  .li-status.deleted { background:var(--gray); }
+  .li-body { padding:14px; }
+  .li-price { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; }
+  .li-commission { font-size:11px; color:var(--green); font-weight:700; margin-top:2px; }
+  .li-addr { font-size:12px; color:var(--gray); margin-top:4px; }
+  .li-specs { font-size:11px; color:var(--gray); margin-top:4px; }
+  .li-actions { display:flex; gap:12px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+  .li-actions a { font-size:12px; color:var(--blue); font-weight:700; text-decoration:none; }
+  .li-actions button { font-size:12px; color:var(--red); font-weight:700; background:none; border:none; cursor:pointer; padding:0; }
+
+  /* LEADS */
+  .leads-list { display:flex; flex-direction:column; gap:12px; }
+  .lead-item { background:white; border-radius:10px; padding:16px 20px; box-shadow:0 1px 6px rgba(0,0,0,0.07); display:flex; gap:16px; align-items:flex-start; }
+  .lead-avi { width:40px; height:40px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; }
+  .lead-info { flex:1; min-width:0; }
+  .lead-name { font-weight:700; font-size:14px; }
+  .lead-contact { font-size:12px; color:var(--gray); margin-top:2px; }
+  .lead-msg { font-size:12px; color:var(--text); margin-top:6px; font-style:italic; }
+  .lead-time { font-size:11px; color:var(--gray); white-space:nowrap; }
+  .lead-reply { background:var(--blue); color:white; padding:6px 14px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; display:inline-block; margin-top:8px; }
 
   .empty-state { text-align:center; padding:40px; color:var(--gray); }
   .empty-state .icon { font-size:40px; margin-bottom:12px; }
   .empty-state h3 { font-family:'Nunito',sans-serif; font-weight:800; margin-bottom:6px; color:var(--text); }
   .empty-state a { display:inline-block; margin-top:12px; background:var(--blue); color:white; padding:10px 24px; border-radius:8px; text-decoration:none; font-weight:700; }
 
-  .loading { text-align:center; padding:40px; color:var(--gray); font-size:14px; }
+  .loading-text { text-align:center; padding:32px; color:var(--gray); font-size:14px; }
+
+  /* SESSION EXPIRED */
   .session-banner { background:var(--red); color:white; text-align:center; padding:10px; font-size:13px; font-weight:700; display:none; }
   .session-banner a { color:var(--yellow); text-decoration:underline; cursor:pointer; }
 
@@ -158,469 +121,334 @@
 </head>
 <body>
 
-<!-- Session expired banner -->
 <div class="session-banner" id="sessionBanner">
-  Your session expired. <a onclick="document.getElementById('sessionBanner').style.display='none';showLogin()">Sign in again →</a>
+  Your session expired. <a onclick="window.location.href='signup.html'">Sign in again →</a>
 </div>
 
 <nav>
-  <a href="index.html" class="nav-logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a>
+  <a href="index.html" class="logo">Get<span>Off</span><em>Zillow</em><sup>AI</sup></a>
   <div class="nav-right">
-    <span class="nav-agent-name" id="navAgentName"></span>
-    <a href="list.html" class="nav-btn primary" id="navListBtn" style="display:none">+ New Listing</a>
-    <button class="nav-btn outline" id="navSignOutBtn" onclick="GOZ_AUTH.signOut()" style="display:none">Sign Out</button>
+    <span class="nav-name" id="navName"></span>
+    <a href="list.html" class="nav-btn green" id="navListBtn" style="display:none">+ New Listing</a>
+    <button class="nav-btn outline" id="navSignOutBtn" onclick="doSignOut()" style="display:none">Sign Out</button>
   </div>
 </nav>
 
-<!-- LOGIN SCREEN -->
-<div class="login-wrap" id="loginScreen">
-  <div class="login-card">
-    <h2>Agent Sign In</h2>
-    <p class="sub">Access your listings, leads, and profile.</p>
-
-    <div class="error-msg" id="loginError"></div>
-    <div class="success-msg" id="loginSuccess"></div>
-
-    <!-- Google OAuth -->
-    <button class="oauth-btn" onclick="GOZ_AUTH.signInWithGoogle()">
-      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Continue with Google
-    </button>
-
-    <div class="divider">or sign in with email</div>
-
-    <form onsubmit="doLogin(event)">
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="loginEmail" placeholder="jane@realty.com" autocomplete="email" required />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required />
-      </div>
-      <div style="text-align:right;margin-bottom:16px">
-        <span class="forgot-link" onclick="openForgotPassword()">Forgot password?</span>
-      </div>
-      <button type="submit" class="submit-btn" id="loginBtn">Sign In →</button>
-    </form>
-
-    <div class="signup-link">
-      No account? <a href="signup.html">Create free agent account →</a>
-    </div>
+<!-- LOADING -->
+<div class="page-state active" id="state-loading">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px)">
+    <div class="spinner"></div>
   </div>
 </div>
 
-<!-- FORGOT PASSWORD MODAL -->
-<div class="modal-overlay" id="forgotModal">
-  <div class="modal-box">
-    <div class="modal-close" onclick="closeForgotPassword()">✕</div>
-    <div class="modal-title">Reset Your Password</div>
-    <div class="modal-sub">Enter your email and we'll send you a reset link. Check your inbox — it arrives in under a minute.</div>
-    <div class="error-msg" id="forgotError"></div>
-    <div class="success-msg" id="forgotSuccess"></div>
-    <div class="form-group">
-      <label>Email Address</label>
-      <input type="email" id="forgotEmail" placeholder="jane@realty.com" />
+<!-- NOT LOGGED IN -->
+<div class="page-state" id="state-auth">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);padding:40px 24px">
+    <div class="auth-card">
+      <h2>Agent Sign In</h2>
+      <p>Access your listings, leads, and agent profile. Don't have an account? It's free.</p>
+      <a href="signup.html">Sign In / Create Account →</a>
     </div>
-    <button class="submit-btn" id="forgotBtn" onclick="sendPasswordReset()">Send Reset Link →</button>
   </div>
 </div>
 
 <!-- DASHBOARD -->
-<div class="dashboard" id="dashboardContent">
+<div class="page-state" id="state-dashboard">
+  <div style="max-width:1100px;margin:0 auto;padding:32px 24px">
 
-  <!-- Incomplete profile warning -->
-  <div class="profile-incomplete" id="profileIncomplete">
-    <strong>⚠️ Your profile is incomplete.</strong> Add your license number, phone, and bio so buyers can find and trust you.
-    <a href="#profileSection">Complete Profile →</a>
+    <div class="profile-alert" id="profileAlert">
+      ⚠️ <strong>Your profile is incomplete.</strong> Add your phone, license number, and bio so buyers can find and trust you. <a href="agent.html?edit=true" id="profileAlertLink">Complete profile →</a>
+    </div>
+
+    <div class="dash-header">
+      <div class="dash-greeting">
+        <h1 id="dashGreeting">Welcome back! 👋</h1>
+        <p>Your GetOffZillow AI dashboard — 1% fee locked for life.</p>
+      </div>
+      <a href="list.html" class="dash-new-listing">+ Submit New Listing</a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Active Listings</div>
+        <div class="stat-value blue" id="statListings">—</div>
+        <div class="stat-sub">Live and visible</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Leads</div>
+        <div class="stat-value green" id="statLeads">—</div>
+        <div class="stat-sub">Buyers who contacted you</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Your Referral Rate</div>
+        <div class="stat-value ai">1%</div>
+        <div class="stat-sub">Locked for life</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Saved vs Zillow</div>
+        <div class="stat-value green" id="statSaved">$0</div>
+        <div class="stat-sub">vs. Zillow Flex (40%)</div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Your Agent Profile</h2>
+        <a href="#" id="editProfileLink">Edit Profile →</a>
+      </div>
+      <div class="profile-card" id="profileCard">
+        <div class="loading-text">Loading profile...</div>
+      </div>
+    </div>
+
+    <!-- LISTINGS -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Your Listings</h2>
+        <a href="list.html">+ Add Listing</a>
+      </div>
+      <div id="listingsContainer"><div class="loading-text">Loading listings...</div></div>
+    </div>
+
+    <!-- LEADS -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Recent Leads</h2>
+        <span style="font-size:12px;color:var(--gray)">Zero per-lead charge — ever</span>
+      </div>
+      <div id="leadsContainer"><div class="loading-text">Loading leads...</div></div>
+    </div>
+
   </div>
-
-  <div class="dash-header">
-    <div class="dash-greeting">
-      <h1 id="dashGreeting">Welcome back! 👋</h1>
-      <p>Your GetOffZillow AI agent dashboard — 1% fee locked for life.</p>
-    </div>
-    <a href="list.html" style="background:var(--ai-green);color:#000;padding:12px 24px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:900;font-size:14px;text-decoration:none;box-shadow:0 0 16px rgba(0,255,157,0.25)">
-      + Submit New Listing
-    </a>
-  </div>
-
-  <!-- STATS -->
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-label">Active Listings</div>
-      <div class="stat-value blue" id="statListings">—</div>
-      <div class="stat-sub">Live and visible to buyers</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Leads</div>
-      <div class="stat-value green" id="statLeads">—</div>
-      <div class="stat-sub">Buyers who contacted you</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Your Referral Rate</div>
-      <div class="stat-value ai">1%</div>
-      <div class="stat-sub">Locked for life — never goes up</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Saved vs Zillow</div>
-      <div class="stat-value green" id="statSaved">$0</div>
-      <div class="stat-sub">vs. Zillow Flex at 40%</div>
-    </div>
-  </div>
-
-  <!-- PROFILE -->
-  <div class="section" id="profileSection">
-    <div class="section-head">
-      <h2>Your Agent Profile</h2>
-      <a href="agent.html?edit=true" id="editProfileLink">Edit Profile →</a>
-    </div>
-    <div class="profile-card" id="profileCard">
-      <div class="loading">Loading your profile...</div>
-    </div>
-  </div>
-
-  <!-- LISTINGS -->
-  <div class="section">
-    <div class="section-head">
-      <h2>Your Listings</h2>
-      <a href="list.html">+ Add Listing</a>
-    </div>
-    <div id="listingsContainer"><div class="loading">Loading listings...</div></div>
-  </div>
-
-  <!-- LEADS -->
-  <div class="section">
-    <div class="section-head">
-      <h2>Recent Leads</h2>
-      <span style="font-size:12px;color:var(--gray);font-weight:400">Every lead is free — zero per-lead charge ever</span>
-    </div>
-    <div id="leadsContainer"><div class="loading">Loading leads...</div></div>
-  </div>
-
 </div>
 
-<script src="auth.js"></script>
 <script>
-const SUPABASE_URL = 'https://pneixwmkphakoxmzkblx.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0';
+const { createClient } = supabase;
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
+
+let currentSession = null;
+let agentId = null;
 
 // ── INIT ──
 async function init() {
-  // Handle OAuth callback (Google redirect)
-  if (window.location.hash.includes('access_token')) {
-    await GOZ_AUTH.handleOAuthCallback();
+  const { data: { session } } = await sb.auth.getSession();
+
+  if (!session) {
+    showState('auth');
+    return;
   }
 
-  if (GOZ_AUTH.isLoggedIn()) {
-    showDashboard();
-  } else {
-    showLogin();
-  }
-}
-
-function showLogin() {
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('dashboardContent').style.display = 'none';
-  document.getElementById('navListBtn').style.display = 'none';
-  document.getElementById('navSignOutBtn').style.display = 'none';
-  document.getElementById('navAgentName').textContent = '';
-}
-
-function showDashboard() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashboardContent').style.display = 'block';
+  currentSession = session;
+  showState('dashboard');
   document.getElementById('navListBtn').style.display = 'inline-block';
   document.getElementById('navSignOutBtn').style.display = 'inline-block';
 
-  const name = GOZ_AUTH.getAgentName() || 'Agent';
-  document.getElementById('navAgentName').textContent = name;
+  // Get agent profile
+  const { data: agent, error } = await sb
+    .from('agents')
+    .select('*')
+    .eq('user_id', session.user.id)
+    .single();
 
+  if (error || !agent) {
+    // Auth user exists but no agent profile — create one
+    const meta = session.user.user_metadata || {};
+    const { data: newAgent } = await sb.from('agents').insert({
+      user_id: session.user.id,
+      first_name: meta.first_name || 'Agent',
+      last_name: meta.last_name || '',
+      email: session.user.email
+    }).select().single();
+
+    if (newAgent) {
+      agentId = newAgent.id;
+      localStorage.setItem('goz_agent_id', agentId);
+    }
+  } else {
+    agentId = agent.id;
+    localStorage.setItem('goz_agent_id', agentId);
+    localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`);
+  }
+
+  // Set greeting
+  const name = localStorage.getItem('goz_name') || 'Agent';
+  document.getElementById('navName').textContent = name;
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
   document.getElementById('dashGreeting').textContent = `${greeting}, ${name.split(' ')[0]}! 👋`;
 
-  const agentId = GOZ_AUTH.getAgentId();
-  loadProfile(agentId);
-  loadListings(agentId);
-  loadLeads(agentId);
-}
+  if (agentId) {
+    document.getElementById('editProfileLink').href = `agent.html?id=${agentId}&edit=true`;
+    loadProfile();
+    loadListings();
+    loadLeads();
+  }
 
-// ── LOGIN ──
-async function doLogin(e) {
-  e.preventDefault();
-  const btn = document.getElementById('loginBtn');
-  const errEl = document.getElementById('loginError');
-  errEl.style.display = 'none';
-
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-
-  btn.disabled = true;
-  btn.textContent = 'Signing in...';
-
-  try {
-    await GOZ_AUTH.signIn(email, password);
-    showDashboard();
-  } catch (err) {
-    if (err.message === 'SESSION_EXPIRED') {
-      errEl.textContent = 'Session expired. Please sign in again.';
-    } else {
-      errEl.textContent = err.message;
+  // Listen for auth state changes (token refresh handled by Supabase SDK automatically)
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') {
+      window.location.href = 'signup.html';
     }
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Sign In →';
-  }
+    if (event === 'TOKEN_REFRESHED') {
+      currentSession = session;
+    }
+  });
 }
 
-// ── FORGOT PASSWORD ──
-function openForgotPassword() {
-  document.getElementById('forgotModal').classList.add('open');
-  document.getElementById('forgotError').style.display = 'none';
-  document.getElementById('forgotSuccess').style.display = 'none';
-  document.getElementById('forgotEmail').value =
-    document.getElementById('loginEmail').value || '';
+function showState(name) {
+  document.querySelectorAll('.page-state').forEach(s => s.classList.remove('active'));
+  document.getElementById('state-' + name).classList.add('active');
 }
-
-function closeForgotPassword() {
-  document.getElementById('forgotModal').classList.remove('open');
-}
-
-async function sendPasswordReset() {
-  const email = document.getElementById('forgotEmail').value.trim();
-  const btn = document.getElementById('forgotBtn');
-  const errEl = document.getElementById('forgotError');
-  const successEl = document.getElementById('forgotSuccess');
-
-  errEl.style.display = 'none';
-  successEl.style.display = 'none';
-
-  if (!email) {
-    errEl.textContent = 'Please enter your email address.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
-
-  try {
-    await fetch('/api/forgot-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    });
-    // Always show success (don't reveal if email exists)
-    successEl.textContent = `✅ If ${email} is in our system, a reset link is on its way. Check your inbox.`;
-    successEl.style.display = 'block';
-    btn.textContent = 'Sent!';
-  } catch {
-    successEl.textContent = `✅ If ${email} is in our system, a reset link is on its way.`;
-    successEl.style.display = 'block';
-    btn.textContent = 'Sent!';
-  }
-}
-
-// Close modal clicking outside
-document.getElementById('forgotModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('forgotModal')) closeForgotPassword();
-});
 
 // ── LOAD PROFILE ──
-async function loadProfile(agentId) {
-  try {
-    const token = await GOZ_AUTH.getValidToken();
-    if (!token) { handleSessionExpired(); return; }
+async function loadProfile() {
+  const { data: agent } = await sb.from('agents').select('*').eq('id', agentId).single();
+  if (!agent) return;
 
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/agents?id=eq.${agentId}&limit=1`,
-      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}` } }
-    );
-    const data = await res.json();
-    if (!data.length) return;
-    const agent = data[0];
-
-    // Show incomplete profile warning
-    if (!agent.license_number || !agent.phone) {
-      document.getElementById('profileIncomplete').style.display = 'block';
-    }
-
-    const avi = agent.photo_url
-      ? `<img src="${agent.photo_url}" alt="${agent.first_name}" />`
-      : (agent.first_name?.[0] || '') + (agent.last_name?.[0] || '');
-
-    document.getElementById('editProfileLink').href = `agent.html?id=${agent.id}&edit=true`;
-    document.getElementById('profileCard').innerHTML = `
-      <div class="profile-avi">${avi}</div>
-      <div class="profile-info">
-        <h3>${agent.first_name} ${agent.last_name}</h3>
-        <div class="profile-meta">
-          ${agent.brokerage ? agent.brokerage : ''}${agent.brokerage && agent.state ? ' · ' : ''}${agent.state || ''}
-          ${agent.license_number ? `<br>License: ${agent.license_number}` : ''}
-          ${agent.phone ? `<br>📞 ${agent.phone}` : ''}
-          ${agent.markets_served ? `<br>📍 ${agent.markets_served}` : ''}
-          ${agent.website ? `<br><a href="${agent.website}" target="_blank" style="color:var(--blue)">${agent.website}</a>` : ''}
-        </div>
-        <div class="profile-badge">🤖 GOZ AI Agent · 1% rate locked</div>
-        <div class="profile-actions">
-          <a href="agent.html?id=${agent.id}" class="pa-primary" target="_blank">View Public Profile →</a>
-          <a href="agent.html?id=${agent.id}&edit=true" class="pa-outline">Edit Profile</a>
-          <a href="list.html" class="pa-outline">+ Add Listing</a>
-        </div>
-      </div>
-    `;
-  } catch (e) {
-    if (e.message === 'SESSION_EXPIRED') handleSessionExpired();
-    console.error('loadProfile error:', e);
+  // Show incomplete alert if missing key fields
+  if (!agent.phone || !agent.license_number) {
+    document.getElementById('profileAlert').style.display = 'block';
+    document.getElementById('profileAlertLink').href = `agent.html?id=${agentId}&edit=true`;
   }
+
+  const avi = agent.photo_url
+    ? `<img src="${agent.photo_url}" alt="${agent.first_name}" />`
+    : (agent.first_name?.[0] || '') + (agent.last_name?.[0] || '');
+
+  document.getElementById('profileCard').innerHTML = `
+    <div class="profile-avi">${avi}</div>
+    <div class="profile-info">
+      <h3>${agent.first_name} ${agent.last_name}</h3>
+      <div class="profile-meta">
+        ${agent.brokerage ? agent.brokerage : ''}${agent.brokerage && agent.state ? ' · ' : ''}${agent.state || ''}
+        ${agent.license_number ? `<br>License: ${agent.license_number}` : ''}
+        ${agent.phone ? `<br>📞 ${agent.phone}` : ''}
+        ${agent.markets_served ? `<br>📍 ${agent.markets_served}` : ''}
+        ${agent.website ? `<br><a href="${agent.website}" target="_blank" style="color:var(--blue)">${agent.website}</a>` : ''}
+      </div>
+      <div class="profile-badge">GOZ AI Agent · 1% rate locked</div>
+      <div class="profile-actions">
+        <a href="agent.html?id=${agentId}" class="pa-primary" target="_blank">View Public Profile →</a>
+        <a href="agent.html?id=${agentId}&edit=true" class="pa-outline">Edit Profile</a>
+      </div>
+    </div>`;
 }
 
 // ── LOAD LISTINGS ──
-async function loadListings(agentId) {
-  try {
-    const token = await GOZ_AUTH.getValidToken();
-    if (!token) { handleSessionExpired(); return; }
+async function loadListings() {
+  const { data: listings, error } = await sb
+    .from('listings')
+    .select('*')
+    .eq('agent_id', agentId)
+    .order('created_at', { ascending: false });
 
-    // FIX: Fetch ALL agent listings (auth token means RLS shows own listings regardless of status)
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/listings?agent_id=eq.${agentId}&order=created_at.desc`,
-      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}` } }
-    );
-    const listings = await res.json();
+  if (error) { console.error(error); return; }
 
-    const active = listings.filter(l => l.status === 'active');
-    document.getElementById('statListings').textContent = active.length;
+  const active = (listings || []).filter(l => l.status === 'active');
+  document.getElementById('statListings').textContent = active.length;
 
-    // Savings calc vs Zillow 40%
-    const totalComm = active.reduce((sum, l) => sum + (l.price || 0), 0) * 0.025;
-    const saved = Math.round(totalComm * (0.40 - 0.01));
-    document.getElementById('statSaved').textContent = saved > 0 ? '$' + saved.toLocaleString() : '$0';
+  // Savings calc
+  const totalComm = active.reduce((sum, l) => sum + (Number(l.price) || 0), 0) * 0.025;
+  const saved = Math.round(totalComm * 0.39); // 40% zillow vs 1% ours
+  document.getElementById('statSaved').textContent = saved > 0 ? '$' + saved.toLocaleString() : '$0';
 
-    if (!listings.length) {
-      document.getElementById('listingsContainer').innerHTML = `
-        <div class="empty-state">
-          <div class="icon">🏡</div>
-          <h3>No listings yet</h3>
-          <p>Submit your first listing — free, goes live immediately.</p>
-          <a href="list.html">Submit First Listing →</a>
-        </div>`;
-      return;
-    }
-
-    document.getElementById('listingsContainer').innerHTML = `<div class="listings-grid">` +
-      listings.map(l => `
-        <div class="listing-item">
-          <div class="listing-img">
-            ${l.photos?.length ? `<img src="${l.photos[0]}" alt="${l.address}" />` : '🏡'}
-            <div class="listing-status ${l.status}">${l.status.toUpperCase()}</div>
-          </div>
-          <div class="listing-body">
-            <div class="listing-price">$${Number(l.price).toLocaleString()}</div>
-            <div class="listing-commission">✓ ${l.commission_rate} commission — public</div>
-            <div class="listing-addr">${l.address}, ${l.city}, ${l.state}</div>
-            <div class="listing-specs">
-              ${l.beds ? l.beds + 'bd' : ''} ${l.baths ? l.baths + 'ba' : ''} ${l.sqft ? Number(l.sqft).toLocaleString() + ' sqft' : ''}
-            </div>
-            <div class="listing-actions">
-              <a href="listing.html?id=${l.id}" target="_blank">View Live →</a>
-              <button onclick="toggleListingStatus('${l.id}', '${l.status}')">
-                ${l.status === 'active' ? 'Deactivate' : 'Reactivate'}
-              </button>
-              <button onclick="deleteListing('${l.id}')">Delete</button>
-            </div>
-          </div>
-        </div>`
-      ).join('') + `</div>`;
-  } catch (e) {
-    if (e.message === 'SESSION_EXPIRED') handleSessionExpired();
-    console.error('loadListings error:', e);
+  if (!listings || !listings.length) {
+    document.getElementById('listingsContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🏡</div>
+        <h3>No listings yet</h3>
+        <p>Submit your first listing — free, goes live immediately.</p>
+        <a href="list.html">Submit First Listing →</a>
+      </div>`;
+    return;
   }
+
+  document.getElementById('listingsContainer').innerHTML = `<div class="listings-grid">` +
+    listings.map(l => `
+      <div class="listing-item">
+        <div class="li-img">
+          ${l.photos && l.photos.length ? `<img src="${l.photos[0]}" alt="${l.address}" />` : '🏡'}
+          <div class="li-status ${l.status}">${l.status.toUpperCase()}</div>
+        </div>
+        <div class="li-body">
+          <div class="li-price">$${Number(l.price).toLocaleString()}</div>
+          <div class="li-commission">✓ ${l.commission_rate} commission — public</div>
+          <div class="li-addr">${l.address}, ${l.city}, ${l.state}</div>
+          <div class="li-specs">${l.beds ? l.beds + 'bd' : ''} ${l.baths ? l.baths + 'ba' : ''} ${l.sqft ? Number(l.sqft).toLocaleString() + ' sqft' : ''}</div>
+          <div class="li-actions">
+            <a href="listing.html?id=${l.id}" target="_blank">View →</a>
+            <button onclick="toggleStatus('${l.id}','${l.status}')">${l.status === 'active' ? 'Deactivate' : 'Reactivate'}</button>
+            <button onclick="deleteListing('${l.id}')">Delete</button>
+          </div>
+        </div>
+      </div>`
+    ).join('') + `</div>`;
 }
 
 // ── LOAD LEADS ──
-async function loadLeads(agentId) {
-  try {
-    const token = await GOZ_AUTH.getValidToken();
-    if (!token) { handleSessionExpired(); return; }
+async function loadLeads() {
+  const { data: leads, error } = await sb
+    .from('leads')
+    .select('*')
+    .eq('agent_id', agentId)
+    .order('created_at', { ascending: false })
+    .limit(20);
 
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/leads?agent_id=eq.${agentId}&order=created_at.desc&limit=20`,
-      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}` } }
-    );
-    const leads = await res.json();
-    document.getElementById('statLeads').textContent = leads.length;
+  if (error) { console.error(error); return; }
 
-    if (!leads.length) {
-      document.getElementById('leadsContainer').innerHTML = `
-        <div class="empty-state">
-          <div class="icon">📬</div>
-          <h3>No leads yet</h3>
-          <p>When buyers contact you through your listings, they appear here — zero lead tax charged to you.</p>
-        </div>`;
-      return;
-    }
+  document.getElementById('statLeads').textContent = (leads || []).length;
 
-    document.getElementById('leadsContainer').innerHTML = `<div class="leads-list">` +
-      leads.map(l => `
-        <div class="lead-item">
-          <div class="lead-avatar">${l.buyer_name?.[0]?.toUpperCase() || '?'}</div>
-          <div class="lead-info">
-            <div class="lead-name">${l.buyer_name}</div>
-            <div class="lead-contact">
-              📧 <a href="mailto:${l.buyer_email}" style="color:var(--blue)">${l.buyer_email}</a>
-              ${l.buyer_phone ? ` · 📞 <a href="tel:${l.buyer_phone}" style="color:var(--blue)">${l.buyer_phone}</a>` : ''}
-            </div>
-            ${l.message ? `<div class="lead-message">"${l.message}"</div>` : ''}
-            <a href="mailto:${l.buyer_email}?subject=Re: Your inquiry on GetOffZillow AI" class="lead-reply">Reply →</a>
-          </div>
-          <div class="lead-time">${timeSince(new Date(l.created_at))}</div>
-        </div>`
-      ).join('') + `</div>`;
-  } catch (e) {
-    if (e.message === 'SESSION_EXPIRED') handleSessionExpired();
+  if (!leads || !leads.length) {
+    document.getElementById('leadsContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📬</div>
+        <h3>No leads yet</h3>
+        <p>When buyers contact you through your listings, they appear here. Zero per-lead charge.</p>
+      </div>`;
+    return;
   }
+
+  document.getElementById('leadsContainer').innerHTML = `<div class="leads-list">` +
+    leads.map(l => `
+      <div class="lead-item">
+        <div class="lead-avi">${l.buyer_name?.[0]?.toUpperCase() || '?'}</div>
+        <div class="lead-info">
+          <div class="lead-name">${l.buyer_name}</div>
+          <div class="lead-contact">
+            📧 <a href="mailto:${l.buyer_email}" style="color:var(--blue)">${l.buyer_email}</a>
+            ${l.buyer_phone ? ` · 📞 <a href="tel:${l.buyer_phone}" style="color:var(--blue)">${l.buyer_phone}</a>` : ''}
+          </div>
+          ${l.message ? `<div class="lead-msg">"${l.message}"</div>` : ''}
+          <a href="mailto:${l.buyer_email}?subject=Re: Your inquiry on GetOffZillow AI" class="lead-reply">Reply →</a>
+        </div>
+        <div class="lead-time">${timeSince(new Date(l.created_at))}</div>
+      </div>`
+    ).join('') + `</div>`;
 }
 
 // ── LISTING ACTIONS ──
-async function toggleListingStatus(id, currentStatus) {
-  const newStatus = currentStatus === 'active' ? 'pending' : 'active';
-  const token = await GOZ_AUTH.getValidToken();
-  if (!token) { handleSessionExpired(); return; }
-
-  await fetch(`${SUPABASE_URL}/rest/v1/listings?id=eq.${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ status: newStatus })
-  });
-  loadListings(GOZ_AUTH.getAgentId());
+async function toggleStatus(id, current) {
+  const next = current === 'active' ? 'pending' : 'active';
+  await sb.from('listings').update({ status: next }).eq('id', id);
+  loadListings();
 }
 
 async function deleteListing(id) {
   if (!confirm('Delete this listing? It will be removed from public search.')) return;
-  const token = await GOZ_AUTH.getValidToken();
-  if (!token) { handleSessionExpired(); return; }
-
-  await fetch(`${SUPABASE_URL}/rest/v1/listings?id=eq.${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ status: 'deleted' })
-  });
-  loadListings(GOZ_AUTH.getAgentId());
+  await sb.from('listings').update({ status: 'deleted' }).eq('id', id);
+  loadListings();
 }
 
-// ── SESSION EXPIRED ──
-function handleSessionExpired() {
-  document.getElementById('sessionBanner').style.display = 'block';
-  GOZ_AUTH.clearSession();
+// ── SIGN OUT ──
+async function doSignOut() {
+  await sb.auth.signOut();
+  localStorage.clear();
+  window.location.href = 'index.html';
 }
 
 function timeSince(date) {
