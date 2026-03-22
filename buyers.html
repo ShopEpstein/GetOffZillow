@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Find homes on GOZ — commission shown on every listing. Contact agents directly. No middlemen, no lead forms, no data sold.">
+<title>For Buyers — GOZ | GetOffZillow AI</title>
+<meta name="theme-color" content="#0D0D0D">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D0D0D;--cream:#F4F1EB;--cream2:#EAE6DC;--green:#00FF9D;--green-dim:#00CC7A;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--navy:#0a1f44;--gold:#C9A84C;--white:#fff;--text:#1A1A1A;--gray:#6B6B6B;--border:#D4CFC4}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.nav{position:sticky;top:0;z-index:300;background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.06);height:60px;display:flex;align-items:center;padding:0 32px;gap:16px}
+.nav-logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-goz{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.12em;color:var(--green);line-height:1}
+.nav-full{font-size:10px;color:rgba(255,255,255,0.3);font-family:'Space Mono',monospace}
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.nav-link{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;transition:color 0.2s}
+.nav-link:hover{color:var(--green)}
+.btn-blue{background:var(--blue);color:white;padding:9px 20px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;transition:background 0.2s;display:inline-block}
+.btn-blue:hover{background:#0050CC}
+.btn-outline{background:transparent;color:rgba(255,255,255,0.7);padding:9px 18px;border-radius:8px;font-weight:500;font-size:13px;text-decoration:none;border:1px solid rgba(255,255,255,0.2);display:inline-block;transition:all 0.2s}
+.btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+/* HERO */
+.hero{background:var(--blue);padding:100px 32px;position:relative;overflow:hidden;color:white}
+.hero::before{content:'';position:absolute;bottom:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:80px;align-items:center}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:20px;display:block}
+.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7vw,88px);line-height:0.88;margin-bottom:24px;letter-spacing:-0.5px}
+.hero-h1 .white{color:white}
+.hero-h1 .cream{color:rgba(255,255,255,0.85)}
+.hero-desc{font-size:17px;color:rgba(255,255,255,0.75);line-height:1.75;margin-bottom:32px;font-weight:300;max-width:500px}
+.hero-desc strong{color:white;font-weight:500}
+.hero-trust{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.trust-chip{font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.6);padding:5px 12px;border:1px solid rgba(255,255,255,0.2);border-radius:20px;display:flex;align-items:center;gap:5px}
+.trust-chip::before{content:'✓';color:white;font-size:11px}
+.search-hero{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:24px;backdrop-filter:blur(8px)}
+.search-hero h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.05em;margin-bottom:4px}
+.search-hero p{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px;font-family:'Space Mono',monospace}
+.search-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:white;font-family:'DM Sans',sans-serif;font-size:16px;outline:none;margin-bottom:10px;transition:border-color 0.2s;-webkit-appearance:none}
+.search-input:focus{border-color:white;background:rgba(255,255,255,0.2)}
+.search-input::placeholder{color:rgba(255,255,255,0.4)}
+.search-btn{width:100%;background:white;color:var(--blue);border:none;padding:13px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all 0.2s}
+.search-btn:hover{background:rgba(255,255,255,0.9)}
+.search-note{font-size:11px;color:rgba(255,255,255,0.4);text-align:center;margin-top:10px;font-family:'Space Mono',monospace}
+
+/* SECTIONS */
+.section{padding:88px 32px}
+.section-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gray);margin-bottom:14px;display:block}
+.eyebrow.light{color:rgba(255,255,255,0.35)}
+.section-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,60px);line-height:0.92;color:var(--ink);margin-bottom:12px}
+.section-h2 .accent{color:var(--blue)}
+.section-h2 .green{color:var(--green-dark)}
+.section-h2.white{color:white}
+.section-sub{font-size:15px;color:var(--gray);line-height:1.7;font-weight:300;max-width:540px;margin-bottom:48px}
+.section-sub.light{color:rgba(255,255,255,0.5)}
+
+/* DIFFERENCE GRID */
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-radius:14px;overflow:hidden;margin-top:40px}
+.diff-card{padding:40px 36px;background:white}
+.diff-card.them{background:#fff8f8}
+.diff-card.us{background:#f0fff8}
+.diff-label{font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
+.diff-label.them{color:var(--red)}
+.diff-label.us{color:var(--green-dark)}
+.diff-item{display:flex;gap:12px;margin-bottom:16px;font-size:15px;line-height:1.5;align-items:flex-start}
+.diff-item .di{font-size:18px;flex-shrink:0}
+
+/* HOW TO SEARCH */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.how-card{background:white;border-radius:14px;padding:28px;border:1px solid var(--border);position:relative}
+.how-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(0,0,0,0.04);position:absolute;top:12px;right:16px;line-height:1}
+.how-icon{font-size:28px;margin-bottom:14px;display:block}
+.how-title{font-weight:600;font-size:16px;margin-bottom:8px;color:var(--ink)}
+.how-desc{font-size:13px;color:var(--gray);line-height:1.7;font-weight:300}
+
+/* NAR BOX */
+.nar-box{background:var(--ink);border-radius:14px;padding:36px 40px;color:white;margin-top:48px}
+.nar-box h3{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.04em;margin-bottom:12px;color:var(--green)}
+.nar-box p{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;font-weight:300;max-width:640px}
+.nar-box strong{color:white;font-weight:500}
+
+/* CALC */
+.calc-section{background:var(--navy);color:white;padding:88px 32px}
+.calc-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.calc-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:28px}
+.calc-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.5);display:block;margin-bottom:6px}
+.calc-input{width:100%;padding:11px 14px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;color:white;font-family:'DM Sans',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;margin-bottom:14px;-webkit-appearance:none}
+.calc-input::placeholder{color:rgba(255,255,255,0.3)}
+.calc-input:focus{border-color:rgba(255,255,255,0.4)}
+.calc-result{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:18px;display:none;margin-top:4px}
+.result-num{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--green);line-height:1}
+.result-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;font-family:'Space Mono',monospace}
+.calc-btn{width:100%;margin-top:12px;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:background 0.2s}
+.calc-btn:hover{background:#0050CC}
+
+/* LISTINGS PREVIEW */
+.listings-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+.listing-card{background:white;border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.07);transition:transform 0.2s,box-shadow 0.2s;border:1px solid rgba(0,0,0,0.06)}
+.listing-card:hover{transform:translateY(-3px);box-shadow:0 6px 24px rgba(0,0,0,0.1)}
+.listing-img{height:160px;position:relative;overflow:hidden;background:linear-gradient(135deg,#c8d8f0,#a8c0e8)}
+.listing-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block}
+.listing-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.15))}
+.commission-banner{position:absolute;bottom:0;left:0;right:0;z-index:1;background:rgba(0,132,61,0.9);color:white;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:5px 10px;letter-spacing:0.05em}
+.listing-body{padding:14px}
+.listing-price{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ink);letter-spacing:0.02em}
+.listing-addr{font-size:13px;font-weight:500;color:var(--ink);margin-top:5px}
+.listing-city{font-size:12px;color:var(--gray);margin-top:1px}
+.listing-specs{display:flex;gap:10px;margin-top:8px;font-size:12px;color:var(--gray);border-top:1px solid rgba(0,0,0,0.06);padding-top:8px}
+.contact-btn{display:block;width:100%;margin-top:10px;padding:9px;background:var(--blue);color:white;border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;text-align:center;text-decoration:none;transition:background 0.2s}
+.contact-btn:hover{background:#0050CC}
+.skeleton-card{background:white;border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,0.06)}
+.skeleton-img{height:160px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.skeleton-body{padding:14px}
+.skeleton-line{height:14px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:4px;margin-bottom:8px}
+.skeleton-line.short{width:60%}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* CTA */
+.cta-section{background:var(--blue);padding:88px 32px;text-align:center;color:white}
+.cta-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,72px);line-height:0.9;margin-bottom:16px}
+.cta-sub{font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6;font-weight:300}
+.cta-big{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--blue);padding:15px 36px;border-radius:10px;font-weight:700;font-size:16px;text-decoration:none;transition:all 0.2s}
+.cta-big:hover{background:rgba(255,255,255,0.92);transform:translateY(-1px)}
+
+.footer-simple{background:#080808;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25)}
+.footer-simple a{color:rgba(255,255,255,0.35);text-decoration:none}
+.footer-simple a:hover{color:white}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:white;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 4px 24px rgba(0,0,0,0.3);z-index:9999;max-width:340px;transform:translateY(80px);opacity:0;transition:all 0.3s;border-left:3px solid var(--blue)}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:1024px){.hero-inner,.calc-inner{grid-template-columns:1fr;gap:40px}.listings-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.hero{padding:60px 20px}.section{padding:60px 20px}.diff-grid,.how-grid{grid-template-columns:1fr}.listings-grid{grid-template-columns:1fr 1fr}.nav-right .btn-outline{display:none}}
+@media(max-width:480px){.listings-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <div style="width:32px;height:32px;background:var(--ink);border-radius:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px var(--green)">
+      <svg width="20" height="20" viewBox="0 0 46 46" fill="none"><polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/><line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/><circle cx="23" cy="30" r="1.2" fill="#00FF9D"/></svg>
+    </div>
+    <div><div class="nav-goz">GOZ</div><div class="nav-full">GetOffZillow AI</div></div>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="agents.html" class="nav-link">For Agents</a>
+    <a href="#listings" class="btn-blue">Browse Listings</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-eyebrow">For Home Buyers</span>
+      <h1 class="hero-h1">Search Homes.<br>See Every<br>Commission.<br>Talk Directly.</h1>
+      <p class="hero-desc">On GOZ, every listing shows the agent's commission rate — no hidden fees, no surprises at closing. When you're ready to connect, you contact the agent directly. <strong>No lead forms, no call centers, no middlemen.</strong></p>
+      <div class="hero-trust">
+        <span class="trust-chip">Commission shown on every listing</span>
+        <span class="trust-chip">Contact agents directly</span>
+        <span class="trust-chip">No account required to browse</span>
+        <span class="trust-chip">Free mortgage calculator</span>
+      </div>
+    </div>
+    <div class="search-hero">
+      <h3>Search Listings</h3>
+      <p>Commission shown on every result</p>
+      <input class="search-input" id="buyerSearch" type="text" placeholder="City, ZIP, or address...">
+      <button class="search-btn" onclick="doSearch()">Find Homes →</button>
+      <p class="search-note">No account needed to browse</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S DIFFERENT -->
+<section class="section" style="background:white">
+  <div class="section-inner">
+    <span class="eyebrow">Why GOZ Is Different</span>
+    <h2 class="section-h2">What You See on <span class="accent">Other Platforms</span><br>vs. What You Get Here.</h2>
+    <div class="diff-grid">
+      <div class="diff-card them">
+        <div class="diff-label them">Other Platforms</div>
+        <div class="diff-item"><span class="di">🙈</span><span>Commission rates hidden — you find out at the negotiating table or closing</span></div>
+        <div class="diff-item"><span class="di">📋</span><span>Submit a lead form → your info sold to multiple agents → inbox flooded</span></div>
+        <div class="diff-item"><span class="di">🤖</span><span>AI-generated reviews, pay-to-rank listings, sponsored agents at the top</span></div>
+        <div class="diff-item"><span class="di">💰</span><span>Platform profits from your data — sold to lenders, advertisers, data brokers</span></div>
+      </div>
+      <div class="diff-card us">
+        <div class="diff-label us">GOZ</div>
+        <div class="diff-item"><span class="di">✅</span><span>Commission shown on every listing card — before you click, before you call</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>One message goes directly to one agent — their real phone and email</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>Listings sort by recency, not ad spend — no pay-to-rank</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>We don't sell your data. We earn 3% of agent commission at closing — that's our only revenue.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE LISTINGS -->
+<section class="section" style="background:var(--cream)" id="listings">
+  <div class="section-inner">
+    <span class="eyebrow">Active Listings</span>
+    <h2 class="section-h2">Homes for Sale.<br><span class="green">Commission Shown. Always.</span></h2>
+    <p class="section-sub">Every listing below shows the buyer's agent commission publicly. Click to view details and contact the agent directly.</p>
+    <div class="listings-grid" id="listingGrid">
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO SEARCH -->
+<section class="section" style="background:white">
+  <div class="section-inner">
+    <span class="eyebrow">How It Works for Buyers</span>
+    <h2 class="section-h2">Three Steps to<br><span class="accent">Your Next Home.</span></h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <span class="how-num">1</span>
+        <span class="how-icon">🔍</span>
+        <h3 class="how-title">Search Without an Account</h3>
+        <p class="how-desc">Browse by city, ZIP, or neighborhood. No sign-up required. Every listing shows price, commission rate, specs, and the agent's contact info. Filter by beds, baths, price range.</p>
+      </div>
+      <div class="how-card">
+        <span class="how-num">2</span>
+        <span class="how-icon">👆</span>
+        <h3 class="how-title">See the Commission. Always.</h3>
+        <p class="how-desc">Post-NAR settlement, buyer's agent compensation is negotiated separately. On GOZ it's displayed on every listing card — not buried in disclosures, not hidden until you're already emotionally invested.</p>
+      </div>
+      <div class="how-card">
+        <span class="how-num">3</span>
+        <span class="how-icon">📞</span>
+        <h3 class="how-title">Contact the Agent Directly</h3>
+        <p class="how-desc">Click "Contact Agent" on any listing. Your message goes to that one agent — their real email address, not a lead distribution system. No auction, no call center, no delay.</p>
+      </div>
+    </div>
+    <div class="nar-box">
+      <h3>About the NAR Settlement &amp; Buyer Commissions</h3>
+      <p>Following the 2024 NAR settlement, buyer's agent compensation can no longer be advertised on MLS in certain markets, and must be negotiated separately. This means <strong>you need to know what your agent charges before you agree to work with them</strong>. GOZ displays it publicly on every listing — so you can compare agents by market expertise, response time, and commission rate before you make contact.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MORTGAGE CALC -->
+<section class="calc-section" id="mortgage">
+  <div class="calc-inner">
+    <div>
+      <span class="eyebrow light">Mortgage Calculator</span>
+      <h2 class="section-h2 white" style="margin-bottom:16px">Know Your<br>Real Monthly Cost.</h2>
+      <p class="section-sub light" style="margin-bottom:0">Principal, interest, estimated taxes, and insurance — not just the teaser number. No spam, no rate-shopping emails, no lender calls.</p>
+      <p style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:16px;font-style:italic;font-family:'Space Mono',monospace">Estimates only. Not financial advice.</p>
+    </div>
+    <div class="calc-card">
+      <label class="calc-label">Home Price ($)</label>
+      <input class="calc-input" id="calcPrice" type="number" placeholder="350000" oninput="runCalc()">
+      <label class="calc-label">Down Payment ($)</label>
+      <input class="calc-input" id="calcDown" type="number" placeholder="70000" oninput="runCalc()">
+      <label class="calc-label">Interest Rate (%)</label>
+      <input class="calc-input" id="calcRate" type="number" placeholder="6.875" step="0.125" oninput="runCalc()">
+      <label class="calc-label">Loan Term</label>
+      <select class="calc-input" id="calcTerm" onchange="runCalc()">
+        <option value="30">30 Year Fixed</option>
+        <option value="20">20 Year Fixed</option>
+        <option value="15">15 Year Fixed</option>
+      </select>
+      <div class="calc-result" id="calcResult">
+        <div class="result-num" id="calcMonthly">$0</div>
+        <div class="result-sub" id="calcBreakdown">Enter values above</div>
+      </div>
+      <button class="calc-btn" onclick="showToast('Lender connections coming soon!')">Get My Rate →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-h2">Ready to Find<br>Your Home?</h2>
+  <p class="cta-sub">Browse listings with commission shown on every card. Contact agents directly. No account required.</p>
+  <a href="#listings" class="cta-big">Browse Listings Now →</a>
+  <p style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:20px;font-family:'Space Mono',monospace">Are you an agent? <a href="agents.html" style="color:rgba(255,255,255,0.5)">List your properties free →</a></p>
+</section>
+
+<div class="footer-simple">
+  <div>© 2026 GOZ · GetOffZillow AI · TransBid LLC · Pensacola FL</div>
+  <div style="display:flex;gap:20px">
+    <a href="index.html">Home</a>
+    <a href="agents.html">For Agents</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const { createClient } = window.supabase || supabase;
+const sb = createClient('https://pneixwmkphakoxmzkblx.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0');
+const DEMO=[
+  'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+  'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+  'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+  'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+];
+function parsePhotos(r){if(!r)return[];if(Array.isArray(r))return r.filter(Boolean);if(typeof r==='string'){if(r.startsWith('['))try{const p=JSON.parse(r);return Array.isArray(p)?p.filter(Boolean):[]}catch(e){}if(r.startsWith('{')&&r.endsWith('}'))return r.slice(1,-1).split(',').map(s=>s.trim().replace(/^"|"$/g,'')).filter(s=>s.startsWith('http'));if(r.startsWith('http'))return[r]}return[]}
+async function loadListings() {
+  try {
+    const {data} = await sb.from('listings').select('id,address,city,state,price,beds,baths,commission_rate,photos,created_at,agents(first_name,last_name)').eq('status','active').order('created_at',{ascending:false}).limit(8);
+    const grid = document.getElementById('listingGrid');
+    if (!data||!data.length) { grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><div style="font-size:40px;margin-bottom:12px">🏡</div><p style="font-size:15px;font-weight:300">No listings yet. <a href="agents.html" style="color:var(--blue)">Agents — list your first property free →</a></p></div>'; return; }
+    grid.innerHTML = data.map((l,i) => {
+      const photos=parsePhotos(l.photos);
+      const src=photos.length?photos[0]:DEMO[i%DEMO.length];
+      const fb=DEMO[i%DEMO.length];
+      const agentName=l.agents?`${l.agents.first_name} ${l.agents.last_name[0]}.`:'GOZ Agent';
+      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'">
+        <div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy">
+          <div class="commission-banner">✓ ${l.commission_rate||'2.5%'} buyer's agent commission</div>
+        </div>
+        <div class="listing-body">
+          <div class="listing-price">$${Number(l.price).toLocaleString()}</div>
+          <div class="listing-addr">${l.address}</div>
+          <div class="listing-city">${l.city}, ${l.state}</div>
+          <div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div>
+          <a class="contact-btn" href="listing.html?id=${l.id}">View & Contact ${agentName} →</a>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) { console.error(e); }
+}
+async function doSearch() {
+  const q = document.getElementById('buyerSearch').value.trim();
+  if (!q) { showToast('Enter a city, ZIP, or address'); return; }
+  document.getElementById('listings')?.scrollIntoView({behavior:'smooth'});
+  try {
+    const {data} = await sb.from('listings').select('id,address,city,state,price,beds,baths,commission_rate,photos,created_at,agents(first_name,last_name)').eq('status','active').or(`city.ilike.%${q}%,address.ilike.%${q}%,zip.ilike.%${q}%`).order('created_at',{ascending:false}).limit(20);
+    const grid = document.getElementById('listingGrid');
+    if (!data||!data.length) { grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><p style="font-size:15px;font-weight:300">No listings found for "${q}" yet.</p></div>`; showToast(`No listings found for "${q}"`); return; }
+    grid.innerHTML = data.map((l,i) => {
+      const photos=parsePhotos(l.photos);const src=photos.length?photos[0]:DEMO[i%DEMO.length];const fb=DEMO[i%DEMO.length];const agentName=l.agents?`${l.agents.first_name} ${l.agents.last_name[0]}.`:'GOZ Agent';
+      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'"><div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy"><div class="commission-banner">✓ ${l.commission_rate||'2.5%'} commission</div></div><div class="listing-body"><div class="listing-price">$${Number(l.price).toLocaleString()}</div><div class="listing-addr">${l.address}</div><div class="listing-city">${l.city}, ${l.state}</div><div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div><a class="contact-btn" href="listing.html?id=${l.id}">Contact ${agentName} →</a></div></div>`;
+    }).join('');
+    showToast(`${data.length} listing${data.length!==1?'s':''} found for "${q}"`);
+  } catch(e) { showToast('Search failed. Try again.'); }
+}
+function runCalc() {
+  const price=parseFloat(document.getElementById('calcPrice').value)||0;
+  const down=parseFloat(document.getElementById('calcDown').value)||0;
+  const rate=parseFloat(document.getElementById('calcRate').value)||0;
+  const term=parseInt(document.getElementById('calcTerm').value)||30;
+  const loan=price-down; if(loan<=0||rate<=0) return;
+  const r=rate/100/12,n=term*12;
+  const payment=(loan*r)/(1-Math.pow(1+r,-n));
+  const estTax=price*0.011/12,estIns=price*0.005/12;
+  const total=payment+estTax+estIns;
+  const el=document.getElementById('calcResult'); el.style.display='block';
+  document.getElementById('calcMonthly').textContent='$'+Math.round(total).toLocaleString();
+  document.getElementById('calcBreakdown').textContent=`P&I $${Math.round(payment).toLocaleString()} + Tax $${Math.round(estTax).toLocaleString()} + Ins $${Math.round(estIns).toLocaleString()}`;
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),4000)}
+loadListings();
+</script>
+</body>
+</html>
