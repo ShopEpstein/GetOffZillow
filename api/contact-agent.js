@@ -40,7 +40,7 @@ export default async function handler(req, res) {
           ${message ? `<tr><td style="padding:10px 0;color:#888;vertical-align:top">Message</td><td style="padding:10px 0;font-style:italic">"${message}"</td></tr>` : ''}
         </table>
         <div style="background:#f0fff8;border-left:4px solid #00C853;padding:14px;margin-top:20px;border-radius:4px">
-          <strong style="color:#00C853">This lead cost you $0.</strong> GOZ AI only charges 3% when the deal closes.
+          <strong style="color:#00C853">This lead cost you $0.</strong> GOZ AI charges 3% of your gross commission at closing — not 3% of the sale price. This lead costs you nothing.
         </div>
         <p style="margin-top:20px"><a href="mailto:${buyer_email}?subject=Re: Your inquiry about ${listing_address}" style="background:#006AFF;color:white;padding:11px 22px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px">Reply to ${buyer_name} →</a></p>
       </div>
