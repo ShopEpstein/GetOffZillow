@@ -1051,14 +1051,20 @@ function statusClass(status) {
 let liveListings = [];
 
 async function loadListings() {
-  const { data, error } = await sb
-    .from('listings')
-    .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, agents(first_name, last_name)')
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(8);
+  try {
+    const { data, error } = await sb
+      .from('listings')
+      .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, agents(first_name, last_name)')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(8);
 
-  liveListings = data || [];
+    if (error) throw error;
+    liveListings = data || [];
+  } catch(e) {
+    console.error('loadListings error:', e);
+    liveListings = [];
+  }
   renderListings();
   renderMapList();
 }
@@ -1280,7 +1286,7 @@ function showToast(msg) {
 function renderReviews() {
   document.getElementById('reviewsGrid').innerHTML = reviews.map(r => `
     <div class="review-card">
-      <div class="review-stars">${'★'.repeat(r.stars)}</div>
+      <div class="review-stars">${'\u2605'.repeat(r.stars)}</div>
       <p class="review-text">"${r.text}"</p>
       <div class="review-author">
         <div class="review-avatar">${r.emoji}</div>
@@ -1290,84 +1296,59 @@ function renderReviews() {
 }
 
 const reviews = [
-  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $300 on a $10,000 commission. The direct contact with buyers is a completely different experience.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
-  { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"👩" },
-  { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"👩" },
-  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $300. That's not a typo. Three hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
-  { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"👩" },
-  { stars:5, text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"👨" },
+  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $300 on a $10,000 commission. The direct contact with buyers is a completely different experience.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"\ud83d\udc68" },
+  { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"\ud83d\udc69" },
+  { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"\ud83d\udc69" },
+  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $300. That's not a typo. Three hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"\ud83d\udc68" },
+  { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"\ud83d\udc69" },
+  { stars:5, text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"\ud83d\udc68" },
 ];
 
-function setHeroTab(el,type) {
-  document.querySelectorAll('.hero-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  const msgs = {sell:'💰 Sell — list free in minutes',agent:'🤝 Agents: 3% at closing, free listings'};
-  if (msgs[type]) showToast(msgs[type]);
-}
+// ── NAV AUTH STATE — swap nav buttons when logged in ──
+async function initNavAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return; // not logged in — default nav is correct
 
-async function doSearch() {
-  const q = (document.getElementById('heroSearchInput').value||document.getElementById('hSearch').value).trim();
-  if (!q) { showToast('Enter a city, ZIP, or address to search'); return; }
-  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
-
-  const { data } = await sb
-    .from('listings')
-    .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, agents(first_name, last_name)')
-    .eq('status', 'active')
-    .or(`city.ilike.%${q}%,address.ilike.%${q}%,state.ilike.%${q}%,zip.ilike.%${q}%`)
-    .order('created_at', { ascending: false })
-    .limit(20);
-
-  liveListings = data || [];
-  renderListings();
-  const count = liveListings.length;
-  showToast(count > 0 ? `🔍 ${count} listing${count!==1?'s':''} found for "${q}"` : `🔍 No listings found for "${q}" yet.`);
-}
-
-function scrollTo(id) { document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
-
-function toggleFaq(btn) {
-  const answer = btn.nextElementSibling;
-  const isOpen = answer.classList.contains('open');
-  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
-  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
-  if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
-}
-
-function toggleMobileMenu() {
-  const btn = document.getElementById('hamburger');
-  const menu = document.getElementById('mobileMenu');
-  btn.classList.toggle('open');
-  menu.classList.toggle('open');
-  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
-}
-
-function closeMobileMenu() {
-  document.getElementById('hamburger').classList.remove('open');
-  document.getElementById('mobileMenu').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('click', e => {
-  const menu = document.getElementById('mobileMenu');
-  const btn = document.getElementById('hamburger');
-  if (menu && btn && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
-    closeMobileMenu();
+  // Swap Sign In / List Free → Dashboard / Sign Out
+  const navUl = document.querySelector('.header-nav');
+  if (navUl) {
+    const signInLi = navUl.querySelector('a[href="signup.html"].btn-outline')?.closest('li');
+    const listLi = navUl.querySelector('a[href="signup.html"].btn-red')?.closest('li');
+    if (signInLi) signInLi.innerHTML = '<a href="dashboard.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Dashboard</a>';
+    if (listLi) listLi.innerHTML = '<a href="#" onclick="sb.auth.signOut().then(()=>location.reload())" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">Sign Out</a>';
   }
-});
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(()=>t.classList.remove('show'),4500);
+  // Swap mobile menu CTA
+  const mobCta = document.querySelector('.mob-cta');
+  if (mobCta) {
+    mobCta.href = 'dashboard.html';
+    mobCta.textContent = 'Go to Dashboard \u2192';
+  }
+}
+
+function buildTicker() {
+  const items = [
+    {label:'Zillow Flex Fee',val:'40%',cls:'red'},
+    {label:'Agent Pronto Fee',val:'35%',cls:'red'},
+    {label:'OpCity Fee',val:'38%',cls:'red'},
+    {label:'UpNest Fee',val:'30%',cls:'red'},
+    {label:'GetOffZillow AI Fee',val:'3%',cls:'green'},
+    {label:'Savings vs Zillow Flex',val:'37%',cls:'green'},
+    {label:'Savings vs Agent Pronto',val:'32%',cls:'green'},
+    {label:'You Keep of Commission',val:'97%',cls:'green'},
+    {label:'Upfront Cost',val:'$0',cls:'green'},
+  ];
+  const doubled = [...items,...items];
+  document.getElementById('feeTicker').innerHTML = doubled.map(i =>
+    `<div class="fee-tick-item">${i.label}: <span class="highlight ${i.cls}">${i.val}</span></div>`
+  ).join('');
 }
 
 // ── INIT ──
 buildTicker();
 renderReviews();
 loadListings();
+initNavAuth();
 </script>
 </body>
 </html>
