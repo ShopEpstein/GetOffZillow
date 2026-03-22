@@ -153,7 +153,6 @@ const sb = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
 );
 
-const BREVO_API_KEY = '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';
 
 let listing = null;
 let agent = null;
@@ -293,53 +292,20 @@ async function sendMessage(e) {
       message: message || null
     });
 
-    // 2. Send email to agent via Brevo
-    if (agent?.email) {
-      await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
-        body: JSON.stringify({
-          sender: { name: 'GetOffZillow AI', email: 'campaigns@transbidlive.faith' },
-          to: [{ email: agent.email, name: `${agent.first_name} ${agent.last_name}` }],
-          replyTo: { email: buyerEmail, name: buyerName },
-          subject: `🏡 New lead: ${buyerName} is interested in ${listing.address}`,
-          htmlContent: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px">
-            <div style="background:#006AFF;padding:20px 24px;border-radius:8px 8px 0 0">
-              <h2 style="color:white;margin:0">New Buyer Lead 🔔</h2>
-              <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:13px">GetOffZillow AI — zero lead charge to you</p>
-            </div>
-            <div style="background:#fff;padding:28px;border:1px solid #e0e0e0;border-top:none">
-              <table style="width:100%;border-collapse:collapse">
-                <tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888;width:120px">Buyer</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-weight:700">${buyerName}</td></tr>
-                <tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888">Email</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0"><a href="mailto:${buyerEmail}" style="color:#006AFF">${buyerEmail}</a></td></tr>
-                ${buyerPhone ? `<tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888">Phone</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0"><a href="tel:${buyerPhone}" style="color:#006AFF">${buyerPhone}</a></td></tr>` : ''}
-                <tr><td style="padding:10px 0;border-bottom:1px solid #f0f0f0;color:#888">Listing</td><td style="padding:10px 0;border-bottom:1px solid #f0f0f0">${listing.address}, ${listing.city} — $${Number(listing.price).toLocaleString()}</td></tr>
-                ${message ? `<tr><td style="padding:10px 0;color:#888;vertical-align:top">Message</td><td style="padding:10px 0">${message}</td></tr>` : ''}
-              </table>
-              <div style="background:#f0fff8;border-left:4px solid #00C853;padding:14px;margin-top:20px;border-radius:4px">
-                <strong style="color:#00C853">This lead cost you $0.</strong> Reply directly to ${buyerName} at <a href="mailto:${buyerEmail}">${buyerEmail}</a>.
-              </div>
-              <p style="margin-top:20px"><a href="mailto:${buyerEmail}" style="background:#006AFF;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:700">Reply to ${buyerName} →</a></p>
-            </div>
-          </div>`
-        })
-      });
-    }
-
-    // 3. Confirmation to buyer
-    await fetch('https://api.brevo.com/v3/smtp/email', {
+    // 2. Send emails via server-side API (key never in browser)
+    await fetch('/api/contact-agent', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sender: { name: 'GetOffZillow AI', email: 'campaigns@transbidlive.faith' },
-        to: [{ email: buyerEmail, name: buyerName }],
-        subject: `✅ Your message was sent to ${agent?.first_name || 'the agent'} — GetOffZillow AI`,
-        htmlContent: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:32px">
-          <h2 style="color:#006AFF">Message Sent ✅</h2>
-          <p>Hi ${buyerName},</p>
-          <p style="line-height:1.6">Your message about <strong>${listing.address}, ${listing.city}</strong> was sent directly to the agent. They'll contact you within a few hours.</p>
-          <p style="color:#888;font-size:12px;margin-top:16px">GetOffZillow AI · Pensacola, FL</p>
-        </div>`
+        agent_email: agent?.email,
+        agent_name: agent ? `${agent.first_name} ${agent.last_name}` : '',
+        agent_first: agent?.first_name,
+        listing_address: listing.address,
+        listing_price: listing.price,
+        buyer_name: buyerName,
+        buyer_email: buyerEmail,
+        buyer_phone: buyerPhone,
+        message
       })
     });
 
