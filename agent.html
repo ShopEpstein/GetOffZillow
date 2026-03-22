@@ -186,6 +186,7 @@ function parsePhotos(raw) {
     if (raw.startsWith('http')) return [raw];
   }
   return [];
+}
 
 async function init() {
   if (!agentId) { showNotFound(); return; }
