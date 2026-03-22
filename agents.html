@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="GOZ for Agents — List free. Keep 97% of your commission. 3% at closing only, never upfront. Direct buyer contact, no lead auctions.">
+<title>For Agents — GOZ | GetOffZillow AI</title>
+<meta name="theme-color" content="#0D0D0D">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D0D0D;--cream:#F4F1EB;--cream2:#EAE6DC;--green:#00FF9D;--green-dim:#00CC7A;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--navy:#0a1f44;--gold:#C9A84C;--white:#fff;--text:#1A1A1A;--gray:#6B6B6B;--border:#D4CFC4}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.nav{position:sticky;top:0;z-index:300;background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.06);height:60px;display:flex;align-items:center;padding:0 32px;gap:16px}
+.nav-logo{text-decoration:none;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-goz{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.12em;color:var(--green);line-height:1}
+.nav-full{font-size:10px;color:rgba(255,255,255,0.3);font-family:'Space Mono',monospace}
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.nav-link{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;transition:color 0.2s}
+.nav-link:hover{color:var(--green)}
+.btn-green{background:var(--green);color:var(--ink);padding:9px 20px;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;display:inline-block}
+.btn-green:hover{background:#00e88a;box-shadow:0 0 16px rgba(0,255,157,0.3)}
+.btn-outline{background:transparent;color:rgba(255,255,255,0.7);padding:9px 18px;border-radius:8px;font-weight:500;font-size:13px;text-decoration:none;transition:all 0.2s;border:1px solid rgba(255,255,255,0.2);display:inline-block}
+.btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+/* HERO */
+.hero{background:var(--ink);padding:100px 32px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(0,255,157,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:center}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:20px;display:block}
+.hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,7vw,96px);line-height:0.88;color:white;letter-spacing:-0.5px;margin-bottom:24px}
+.hero-h1 .green{color:var(--green)}
+.hero-h1 .gold{color:var(--gold)}
+.hero-desc{font-size:17px;color:rgba(255,255,255,0.6);line-height:1.75;margin-bottom:32px;font-weight:300;max-width:500px}
+.hero-desc strong{color:white;font-weight:500}
+.hero-trust{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:36px}
+.trust-chip{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.5);padding:6px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;display:flex;align-items:center;gap:6px}
+.trust-chip::before{content:'✓';color:var(--green);font-size:11px}
+.hero-cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.hero-cta-big{background:var(--green);color:var(--ink);padding:15px 32px;border-radius:10px;font-weight:700;font-size:16px;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 0 28px rgba(0,255,157,0.25)}
+.hero-cta-big:hover{background:#00e88a;box-shadow:0 0 40px rgba(0,255,157,0.4);transform:translateY(-1px)}
+.hero-cta-sec{background:transparent;color:rgba(255,255,255,0.65);padding:15px 24px;border-radius:10px;font-weight:500;font-size:16px;text-decoration:none;transition:all 0.2s;border:1px solid rgba(255,255,255,0.15);display:inline-flex;align-items:center;gap:8px}
+.hero-cta-sec:hover{border-color:var(--green);color:var(--green)}
+
+/* EARNINGS CALC */
+.earn-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;backdrop-filter:blur(8px)}
+.earn-card h3{font-family:'Bebas Neue',sans-serif;font-size:22px;color:white;letter-spacing:0.05em;margin-bottom:4px}
+.earn-card .sub{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:20px;font-family:'Space Mono',monospace}
+.earn-slider-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);display:block;margin-bottom:8px}
+.earn-slider{width:100%;margin-bottom:20px;accent-color:var(--green)}
+.earn-result{background:rgba(0,255,157,0.08);border:1px solid rgba(0,255,157,0.2);border-radius:12px;padding:20px;margin-top:8px}
+.earn-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;color:rgba(255,255,255,0.6)}
+.earn-row:last-child{margin-bottom:0;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);font-size:15px;font-weight:600;color:white}
+.earn-row .good{color:var(--green);font-weight:700}
+.earn-row .bad{color:#ff6b5b}
+.earn-sale-display{font-family:'Bebas Neue',sans-serif;font-size:32px;color:white;letter-spacing:0.02em;text-align:center;margin-bottom:4px}
+.earn-sale-sub{font-size:11px;color:rgba(255,255,255,0.4);text-align:center;margin-bottom:16px;font-family:'Space Mono',monospace}
+
+/* SECTIONS */
+.section{padding:88px 32px}
+.section-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gray);margin-bottom:14px;display:block}
+.eyebrow.light{color:rgba(255,255,255,0.35)}
+.section-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,64px);line-height:0.92;color:var(--ink);margin-bottom:12px}
+.section-h2.white{color:white}
+.section-h2 .accent{color:var(--green)}
+.section-h2 .blue{color:var(--blue)}
+.section-sub{font-size:15px;color:var(--gray);line-height:1.7;max-width:540px;font-weight:300;margin-bottom:48px}
+.section-sub.light{color:rgba(255,255,255,0.5)}
+
+/* STEPS */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:14px;overflow:hidden}
+.step-card{background:var(--cream2);padding:32px 24px;position:relative;transition:background 0.2s}
+.step-card:hover{background:white}
+.step-n{font-family:'Bebas Neue',sans-serif;font-size:72px;color:rgba(0,0,0,0.05);position:absolute;top:12px;right:16px;line-height:1}
+.step-icon{font-size:32px;margin-bottom:18px;display:block}
+.step-title{font-family:'DM Sans',sans-serif;font-weight:600;font-size:17px;margin-bottom:8px;color:var(--ink)}
+.step-desc{font-size:13px;color:var(--gray);line-height:1.7;font-weight:300}
+.step-badge{display:inline-block;margin-top:12px;font-family:'Space Mono',monospace;font-size:10px;color:var(--green-dark);background:rgba(0,132,61,0.08);padding:3px 10px;border-radius:4px}
+
+/* OBJECTIONS */
+.obj-section{background:var(--ink)}
+.obj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.05)}
+.obj-card{background:var(--ink);padding:32px 28px}
+.obj-q{font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;color:white;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.obj-q::before{content:'"';color:rgba(255,255,255,0.2);font-size:24px;font-family:'Georgia',serif;margin-right:2px}
+.obj-a{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.75;font-weight:300}
+.obj-a strong{color:var(--green);font-weight:500}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feature-card{background:white;border-radius:14px;padding:26px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.feature-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.feature-icon-wrap.g{background:#e8f8f0}
+.feature-icon-wrap.b{background:#ebf3ff}
+.feature-icon-wrap.y{background:#fff8e6}
+.feature-icon-wrap.r{background:#fff0ee}
+.feature-icon-wrap.p{background:#f5f0ff}
+.feature-title{font-weight:600;font-size:15px;margin-bottom:6px;color:var(--ink)}
+.feature-desc{font-size:13px;color:var(--gray);line-height:1.65;font-weight:300}
+.feature-status{font-family:'Space Mono',monospace;font-size:10px;color:var(--green-dark);margin-top:8px;display:block}
+.feature-status.coming{color:#E67E00}
+
+/* COMPARISON TABLE */
+.compare-table{width:100%;border-collapse:collapse;background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.07)}
+.compare-table th{padding:16px 18px;text-align:left;font-family:'Space Mono',monospace;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;background:var(--cream2);border-bottom:2px solid var(--border);color:var(--gray)}
+.compare-table th.goz-col{background:#e8f8f0;color:var(--green-dark)}
+.compare-table td{padding:15px 18px;font-size:14px;border-bottom:1px solid rgba(0,0,0,0.05);vertical-align:middle}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table td.goz-col{background:#f0fff8;font-weight:600;color:var(--green-dark)}
+.compare-table tr:hover td{background:#fafafa}
+.compare-table tr:hover td.goz-col{background:#e6ffef}
+.bad{color:var(--red);font-weight:600}
+.good{color:var(--green-dark);font-weight:600}
+.warn{color:#E67E00;font-weight:600}
+.winner{display:inline-flex;align-items:center;gap:3px;background:var(--green-dark);color:white;font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-left:6px;font-family:'Space Mono',monospace}
+
+/* CTA STRIP */
+.cta-strip{background:linear-gradient(135deg,var(--navy),#001a4d);padding:88px 32px;text-align:center;color:white}
+.cta-strip-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,80px);line-height:0.9;margin-bottom:16px}
+.cta-strip-h2 .green{color:var(--green)}
+.cta-strip-sub{font-size:16px;color:rgba(255,255,255,0.55);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6;font-weight:300}
+.cta-strip-note{font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25);margin-top:20px;letter-spacing:0.05em}
+
+/* FOOTER SIMPLE */
+.footer-simple{background:#080808;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25)}
+.footer-simple a{color:rgba(255,255,255,0.35);text-decoration:none}
+.footer-simple a:hover{color:white}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:white;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 4px 24px rgba(0,0,0,0.3);z-index:9999;max-width:340px;transform:translateY(80px);opacity:0;transition:all 0.3s;border-left:3px solid var(--green)}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:1024px){.hero-inner{grid-template-columns:1fr;gap:48px}.steps-grid{grid-template-columns:repeat(2,1fr)}.obj-grid{grid-template-columns:1fr 1fr}.features-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.hero{padding:60px 20px}.section{padding:60px 20px}.steps-grid{grid-template-columns:1fr}.obj-grid{grid-template-columns:1fr}.features-grid{grid-template-columns:1fr}.nav-right .btn-outline{display:none}.compare-table th:nth-child(3),.compare-table td:nth-child(3),.compare-table th:nth-child(4),.compare-table td:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <div style="width:32px;height:32px;background:var(--ink);border-radius:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px var(--green)">
+      <svg width="20" height="20" viewBox="0 0 46 46" fill="none"><polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/><line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/><circle cx="23" cy="30" r="1.2" fill="#00FF9D"/></svg>
+    </div>
+    <div><div class="nav-goz">GOZ</div><div class="nav-full">GetOffZillow AI</div></div>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="buyers.html" class="nav-link">For Buyers</a>
+    <a href="dashboard.html" class="btn-outline">Dashboard</a>
+    <a href="signup.html" class="btn-green">List Free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-eyebrow">For Licensed Real Estate Agents</span>
+      <h1 class="hero-h1">List Free.<br>Pay <span class="green">3%</span><br>at Close.</h1>
+      <p class="hero-desc">Most platforms take 25–40% of your commission. GOZ takes <strong>3% of your commission</strong> — not 3% of the sale price — only when a buyer you met through us closes with you. <strong>Listing is always free.</strong></p>
+      <div class="hero-trust">
+        <span class="trust-chip">Unlimited free listings</span>
+        <span class="trust-chip">Direct buyer contact</span>
+        <span class="trust-chip">3% of commission only</span>
+        <span class="trust-chip">AI listing writer</span>
+        <span class="trust-chip">No monthly fees</span>
+      </div>
+      <div class="hero-cta-row">
+        <a href="signup.html" class="hero-cta-big">Create Free Account →</a>
+        <a href="#how" class="hero-cta-sec">See How It Works</a>
+      </div>
+    </div>
+
+    <!-- EARNINGS CALCULATOR -->
+    <div class="earn-card">
+      <h3>Your Earnings Calculator</h3>
+      <div class="sub">Drag to see what you keep vs. competitors</div>
+      <label class="earn-slider-label">Sale Price: <span id="saleDisplay">$400,000</span></label>
+      <input type="range" class="earn-slider" id="saleSlider" min="100000" max="1200000" step="25000" value="400000" oninput="updateCalc()">
+      <label class="earn-slider-label">Commission Rate: <span id="rateDisplay">2.5%</span></label>
+      <input type="range" class="earn-slider" id="rateSlider" min="1" max="4" step="0.25" value="2.5" oninput="updateCalc()">
+      <div class="earn-result" id="earnResult">
+        <div class="earn-sale-display" id="earnGross">$10,000</div>
+        <div class="earn-sale-sub">your gross commission</div>
+        <div class="earn-row"><span>Zillow Flex takes (40%)</span><span class="bad" id="earnZillow">-$4,000</span></div>
+        <div class="earn-row"><span>Agent Pronto takes (35%)</span><span class="bad" id="earnAP">-$3,500</span></div>
+        <div class="earn-row"><span>GOZ takes (3%)</span><span class="good" id="earnGOZ">-$300</span></div>
+        <div class="earn-row"><span>You keep with GOZ</span><span class="good" id="earnKeep">$9,700</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how" style="background:white">
+  <div class="section-inner">
+    <span class="eyebrow">The Process</span>
+    <h2 class="section-h2">Four Steps.<br><span class="accent">Zero Surprises.</span></h2>
+    <p class="section-sub">Here's exactly what happens from the moment you sign up to the moment you get paid.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-n">1</span>
+        <span class="step-icon">📋</span>
+        <h3 class="step-title">Create Your Free Profile</h3>
+        <p class="step-desc">Sign up in under 5 minutes. Add your license number, phone, and brokerage. Set your typical commission rate — it'll be shown on every listing you post. No credit card required.</p>
+        <span class="step-badge">$0 to start</span>
+      </div>
+      <div class="step-card">
+        <span class="step-n">2</span>
+        <span class="step-icon">🏡</span>
+        <h3 class="step-title">Post Unlimited Listings</h3>
+        <p class="step-desc">Add photos, description, beds, baths, price, and commission rate. Use the AI writer to generate a professional description from one sentence. Listings appear in search immediately.</p>
+        <span class="step-badge">Free forever</span>
+      </div>
+      <div class="step-card">
+        <span class="step-n">3</span>
+        <span class="step-icon">📞</span>
+        <h3 class="step-title">Buyer Contacts You Directly</h3>
+        <p class="step-desc">When a buyer is interested, their message goes straight to your inbox — not to a platform call center, not to a lead auction. Your direct phone and email are on every listing card.</p>
+        <span class="step-badge">No middlemen</span>
+      </div>
+      <div class="step-card">
+        <span class="step-n">4</span>
+        <span class="step-icon">💰</span>
+        <h3 class="step-title">Close. Pay 3% of Commission.</h3>
+        <p class="step-desc">Deal closes with a GOZ buyer. You report the closing in your dashboard, calculate the fee, and pay via Venmo or Zelle. On a $10,000 commission, that's $300. You keep $9,700.</p>
+        <span class="step-badge">3% of commission = $300 on $10K</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM FEATURES -->
+<section class="section" style="background:var(--cream)">
+  <div class="section-inner">
+    <span class="eyebrow">What's Included</span>
+    <h2 class="section-h2">Everything You Need.<br><span class="blue">Nothing You Don't.</span></h2>
+    <p class="section-sub">No feature tiers. No Pro plan. Every agent gets everything.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrap g">🏡</div>
+        <div class="feature-title">Unlimited Free Listings</div>
+        <p class="feature-desc">Post as many properties as you want at no cost. Photos, description, commission rate, and your direct contact info — all public, all free.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap b">🤖</div>
+        <div class="feature-title">AI Listing Writer</div>
+        <p class="feature-desc">Type one sentence about the property. Claude writes a 150-word professional description. Edit it, use it, or regenerate. Built directly into the listing form.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap g">📞</div>
+        <div class="feature-title">Direct Buyer Contact</div>
+        <p class="feature-desc">Your phone and email shown on every listing card. Buyer reaches out, you get an email notification immediately. No platform sitting between you.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap y">💰</div>
+        <div class="feature-title">Commission Displayed Publicly</div>
+        <p class="feature-desc">Every listing shows your buyer's agent commission rate openly. Post-NAR settlement compliant by design, not as an afterthought.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap b">📊</div>
+        <div class="feature-title">Agent Dashboard</div>
+        <p class="feature-desc">Manage all your listings, view leads, report closings, calculate your GOZ fee, and share your invite link — all in one place.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap g">🔗</div>
+        <div class="feature-title">Referral System</div>
+        <p class="feature-desc">Share your unique invite link. Every agent who joins through you shows in your dashboard with their active listing count. Build your network, grow the marketplace.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap p">🗺️</div>
+        <div class="feature-title">Map Search</div>
+        <p class="feature-desc">Your listings appear on the map view with commission shown on the pin. Buyers browse by neighborhood and contact you in one click.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap r">📸</div>
+        <div class="feature-title">Photo Uploads</div>
+        <p class="feature-desc">Upload multiple photos per listing. Stored securely, displayed in order. No compression beyond standard web optimization.</p>
+        <span class="feature-status">✓ Live now</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap y">🏦</div>
+        <div class="feature-title">Home Value Estimator</div>
+        <p class="feature-desc">Tool to help buyers estimate value based on comparable market inputs. MLS comp integration in development.</p>
+        <span class="feature-status coming">🔧 In development</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTION HANDLING -->
+<section class="section obj-section">
+  <div class="section-inner">
+    <span class="eyebrow light">Common Questions</span>
+    <h2 class="section-h2 white" style="margin-bottom:40px">We Heard You.<br><span class="accent">Here's the Truth.</span></h2>
+    <div class="obj-grid">
+      <div class="obj-card">
+        <p class="obj-q">Is this 3% of the sale price or my commission?</p>
+        <p class="obj-a">Your commission. On a $400K sale at 2.5%, your gross commission is $10,000. We take 3% of that — <strong>$300</strong>. Not $12,000. Not 3% of the sale price. Every platform charges a % of commission. Most just charge 25–40x more than we do.</p>
+      </div>
+      <div class="obj-card">
+        <p class="obj-q">How do buyers actually find my listings?</p>
+        <p class="obj-a">Buyers search GOZ directly by city, ZIP, or address. Listings show by recency — not ad spend. As the platform grows, more buyers come. You're also encouraged to share your direct listing URL anywhere you currently market properties.</p>
+      </div>
+      <div class="obj-card">
+        <p class="obj-q">What if I already pay for Zillow or Agent Pronto?</p>
+        <p class="obj-a">GOZ is an additional channel — not a replacement. List the same properties here for free. If GOZ delivers a buyer who closes, you pay <strong>$300 instead of $3,500</strong>. There's no risk in running both simultaneously.</p>
+      </div>
+      <div class="obj-card">
+        <p class="obj-q">How does GOZ make money if listing is free?</p>
+        <p class="obj-a">3% of your commission only when a GOZ buyer closes with you. No monthly subscription, no advertising revenue, no data sales. Our incentive is aligned with yours: we only earn when you earn.</p>
+      </div>
+      <div class="obj-card">
+        <p class="obj-q">What if I close a deal but don't report it?</p>
+        <p class="obj-a">We operate on professional trust — the same system every referral agreement uses. Agents who circumvent the fee agreement have their accounts permanently terminated. Most agents find <strong>$300 a reasonable cost</strong> for a closed deal they wouldn't have had otherwise.</p>
+      </div>
+      <div class="obj-card">
+        <p class="obj-q">Is this only for Pensacola / Florida?</p>
+        <p class="obj-a">We're launching in the Gulf South — Pensacola, Fort Walton, Destin, Mobile, and surrounding markets first. Any licensed agent can join. We're keeping the initial geography tight intentionally to build genuine liquidity before expanding.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="section" style="background:white" id="compare">
+  <div class="section-inner">
+    <span class="eyebrow">Platform Comparison</span>
+    <h2 class="section-h2">The Numbers,<br><span class="blue">Side by Side.</span></h2>
+    <p class="section-sub">All fees are % of gross commission, not % of sale price. Based on $10,000 gross commission.</p>
+    <div style="overflow-x:auto">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>Fee at Close</th>
+            <th>Upfront Cost</th>
+            <th>Lead Auction?</th>
+            <th>Commission Shown?</th>
+            <th>Free Listings?</th>
+            <th class="goz-col">GOZ <span class="winner">★ Best</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Zillow Flex</strong></td>
+            <td class="bad">15–40% of commission</td>
+            <td>None (rising)</td>
+            <td class="bad">✗ Pay to rank</td>
+            <td class="bad">✗ Hidden</td>
+            <td class="bad">✗ No</td>
+            <td class="goz-col" rowspan="4" style="text-align:center;vertical-align:middle">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--green-dark);line-height:1">3%</div>
+              <div style="font-size:11px;color:var(--gray);margin-top:4px;font-family:'Space Mono',monospace">of commission only</div>
+              <div style="font-size:14px;font-weight:700;color:var(--green-dark);margin-top:6px">$300 on $10K</div>
+              <div style="margin-top:14px;font-size:12px;line-height:2;color:var(--text)">
+                ✓ Listing always free<br>✓ No per-lead charge<br>✓ Commission public<br>✓ Direct buyer contact<br>✓ No data sold
+              </div>
+              <a href="signup.html" class="btn-green" style="margin-top:16px;display:inline-block">Join Free →</a>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Agent Pronto</strong></td>
+            <td class="bad">25–35% of commission</td>
+            <td>None</td>
+            <td class="warn">⚠ Algorithmic</td>
+            <td class="bad">✗ Not disclosed</td>
+            <td class="bad">✗ No</td>
+          </tr>
+          <tr>
+            <td><strong>UpNest</strong></td>
+            <td class="bad">25–30%</td>
+            <td>None</td>
+            <td class="bad">✗ Agents compete</td>
+            <td class="warn">⚠ Partial</td>
+            <td class="bad">✗ No</td>
+          </tr>
+          <tr>
+            <td><strong>OpCity / Realtor.com</strong></td>
+            <td class="bad">30–38%</td>
+            <td>Varies</td>
+            <td class="bad">✗ Timed auction</td>
+            <td class="bad">✗ Hidden</td>
+            <td class="bad">✗ No</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--gray);margin-top:10px;font-style:italic;font-family:'Space Mono',monospace">Sources: Zillow Help Center, The Close, RealEstateWitch.com. Rates as of early 2026.</p>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <h2 class="cta-strip-h2">Ready to Keep More<br>of What You <span class="green">Earn?</span></h2>
+  <p class="cta-strip-sub">Create your free agent account in 5 minutes. List your first property today. Pay us $300 only when a GOZ buyer closes with you.</p>
+  <a href="signup.html" class="hero-cta-big" style="font-size:16px;padding:16px 40px;display:inline-flex">Create Free Account →</a>
+  <p class="cta-strip-note">No credit card. No monthly fee. No commitment until you close.</p>
+</section>
+
+<div class="footer-simple">
+  <div>© 2026 GOZ · GetOffZillow AI · TransBid LLC · Pensacola FL</div>
+  <div style="display:flex;gap:20px">
+    <a href="index.html">Home</a>
+    <a href="buyers.html">For Buyers</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function updateCalc() {
+  const sale = parseInt(document.getElementById('saleSlider').value);
+  const rate = parseFloat(document.getElementById('rateSlider').value);
+  document.getElementById('saleDisplay').textContent = '$' + sale.toLocaleString();
+  document.getElementById('rateDisplay').textContent = rate + '%';
+  const gross = sale * (rate / 100);
+  const zillow = gross * 0.40;
+  const ap = gross * 0.35;
+  const goz = gross * 0.03;
+  const keep = gross - goz;
+  document.getElementById('earnGross').textContent = '$' + Math.round(gross).toLocaleString();
+  document.getElementById('earnZillow').textContent = '-$' + Math.round(zillow).toLocaleString();
+  document.getElementById('earnAP').textContent = '-$' + Math.round(ap).toLocaleString();
+  document.getElementById('earnGOZ').textContent = '-$' + Math.round(goz).toLocaleString();
+  document.getElementById('earnKeep').textContent = '$' + Math.round(keep).toLocaleString();
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 4000);
+}
+updateCalc();
+</script>
+</body>
+</html>
