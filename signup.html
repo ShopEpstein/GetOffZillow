@@ -99,6 +99,10 @@
         <div class="field"><label>Phone</label><input id="su-phone" type="tel" placeholder="(850) 555-0100" autocomplete="tel" /></div>
         <div class="field"><label>License #</label><input id="su-lic" type="text" placeholder="FL-BK12345678" /></div>
         <div class="field"><label>Brokerage</label><input id="su-brok" type="text" placeholder="Smith Realty Group" /></div>
+        <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#666;line-height:1.5;cursor:pointer;margin-bottom:12px">
+          <input type="checkbox" id="su-terms" style="width:auto;margin-top:2px;flex-shrink:0" />
+          <span>I am a licensed real estate agent and agree to the <a href="terms.html" target="_blank" style="color:var(--blue)">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color:var(--blue)">Privacy Policy</a></span>
+        </label>
         <button class="btn btn-green" id="su-btn" onclick="doSignup()">Create Free Account →</button>
       </div>
       <div class="bottom-link"><a href="index.html">← Back to home</a></div>
@@ -172,6 +176,10 @@ async function init() {
     }
   }
 
+  // Capture referral param
+  const urlRef = new URLSearchParams(window.location.search).get('ref');
+  if (urlRef) sessionStorage.setItem('goz_ref', urlRef);
+
   // Already logged in — show options instead of hard-redirecting
   const { data } = await sb.auth.getSession();
   if (data.session) {
@@ -206,6 +214,12 @@ function showFormOnly(name) {
 
 // ── SIGN UP ──
 async function doSignup() {
+  const terms = document.getElementById('su-terms');
+  if (terms && !terms.checked) {
+    document.getElementById('su-err').textContent = 'Please confirm you are a licensed agent and agree to the Terms of Service.';
+    document.getElementById('su-err').style.display = 'block';
+    return;
+  }
   const btn = document.getElementById('su-btn');
   const err = document.getElementById('su-err');
   const ok = document.getElementById('su-ok');
@@ -253,7 +267,8 @@ async function doSignup() {
       email: email.toLowerCase(),
       phone: phone || null,
       license_number: lic || null,
-      brokerage: brok || null
+      brokerage: brok || null,
+      referred_by: sessionStorage.getItem('goz_ref') || null
     });
     if (profileErr) console.error('Profile insert error:', profileErr.message);
   }
@@ -362,6 +377,15 @@ async function doSetNewPassword() {
   ok.innerHTML = `✅ <strong>Password updated!</strong> Taking you to your dashboard...`;
   ok.style.display = 'block';
   setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
+}
+
+function checkPwStrength(val) {
+  const hint = document.getElementById('pw-hint');
+  if (!hint) return;
+  if (val.length === 0) { hint.textContent = 'Min 8 characters'; hint.style.color = 'var(--gray)'; }
+  else if (val.length < 8) { hint.textContent = `${8-val.length} more characters needed`; hint.style.color = 'var(--red)'; }
+  else if (val.length < 12) { hint.textContent = 'Good password ✓'; hint.style.color = 'var(--green)'; }
+  else { hint.textContent = 'Strong password ✓✓'; hint.style.color = 'var(--green)'; }
 }
 
 init();
