@@ -254,7 +254,7 @@
       <button onclick="reportClosingHonor()" class="pay-btn honor">✓ I'll pay separately — log this closing</button>
     </div>
     <p style="font-size:11px;color:var(--gray);margin-top:12px;line-height:1.5" id="payNote" style="display:none">
-      Venmo: <strong>@GetOffZillow</strong> · Zelle: <strong>campaigns@transbidlive.faith</strong><br>
+      Venmo: <strong>@GetOffZillow</strong> · Zelle: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4023212d302129272e33003432212e332229242c2936256e2621293428">[email&#160;protected]</a></strong><br>
       Include the property address in your payment note. Payment due within 10 days of closing.
     </p>
   </div>
@@ -428,6 +428,19 @@ const sb = createClient(
 let agentId = null;
 let currentListingForEdit = null;
 
+// Safety timeout — if init hangs for any reason, show auth screen after 8s
+const _loadTimeout = setTimeout(() => {
+  const loading = document.getElementById('screenLoading');
+  const auth    = document.getElementById('screenAuth');
+  if (loading && loading.style.display !== 'none') {
+    console.warn('Dashboard load timeout — showing auth screen');
+    loading.style.display = 'none';
+    if (auth) auth.style.display = 'flex';
+  }
+}, 8000);
+
+// Clear the timeout once we successfully show the dashboard
+
 // Parse Postgres array or JS array
 function parsePhotos(raw) {
   if (!raw) return [];
@@ -455,6 +468,7 @@ async function init() {
   const { data: { session }, error: sessionError } = await sb.auth.getSession();
 
   if (sessionError || !session) {
+    clearTimeout(_loadTimeout);
     hide('screenLoading');
     show('screenAuth');
     return;
@@ -502,6 +516,7 @@ async function init() {
   }
 
   // Show dashboard
+  clearTimeout(_loadTimeout);
   hide('screenLoading');
   show('screenDashboard');
   document.getElementById('navListBtn').style.display = 'inline-block';
@@ -941,7 +956,18 @@ function timeSince(date) {
   return Math.floor(s/86400) + 'd ago';
 }
 
-init();
+// Wrap init in try/catch so errors surface instead of silent spinner
+(async () => {
+  try {
+    await init();
+  } catch(e) {
+    console.error('Dashboard init failed:', e);
+    const loading = document.getElementById('screenLoading');
+    const auth    = document.getElementById('screenAuth');
+    if (loading) loading.style.display = 'none';
+    if (auth)    auth.style.display    = 'flex';
+  }
+})();
 </script>
 </body>
 </html>
