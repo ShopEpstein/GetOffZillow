@@ -278,6 +278,13 @@ async function doSignup() {
       referred_by: sessionStorage.getItem('goz_ref') || null
     });
     if (profileErr) console.error('Profile insert error:', profileErr.message);
+
+    // Fire welcome email via API (non-blocking)
+    fetch('/api/welcome-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ first_name: first, last_name: last, email: email })
+    }).catch(e => console.warn('Welcome email failed:', e));
   }
 
   localStorage.setItem('goz_name', `${first} ${last}`);
