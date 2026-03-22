@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='38,19 42,22' fill='none' stroke='%23E8341C' stroke-width='2.2' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
+<meta property="og:title" content="Your Agent Invited You to GetOffZillow AI">
+<meta property="og:description" content="Free listings. 3% marketplace fee at closing — not 35-40% like Zillow. Join free.">
+<title>You've Been Invited — GetOffZillow AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ai-green:#00FF9D; --green-dim:#00CC7A; --red:#E8341C;
+    --blue:#006AFF; --navy:#0a1f44; --black:#111111;
+    --cream:#F5F0E8; --gray:#6B6B6B; --yellow:#FFB800;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito',sans-serif; background:var(--black); color:white; min-height:100vh; overflow-x:hidden; }
+
+  /* NAV */
+  nav { padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(0,255,157,0.1); }
+  .nav-logo { text-decoration:none; display:flex; align-items:center; gap:10px; }
+  .nav-cta { background:var(--ai-green); color:#000; padding:10px 20px; border-radius:8px; font-weight:900; font-size:13px; text-decoration:none; }
+
+  /* HERO */
+  .hero { padding:80px 24px 60px; text-align:center; position:relative; }
+  .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, rgba(0,255,157,0.08) 0%, transparent 70%); pointer-events:none; }
+
+  .referrer-card {
+    display:inline-flex; align-items:center; gap:14px;
+    background:rgba(0,255,157,0.08);
+    border:1px solid rgba(0,255,157,0.2);
+    border-radius:40px; padding:10px 20px 10px 10px;
+    margin-bottom:32px; position:relative; z-index:1;
+  }
+  .referrer-avi { width:40px; height:40px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; overflow:hidden; }
+  .referrer-avi img { width:100%; height:100%; object-fit:cover; }
+  .referrer-text { text-align:left; }
+  .referrer-name { font-size:14px; font-weight:700; }
+  .referrer-label { font-size:11px; color:rgba(255,255,255,0.5); }
+
+  .hero h1 {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(52px,9vw,100px);
+    line-height:0.92; letter-spacing:-1px;
+    margin-bottom:20px; position:relative; z-index:1;
+  }
+  .hero h1 .green { color:var(--ai-green); }
+  .hero h1 .red { color:var(--red); }
+  .hero-sub {
+    font-size:17px; color:rgba(255,255,255,0.75);
+    max-width:520px; margin:0 auto 36px; line-height:1.6;
+    position:relative; z-index:1;
+  }
+
+  /* FEE COMPARISON */
+  .fee-compare {
+    display:inline-flex; gap:0;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:14px; overflow:hidden;
+    margin-bottom:40px; position:relative; z-index:1;
+  }
+  .fee-col { padding:24px 32px; text-align:center; }
+  .fee-col.them { border-right:1px solid rgba(255,255,255,0.1); }
+  .fee-col.us { background:rgba(0,255,157,0.07); }
+  .fee-platform { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.4); margin-bottom:8px; font-family:'Space Mono',monospace; }
+  .fee-pct { font-family:'Bebas Neue',sans-serif; font-size:64px; line-height:1; margin-bottom:4px; }
+  .fee-col.them .fee-pct { color:#ff6b5b; }
+  .fee-col.us .fee-pct { color:var(--ai-green); text-shadow:0 0 20px rgba(0,255,157,0.4); }
+  .fee-desc { font-size:12px; color:rgba(255,255,255,0.5); max-width:120px; margin:0 auto; line-height:1.4; }
+
+  /* CTA */
+  .cta-section { padding:0 24px 80px; text-align:center; position:relative; z-index:1; }
+  .cta-primary {
+    display:inline-block; background:var(--ai-green); color:#000;
+    padding:18px 48px; border-radius:10px;
+    font-family:'Nunito',sans-serif; font-weight:900; font-size:18px;
+    text-decoration:none; transition:all 0.2s;
+    box-shadow:0 0 30px rgba(0,255,157,0.35);
+    margin-bottom:14px;
+  }
+  .cta-primary:hover { background:#00e88a; box-shadow:0 0 40px rgba(0,255,157,0.5); transform:translateY(-2px); }
+  .cta-sub { font-size:13px; color:rgba(255,255,255,0.4); }
+
+  /* PROOF POINTS */
+  .proof { max-width:800px; margin:0 auto; padding:0 24px 80px; }
+  .proof-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .proof-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:22px; }
+  .proof-icon { font-size:28px; margin-bottom:12px; }
+  .proof-title { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--ai-green); letter-spacing:0.05em; margin-bottom:6px; }
+  .proof-text { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.6; }
+
+  /* MATH SECTION */
+  .math-section { max-width:700px; margin:0 auto; padding:0 24px 80px; }
+  .math-card {
+    background:var(--navy);
+    border:1.5px solid rgba(0,255,157,0.2);
+    border-radius:14px; padding:32px;
+    text-align:center;
+  }
+  .math-title { font-family:'Bebas Neue',sans-serif; font-size:28px; color:white; margin-bottom:24px; }
+  .math-row { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.07); font-size:14px; }
+  .math-row:last-child { border-bottom:none; }
+  .math-label { color:rgba(255,255,255,0.6); }
+  .math-val { font-weight:700; }
+  .math-val.bad { color:#ff6b5b; }
+  .math-val.good { color:var(--ai-green); }
+  .math-savings { background:rgba(0,255,157,0.08); border:1px solid rgba(0,255,157,0.2); border-radius:8px; padding:16px; margin-top:16px; }
+  .math-savings-label { font-size:11px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; font-family:'Space Mono',monospace; }
+  .math-savings-amount { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--ai-green); line-height:1; }
+  .math-savings-sub { font-size:12px; color:rgba(255,255,255,0.4); margin-top:4px; }
+
+  /* FOOTER */
+  footer { border-top:1px solid rgba(255,255,255,0.07); padding:32px 24px; text-align:center; font-size:12px; color:rgba(255,255,255,0.3); }
+
+  @media(max-width:600px) {
+    .proof-grid { grid-template-columns:1fr; }
+    .fee-compare { flex-direction:column; }
+    .fee-col.them { border-right:none; border-bottom:1px solid rgba(255,255,255,0.1); }
+    .hero h1 { font-size:clamp(44px,13vw,80px); }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div style="width:36px;height:36px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #00FF9D,0 0 10px rgba(0,255,157,0.2)">
+      <svg width="22" height="22" viewBox="0 0 46 46" fill="none"><polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/><polyline points="38,19 42,22" fill="none" stroke="#E8341C" stroke-width="2.2" stroke-linecap="round" opacity="0.9"/><line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/><circle cx="23" cy="30" r="1.2" fill="#00FF9D"/></svg>
+    </div>
+    <div style="display:flex;flex-direction:column;line-height:1;gap:0;margin-left:2px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.1em;color:white">GET OFF</div>
+      <div style="display:flex;align-items:center;gap:5px">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);position:relative;display:inline-block">ZILLOW<span style="position:absolute;left:-2px;top:52%;width:calc(100% + 4px);height:2px;background:#E8341C;transform:rotate(-5deg) translateY(-50%);display:block"></span></span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:#E8341C">&#10005;</span>
+      </div>
+      <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:0.18em;padding:1px 6px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start">AI</div>
+    </div>
+  </a>
+  <a href="signup.html" class="nav-cta" id="navCta">Join Free &#10230;</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="referrer-card" id="referrerCard" style="display:none">
+    <div class="referrer-avi" id="referrerAvi">?</div>
+    <div class="referrer-text">
+      <div class="referrer-name" id="referrerName">Loading...</div>
+      <div class="referrer-label">invited you to GetOffZillow AI</div>
+    </div>
+  </div>
+
+  <h1>Stop Giving<br><span class="red">Zillow</span><br><span class="green">35–40%.</span></h1>
+  <p class="hero-sub">A transparent real estate marketplace. Free to list. Buyers contact you directly. We take 3% at closing — not 35–40% like everyone else.</p>
+
+  <div class="fee-compare">
+    <div class="fee-col them">
+      <div class="fee-platform">Zillow Flex &amp; Agent Pronto</div>
+      <div class="fee-pct">40%</div>
+      <div class="fee-desc">of your gross commission at closing</div>
+    </div>
+    <div class="fee-col us">
+      <div class="fee-platform">GetOffZillow AI</div>
+      <div class="fee-pct">3%</div>
+      <div class="fee-desc">marketplace fee — only when you close</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <a href="signup.html" class="cta-primary" id="ctaBtn">Create Free Agent Account &#10230;</a>
+  <div class="cta-sub">No credit card. No upfront fee. No monthly minimum.</div>
+</div>
+
+<!-- PROOF -->
+<div class="proof">
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="proof-icon">&#127968;</div>
+      <div class="proof-title">Free Listings</div>
+      <div class="proof-text">Post unlimited properties at no cost. Commission rate shown publicly on every listing.</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-icon">&#128222;</div>
+      <div class="proof-title">Direct Contact</div>
+      <div class="proof-text">Buyers get your real phone and email instantly. No lead auction. No 30-second accept window.</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-icon">&#129302;</div>
+      <div class="proof-title">AI Listing Writer</div>
+      <div class="proof-text">Type one sentence about the property. Claude writes your full listing description in seconds.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MATH -->
+<div class="math-section">
+  <div class="math-card">
+    <div class="math-title">The Math on a $400K Sale (2.5% Commission)</div>
+    <div class="math-row"><span class="math-label">Gross commission</span><span class="math-val">$10,000</span></div>
+    <div class="math-row"><span class="math-label">Zillow Flex takes (40%)</span><span class="math-val bad">-$4,000</span></div>
+    <div class="math-row"><span class="math-label">Agent Pronto takes (35%)</span><span class="math-val bad">-$3,500</span></div>
+    <div class="math-row"><span class="math-label">GetOffZillow AI takes (3%)</span><span class="math-val good">-$300</span></div>
+    <div class="math-savings">
+      <div class="math-savings-label">You save per deal vs. Zillow Flex</div>
+      <div class="math-savings-amount">$3,700</div>
+      <div class="math-savings-sub">Per transaction. Before your broker split.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="cta-section" style="padding-top:0">
+  <a href="signup.html" class="cta-primary" id="ctaBtn2">Join Free — Lock In 3% &#10230;</a>
+  <div class="cta-sub">No spam. No data sold. Pensacola, FL &middot; TransBid LLC</div>
+</div>
+
+<footer>
+  &copy; 2026 GetOffZillow AI / TransBid LLC &middot; Not affiliated with Zillow Group, Inc.
+</footer>
+
+<script>
+const { createClient } = supabase;
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
+
+async function init() {
+  // Get referrer ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+
+  // Pass ref to signup links
+  const signupUrl = ref ? `signup.html?ref=${ref}` : 'signup.html';
+  document.getElementById('navCta').href = signupUrl;
+  document.getElementById('ctaBtn').href = signupUrl;
+  document.getElementById('ctaBtn2').href = signupUrl;
+
+  if (!ref) return;
+
+  // Load referrer info
+  try {
+    const { data: agent } = await sb
+      .from('agents')
+      .select('first_name, last_name, photo_url, brokerage')
+      .eq('id', ref)
+      .single();
+
+    if (agent) {
+      const card = document.getElementById('referrerCard');
+      const avi = document.getElementById('referrerAvi');
+      const name = document.getElementById('referrerName');
+
+      name.textContent = `${agent.first_name} ${agent.last_name}${agent.brokerage ? ' · ' + agent.brokerage : ''}`;
+      if (agent.photo_url) {
+        avi.innerHTML = `<img src="${agent.photo_url}" alt="${agent.first_name}" />`;
+      } else {
+        avi.textContent = (agent.first_name?.[0]||'') + (agent.last_name?.[0]||'');
+      }
+      card.style.display = 'inline-flex';
+
+      // Update page title
+      document.title = `${agent.first_name} invited you to GetOffZillow AI`;
+    }
+  } catch(e) { console.warn('Referrer load failed:', e); }
+}
+
+init();
+</script>
+</body>
+</html>
