@@ -1002,12 +1002,10 @@ async function loadListings() {
 
 function getPhoto(listing, index) {
   const photos = parsePhotos(listing.photos);
-  const style = 'width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0';
-  if (photos.length > 0) {
-    // onerror falls back to demo photo
-    return `<img src="${photos[0]}" alt="${listing.address}" style="${style}" onerror="this.src='${DEMO_PHOTOS[index % DEMO_PHOTOS.length]}'" />`;
-  }
-  return `<img src="${DEMO_PHOTOS[index % DEMO_PHOTOS.length]}" alt="${listing.address}" style="${style}" />`;
+  const fallback = DEMO_PHOTOS[index % DEMO_PHOTOS.length];
+  const src = photos.length > 0 ? photos[0] : fallback;
+  // Use data attributes to avoid URL escaping issues in HTML attributes
+  return `<img src="${src}" alt="${listing.address}" data-fallback="${fallback}" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0" onload="this.style.opacity=1" onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback}" />`;
 }
 
 function renderListings() {
