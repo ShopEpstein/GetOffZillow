@@ -10,8 +10,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23111111'/%3E%3Cpolyline points='16,86 90,20 149,74' fill='none' stroke='%2300FF9D' stroke-width='11' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='149,74 164,86' fill='none' stroke='%23E8341C' stroke-width='8.6' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='31' y1='86' x2='31' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Cline x1='31' y1='156' x2='144' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='118' r='12' fill='%23111' stroke='%2300FF9D' stroke-width='7'/%3E%3Ccircle cx='90' cy='118' r='5' fill='%2300FF9D'/%3E%3Crect x='16' y='91' width='148' height='8' fill='%23E8341C' opacity='0.2'/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Dashboard — GetOffZillow AI</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Agent Dashboard — GetOffZillow AI v4</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -175,6 +175,7 @@
   @media(max-width:900px) { .stats-row{grid-template-columns:repeat(2,1fr);} .listings-grid{grid-template-columns:repeat(2,1fr);} }
   @media(max-width:600px) { .listings-grid{grid-template-columns:1fr;} .stats-row{grid-template-columns:repeat(2,1fr);} .profile-card{flex-direction:column;} .form-grid{grid-template-columns:1fr;} }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -419,7 +420,16 @@
 </div>
 
 <script>
-const { createClient } = supabase;
+// Verify Supabase loaded — if not, show auth screen immediately
+if (typeof supabase === 'undefined' && typeof window.supabase === 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const l = document.getElementById('screenLoading');
+    const a = document.getElementById('screenAuth');
+    if (l) l.style.display = 'none';
+    if (a) a.style.display = 'flex';
+  });
+}
+const { createClient } = (window.supabase || supabase);
 const sb = createClient(
   'https://pneixwmkphakoxmzkblx.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
@@ -437,7 +447,7 @@ const _loadTimeout = setTimeout(() => {
     loading.style.display = 'none';
     if (auth) auth.style.display = 'flex';
   }
-}, 8000);
+}, 5000);
 
 // Clear the timeout once we successfully show the dashboard
 
@@ -702,8 +712,12 @@ function closeEditModal() {
   currentListingForEdit = null;
 }
 
-document.getElementById('editModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('editModal')) closeEditModal();
+// Event listeners — safe to attach after DOM loads
+document.addEventListener('DOMContentLoaded', () => {
+  const _editModal = document.getElementById('editModal');
+  if (_editModal) _editModal.addEventListener('click', e => { if (e.target === _editModal) closeEditModal(); });
+  const _closingModal = document.getElementById('closingModal');
+  if (_closingModal) _closingModal.addEventListener('click', e => { if (e.target === _closingModal) closeClosingModal(); });
 });
 
 async function saveEditListing() {
@@ -837,9 +851,7 @@ function closeClosingModal() {
   document.body.style.overflow = '';
 }
 
-document.getElementById('closingModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('closingModal')) closeClosingModal();
-});
+
 
 function calcClosingFee() {
   const price = parseFloat(document.getElementById('cl_sale_price').value) || 0;
