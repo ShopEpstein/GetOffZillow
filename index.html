@@ -587,7 +587,7 @@
     </div>
   </div>
   <div class="listings-grid" id="listingGrid">
-    <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:16px" id="listingSkeleton">
+    <div class="listings-grid" id="listingSkeleton" style="grid-column:1/-1">
       <div style="background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08)">
         <div style="height:175px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
         <div style="padding:14px"><div style="height:20px;background:#f0f0f0;border-radius:4px;margin-bottom:8px;animation:shimmer 1.5s infinite"></div><div style="height:14px;background:#f0f0f0;border-radius:4px;width:70%;animation:shimmer 1.5s infinite"></div></div>
@@ -1344,6 +1344,7 @@ function renderReviews() {
 
 // ── NAV AUTH STATE — swap nav buttons when logged in ──
 async function initNavAuth() {
+  try {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return; // not logged in — default nav is correct
 
