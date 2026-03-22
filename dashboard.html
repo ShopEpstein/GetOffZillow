@@ -460,7 +460,7 @@ let agentId = null;
 let currentListingForEdit = null;
 
 // Safety timeout — if init hangs for any reason, show auth screen after 8s
-const _loadTimeout = (window._gozLoadGuard = setTimeout(() => {
+window._gozLoadGuard = setTimeout(() => {
   const loading = document.getElementById('screenLoading');
   const auth    = document.getElementById('screenAuth');
   if (loading && loading.style.display !== 'none') {
@@ -468,7 +468,7 @@ const _loadTimeout = (window._gozLoadGuard = setTimeout(() => {
     loading.style.display = 'none';
     if (auth) auth.style.display = 'flex';
   }
-}, 5000)));
+}, 5000);
 
 // Clear the timeout once we successfully show the dashboard
 
@@ -491,21 +491,24 @@ function hide(id) { document.getElementById(id).style.display = 'none'; }
 
 // ── INIT ──
 async function init() {
-  // Listen for auth changes immediately
+  console.log('[GOZ] init started');
+
   sb.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_OUT') window.location.href = 'index.html';
   });
 
+  console.log('[GOZ] calling getSession...');
   const { data: { session }, error: sessionError } = await sb.auth.getSession();
+  console.log('[GOZ] session result:', session ? 'HAS SESSION' : 'NO SESSION', 'error:', sessionError);
 
   if (sessionError || !session) {
-    clearTimeout(_loadTimeout);
     clearTimeout(window._gozLoadGuard);
     hide('screenLoading');
     show('screenAuth');
     return;
   }
 
+  console.log('[GOZ] session ok, fetching agent profile...');
   // Session exists — get agent profile
   const { data: agent, error: agentError } = await sb
     .from('agents')
@@ -547,8 +550,7 @@ async function init() {
     localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`.trim());
   }
 
-  // Show dashboard
-  clearTimeout(_loadTimeout);
+  console.log('[GOZ] showing dashboard');
   clearTimeout(window._gozLoadGuard);
   hide('screenLoading');
   show('screenDashboard');
