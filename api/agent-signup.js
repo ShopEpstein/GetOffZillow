@@ -133,7 +133,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           sender: { name: 'GetOffZillow AI', email: 'campaigns@transbidlive.faith' },
           to: [{ email, name: `${first_name} ${last_name}` }],
-          subject: `🎉 Welcome to GetOffZillow AI — You're locked in at 1%`,
+          subject: `🎉 Welcome to GetOffZillow AI — You're locked in at 3%`,
           htmlContent: `
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px">
               <div style="background:#006AFF;padding:24px;border-radius:8px 8px 0 0;text-align:center">
