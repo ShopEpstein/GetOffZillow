@@ -637,7 +637,8 @@ async function loadListings() {
     return;
   }
 
-  document.getElementById('listingsContainer').innerHTML = `<div class="listings-grid">` +
+  window._cachedListings = listings;
+document.getElementById('listingsContainer').innerHTML = `<div class="listings-grid">` +
     listings.map(l => {
       const photos = parsePhotos(l.photos);
       const imgHtml = photos.length
@@ -656,7 +657,7 @@ async function loadListings() {
           <div class="li-specs">${[l.beds&&l.beds+'bd', l.baths&&l.baths+'ba', l.sqft&&Number(l.sqft).toLocaleString()+' sqft'].filter(Boolean).join(' · ')}</div>
           <div class="li-actions">
             <a href="listing.html?id=${l.id}" target="_blank">View →</a>
-            ${l.status==='sold'?'':'<button class="btn-close-report" onclick="openClosingModal('+JSON.stringify(l).replace(/"/g,\'&quot;\')+')" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:var(--green)">Report Closing</button>'}
+            ${l.status==='sold'?'':'<button class="btn-close-report" onclick="triggerClosingModal(this)" data-id="'+l.id+'" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:var(--green)">Report Closing</button>'}
             <button class="btn-edit" onclick="openEditModal(${JSON.stringify(l).replace(/"/g,'&quot;')})">Edit</button>
             <button class="btn-toggle" onclick="toggleStatus('${l.id}','${l.status}')">${l.status==='active'?'Deactivate':'Reactivate'}</button>
             <button class="btn-sold" onclick="markSold('${l.id}','${l.status}')" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:${l.status==='sold'?'var(--gray)':'#2e7d32'}">${l.status==='sold'?'Unmark Sold':'Mark Sold'}</button>
@@ -852,6 +853,13 @@ async function deleteListing(id) {
   if (!confirm('Remove this listing from public search?')) return;
   await sb.from('listings').update({ status: 'deleted' }).eq('id', id);
   loadListings();
+}
+
+// Trigger closing modal from listing card button (avoids JSON serialization in template)
+function triggerClosingModal(btn) {
+  const id = btn.getAttribute('data-id');
+  const listing = (window._cachedListings || []).find(l => l.id === id);
+  if (listing) openClosingModal(listing);
 }
 
 // ── CLOSING MODAL ──
