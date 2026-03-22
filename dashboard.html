@@ -6,10 +6,16 @@
 // Hard guard — runs before any other script
 // If page doesn't transition from loading within 6 seconds, show sign-in
 window._gozLoadGuard = setTimeout(function() {
+  // Only fire if still on loading screen
   var l = document.getElementById('screenLoading');
-  var a = document.getElementById('screenAuth');
-  if (l) l.style.display = 'none';
-  if (a) { a.style.display = 'flex'; }
+  if (l && l.style.display !== 'none') {
+    ['screenLoading','screenDashboard'].forEach(function(s) {
+      var el = document.getElementById(s);
+      if (el) el.style.display = 'none';
+    });
+    var a = document.getElementById('screenAuth');
+    if (a) a.style.display = 'flex';
+  }
 }, 6000);
 // Also guard against supabase CDN failure
 window.addEventListener('error', function(e) {
@@ -31,7 +37,7 @@ window.addEventListener('error', function(e) {
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23111111'/%3E%3Cpolyline points='16,86 90,20 149,74' fill='none' stroke='%2300FF9D' stroke-width='11' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='149,74 164,86' fill='none' stroke='%23E8341C' stroke-width='8.6' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='31' y1='86' x2='31' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Cline x1='31' y1='156' x2='144' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='118' r='12' fill='%23111' stroke='%2300FF9D' stroke-width='7'/%3E%3Ccircle cx='90' cy='118' r='5' fill='%2300FF9D'/%3E%3Crect x='16' y='91' width='148' height='8' fill='%23E8341C' opacity='0.2'/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Dashboard — GetOffZillow AI v4</title>
+<title>Agent Dashboard — GetOffZillow AI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -486,21 +492,26 @@ function parsePhotos(raw) {
   return [];
 }
 
-function show(id) { document.getElementById(id).style.display = id === 'screenDashboard' ? 'block' : 'flex'; }
-function hide(id) { document.getElementById(id).style.display = 'none'; }
+function showScreen(id) {
+  // Hide all screens first
+  ['screenLoading','screenAuth','screenDashboard'].forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.style.display = 'none';
+  });
+  // Show the requested screen
+  const target = document.getElementById(id);
+  if (target) target.style.display = id === 'screenDashboard' ? 'block' : 'flex';
+}
+function show(id) { showScreen(id); }
+function hide(id) { const el = document.getElementById(id); if(el) el.style.display = 'none'; }
 
 // ── INIT ──
 async function init() {
-  console.log('[GOZ] init started');
-
   sb.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_OUT') window.location.href = 'index.html';
   });
 
-  console.log('[GOZ] calling getSession...');
   const { data: { session }, error: sessionError } = await sb.auth.getSession();
-  console.log('[GOZ] session result:', session ? 'HAS SESSION' : 'NO SESSION', 'error:', sessionError);
-
   if (sessionError || !session) {
     clearTimeout(window._gozLoadGuard);
     hide('screenLoading');
@@ -508,7 +519,6 @@ async function init() {
     return;
   }
 
-  console.log('[GOZ] session ok, fetching agent profile...');
   // Session exists — get agent profile
   const { data: agent, error: agentError } = await sb
     .from('agents')
@@ -550,7 +560,6 @@ async function init() {
     localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`.trim());
   }
 
-  console.log('[GOZ] showing dashboard');
   clearTimeout(window._gozLoadGuard);
   hide('screenLoading');
   show('screenDashboard');
