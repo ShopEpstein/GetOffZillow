@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         'api-key': BREVO_API_KEY
       },
       body: JSON.stringify({
-        sender: { name: 'GOZ — GetOffZillow AI', email: 'campaigns@transbidlive.faith' },
+        sender: { name: 'GOZ Team', email: 'campaigns@transbidlive.faith' },
         to: [{ email, name: `${first_name} ${last_name || ''}`.trim() }],
         subject: `Welcome to GOZ, ${first_name} — you're locked in at 3%`,
         htmlContent: `
@@ -93,7 +93,7 @@ export default async function handler(req, res) {
 
     <p style="font-size:14px;color:#6B6B6B;margin:24px 0 0;line-height:1.7">
       Questions? Reply to this email — we read every one.<br>
-      <strong style="color:#0D0D0D">— Chase, GOZ / TransBid LLC</strong><br>
+      <strong style="color:#0D0D0D">— The GOZ Team</strong><br>
       <span style="font-size:12px">Pensacola, FL</span>
     </p>
   </div>
