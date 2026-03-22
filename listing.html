@@ -141,7 +141,7 @@
         <div class="form-group"><label>Message</label><textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea></div>
         <button type="submit" class="contact-btn" id="contactBtn">Send Message →</button>
       </form>
-      <p class="no-fee-note"><strong>Free lead for this agent.</strong> GOZ AI charges agents 1% only when the deal closes — this lead costs them nothing.</p>
+      <p class="no-fee-note"><strong>Free lead for this agent.</strong> GOZ AI charges agents 3% only when the deal closes — this lead costs them nothing.</p>
     </div>
   </div>
 </div>
@@ -249,7 +249,7 @@ function renderListing() {
       <div>
         <div class="agent-name">${agent.first_name} ${agent.last_name}</div>
         <div class="agent-brokerage">${agent.brokerage || 'Independent Agent'}</div>
-        <div class="agent-badge">GOZ Agent · 1% marketplace fee</div>
+        <div class="agent-badge">GOZ Agent · 3% marketplace fee</div>
         <div class="agent-direct">
           ${agent.phone ? `<a href="tel:${agent.phone}">📞 ${agent.phone}</a>` : ''}
           ${agent.email ? `<a href="mailto:${agent.email}">📧 ${agent.email}</a>` : ''}
