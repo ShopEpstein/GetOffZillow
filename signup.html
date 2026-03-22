@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Create your free GetOffZillow AI agent account. List properties free. Pay 3% marketplace fee only when you close.">
 <title>Sign Up / Sign In — GetOffZillow AI</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   :root { --blue:#006AFF; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; }
@@ -52,6 +52,7 @@
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   @media(max-width:480px) { .two-col { grid-template-columns:1fr; } .card { padding:28px 20px; } }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
 </head>
 <body>
 <nav>
@@ -153,7 +154,7 @@
 </div>
 
 <script>
-const { createClient } = supabase;
+const { createClient } = window.supabase || supabase;
 const sb = createClient(
   'https://pneixwmkphakoxmzkblx.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
