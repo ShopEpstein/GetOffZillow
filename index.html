@@ -579,7 +579,23 @@
       <h2 class="section-title" style="margin-bottom:0">Homes For Sale.<br><span class="blue">Commission Shown. Always.</span></h2>
     </div>
   </div>
-  <div class="listings-grid" id="listingGrid"></div>
+  <div class="listings-grid" id="listingGrid">
+    <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:16px" id="listingSkeleton">
+      <div style="background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08)">
+        <div style="height:175px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
+        <div style="padding:14px"><div style="height:20px;background:#f0f0f0;border-radius:4px;margin-bottom:8px;animation:shimmer 1.5s infinite"></div><div style="height:14px;background:#f0f0f0;border-radius:4px;width:70%;animation:shimmer 1.5s infinite"></div></div>
+      </div><div style="background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08)">
+        <div style="height:175px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
+        <div style="padding:14px"><div style="height:20px;background:#f0f0f0;border-radius:4px;margin-bottom:8px;animation:shimmer 1.5s infinite"></div><div style="height:14px;background:#f0f0f0;border-radius:4px;width:70%;animation:shimmer 1.5s infinite"></div></div>
+      </div><div style="background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08)">
+        <div style="height:175px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
+        <div style="padding:14px"><div style="height:20px;background:#f0f0f0;border-radius:4px;margin-bottom:8px;animation:shimmer 1.5s infinite"></div><div style="height:14px;background:#f0f0f0;border-radius:4px;width:70%;animation:shimmer 1.5s infinite"></div></div>
+      </div><div style="background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.08)">
+        <div style="height:175px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
+        <div style="padding:14px"><div style="height:20px;background:#f0f0f0;border-radius:4px;margin-bottom:8px;animation:shimmer 1.5s infinite"></div><div style="height:14px;background:#f0f0f0;border-radius:4px;width:70%;animation:shimmer 1.5s infinite"></div></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- REFERRAL SECTION -->
@@ -1065,6 +1081,9 @@ async function loadListings() {
     console.error('loadListings error:', e);
     liveListings = [];
   }
+  // Remove skeleton
+  const skel = document.getElementById('listingSkeleton');
+  if (skel) skel.remove();
   renderListings();
   renderMapList();
 }
@@ -1138,7 +1157,7 @@ function renderMapList() {
   const pinsEl = document.getElementById('mapPins');
   const items = liveListings.slice(0, 8);
 
-  if (count) count.textContent = `${items.length} home${items.length !== 1 ? 's' : ''} available`;
+  if (count) count.textContent = items.length > 0 ? `${items.length} home${items.length !== 1 ? 's' : ''} available` : 'No listings yet';
 
   if (!items.length) {
     el.innerHTML = '<div style="padding:20px;text-align:center;color:#999;font-size:13px">No listings yet</div>';
@@ -1238,7 +1257,7 @@ async function doSearch() {
     .from('listings')
     .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, agents(first_name, last_name)')
     .eq('status', 'active')
-    .or(`city.ilike.%${q}%,address.ilike.%${q}%,state.ilike.%${q}%,zip.ilike.%${q}%`)
+    .or(`city.ilike.%${q}%,address.ilike.%${q}%,state.ilike.%${q}%,zip.ilike.%${q}%,zip.eq.${q}`)
     .order('created_at', { ascending: false })
     .limit(20);
 
