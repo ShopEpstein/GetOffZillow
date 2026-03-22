@@ -137,6 +137,31 @@
   .save-btn { background:var(--ai-green); color:#000; border:none; padding:12px 28px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; cursor:pointer; }
   .cancel-btn { background:transparent; color:var(--gray); border:1.5px solid var(--border); padding:11px 20px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; cursor:pointer; margin-left:10px; }
 
+  /* CLOSING MODAL */
+  .closing-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:600; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+  .closing-modal-overlay.open { display:flex; }
+  .closing-modal {
+    background:white; border-radius:16px; padding:32px; width:100%;
+    max-width:520px; position:relative; animation:fadeUp 0.2s ease;
+    border-top:4px solid var(--green);
+  }
+  .closing-modal h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:20px; margin-bottom:6px; }
+  .closing-modal .sub { font-size:13px; color:var(--gray); margin-bottom:24px; line-height:1.5; }
+  .fee-preview { background:#f0fff8; border:1px solid #b3f0d0; border-radius:10px; padding:16px 20px; margin:16px 0; }
+  .fee-preview-row { display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px; }
+  .fee-preview-row:last-child { margin-bottom:0; border-top:1px solid #b3f0d0; padding-top:8px; font-weight:900; }
+  .fee-preview-label { color:var(--gray); }
+  .fee-preview-val { font-weight:700; }
+  .fee-preview-val.green { color:var(--green); }
+  .fee-preview-val.due { color:var(--blue); }
+  .pay-options { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+  .pay-btn { flex:1; min-width:120px; padding:11px 16px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:13px; cursor:pointer; border:none; transition:all 0.2s; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+  .pay-btn.venmo { background:#008CFF; color:white; }
+  .pay-btn.zelle { background:#6B1BE3; color:white; }
+  .pay-btn.paypal { background:#003087; color:white; }
+  .pay-btn.honor { background:var(--bg); color:var(--text); border:1.5px solid var(--border); }
+  .pay-btn:hover { opacity:0.88; transform:translateY(-1px); }
+
   /* EMPTY STATES */
   .empty-state { text-align:center; padding:36px; color:var(--gray); }
   .empty-state .icon { font-size:36px; margin-bottom:10px; }
@@ -177,6 +202,63 @@
     <button class="nav-btn outline" id="navSignOutBtn" onclick="doSignOut()" style="display:none">Sign Out</button>
   </div>
 </nav>
+
+<!-- CLOSING REPORT MODAL -->
+<div class="closing-modal-overlay" id="closingModal">
+  <div class="closing-modal">
+    <button style="position:absolute;top:14px;right:14px;background:#f0f0f0;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:15px" onclick="closeClosingModal()">✕</button>
+    <div style="font-size:32px;margin-bottom:8px">🎉</div>
+    <h3>Report a Closing</h3>
+    <p class="sub">You closed a deal with a buyer from GetOffZillow AI. Enter the details below to calculate your marketplace fee. <strong>You only owe us 3% of your gross commission — not 3% of the sale price.</strong></p>
+    <input type="hidden" id="cl_listing_id" />
+    <div class="form-group">
+      <label>Property Address</label>
+      <input id="cl_address" type="text" readonly style="background:#f7f7f7;color:var(--gray)" />
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Final Sale Price ($) *</label>
+        <input id="cl_sale_price" type="number" placeholder="400000" oninput="calcClosingFee()" />
+      </div>
+      <div class="form-group">
+        <label>Your Commission Rate *</label>
+        <select id="cl_commission_rate" onchange="calcClosingFee()">
+          <option value="1">1%</option><option value="1.5">1.5%</option>
+          <option value="2">2%</option><option value="2.5" selected>2.5%</option>
+          <option value="2.75">2.75%</option><option value="3">3%</option>
+          <option value="3.5">3.5%</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Did you represent both buyer AND seller? (Dual Agency)</label>
+      <select id="cl_dual" onchange="calcClosingFee()">
+        <option value="no">No — I represented one side only</option>
+        <option value="yes">Yes — I represented both buyer and seller</option>
+      </select>
+    </div>
+
+    <div class="fee-preview" id="feePreview" style="display:none">
+      <div class="fee-preview-row"><span class="fee-preview-label">Sale price</span><span class="fee-preview-val" id="fp_price">—</span></div>
+      <div class="fee-preview-row"><span class="fee-preview-label">Your gross commission</span><span class="fee-preview-val" id="fp_commission">—</span></div>
+      <div class="fee-preview-row"><span class="fee-preview-label">You keep (97%)</span><span class="fee-preview-val green" id="fp_keep">—</span></div>
+      <div class="fee-preview-row"><span class="fee-preview-label">GOZ AI fee (3% of commission)</span><span class="fee-preview-val due" id="fp_fee">—</span></div>
+    </div>
+
+    <div class="modal-err" id="cl_err"></div>
+    <div class="modal-ok" id="cl_ok" style="display:none"></div>
+
+    <div class="pay-options" id="payOptions" style="display:none">
+      <a id="payVenmo" href="#" target="_blank" class="pay-btn venmo">💙 Pay via Venmo</a>
+      <a id="payZelle" href="#" target="_blank" class="pay-btn zelle">💜 Pay via Zelle</a>
+      <button onclick="reportClosingHonor()" class="pay-btn honor">✓ I'll pay separately — log this closing</button>
+    </div>
+    <p style="font-size:11px;color:var(--gray);margin-top:12px;line-height:1.5" id="payNote" style="display:none">
+      Venmo: <strong>@GetOffZillow</strong> · Zelle: <strong>campaigns@transbidlive.faith</strong><br>
+      Include the property address in your payment note. Payment due within 10 days of closing.
+    </p>
+  </div>
+</div>
 
 <!-- EDIT LISTING MODAL -->
 <div class="modal-overlay" id="editModal">
@@ -313,8 +395,8 @@
       <div style="background:linear-gradient(135deg,#0a1f44,#002080);border:1.5px solid rgba(0,255,157,0.25);border-radius:14px;padding:24px 28px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;box-shadow:0 0 30px rgba(0,255,157,0.1)">
         <div style="font-size:32px;flex-shrink:0">🤝</div>
         <div style="flex:1;min-width:200px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ai-green);letter-spacing:0.05em;margin-bottom:4px">Invite an Agent. They Save. You Both Win.</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin-bottom:12px">Every agent you refer locks in 3% of their commission at closing — not 3% of the sale price. On a $10K commission, that's $300 vs. Zillow's $4,000. Share your link.</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ai-green);letter-spacing:0.05em;margin-bottom:4px">Grow Your Network. Every Agent Here Saves.</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:12px">The more agents on this platform, the more buyers come looking — and the more likely they find <em>you</em>. Share your link with agents in your market, your brokerage, your network. Every person you bring in makes the platform more valuable for everyone on it.<br><br><span style="color:rgba(255,255,255,0.5);font-size:12px">Every agent you invite pays 3% of commission at closing — not 3% of the sale price. On a $10K commission that's $300 vs. Zillow's $4,000. Send them your link so they sign up through you.</span></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
             <div id="inviteLink" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--ai-green);background:rgba(0,255,157,0.08);padding:8px 14px;border-radius:6px;border:1px solid rgba(0,255,157,0.2);flex:1;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Loading your invite link...</div>
             <button onclick="copyInviteLink()" style="background:var(--ai-green);color:#000;border:none;padding:8px 18px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:900;font-size:12px;cursor:pointer;white-space:nowrap">Copy Link</button>
@@ -524,6 +606,7 @@ async function loadListings() {
           <div class="li-specs">${[l.beds&&l.beds+'bd', l.baths&&l.baths+'ba', l.sqft&&Number(l.sqft).toLocaleString()+' sqft'].filter(Boolean).join(' · ')}</div>
           <div class="li-actions">
             <a href="listing.html?id=${l.id}" target="_blank">View →</a>
+            ${l.status==='sold'?'':'<button class="btn-close-report" onclick="openClosingModal('+JSON.stringify(l).replace(/"/g,\'&quot;\')+')" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:var(--green)">Report Closing</button>'}
             <button class="btn-edit" onclick="openEditModal(${JSON.stringify(l).replace(/"/g,'&quot;')})">Edit</button>
             <button class="btn-toggle" onclick="toggleStatus('${l.id}','${l.status}')">${l.status==='active'?'Deactivate':'Reactivate'}</button>
             <button class="btn-sold" onclick="markSold('${l.id}','${l.status}')" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:${l.status==='sold'?'var(--gray)':'#2e7d32'}">${l.status==='sold'?'Unmark Sold':'Mark Sold'}</button>
@@ -717,16 +800,129 @@ async function deleteListing(id) {
   loadListings();
 }
 
+// ── CLOSING MODAL ──
+function openClosingModal(listing) {
+  document.getElementById('cl_listing_id').value = listing.id;
+  document.getElementById('cl_address').value = listing.address + ', ' + listing.city + ', ' + listing.state;
+  document.getElementById('cl_sale_price').value = listing.price || '';
+  document.getElementById('cl_commission_rate').value = parseFloat(listing.commission_rate) || 2.5;
+  document.getElementById('cl_dual').value = 'no';
+  document.getElementById('cl_err').style.display = 'none';
+  document.getElementById('cl_ok').style.display = 'none';
+  document.getElementById('feePreview').style.display = 'none';
+  document.getElementById('payOptions').style.display = 'none';
+  document.getElementById('payNote').style.display = 'none';
+  document.getElementById('closingModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  calcClosingFee();
+}
+
+function closeClosingModal() {
+  document.getElementById('closingModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('closingModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('closingModal')) closeClosingModal();
+});
+
+function calcClosingFee() {
+  const price = parseFloat(document.getElementById('cl_sale_price').value) || 0;
+  const rate  = parseFloat(document.getElementById('cl_commission_rate').value) || 2.5;
+  const dual  = document.getElementById('cl_dual').value === 'yes';
+  if (!price) { document.getElementById('feePreview').style.display='none'; document.getElementById('payOptions').style.display='none'; return; }
+
+  const grossComm = price * (rate / 100) * (dual ? 2 : 1);
+  const gozFee    = Math.round(grossComm * 0.03);
+  const agentKeep = Math.round(grossComm - gozFee);
+
+  document.getElementById('fp_price').textContent      = '$' + price.toLocaleString();
+  document.getElementById('fp_commission').textContent  = '$' + Math.round(grossComm).toLocaleString() + (dual ? ' (both sides)' : '');
+  document.getElementById('fp_keep').textContent        = '$' + agentKeep.toLocaleString();
+  document.getElementById('fp_fee').textContent         = '$' + gozFee.toLocaleString();
+  document.getElementById('feePreview').style.display   = 'block';
+  document.getElementById('payOptions').style.display   = 'flex';
+  document.getElementById('payNote').style.display      = 'block';
+
+  // Build payment links
+  const addr = document.getElementById('cl_address').value;
+  const note = encodeURIComponent(`GOZ fee - ${addr}`);
+  document.getElementById('payVenmo').href = `https://venmo.com/GetOffZillow?txn=pay&amount=${gozFee}&note=${note}`;
+  document.getElementById('payZelle').href = `mailto:campaigns@transbidlive.faith?subject=GOZ Closing Fee - ${addr}&body=I am paying the GOZ marketplace fee of $${gozFee} for the closing at ${addr}.`;
+}
+
+async function reportClosingHonor() {
+  const listingId = document.getElementById('cl_listing_id').value;
+  const price     = parseFloat(document.getElementById('cl_sale_price').value);
+  const rate      = parseFloat(document.getElementById('cl_commission_rate').value);
+  const dual      = document.getElementById('cl_dual').value === 'yes';
+  const errEl     = document.getElementById('cl_err');
+  const okEl      = document.getElementById('cl_ok');
+
+  if (!price) { errEl.textContent='Enter the sale price first.'; errEl.style.display='block'; return; }
+
+  const grossComm = price * (rate/100) * (dual ? 2 : 1);
+  const gozFee    = Math.round(grossComm * 0.03);
+
+  // Log the closing in Supabase
+  const { error } = await sb.from('closings').insert({
+    agent_id:        agentId,
+    listing_id:      listingId,
+    sale_price:      price,
+    commission_rate: rate,
+    dual_agency:     dual,
+    gross_commission: Math.round(grossComm),
+    goz_fee:         gozFee,
+    payment_method:  'honor',
+    status:          'pending_payment'
+  });
+
+  if (error && !error.message.includes('relation "closings" does not exist')) {
+    errEl.textContent = 'Could not log closing: ' + error.message;
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Mark listing as sold
+  await sb.from('listings').update({ status:'sold' }).eq('id', listingId);
+
+  okEl.textContent = `✅ Closing logged! GOZ fee of $${gozFee.toLocaleString()} is due within 10 days. Send to Venmo @GetOffZillow or Zelle campaigns@transbidlive.faith with the property address in the note.`;
+  okEl.style.display = 'block';
+  document.getElementById('payOptions').style.display = 'none';
+  setTimeout(() => { closeClosingModal(); loadListings(); }, 4000);
+}
+
 // ── INVITE LINK ──
 async function loadInviteLink(aid) {
   const base = window.location.origin;
-  const link = `${base}/signup.html?ref=${aid}`;
+  const link = `${base}/invite.html?ref=${aid}`;
   document.getElementById('inviteLink').textContent = link;
 
-  // Count referrals
-  const { count } = await sb.from('agents').select('*', { count:'exact', head:true }).eq('referred_by', aid);
-  if (count > 0) {
-    document.getElementById('inviteCount').textContent = `${count} agent${count!==1?'s':''} joined through your link`;
+  // Count referrals + their activity
+  const { data: refs } = await sb
+    .from('agents')
+    .select('id, first_name, last_name, created_at')
+    .eq('referred_by', aid)
+    .order('created_at', { ascending: false });
+
+  const refCount = (refs || []).length;
+  const countEl = document.getElementById('inviteCount');
+
+  if (refCount === 0) {
+    countEl.textContent = 'No agents referred yet — share your link to grow the network.';
+  } else {
+    // Count their active listings
+    const refIds = refs.map(r => r.id);
+    const { count: listingCount } = await sb
+      .from('listings')
+      .select('*', { count:'exact', head:true })
+      .in('agent_id', refIds)
+      .eq('status', 'active');
+
+    const names = refs.slice(0,3).map(r => r.first_name).join(', ');
+    const more  = refCount > 3 ? ` +${refCount-3} more` : '';
+    countEl.innerHTML = `<strong style="color:var(--ai-green)">${refCount} agent${refCount!==1?'s':''} joined through your link</strong> — ${names}${more}` +
+      (listingCount > 0 ? ` · <span style="color:rgba(255,255,255,0.5)">${listingCount} active listing${listingCount!==1?'s':''} between them</span>` : '');
   }
 }
 
