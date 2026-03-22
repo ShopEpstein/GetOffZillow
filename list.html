@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='38,19 42,22' fill='none' stroke='%23E8341C' stroke-width='2.2' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GetOffZillow AI">
+<meta name="theme-color" content="#111111">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23111111'/%3E%3Cpolyline points='16,86 90,20 149,74' fill='none' stroke='%2300FF9D' stroke-width='11' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='149,74 164,86' fill='none' stroke='%23E8341C' stroke-width='8.6' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='31' y1='86' x2='31' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Cline x1='31' y1='156' x2='144' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='118' r='12' fill='%23111' stroke='%2300FF9D' stroke-width='7'/%3E%3Ccircle cx='90' cy='118' r='5' fill='%2300FF9D'/%3E%3Crect x='16' y='91' width='148' height='8' fill='%23E8341C' opacity='0.2'/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Submit a Listing — GetOffZillow AI</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -60,18 +66,30 @@
   .ai-banner-btn:disabled { background:#555; color:#999; box-shadow:none; cursor:not-allowed; }
 
   /* AI MODAL */
-  .ai-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:999; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
+  .ai-modal-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.75);
+    z-index:999;
+    align-items:flex-start;
+    justify-content:center;
+    padding:16px;
+    padding-top:max(16px, env(safe-area-inset-top));
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
   .ai-modal-overlay.open { display:flex; }
   .ai-modal {
     background:#0a1f44;
     border:1.5px solid rgba(0,255,157,0.3);
     border-radius:16px;
-    padding:32px;
+    padding:28px;
     width:100%;
     max-width:600px;
     position:relative;
     box-shadow:0 0 60px rgba(0,255,157,0.15);
     animation:slideUp 0.25s ease;
+    margin:auto;
+    flex-shrink:0;
   }
   @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
   .ai-modal h2 { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--ai-green); letter-spacing:0.05em; margin-bottom:6px; }
@@ -85,8 +103,9 @@
     background:rgba(255,255,255,0.08);
     border:1.5px solid rgba(255,255,255,0.15);
     border-radius:8px; color:white;
-    font-family:'Nunito Sans',sans-serif; font-size:14px;
+    font-family:'Nunito Sans',sans-serif; font-size:16px;
     outline:none; transition:border-color 0.2s;
+    -webkit-appearance:none;
   }
   .ai-input-group textarea { min-height:90px; resize:vertical; }
   .ai-input-group textarea:focus, .ai-input-group input:focus { border-color:var(--ai-green); }
@@ -133,9 +152,9 @@
   .form-group input, .form-group select, .form-group textarea {
     width:100%; padding:11px 14px;
     border:1.5px solid var(--border); border-radius:8px;
-    font-family:'Nunito Sans',sans-serif; font-size:14px;
+    font-family:'Nunito Sans',sans-serif; font-size:16px;
     outline:none; transition:border-color 0.2s, box-shadow 0.2s;
-    background:white;
+    background:white; -webkit-appearance:none;
   }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
   .form-group textarea { resize:vertical; min-height:120px; }
@@ -190,11 +209,20 @@
   /* PRICE DISPLAY */
   .price-display { font-size:11px; color:var(--green); font-weight:700; margin-top:4px; min-height:16px; }
 
+  @media(max-width:768px) {
+    .form-grid-3 { grid-template-columns:1fr 1fr; }
+    .page { padding:32px 16px 60px; }
+  }
   @media(max-width:600px) {
     .form-grid-2, .form-grid-3 { grid-template-columns:1fr; }
     .form-card { padding:20px 16px; }
-    .ai-modal { padding:24px 18px; }
-    .ai-banner { flex-direction:column; gap:14px; }
+    .ai-modal { padding:20px 16px; }
+    .ai-banner { flex-direction:column; gap:12px; }
+    .ai-banner-btn { width:100%; }
+    .nav-links a { font-size:12px; }
+    .page-header h1 { font-size:clamp(28px,8vw,40px); }
+    .submit-btn { font-size:15px; padding:14px; }
+    .photo-grid { grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); }
   }
 </style>
 </head>
