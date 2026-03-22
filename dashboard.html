@@ -282,7 +282,7 @@ window.addEventListener('error', function(e) {
       <button onclick="reportClosingHonor()" class="pay-btn honor">✓ I'll pay separately — log this closing</button>
     </div>
     <p style="font-size:11px;color:var(--gray);margin-top:12px;line-height:1.5" id="payNote" style="display:none">
-      Venmo: <strong>@GetOffZillow</strong> · Zelle: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4023212d302129272e33003432212e332229242c2936256e2621293428">[email&#160;protected]</a></strong><br>
+      Venmo: <strong>@VinHunter</strong> · Zelle: <strong>campaigns&#64;transbidlive&#46;faith</strong><br>
       Include the property address in your payment note. Payment due within 10 days of closing.
     </p>
   </div>
@@ -916,7 +916,7 @@ function calcClosingFee() {
   // Build payment links
   const addr = document.getElementById('cl_address').value;
   const note = encodeURIComponent(`GOZ fee - ${addr}`);
-  document.getElementById('payVenmo').href = `https://venmo.com/GetOffZillow?txn=pay&amount=${gozFee}&note=${note}`;
+  document.getElementById('payVenmo').href = `https://venmo.com/VinHunter?txn=pay&amount=${gozFee}&note=${note}`;
   document.getElementById('payZelle').href = `mailto:campaigns@transbidlive.faith?subject=GOZ Closing Fee - ${addr}&body=I am paying the GOZ marketplace fee of $${gozFee} for the closing at ${addr}.`;
 }
 
@@ -955,7 +955,7 @@ async function reportClosingHonor() {
   // Mark listing as sold
   await sb.from('listings').update({ status:'sold' }).eq('id', listingId);
 
-  okEl.textContent = `✅ Closing logged! GOZ fee of $${gozFee.toLocaleString()} is due within 10 days. Send to Venmo @GetOffZillow or Zelle campaigns@transbidlive.faith with the property address in the note.`;
+  okEl.textContent = `✅ Closing logged! GOZ fee of $${gozFee.toLocaleString()} is due within 10 days. Send to Venmo @VinHunter or Zelle campaigns@transbidlive.faith with the property address in the note.`;
   okEl.style.display = 'block';
   document.getElementById('payOptions').style.display = 'none';
   setTimeout(() => { closeClosingModal(); loadListings(); }, 4000);
