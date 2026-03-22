@@ -388,6 +388,7 @@
   .hero-logo-ai-badge { background:var(--ai-green); color:#111; font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:0.2em; padding:4px 20px 3px; clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); box-shadow:0 0 20px rgba(0,255,157,0.4); }
   .hero-logo-tagline { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(255,255,255,0.45); text-transform:uppercase; margin-top:8px; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -1014,7 +1015,7 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="mailto:campaigns@transbidlive.faith">Contact Us</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#d1b2b0bca1b0b8b6bfa291a5a3b0bfa2b3b8b5bdb8a7b4ffb7b0b8a5b9">Contact Us</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Service</a></li>
 
@@ -1030,9 +1031,9 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const { createClient } = supabase;
+const { createClient } = window.supabase || supabase;
 const sb = createClient(
   'https://pneixwmkphakoxmzkblx.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
@@ -1357,10 +1358,8 @@ async function initNavAuth() {
 
   // Swap mobile menu CTA
   const mobCta = document.querySelector('.mob-cta');
-  if (mobCta) {
-    mobCta.href = 'dashboard.html';
-    mobCta.textContent = 'Go to Dashboard \u2192';
-  }
+  if (mobCta) { mobCta.href = 'dashboard.html'; mobCta.textContent = 'Go to Dashboard \u2192'; }
+  } catch(e) { console.warn('initNavAuth:', e); }
 }
 
 buildTicker();
