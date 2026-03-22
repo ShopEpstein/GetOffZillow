@@ -995,7 +995,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
 const sb = createClient(
@@ -1154,14 +1154,7 @@ function renderMapList() {
         <div class="mli-addr">${l.address}</div>
         <div class="mli-addr" style="color:#999">${l.city}, ${l.state}</div>
         ${l.beds || l.baths ? `<div class="mli-specs">${l.beds?l.beds+'bd':''} ${l.baths?'· '+l.baths+'ba':''} ${l.sqft?'· '+Number(l.sqft).toLocaleString()+' sqft':''}</div>` : ''}
-        <div class="mli-commission">✓ ${l.commission_rate || '2.5%'} commission</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  // Map pins from real listings
-  if (pinsEl) {
-    pinsEl.innerHTML = items.map((l, i) => {
+        <div class="m   pinsEl.innerHTML = items.map((l, i) => {
       const pos = PIN_POSITIONS[i % PIN_POSITIONS.length];
       const price = '$' + (Number(l.price)/1000).toFixed(0) + 'K';
       return `<div class="map-pin" style="top:${pos.top};left:${pos.left}" onclick="window.location.href='listing.html?id=${l.id}'">${price}</div>`;
@@ -1291,4 +1284,90 @@ function renderReviews() {
       <p class="review-text">"${r.text}"</p>
       <div class="review-author">
         <div class="review-avatar">${r.emoji}</div>
-        <div><div class="review-name">${r.name}</div><div cla
+        <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
+      </div>
+    </div>`).join('');
+}
+
+const reviews = [
+  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $300 on a $10,000 commission. The direct contact with buyers is a completely different experience.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
+  { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"👩" },
+  { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"👩" },
+  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $300. That's not a typo. Three hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
+  { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"👩" },
+  { stars:5, text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"👨" },
+];
+
+function setHeroTab(el,type) {
+  document.querySelectorAll('.hero-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const msgs = {sell:'💰 Sell — list free in minutes',agent:'🤝 Agents: 3% at closing, free listings'};
+  if (msgs[type]) showToast(msgs[type]);
+}
+
+async function doSearch() {
+  const q = (document.getElementById('heroSearchInput').value||document.getElementById('hSearch').value).trim();
+  if (!q) { showToast('Enter a city, ZIP, or address to search'); return; }
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+
+  const { data } = await sb
+    .from('listings')
+    .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, agents(first_name, last_name)')
+    .eq('status', 'active')
+    .or(`city.ilike.%${q}%,address.ilike.%${q}%,state.ilike.%${q}%,zip.ilike.%${q}%`)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  liveListings = data || [];
+  renderListings();
+  const count = liveListings.length;
+  showToast(count > 0 ? `🔍 ${count} listing${count!==1?'s':''} found for "${q}"` : `🔍 No listings found for "${q}" yet.`);
+}
+
+function scrollTo(id) { document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+  if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
+}
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  if (menu && btn && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+    closeMobileMenu();
+  }
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'),4500);
+}
+
+// ── INIT ──
+buildTicker();
+renderReviews();
+loadListings();
+</script>
+</body>
+</html>
