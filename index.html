@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='38,19 42,22' fill='none' stroke='%23E8341C' stroke-width='2.2' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3Crect x='4' y='23.5' width='38' height='2' fill='%23E8341C' opacity='0.25'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
-<meta name="description" content="GetOffZillow AI — Free listings. Transparent commissions. Direct agent contact. 1% marketplace fee at closing vs. Zillow's 40%. Real estate without the B.S.">
+<meta name="description" content="GetOffZillow AI — Free listings. Transparent commissions. Direct agent contact. 3% marketplace fee at closing. Real estate without the B.S.">
 <meta property="og:title" content="GetOffZillow AI — Real Estate Without The B.S.">
-<meta property="og:description" content="Free listings. Transparent commissions. Direct contact. 1% fee at closing vs. Zillow's 40%. Agents keep 99%.">
+<meta property="og:description" content="Free listings. Transparent commissions. Direct contact. 3% marketplace fee at closing. Agents keep 97%.">
 <meta property="og:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 <meta property="og:url" content="https://get-off-zillow.vercel.app">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GetOffZillow AI — Real Estate Without The B.S.">
-<meta name="twitter:description" content="1% marketplace fee vs. Zillow's 40%. Free listings. Transparent commissions. Direct agent contact.">
+<meta name="twitter:description" content="3% marketplace fee at closing. Free listings. Transparent commissions. Direct agent contact.">
 <meta name="twitter:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 <title>GetOffZillow AI — Real Estate. No Extraction.</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -362,6 +362,14 @@
     .fee-table th:nth-child(5), .fee-table td:nth-child(5) { display:none; }
   }
 
+  /* FAQ */
+  .faq-item { border-bottom:1px solid var(--border); }
+  .faq-q { width:100%; text-align:left; padding:18px 0; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; background:none; border:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; color:var(--text); }
+  .faq-q:hover { color:var(--blue); }
+  .faq-arrow { font-size:18px; transition:transform 0.2s; color:var(--gray); }
+  .faq-q.open .faq-arrow { transform:rotate(180deg); }
+  .faq-a { display:none; padding:0 0 18px; font-size:14px; color:var(--gray); line-height:1.8; }
+  .faq-a.open { display:block; }
   /* HERO LOGO TREATMENT */
   .hero-logo-treatment { margin-bottom:28px; display:flex; flex-direction:column; align-items:center; gap:0; }
   .hero-logo-icon { width:80px; height:80px; background:#111; border-radius:18px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px #00FF9D, 0 0 30px rgba(0,255,157,0.3); margin-bottom:16px; }
@@ -430,10 +438,10 @@
 <nav class="mobile-menu" id="mobileMenu">
   <a href="#listings">🏠 Buy a Home</a>
   <a href="signup.html">💰 Sell / List Free</a>
-  <a href="#agents" onclick="closeMobileMenu()">🤝 For Agents — 1% fee</a>
+  <a href="#agents" onclick="closeMobileMenu()">🤝 For Agents — 3% at close</a>
   <a href="signup.html">📊 My Dashboard</a>
   <a href="#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
-  <a href="signup.html" class="mob-cta">List Free — Lock In 1% →</a>
+  <a href="signup.html" class="mob-cta">List Free — Lock In 3% →</a>
   <div style="text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
     <a href="signup.html" style="color:rgba(255,255,255,0.5);font-size:13px;border:none">Already have an account? Sign in →</a>
   </div>
@@ -475,7 +483,7 @@
       <div class="hero-logo-tagline">Real Estate Intelligence — No Middlemen</div>
     </div>
     <p class="hero-sub">
-      List free. Buyers find and contact you directly. We charge 1% when you close — vs. Zillow's 40% and Agent Pronto's 35%.
+      A transparent real estate marketplace. Free to list. Buyers contact agents directly. We earn 3% at closing — only when you do.
     </p>
     <div class="hero-tabs">
       <div class="hero-tab active" onclick="setHeroTab(this,'buy')">🏠 Buy</div>
@@ -489,7 +497,7 @@
     <div class="hero-trust">
       <div class="trust-item"><span class="trust-check">✓</span> Free to search</div>
       <div class="trust-item"><span class="trust-check">✓</span> Agents listed free</div>
-      <div class="trust-item"><span class="trust-check">✓</span> Only 1% at close</div>
+      <div class="trust-item"><span class="trust-check">✓</span> Only 3% at close</div>
       <div class="trust-item"><span class="trust-check">✓</span> Zero data sold</div>
     </div>
   </div>
@@ -502,9 +510,9 @@
 
 <!-- FEE BATTLE -->
 <section class="fee-battle" id="compare">
-  <div class="section-eyebrow">The Numbers Don't Lie</div>
-  <h2 class="section-title">They Charge <span class="accent">Up To 40%.</span><br>We Charge <span class="blue">1%.</span></h2>
-  <p class="section-sub">Every platform in this space takes a massive cut of your commission at closing. Here's the full breakdown.</p>
+  <div class="section-eyebrow">Fee Comparison</div>
+  <h2 class="section-title">Understand <span class="accent">What You're Paying.</span><br>Then Decide.</h2>
+  <p class="section-sub">Most platforms charge a percentage of your commission when a deal closes. Here's how the fees compare across the major options.</p>
   <table class="fee-table">
     <thead>
       <tr>
@@ -526,7 +534,7 @@
         <td class="bad">✗ Hidden</td>
         <td class="bad">✗ No</td>
         <td class="goz-col" rowspan="4" style="text-align:center;vertical-align:middle;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--ai-green);line-height:1;text-shadow:0 0 20px rgba(0,255,157,0.3)">1%</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--ai-green);line-height:1;text-shadow:0 0 20px rgba(0,255,157,0.3)">3%</div>
           <div style="font-size:11px;color:var(--gray);margin-top:4px">at closing only</div>
           <div style="margin-top:12px;font-size:12px;line-height:1.8;color:var(--text)">
             ✓ No upfront cost<br>✓ No lead auction<br>✓ Commission shown publicly<br>✓ Direct buyer contact<br>✓ Free listings<br>✓ No data sold
@@ -579,15 +587,15 @@
   <div class="referral-inner">
     <div class="referral-grid">
       <div>
-        <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.5);margin-bottom:12px">For Real Estate Agents</div>
+        <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.5);margin-bottom:12px">For Licensed Agents</div>
         <h2 class="referral-title">
-          Stop Giving<br>
-          <span class="yellow">Agent Pronto</span><br>
-          <span class="teal">35%.</span>
+          Keep More<br>
+          <span class="yellow">Of What</span><br>
+          <span class="teal">You Earn.</span>
         </h2>
         <p class="referral-desc">
-          Agent Pronto charges 25–35% of your gross commission. Zillow Flex takes up to 40%. On a $10,000 commission that's $2,500–$4,000 gone before your broker split.<br><br>
-          GetOffZillow AI charges <strong style="color:white">1% at closing</strong>. No monthly fee. No upfront cost. No lead auction. You keep $9,900.
+          Most lead platforms charge between 25–40% of your commission at closing. On a $10,000 commission, that's $2,500–$4,000 before your broker split.<br><br>
+          GetOffZillow AI charges <strong style="color:white">3% at closing</strong>. No monthly fee. No upfront cost. No lead fee. You keep $9,700.
         </p>
         <div class="ref-cta-stack">
           <a href="signup.html" class="btn btn-primary" style="background:var(--ai-green);color:#000;padding:12px 24px">Join as an Agent — Free</a>
@@ -605,11 +613,11 @@
           <div class="fee-row competitor"><div class="fee-row-label">OpCity / Realtor.com <span>Timed auction + 30–38% on close</span></div><div class="fee-row-pct">38%</div></div>
           <div class="fee-row competitor"><div class="fee-row-label">UpNest <span>25–30% after competing against other agents</span></div><div class="fee-row-pct">30%</div></div>
           <div class="fee-row us">
-            <div class="fee-row-label" style="font-weight:900;font-size:15px;color:white">GetOffZillow AI ✓<span style="color:var(--ai-green)">Pay only when you close. You keep 99%.</span></div>
-            <div class="fee-row-pct" style="color:var(--ai-green)">1%</div>
+            <div class="fee-row-label" style="font-weight:900;font-size:15px;color:white">GetOffZillow AI ✓<span style="color:var(--ai-green)">Pay only when you close. You keep 97%.</span></div>
+            <div class="fee-row-pct" style="color:var(--ai-green)">3%</div>
           </div>
         </div>
-        <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.4);font-style:italic;text-align:right">On a $10K commission: save $2,400–$3,900 vs. competitors.</div>
+        <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,0.4);font-style:italic;text-align:right">On a $10K commission: save $2,200–$3,700 vs. competitors.</div>
       </div>
     </div>
   </div>
@@ -618,32 +626,32 @@
 <!-- HOW IT WORKS -->
 <section class="how-section" id="how">
   <div class="section-eyebrow">Simple Process</div>
-  <h2 class="section-title">Four Steps.<br><span class="blue">No Surprises.</span></h2>
-  <p class="section-sub">No hidden rules, no algorithm games, no bait-and-switch pricing. Here's exactly how it works.</p>
+  <h2 class="section-title">How It<br><span class="blue">Works.</span></h2>
+  <p class="section-sub">Simple, transparent, and consistent. Here's exactly what happens from signup to close.</p>
   <div class="steps-grid">
     <div class="step">
       <span class="step-num">01</span>
       <span class="step-icon">📋</span>
       <h3>Agent Creates Free Profile</h3>
-      <p>Sign up in under 5 minutes. Post unlimited listings at no cost. Set your commission rate publicly. No Premier Agent paywall, no monthly minimum.</p>
+      <p>Sign up in under 5 minutes. Post unlimited listings at no cost. Set your commission rate — it's shown publicly on every listing.</p>
     </div>
     <div class="step">
       <span class="step-num">02</span>
       <span class="step-icon">🔍</span>
       <h3>Buyer Searches & Finds You</h3>
-      <p>Buyers see real prices, real commission rates, and your direct contact info. No algorithm hiding better-value agents because they paid for Premier status.</p>
+      <p>Buyers search listings and see real prices, commission rates, and your direct contact information. Listings are sorted by recency, not ad spend.</p>
     </div>
     <div class="step">
       <span class="step-num">03</span>
       <span class="step-icon">🤝</span>
       <h3>Buyer Contacts Agent Directly</h3>
-      <p>Buyer gets your real phone and email immediately. No middleman on the introduction. No lead auction. No "accept in 30 seconds" pressure.</p>
+      <p>When a buyer reaches out, their message goes directly to you. No platform sitting in the middle. No timed acceptance window.</p>
     </div>
     <div class="step">
       <span class="step-num">04</span>
       <span class="step-icon">🎉</span>
-      <h3>You Close. We Take 1%.</h3>
-      <p>Deal closes, you pay GOZ AI 1% of your gross commission. On a $10,000 commission, you pay $100. You keep $9,900. That's it.</p>
+      <h3>You Close. We Take 3%.</h3>
+      <p>Deal closes, you pay GOZ AI 3% of your gross commission. On a $10,000 commission, you pay $300. You keep $9,700. That's it.</p>
     </div>
   </div>
 </section>
@@ -714,14 +722,14 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#111;border-radius:14px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.12);margin-top:40px">
     <div style="background:#fff5f5;padding:40px 36px">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟡 Zillow + Agent Pronto</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span>Hidden <strong>40% referral fees</strong> + pay-per-lead gouging that inflates agent costs</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📉</span><span><strong>Inaccurate Zestimates</strong> off by 20%+; Agent Pronto leads that go nowhere</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span><strong>Steers you to paid agents;</strong> hides real contact info to monetize the introduction</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span>Referral fees between <strong>25–40%</strong> of commission at closing</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📉</span><span>Lead quality and accuracy varies — with no refund when leads don't convert</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span>Agent contact info is often gated — the platform controls the introduction</span></div>
       <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🔒</span><span><strong>Commissions hidden;</strong> your data sold to advertisers and lenders</span></div>
     </div>
     <div style="background:#f0fff8;padding:40px 36px">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟢 GetOffZillow AI</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>1% at closing only.</strong> Zero upfront cost. Zero per-lead charge. You keep 99%.</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>3% at closing only.</strong> Zero upfront cost. Zero per-lead charge. You keep 97%.</span></div>
       <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Transparent comps and pricing.</strong> No black box. No fake accuracy claims.</span></div>
       <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Direct phone and email in one click.</strong> No lead auction. No middleman.</span></div>
       <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Commissions shown publicly.</strong> Zero data sold. NAR settlement compliant.</span></div>
@@ -768,28 +776,28 @@
   <div class="agent-inner">
     <div>
       <div class="section-eyebrow">For Real Estate Agents</div>
-      <h2 class="agent-pitch-title">List Free.<br>Pay <span class="blue">1%</span><br>at Close.</h2>
-      <p style="font-size:15px;color:var(--gray);line-height:1.6;margin-bottom:24px">Agent Pronto keeps 25–35%. Zillow keeps up to 40%. We keep 1% — only when you close. The rest is yours.</p>
+      <h2 class="agent-pitch-title">List Free.<br>Pay <span class="blue">3%</span><br>at Close.</h2>
+      <p style="font-size:15px;color:var(--gray);line-height:1.6;margin-bottom:24px">Most platforms keep 25–40% at closing. We keep 3% — only when you close. The rest is yours.</p>
       <ul class="agent-bullets">
         <li>Post unlimited listings for free — forever</li>
         <li>Your phone and email shown directly to buyers. No lead auction.</li>
         <li>Commission rate displayed publicly (NAR settlement compliant)</li>
-        <li><strong>1% marketplace fee ONLY when the deal closes</strong> — zero upfront cost</li>
+        <li><strong>3% marketplace fee ONLY when the deal closes</strong> — zero upfront cost</li>
         <li>Agent dashboard with your listings and leads</li>
-        <li>No pay-to-rank — listings sorted by recency and activity, not ad spend</li>
-        <li>Welcome email and lead notifications via Brevo</li>
+        <li>Listings sorted by recency — no pay-to-rank, no Premier Agent tiers</li>
+        <li>Email notifications when buyers contact you — direct to your inbox</li>
       </ul>
       <div style="background:#E8FBF0;border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.6">
         <strong>💰 The math on a $400K sale (2.5% commission = $10,000):</strong><br>
         Agent Pronto (35%): you lose $3,500 · Zillow Flex (40%): you lose $4,000<br>
-        <strong style="color:var(--green)">GetOffZillow AI (1%): you pay $100. You keep $9,900. Per deal.</strong>
+        <strong style="color:var(--green)">GetOffZillow AI (3%): you pay $300. You keep $9,700. Per deal.</strong>
       </div>
     </div>
     <div class="agent-cta-card">
       <h3>Create Your Free Agent Account</h3>
       <p>No credit card. No upfront fee. No commitment until you close a deal.</p>
-      <div class="agent-cta-note">⚡ Early agents: 1% marketplace fee locked in — never increases as the platform grows.</div>
-      <a href="signup.html" class="cta-btn-big">Create Free Account — Lock In 1% →</a>
+      <div class="agent-cta-note">⚡ Early agents: 3% marketplace fee — only paid when you close.</div>
+      <a href="signup.html" class="cta-btn-big">Create Free Account — Lock In 3% →</a>
       <p style="font-size:11px;color:var(--gray);margin-top:14px">Already have an account? <a href="signup.html" style="color:var(--blue);font-weight:700">Sign in →</a></p>
     </div>
   </div>
@@ -836,10 +844,78 @@
   <div class="reviews-grid" id="reviewsGrid"></div>
 </section>
 
+
+<!-- TRUST + HOW WE MAKE MONEY -->
+<section style="background:white;padding:72px 24px" id="trust">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-eyebrow">Transparency</div>
+    <h2 class="section-title">How We <span class="blue">Make Money.</span></h2>
+    <p class="section-sub">We believe you should know exactly how this works before you sign up.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px">
+      <div style="background:var(--bg);border-radius:12px;padding:24px">
+        <div style="font-size:28px;margin-bottom:12px">🤝</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">When You Close</div>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">We charge 3% of the agent's gross commission — only when a transaction closes. If no deal closes, we earn nothing.</p>
+      </div>
+      <div style="background:var(--bg);border-radius:12px;padding:24px">
+        <div style="font-size:28px;margin-bottom:12px">🚫</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">Never Upfront</div>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">No monthly fees, no listing fees, no lead fees. Agents pay nothing to join, list, or receive buyer inquiries.</p>
+      </div>
+      <div style="background:var(--bg);border-radius:12px;padding:24px">
+        <div style="font-size:28px;margin-bottom:12px">🔒</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">We Don't Sell Data</div>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">We don't sell buyer or agent data to third parties. No advertisers. No lender partnerships. No data brokers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--bg);padding:72px 24px" id="faq">
+  <div style="max-width:720px;margin:0 auto">
+    <div class="section-eyebrow">Common Questions</div>
+    <h2 class="section-title">FAQ</h2>
+    <div style="margin-top:40px;display:flex;flex-direction:column;gap:0" id="faqList">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Why only 3%? How is that sustainable?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">We keep costs low by operating as a direct marketplace — no call centers, no lead teams, no manual agent matching. Agents list themselves, buyers search directly, and we take a small cut only at closing. Volume across many transactions makes it sustainable.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is this too good to be true?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">We understand the skepticism. Traditional platforms charge 25–40% because they invest heavily in lead generation and marketing. We don't — buyers come to the marketplace directly and contact agents themselves. Lower overhead means we can charge less and still operate profitably.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">When exactly do I pay the 3%?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What if I already use Zillow or Agent Pronto?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">GetOffZillow AI is a separate, additional channel. You're not required to leave any existing platform. Many agents use multiple channels and simply compare which ones generate the best return per commission dollar spent.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How do buyers find my listings?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Buyers search the platform by city, ZIP, or address. Your listing appears with your photo, contact info, commission rate, and property details. When they're interested, they contact you directly — no platform introduction fee, no lead auction.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is my data safe?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Yes. We use Supabase with row-level security for all data storage. We don't sell your data to advertisers, lenders, or third parties. You can request deletion of your account and all associated data at any time. See our <a href="privacy.html" style="color:var(--blue)">Privacy Policy</a> for full details.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- FINAL CTA -->
 <section class="final-cta">
-  <h2 class="final-cta-title">Get Off Zillow.<br>For Real This Time.</h2>
-  <p class="final-cta-sub">Join free. List your properties. Pay 1% only when you close.</p>
+  <h2 class="final-cta-title">A Better Way<br>To Buy, Sell, and List.</h2>
+  <p class="final-cta-sub">Free to join. Free to list. We earn 3% only when you close.</p>
   <div class="final-cta-btns">
     <a href="signup.html" class="white-btn">Create Agent Account — Free →</a>
     <a href="signup.html" class="outline-btn">Sign In</a>
@@ -865,7 +941,7 @@
             <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:0.18em;padding:1px 7px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start">AI</div>
           </div>
         </div>
-        <p class="footer-tagline">Real estate without the extraction.<br>1% marketplace fee at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC</p>
+        <p class="footer-tagline">Real estate without the extraction.<br>3% marketplace fee at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC</p>
         <div class="footer-social">
           <a class="social-btn" href="#" onclick="showToast('𝕏 Coming soon!')">𝕏</a>
           <a class="social-btn" href="#" onclick="showToast('Instagram coming soon!')">📸</a>
@@ -887,8 +963,8 @@
         <ul>
           <li><a href="signup.html">List for Free</a></li>
           <li><a href="signup.html">Agent Dashboard</a></li>
-          <li><a href="#referral">1% Referral Model</a></li>
-          <li><a href="#compare" class="fire">⚡ vs. Agent Pronto</a></li>
+          <li><a href="#referral">Our Fee Model</a></li>
+          <li><a href="#compare">Fee Comparison</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -903,7 +979,7 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="mailto:hello@getoffzillow.ai">About / Contact</a></li>
+          <li><a href="mailto:campaigns@transbidlive.faith">Contact Us</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Service</a></li>
 
@@ -919,7 +995,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
 const sb = createClient(
@@ -1099,10 +1175,10 @@ function buildTicker() {
     {label:'Agent Pronto Fee',val:'35%',cls:'red'},
     {label:'OpCity Fee',val:'38%',cls:'red'},
     {label:'UpNest Fee',val:'30%',cls:'red'},
-    {label:'GetOffZillow AI Fee',val:'1%',cls:'green'},
-    {label:'Savings vs Zillow Flex',val:'39%',cls:'green'},
-    {label:'Savings vs Agent Pronto',val:'34%',cls:'green'},
-    {label:'You Keep of Commission',val:'99%',cls:'green'},
+    {label:'GetOffZillow AI Fee',val:'3%',cls:'green'},
+    {label:'Savings vs Zillow Flex',val:'37%',cls:'green'},
+    {label:'Savings vs Agent Pronto',val:'32%',cls:'green'},
+    {label:'You Keep of Commission',val:'97%',cls:'green'},
     {label:'Upfront Cost',val:'$0',cls:'green'},
   ];
   const doubled = [...items,...items];
@@ -1132,10 +1208,10 @@ function runCalc() {
 }
 
 const reviews = [
-  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $100 on a $10,000 commission. The direct contact with buyers is night and day.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
+  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $300 on a $10,000 commission. The direct contact with buyers is a completely different experience.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
   { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"👩" },
   { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"👩" },
-  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $100. That's not a typo. One hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
+  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $300. That's not a typo. Three hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
   { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"👩" },
   { stars:5, text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"👨" },
 ];
@@ -1143,7 +1219,7 @@ const reviews = [
 function setHeroTab(el,type) {
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  const msgs = {sell:'💰 Sell — list free in minutes',agent:'🤝 Agents: 1% fee, free listings'};
+  const msgs = {sell:'💰 Sell — list free in minutes',agent:'🤝 Agents: 3% at closing, free listings'};
   if (msgs[type]) showToast(msgs[type]);
 }
 
@@ -1167,6 +1243,15 @@ async function doSearch() {
 }
 
 function scrollTo(id) { document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+
+
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+  if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
+}
 
 function toggleMobileMenu() {
   const btn = document.getElementById('hamburger');
@@ -1206,14 +1291,4 @@ function renderReviews() {
       <p class="review-text">"${r.text}"</p>
       <div class="review-author">
         <div class="review-avatar">${r.emoji}</div>
-        <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
-      </div>
-    </div>`).join('');
-}
-
-loadListings();
-renderReviews();
-buildTicker();
-</script>
-</body>
-</html>
+        <div><div class="review-name">${r.name}</div><div cla
