@@ -1,84 +1,445 @@
-// api/admin-message.js
-// Sends bulk or single messages to agents via Brevo
-// Only callable from admin portal — verified by email list
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Create your free GOZ agent account. List properties free. 3% marketing fee only when you close.">
+<title>Sign Up / Sign In — GOZ | GetOffZillow AI</title>
+<meta name="theme-color" content="#0D0D0D">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23111'/%3E%3Cpolyline points='16,86 90,20 149,74' fill='none' stroke='%2300FF9D' stroke-width='11' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='31' y1='86' x2='31' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Cline x1='31' y1='156' x2='144' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='118' r='12' fill='%23111' stroke='%2300FF9D' stroke-width='7'/%3E%3Ccircle cx='90' cy='118' r='5' fill='%2300FF9D'/%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GOZ">
+<meta name="mobile-web-app-capable" content="yes">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D0D0D;--cream:#F4F1EB;--green:#00FF9D;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--gray:#6B6B6B;--border:#D4CFC4;--bg:#F7F7F7}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+nav{background:var(--ink);height:56px;display:flex;align-items:center;padding:0 24px;justify-content:space-between;flex-shrink:0}
+.nav-logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-goz{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.12em;color:var(--green);line-height:1}
+.nav-full{font-size:10px;color:rgba(255,255,255,0.3);font-family:'Space Mono',monospace}
+.nav-home{font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;transition:color 0.2s}
+.nav-home:hover{color:var(--green)}
+.wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.card{background:white;border-radius:16px;padding:36px;width:100%;max-width:440px;box-shadow:0 4px 24px rgba(0,0,0,0.1)}
+.tabs{display:flex;margin-bottom:24px;border-bottom:2px solid var(--border)}
+.tab{flex:1;text-align:center;padding:10px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;cursor:pointer;color:var(--gray);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.form-section{display:none}
+.form-section.active{display:block}
+h2{font-family:'DM Sans',sans-serif;font-weight:600;font-size:20px;margin-bottom:4px;color:var(--ink)}
+.sub{font-size:13px;color:var(--gray);margin-bottom:20px;line-height:1.5;font-weight:300}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;color:var(--gray)}
+.field input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;background:white;-webkit-appearance:none}
+.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,106,255,0.08)}
+.field .hint{font-size:11px;color:var(--gray);margin-top:3px;display:block;min-height:14px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.terms-check{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--gray);line-height:1.5;cursor:pointer;margin-bottom:14px}
+.terms-check input{width:auto;margin-top:2px;flex-shrink:0;accent-color:var(--blue)}
+.btn{width:100%;padding:13px;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.btn-green{background:var(--green);color:var(--ink);box-shadow:0 0 16px rgba(0,255,157,0.25)}
+.btn-green:hover{background:#00e88a;box-shadow:0 0 24px rgba(0,255,157,0.35)}
+.btn-blue{background:var(--blue);color:white}
+.btn-blue:hover{background:#0050CC}
+.btn:disabled{background:var(--border);color:var(--gray);cursor:not-allowed;box-shadow:none}
+.error{background:#fff5f5;border:1px solid #ffcccc;color:var(--red);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;line-height:1.5}
+.success{background:#f0fff8;border:1px solid #b3f0d0;color:var(--green-dark);padding:12px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;line-height:1.6}
+.link{color:var(--blue);cursor:pointer;font-weight:600}
+.link:hover{text-decoration:underline}
+.bottom-link{text-align:center;margin-top:16px;font-size:13px;color:var(--gray)}
+.bottom-link a,.bottom-link span{color:var(--blue);font-weight:600;text-decoration:none;cursor:pointer}
+@media(max-width:480px){.two-col{grid-template-columns:1fr}.card{padding:24px 18px}}
+</style>
+</head>
+<body>
 
-export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div style="width:34px;height:34px;background:var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px var(--green)">
+      <svg width="21" height="21" viewBox="0 0 46 46" fill="none"><polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/><line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/><circle cx="23" cy="30" r="1.2" fill="#00FF9D"/></svg>
+    </div>
+    <div><div class="nav-goz">GOZ</div><div class="nav-full">GetOffZillow AI</div></div>
+  </a>
+  <a href="index.html" class="nav-home">← Back to home</a>
+</nav>
 
-  const BREVO_API_KEY = process.env.BREVO_API_KEY;
-  if (!BREVO_API_KEY) return res.status(500).json({ error: 'Email service not configured' });
+<div class="wrap">
+  <div class="card" id="mainCard">
 
-  const { emails, subject, body } = req.body;
+    <div class="tabs" id="mainTabs">
+      <button class="tab active" id="tab-btn-signup" onclick="showTab('signup')">Create Account</button>
+      <button class="tab" id="tab-btn-signin" onclick="showTab('signin')">Sign In</button>
+    </div>
 
-  if (!emails?.length || !subject || !body) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
+    <!-- SIGN UP -->
+    <div class="form-section active" id="tab-signup">
+      <h2>Join GOZ Free</h2>
+      <p class="sub">Free to list. 3% marketing fee only when you close.</p>
+      <div class="error" id="su-err"></div>
+      <div class="success" id="su-ok"></div>
+      <div id="su-form">
+        <div class="two-col">
+          <div class="field"><label>First Name *</label><input id="su-first" type="text" placeholder="Jane" autocomplete="given-name"></div>
+          <div class="field"><label>Last Name *</label><input id="su-last" type="text" placeholder="Smith" autocomplete="family-name"></div>
+        </div>
+        <div class="field"><label>Email *</label><input id="su-email" type="email" placeholder="jane@realty.com" autocomplete="email"></div>
+        <div class="field">
+          <label>Password * <span style="font-weight:400;text-transform:none;letter-spacing:0">(min 8 characters)</span></label>
+          <input id="su-pw" type="password" placeholder="••••••••" autocomplete="new-password" oninput="checkPwStrength(this.value)">
+          <span class="hint" id="pw-hint"></span>
+        </div>
+        <div class="field">
+          <label>Phone *</label>
+          <input id="su-phone" type="tel" placeholder="(850) 555-0100" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label>License # <span style="font-weight:400;text-transform:none;letter-spacing:0">(FL: SL or BK + 7 digits)</span></label>
+          <input id="su-lic" type="text" placeholder="SL3456789" oninput="validateLicense(this)">
+          <span class="hint" id="lic-hint"></span>
+        </div>
+        <div class="field"><label>Brokerage</label><input id="su-brok" type="text" placeholder="Smith Realty Group" autocomplete="organization"></div>
+        <label class="terms-check">
+          <input type="checkbox" id="su-terms">
+          <span>I am a licensed real estate agent and agree to the <a href="terms.html" target="_blank" class="link">Terms of Service</a> and <a href="privacy.html" target="_blank" class="link">Privacy Policy</a></span>
+        </label>
+        <button class="btn btn-green" id="su-btn" onclick="doSignup()">Create Free Account →</button>
+      </div>
+      <div class="bottom-link" style="margin-top:12px"><a href="index.html">← Back to home</a></div>
+    </div>
 
-  if (emails.length > 200) {
-    return res.status(400).json({ error: 'Max 200 recipients per send' });
-  }
+    <!-- SIGN IN -->
+    <div class="form-section" id="tab-signin">
+      <h2>Welcome Back</h2>
+      <p class="sub">Sign in to your agent dashboard.</p>
+      <div class="error" id="si-err"></div>
+      <div class="success" id="si-ok"></div>
+      <div class="field"><label>Email</label><input id="si-email" type="email" placeholder="jane@realty.com" autocomplete="email"></div>
+      <div class="field"><label>Password</label><input id="si-pw" type="password" placeholder="••••••••" autocomplete="current-password" onkeypress="if(event.key==='Enter')doSignin()"></div>
+      <div style="text-align:right;margin-bottom:14px"><span class="link" onclick="showTab('reset')" style="font-size:12px">Forgot password?</span></div>
+      <button class="btn btn-blue" id="si-btn" onclick="doSignin()">Sign In →</button>
+      <div class="bottom-link" style="margin-top:14px">No account? <span onclick="showTab('signup')">Create one free →</span></div>
+    </div>
 
-  // Convert plain text body to simple HTML
-  const htmlBody = body
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\n\n/g, '</p><p style="margin:0 0 14px">')
-    .replace(/\n/g, '<br>');
+    <!-- FORGOT PASSWORD -->
+    <div class="form-section" id="tab-reset">
+      <h2>Reset Password</h2>
+      <p class="sub">Enter your email and we'll send a reset link.</p>
+      <div class="error" id="re-err"></div>
+      <div class="success" id="re-ok"></div>
+      <div class="field"><label>Email</label><input id="re-email" type="email" placeholder="jane@realty.com" autocomplete="email"></div>
+      <button class="btn btn-blue" id="re-btn" onclick="doReset()">Send Reset Link →</button>
+      <div class="bottom-link" style="margin-top:16px"><span onclick="showTab('signin')">← Back to sign in</span></div>
+    </div>
 
-  const htmlContent = `
-<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#f4f1eb;font-family:'Helvetica Neue',Arial,sans-serif">
-<div style="max-width:560px;margin:32px auto;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08)">
-  <div style="background:#0D0D0D;padding:20px 28px">
-    <span style="font-family:Georgia,serif;color:#00FF9D;font-size:20px;letter-spacing:3px;font-weight:700">GOZ</span>
-    <span style="color:rgba(255,255,255,0.35);font-size:11px;margin-left:8px">GetOffZillow AI</span>
-  </div>
-  <div style="padding:28px">
-    <p style="margin:0 0 14px;font-size:15px;color:#1A1A1A;line-height:1.7">${htmlBody}</p>
-  </div>
-  <div style="background:#f4f1eb;padding:16px 28px;text-align:center;font-size:11px;color:#999;border-top:1px solid #e8e3d8">
-    GOZ · GetOffZillow AI · TransBid LLC · Pensacola, FL<br>
-    <a href="https://get-off-zillow.vercel.app/dashboard.html" style="color:#999">Your Dashboard</a>
+    <!-- SET NEW PASSWORD -->
+    <div class="form-section" id="tab-newpw">
+      <h2>Set New Password</h2>
+      <p class="sub">Choose a new password for your account.</p>
+      <div class="error" id="np-err"></div>
+      <div class="success" id="np-ok"></div>
+      <div class="field"><label>New Password *</label><input id="np-pw" type="password" placeholder="••••••••" autocomplete="new-password"></div>
+      <div class="field"><label>Confirm Password *</label><input id="np-pw2" type="password" placeholder="••••••••" autocomplete="new-password" onkeypress="if(event.key==='Enter')doSetNewPassword()"></div>
+      <button class="btn btn-blue" id="np-btn" onclick="doSetNewPassword()">Set New Password →</button>
+    </div>
+
   </div>
 </div>
-</body></html>`;
 
-  let sent = 0;
-  let failed = 0;
+<script>
+const { createClient } = window.supabase || supabase;
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
 
-  // Send individually to avoid BCC issues — Brevo supports up to 50 per call
-  // Batch into groups of 50
-  const batches = [];
-  for (let i = 0; i < emails.length; i += 50) {
-    batches.push(emails.slice(i, i + 50));
-  }
+// ── INIT ──
+async function init() {
+  const params = new URLSearchParams(window.location.search);
 
-  for (const batch of batches) {
-    try {
-      const resp = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
-        body: JSON.stringify({
-          sender: { name: 'GOZ Team', email: 'campaigns@transbidlive.faith' },
-          to: batch.map(email => ({ email })),
-          subject,
-          htmlContent
-        })
-      });
-      if (resp.ok) sent += batch.length;
-      else failed += batch.length;
-    } catch(e) {
-      failed += batch.length;
-      console.error('Batch send error:', e.message);
+  // Capture referral
+  const ref = params.get('ref');
+  if (ref) sessionStorage.setItem('goz_ref', ref);
+
+  // Tab routing
+  const tab = params.get('tab');
+  if (tab === 'signin') showTab('signin');
+
+  // Password reset flow
+  const hash = window.location.hash;
+  if (hash.includes('type=recovery') || hash.includes('type=email_change')) {
+    const hashParams = new URLSearchParams(hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
+    if (accessToken) {
+      await sb.auth.setSession({ access_token: accessToken, refresh_token: refreshToken || '' });
+      document.getElementById('mainTabs').style.display = 'none';
+      showFormOnly('newpw');
+      window.history.replaceState(null, '', window.location.pathname);
+      return;
     }
   }
 
-  return res.status(200).json({
-    success: sent > 0,
-    sent,
-    failed,
-    total: emails.length
+  // Already logged in
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    document.getElementById('mainCard').innerHTML = `
+      <div style="text-align:center;padding:16px 0">
+        <div style="font-size:40px;margin-bottom:16px">✅</div>
+        <h2 style="margin-bottom:8px">You're signed in</h2>
+        <p style="color:var(--gray);font-size:14px;margin-bottom:28px;font-weight:300">Where would you like to go?</p>
+        <a href="dashboard.html" style="display:block;background:var(--blue);color:white;padding:13px;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:none;margin-bottom:10px">Go to Dashboard →</a>
+        <a href="index.html" style="display:block;background:var(--bg);color:var(--ink);padding:13px;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:none;margin-bottom:10px;border:1px solid var(--border)">Browse Listings</a>
+        <a href="list.html" style="display:block;background:var(--bg);color:var(--ink);padding:13px;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:none;margin-bottom:20px;border:1px solid var(--border)">Add a Listing</a>
+        <a href="#" onclick="sb.auth.signOut().then(()=>location.href='index.html')" style="font-size:13px;color:var(--gray)">Sign out</a>
+      </div>`;
+  }
+}
+
+// ── TAB SWITCHING ──
+function showTab(name) {
+  ['signup','signin','reset','newpw'].forEach(t => {
+    const form = document.getElementById('tab-' + t);
+    if (form) form.classList.toggle('active', t === name);
+    const btn = document.getElementById('tab-btn-' + t);
+    if (btn) btn.classList.toggle('active', t === name);
   });
 }
+
+function showFormOnly(name) {
+  ['signup','signin','reset','newpw'].forEach(t => {
+    const form = document.getElementById('tab-' + t);
+    if (form) form.classList.toggle('active', t === name);
+  });
+}
+
+// ── SIGN UP ──
+async function doSignup() {
+  const btn = document.getElementById('su-btn');
+  const err = document.getElementById('su-err');
+  const ok  = document.getElementById('su-ok');
+  err.style.display = 'none';
+  ok.style.display  = 'none';
+
+  const first = document.getElementById('su-first').value.trim();
+  const last  = document.getElementById('su-last').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pw    = document.getElementById('su-pw').value;
+  const phone = document.getElementById('su-phone').value.trim();
+  const lic   = document.getElementById('su-lic').value.trim();
+  const brok  = document.getElementById('su-brok').value.trim();
+  const terms = document.getElementById('su-terms').checked;
+
+  if (!first || !last || !email || !pw) {
+    err.textContent = 'First name, last name, email, and password are required.';
+    err.style.display = 'block'; return;
+  }
+  if (pw.length < 8) {
+    err.textContent = 'Password must be at least 8 characters.';
+    err.style.display = 'block'; return;
+  }
+  if (phone) {
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length < 10) {
+      err.textContent = 'Enter a valid 10-digit phone number.';
+      err.style.display = 'block'; return;
+    }
+  }
+  if (!terms) {
+    err.textContent = 'Please confirm you are a licensed agent and agree to the Terms of Service.';
+    err.style.display = 'block'; return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating account...';
+
+  const { data: authData, error: authErr } = await sb.auth.signUp({
+    email,
+    password: pw,
+    options: { data: { first_name: first, last_name: last } }
+  });
+
+  if (authErr) {
+    err.textContent = authErr.message.includes('already registered')
+      ? 'An account with this email already exists. Sign in instead.'
+      : authErr.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Create Free Account →';
+    return;
+  }
+
+  // Insert agent profile
+  if (authData.user?.id) {
+    const { error: profileErr } = await sb.from('agents').insert({
+      user_id:        authData.user.id,
+      first_name:     first,
+      last_name:      last,
+      email:          email.toLowerCase(),
+      phone:          phone || null,
+      license_number: lic || null,
+      brokerage:      brok || null,
+      referred_by:    sessionStorage.getItem('goz_ref') || null
+    });
+    if (profileErr) console.error('Profile insert:', profileErr.message);
+
+    // Welcome email (non-blocking)
+    fetch('/api/welcome-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ first_name: first, last_name: last, email })
+    }).catch(e => console.warn('Welcome email:', e));
+  }
+
+  localStorage.setItem('goz_name', `${first} ${last}`);
+  document.getElementById('su-form').style.display = 'none';
+
+  if (authData.session) {
+    const { data: agent } = await sb.from('agents').select('id').eq('user_id', authData.user.id).single();
+    if (agent) localStorage.setItem('goz_agent_id', agent.id);
+    ok.innerHTML = `🎉 <strong>Welcome, ${first}!</strong> Let's get your first listing live...`;
+    ok.style.display = 'block';
+    setTimeout(() => { window.location.href = 'list.html?new=1'; }, 1500);
+  } else {
+    ok.innerHTML = `🎉 <strong>Account created, ${first}!</strong><br>Check your email to confirm, then <span class="link" onclick="showTab('signin')">sign in here →</span>`;
+    ok.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Create Free Account →';
+}
+
+// ── SIGN IN ──
+async function doSignin() {
+  const btn = document.getElementById('si-btn');
+  const err = document.getElementById('si-err');
+  err.style.display = 'none';
+
+  const email = document.getElementById('si-email').value.trim();
+  const pw    = document.getElementById('si-pw').value;
+
+  if (!email || !pw) {
+    err.textContent = 'Email and password required.';
+    err.style.display = 'block'; return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+
+  if (error) {
+    let msg = error.message;
+    if (msg.includes('Invalid login')) msg = 'Incorrect email or password. Try again.';
+    err.textContent = msg;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+    return;
+  }
+
+  // Cache name
+  const { data: agent } = await sb.from('agents').select('id, first_name, last_name').eq('user_id', data.user.id).single();
+  if (agent) {
+    localStorage.setItem('goz_agent_id', agent.id);
+    localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`.trim());
+  }
+
+  window.location.href = 'dashboard.html';
+}
+
+// ── FORGOT PASSWORD ──
+async function doReset() {
+  const btn = document.getElementById('re-btn');
+  const err = document.getElementById('re-err');
+  const ok  = document.getElementById('re-ok');
+  err.style.display = 'none';
+  ok.style.display  = 'none';
+
+  const email = document.getElementById('re-email').value.trim();
+  if (!email) { err.textContent = 'Enter your email address.'; err.style.display='block'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/signup.html'
+  });
+
+  if (error) {
+    err.textContent = error.message;
+    err.style.display = 'block';
+  } else {
+    ok.textContent = 'Reset link sent! Check your inbox and spam folder.';
+    ok.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Send Reset Link →';
+}
+
+// ── SET NEW PASSWORD ──
+async function doSetNewPassword() {
+  const btn = document.getElementById('np-btn');
+  const err = document.getElementById('np-err');
+  const ok  = document.getElementById('np-ok');
+  err.style.display = 'none';
+  ok.style.display  = 'none';
+
+  const pw  = document.getElementById('np-pw').value;
+  const pw2 = document.getElementById('np-pw2').value;
+
+  if (!pw || pw.length < 8) {
+    err.textContent = 'Password must be at least 8 characters.';
+    err.style.display = 'block'; return;
+  }
+  if (pw !== pw2) {
+    err.textContent = 'Passwords do not match.';
+    err.style.display = 'block'; return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  const { error } = await sb.auth.updateUser({ password: pw });
+
+  if (error) {
+    err.textContent = error.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Set New Password →';
+    return;
+  }
+
+  ok.textContent = '✅ Password updated! Taking you to your dashboard...';
+  ok.style.display = 'block';
+  setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
+}
+
+// ── HELPERS ──
+function checkPwStrength(val) {
+  const hint = document.getElementById('pw-hint');
+  if (!hint) return;
+  if (!val) { hint.textContent = ''; return; }
+  if (val.length < 8) { hint.textContent = `${8 - val.length} more characters needed`; hint.style.color = 'var(--red)'; }
+  else if (val.length < 12) { hint.textContent = 'Good ✓'; hint.style.color = 'var(--green-dark)'; }
+  else { hint.textContent = 'Strong ✓✓'; hint.style.color = 'var(--green-dark)'; }
+}
+
+function validateLicense(input) {
+  const val  = input.value.toUpperCase().trim();
+  const hint = document.getElementById('lic-hint');
+  if (!hint || val.length < 2) { if (hint) hint.textContent = ''; return; }
+  const valid = ['BK','SL','BL','SB','SW','BO','BR','BS','CQ','MV','FE','CV'].some(p => val.startsWith(p));
+  hint.textContent = valid ? '✓ Valid FL license format' : 'FL licenses start with SL (sales) or BK (broker)';
+  hint.style.color = valid ? 'var(--green-dark)' : 'var(--gray)';
+}
+
+init();
+</script>
+</body>
+</html>
