@@ -33,7 +33,7 @@ export default async function handler(req, res) {
         htmlContent: `<div style="font-family:Arial,sans-serif;padding:32px;max-width:500px">
           <h2 style="color:#006AFF">You're on the list!</h2>
           <p>We'll reach out within 24 hours with your early access link.</p>
-          <p style="color:#444">Remember: <strong>1% referral fee. Locked for life.</strong> Zillow charges 40%. Do the math.</p>
+          <p style="color:#444">Remember: <strong>3% marketing fee. Locked for life.</strong> Zillow charges 40%. Do the math.</p>
           <p>— GetOffZillow AI Team</p>
         </div>`
       })
