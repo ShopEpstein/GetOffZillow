@@ -139,6 +139,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 @media(max-width:1024px){.hero-inner,.calc-inner{grid-template-columns:1fr;gap:40px}.listings-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){.hero{padding:60px 20px}.section{padding:60px 20px}.diff-grid,.how-grid{grid-template-columns:1fr}.listings-grid{grid-template-columns:1fr 1fr}.nav-right .btn-outline{display:none}}
 @media(max-width:480px){.listings-grid{grid-template-columns:1fr}}
+
+/* MOBILE NAV */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:auto}
+.hamburger span{display:block;width:22px;height:2px;background:white;border-radius:2px;transition:all 0.3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;inset:0;top:60px;background:var(--ink);z-index:250;padding:20px 24px;flex-direction:column;gap:0;overflow-y:auto}
+.mobile-nav.open{display:flex}
+.mobile-nav a{display:block;padding:16px 0;font-size:17px;font-weight:500;color:rgba(255,255,255,0.8);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.07);transition:color 0.2s}
+.mobile-nav a:hover{color:var(--green)}
+.mobile-nav .mob-cta{margin-top:20px;background:var(--green);color:var(--ink)!important;padding:16px!important;border-radius:8px;text-align:center;font-size:15px;font-weight:700;border:none;display:block;text-decoration:none}
+@media(max-width:768px){.nav-right a:not(.btn-green):not(.btn-blue){display:none}.hamburger{display:flex}}
 </style>
 </head>
 <body>
@@ -155,6 +168,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
     <a href="agents.html" class="nav-link">For Agents</a>
     <a href="#listings" class="btn-blue">Browse Listings</a>
   </div>
+
+  <button class="hamburger" id="mobileHamburger" onclick="toggleMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Home</a>
+  <a href="buyers.html">🔍 Browse Listings</a>
+  <a href="agents.html">🤝 For Agents</a>
+  <a href="directory.html">👤 Find an Agent</a>
+  <a href="signup.html" class="mob-cta">List Free →</a>
 </nav>
 
 <!-- HERO -->
@@ -368,6 +394,24 @@ function runCalc() {
 }
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),4000)}
 loadListings();
+
+function toggleMobileNav() {
+  const btn = document.getElementById('mobileHamburger');
+  const nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  btn.classList.toggle('open');
+  nav.classList.toggle('open');
+  document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+}
+document.addEventListener('click', e => {
+  const btn = document.getElementById('mobileHamburger');
+  const nav = document.getElementById('mobileNav');
+  if (nav && btn && nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+    btn.classList.remove('open');
+    nav.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
 </script>
 </body>
 </html>
