@@ -116,6 +116,38 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Email send failed' });
     }
 
+    // ── ADMIN NOTIFICATION — email you when new agent signs up ──
+    try {
+      await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY },
+        body: JSON.stringify({
+          sender: { name: 'GOZ Platform', email: 'campaigns@transbidlive.faith' },
+          to: [{ email: 'campaigns@transbidlive.faith', name: 'GOZ Admin' }],
+          subject: `🆕 New Agent Signup — ${first_name} ${last_name || ''}`,
+          htmlContent: `
+            <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#f4f1eb">
+              <div style="background:#0D0D0D;padding:16px 20px;border-radius:8px 8px 0 0">
+                <span style="font-family:Georgia,serif;color:#00FF9D;font-size:18px;letter-spacing:3px;font-weight:700">GOZ</span>
+                <span style="color:rgba(255,255,255,0.4);font-size:11px;margin-left:8px">New Agent Alert</span>
+              </div>
+              <div style="background:white;padding:24px;border-radius:0 0 8px 8px;border:1px solid #e0e0e0;border-top:none">
+                <h2 style="margin:0 0 16px;font-size:18px;color:#0D0D0D">New agent signed up</h2>
+                <table style="width:100%;border-collapse:collapse;font-size:14px">
+                  <tr><td style="padding:8px 0;color:#666;width:120px">Name</td><td style="padding:8px 0;font-weight:600">${first_name} ${last_name || ''}</td></tr>
+                  <tr><td style="padding:8px 0;color:#666">Email</td><td style="padding:8px 0"><a href="mailto:${email}" style="color:#006AFF">${email}</a></td></tr>
+                </table>
+                <div style="margin-top:20px;padding:14px;background:#f0fff8;border-radius:6px;font-size:13px;color:#444">
+                  They've been sent the welcome email and redirected to list their first property.
+                </div>
+              </div>
+            </div>`
+        })
+      });
+    } catch(adminErr) {
+      console.warn('Admin notification failed:', adminErr.message);
+    }
+
     return res.status(200).json({ success: true });
 
   } catch (err) {
