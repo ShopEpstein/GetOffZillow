@@ -237,7 +237,7 @@ window.addEventListener('error', function(e) {
     <button style="position:absolute;top:14px;right:14px;background:#f0f0f0;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:15px" onclick="closeClosingModal()">✕</button>
     <div style="font-size:32px;margin-bottom:8px">🎉</div>
     <h3>Report a Closing</h3>
-    <p class="sub">You closed a deal with a buyer from GetOffZillow AI. Enter the details below to calculate your marketplace fee. <strong>You only owe us 3% of your gross commission — not 3% of the sale price.</strong></p>
+    <p class="sub">You closed a deal with a buyer from GetOffZillow AI. Enter the details below to calculate your marketing fee. <strong>You only owe us 3% of your gross commission — not 3% of the sale price.</strong></p>
     <input type="hidden" id="cl_listing_id" />
     <div class="form-group">
       <label>Property Address</label>
@@ -391,7 +391,7 @@ window.addEventListener('error', function(e) {
         <div class="stat-sub">Buyers who contacted you</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Your Marketplace Fee</div>
+        <div class="stat-label">Your Marketing Fee</div>
         <div class="stat-value ai">3%</div>
         <div class="stat-sub">Only when you close</div>
       </div>
@@ -917,7 +917,7 @@ function calcClosingFee() {
   const addr = document.getElementById('cl_address').value;
   const note = encodeURIComponent(`GOZ fee - ${addr}`);
   document.getElementById('payVenmo').href = `https://venmo.com/VinHunter?txn=pay&amount=${gozFee}&note=${note}`;
-  document.getElementById('payZelle').href = `mailto:campaigns@transbidlive.faith?subject=GOZ Closing Fee - ${addr}&body=I am paying the GOZ marketplace fee of $${gozFee} for the closing at ${addr}.`;
+  document.getElementById('payZelle').href = `mailto:campaigns@transbidlive.faith?subject=GOZ Marketing Fee - ${addr}&body=I am paying the GOZ marketing fee of $${gozFee} for the closing at ${addr}.`;
 }
 
 async function reportClosingHonor() {
