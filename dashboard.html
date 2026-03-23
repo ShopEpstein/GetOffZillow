@@ -667,7 +667,6 @@ document.getElementById('listingsContainer').innerHTML = `<div class="listings-g
             <button class="btn-toggle" onclick="toggleStatus('${l.id}','${l.status}')">${l.status==='active'?'Deactivate':'Reactivate'}</button>
             <button class="btn-sold" onclick="markSold('${l.id}','${l.status}')" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:${l.status==='sold'?'var(--gray)':'#2e7d32'}">${l.status==='sold'?'Unmark Sold':'Mark Sold'}</button>
             <button class="btn-share" onclick="shareListing('${l.id}','${l.address}')" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:var(--blue)">Share</button>
-            ${l.featured?'<span style="font-size:10px;background:#FFB800;color:#000;padding:2px 6px;border-radius:3px;font-weight:700">★ Featured</span>':'<button onclick="featureListing(''+l.id+'')" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:#E67E00">★ Feature ($25)</button>'}
             <button onclick="toggleFeatured('${l.id}',${!!l.featured})" style="font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;color:${l.featured?'#FFB800':'var(--gray)'}">${l.featured?'★ Featured':'☆ Feature'}</button>
             <button class="btn-delete" onclick="deleteListing('${l.id}')">Delete</button>
           </div>
