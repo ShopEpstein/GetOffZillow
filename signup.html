@@ -104,7 +104,7 @@
         <div class="field"><label>Email *</label><input id="su-email" type="email" placeholder="jane@realty.com" autocomplete="email" /></div>
         <div class="field"><label>Password * (min 8 characters)</label><input id="su-pw" type="password" placeholder="••••••••" autocomplete="new-password" /></div>
         <div class="field"><label>Phone <span style="font-size:10px;color:var(--gray);font-weight:400">(required for verification)</span></label><input id="su-phone" type="tel" placeholder="(850) 555-0100" autocomplete="tel" required /></div>
-        <div class="field"><label>License # <span style="font-size:10px;color:var(--gray);font-weight:400">(FL format: SL or BK + 7 digits)</span></label><input id="su-lic" type="text" placeholder="SL3456789 or BK1234567" oninput="validateLicense(this)" /></div>
+        <div class="field"><label>License # <span style="font-size:10px;color:var(--gray);font-weight:400">(FL format: SL or BK + 7 digits)</span></label><input id="su-lic" type="text" placeholder="SL3456789 or BK1234567" oninput="validateLicense(this)" /><span class="hint" style="font-size:11px;color:var(--gray);display:block;margin-top:3px"></span></div>
         <div class="field"><label>Brokerage</label><input id="su-brok" type="text" placeholder="Smith Realty Group" /></div>
         <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#666;line-height:1.5;cursor:pointer;margin-bottom:12px">
           <input type="checkbox" id="su-terms" style="width:auto;margin-top:2px;flex-shrink:0" />
@@ -183,8 +183,15 @@ async function init() {
     }
   }
 
+  // URL param routing
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlRef = urlParams.get('ref');
+  const urlTab = urlParams.get('tab'); // ?tab=signin shows signin tab
+  if (urlTab === 'signin') {
+    showTab('signin');
+  }
+
   // Capture referral param
-  const urlRef = new URLSearchParams(window.location.search).get('ref');
   if (urlRef) sessionStorage.setItem('goz_ref', urlRef);
 
   // Already logged in — show options instead of hard-redirecting
@@ -206,10 +213,14 @@ async function init() {
 }
 
 function showTab(name) {
-  ['signup','signin','reset','newpw'].forEach((t,i) => {
-    const tabEl = document.querySelectorAll('.tab')[i];
-    if (tabEl) tabEl.classList.toggle('active', t === name);
-    document.getElementById('tab-' + t).classList.toggle('active', t === name);
+  const tabs = document.querySelectorAll('.tab');
+  const mainNames = ['signup','signin'];
+  mainNames.forEach((t, i) => {
+    if (tabs[i]) tabs[i].classList.toggle('active', t === name);
+  });
+  ['signup','signin','reset','newpw'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) el.classList.toggle('active', t === name);
   });
 }
 
@@ -434,6 +445,18 @@ async function doSetNewPassword() {
   ok.innerHTML = `✅ <strong>Password updated!</strong> Taking you to your dashboard...`;
   ok.style.display = 'block';
   setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
+}
+
+function validateLicense(input) {
+  const val = input.value.toUpperCase().trim();
+  const hint = input.nextElementSibling;
+  if (!val || val.length < 3) return;
+  const validPrefixes = ['BK','SL','BL','SB','SW','BO','BR','BS','CQ','MV','FE','CV'];
+  const hasPrefix = validPrefixes.some(p => val.startsWith(p));
+  if (hint && hint.classList.contains('hint')) {
+    hint.textContent = hasPrefix ? '✓ Looks like a valid FL license format' : 'FL licenses start with SL (sales) or BK (broker)';
+    hint.style.color = hasPrefix ? 'var(--green)' : 'var(--gray)';
+  }
 }
 
 function checkPwStrength(val) {
