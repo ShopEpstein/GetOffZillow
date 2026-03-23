@@ -441,7 +441,7 @@ footer{background:#080808;color:rgba(255,255,255,0.4);padding:64px 32px 28px}
     <li><a href="agents.html">For Agents</a></li>
     <li><a href="buyers.html">For Buyers</a></li>
     <li><a href="directory.html">Find an Agent</a></li>
-    <li style="margin-left:8px"><a href="signup.html" class="nav-btn-outline">Sign In</a></li>
+    <li style="margin-left:8px"><a href="signup.html?tab=signin" class="nav-btn-outline">Sign In</a></li>
     <li style="margin-left:4px"><a href="signup.html" class="nav-btn-green">List Free</a></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -541,19 +541,6 @@ footer{background:#080808;color:rgba(255,255,255,0.4);padding:64px 32px 28px}
         </ul>
         <a href="agents.html" class="path-cta">Start Listing Free →</a>
       </div>
-      <div class="path-card" style="background:var(--cream2);border-top:3px solid #E67E00;position:relative;overflow:hidden;transition:background 0.3s">
-        <span class="path-num" style="color:rgba(0,0,0,0.04)">03</span>
-        <span class="path-icon">🏠</span>
-        <h2 class="path-title" style="color:var(--ink)">I'm Selling<br>Without an<br>Agent (FSBO)</h2>
-        <p class="path-desc">List your own property directly. Buyers contact you. No agent required. Flat $49 marketing fee if a GOZ buyer closes — only if they do.</p>
-        <ul class="path-bullets">
-          <li>Free to list your property</li>
-          <li>Buyers contact you directly — your phone and email</li>
-          <li>AI writes your listing description</li>
-          <li>Flat $49 marketing fee only if a GOZ buyer closes with you</li>
-        </ul>
-        <a href="signup.html?fsbo=1" style="background:#E67E00;color:white;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s">List My Property →</a>
-      </div>
       <div class="path-card buyer">
         <span class="path-num">02</span>
         <span class="path-icon">🔍</span>
@@ -566,6 +553,19 @@ footer{background:#080808;color:rgba(255,255,255,0.4);padding:64px 32px 28px}
           <li>Free mortgage calculator with full cost estimate</li>
         </ul>
         <a href="buyers.html" class="path-cta">Browse Listings →</a>
+      </div>
+      <div class="path-card" style="background:var(--cream2);border-top:3px solid #E67E00;position:relative;overflow:hidden;transition:background 0.3s">
+        <span class="path-num" style="color:rgba(0,0,0,0.04)">03</span>
+        <span class="path-icon">🏠</span>
+        <h2 class="path-title" style="color:var(--ink)">I'm Selling<br>Without an<br>Agent (FSBO)</h2>
+        <p class="path-desc">List your own property directly. Buyers contact you. No agent required. Flat $49 marketing fee only if a GOZ buyer contacts you and closes — no close, no charge.</p>
+        <ul class="path-bullets">
+          <li>Free to list your property</li>
+          <li>Buyers contact you directly — your phone and email</li>
+          <li>AI writes your listing description</li>
+          <li>Flat $49 marketing fee only if a GOZ buyer closes with you</li>
+        </ul>
+        <a href="signup.html?fsbo=1" style="background:#E67E00;color:white;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s">List My Property →</a>
       </div>
     </div>
   </div>
@@ -941,7 +941,7 @@ footer{background:#080808;color:rgba(255,255,255,0.4);padding:64px 32px 28px}
         <h4>Account</h4>
         <ul>
           <li><a href="signup.html">Create Account</a></li>
-          <li><a href="signup.html">Sign In</a></li>
+          <li><a href="signup.html?tab=signin">Sign In</a></li>
           <li><a href="list.html">Submit Listing</a></li>
         </ul>
       </div>
