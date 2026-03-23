@@ -137,6 +137,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 
 @media(max-width:1024px){.hero-inner{grid-template-columns:1fr;gap:48px}.steps-grid{grid-template-columns:repeat(2,1fr)}.obj-grid{grid-template-columns:1fr 1fr}.features-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){.hero{padding:60px 20px}.section{padding:60px 20px}.steps-grid{grid-template-columns:1fr}.obj-grid{grid-template-columns:1fr}.features-grid{grid-template-columns:1fr}.nav-right .btn-outline{display:none}.compare-table th:nth-child(3),.compare-table td:nth-child(3),.compare-table th:nth-child(4),.compare-table td:nth-child(4){display:none}}
+
+/* MOBILE NAV */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:auto}
+.hamburger span{display:block;width:22px;height:2px;background:white;border-radius:2px;transition:all 0.3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;inset:0;top:60px;background:var(--ink);z-index:250;padding:20px 24px;flex-direction:column;gap:0;overflow-y:auto}
+.mobile-nav.open{display:flex}
+.mobile-nav a{display:block;padding:16px 0;font-size:17px;font-weight:500;color:rgba(255,255,255,0.8);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.07);transition:color 0.2s}
+.mobile-nav a:hover{color:var(--green)}
+.mobile-nav .mob-cta{margin-top:20px;background:var(--green);color:var(--ink)!important;padding:16px!important;border-radius:8px;text-align:center;font-size:15px;font-weight:700;border:none;display:block;text-decoration:none}
+@media(max-width:768px){.nav-right a:not(.btn-green):not(.btn-blue){display:none}.hamburger{display:flex}}
 </style>
 </head>
 <body>
@@ -154,6 +167,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
     <a href="dashboard.html" class="btn-outline">Dashboard</a>
     <a href="signup.html" class="btn-green">List Free →</a>
   </div>
+
+  <button class="hamburger" id="mobileHamburger" onclick="toggleMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html">🏠 Home</a>
+  <a href="buyers.html">🔍 Browse Listings</a>
+  <a href="agents.html">🤝 For Agents</a>
+  <a href="directory.html">👤 Find an Agent</a>
+  <a href="signup.html" class="mob-cta">List Free →</a>
 </nav>
 
 <!-- HERO -->
@@ -161,7 +187,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   <div class="hero-inner">
     <div>
       <span class="hero-eyebrow">For Licensed Real Estate Agents</span>
-      <h1 class="hero-h1">List Free.<br>Pay <span class="green">3%</span><br>at Close.</h1>
+      <h1 class="hero-h1">List Free.<br>Keep <span class="green">97%</span><br>at Close.</h1>
       <p class="hero-desc">Most platforms take 25–40% of your commission. GOZ takes <strong>3% of your commission</strong> — not 3% of the sale price — only when a buyer you met through us closes with you. <strong>Listing is always free.</strong></p>
       <div class="hero-trust">
         <span class="trust-chip">Unlimited free listings</span>
@@ -227,7 +253,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
       <div class="step-card">
         <span class="step-n">4</span>
         <span class="step-icon">💰</span>
-        <h3 class="step-title">Close. Pay 3% of Commission.</h3>
+        <h3 class="step-title">Close. Keep $9,700.</h3>
         <p class="step-desc">Deal closes with a GOZ buyer. You report the closing in your dashboard, calculate the fee, and pay via Venmo or Zelle. On a $10,000 commission, that's $300. You keep $9,700.</p>
         <span class="step-badge">3% of commission = $300 on $10K</span>
       </div>
@@ -315,7 +341,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
         <p class="obj-a">Buyers search GOZ directly by city, ZIP, or address. Listings show by recency — not ad spend. As the platform grows, more buyers come. You're also encouraged to share your direct listing URL anywhere you currently market properties.</p>
       </div>
       <div class="obj-card">
-        <p class="obj-q">What if I already pay for Zillow or Agent Pronto?</p>
+        <p class="obj-q">What if I already use Zillow or Agent Pronto?</p>
         <p class="obj-a">GOZ is an additional channel — not a replacement. List the same properties here for free. If GOZ delivers a buyer who closes, you pay <strong>$300 instead of $3,500</strong>. There's no risk in running both simultaneously.</p>
       </div>
       <div class="obj-card">
@@ -324,7 +350,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
       </div>
       <div class="obj-card">
         <p class="obj-q">What if I close a deal but don't report it?</p>
-        <p class="obj-a">We operate on professional trust — the same system every referral agreement uses. Agents who circumvent the fee agreement have their accounts permanently terminated. Most agents find <strong>$300 a reasonable cost</strong> for a closed deal they wouldn't have had otherwise.</p>
+        <p class="obj-a">We operate on professional trust — the same system every referral agreement uses. Agents who circumvent the fee agreement have their accounts closed. Most agents find <strong>$300 a reasonable cost</strong> for a closed deal they wouldn't have had otherwise.</p>
       </div>
       <div class="obj-card">
         <p class="obj-q">Is this only for Pensacola / Florida?</p>
@@ -350,7 +376,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
             <th>Lead Auction?</th>
             <th>Commission Shown?</th>
             <th>Free Listings?</th>
-            <th class="goz-col">GOZ <span class="winner">★ Best</span></th>
+            <th class="goz-col">GOZ</th>
           </tr>
         </thead>
         <tbody>
@@ -446,6 +472,24 @@ function showToast(msg) {
   t._t = setTimeout(() => t.classList.remove('show'), 4000);
 }
 updateCalc();
+
+function toggleMobileNav() {
+  const btn = document.getElementById('mobileHamburger');
+  const nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  btn.classList.toggle('open');
+  nav.classList.toggle('open');
+  document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+}
+document.addEventListener('click', e => {
+  const btn = document.getElementById('mobileHamburger');
+  const nav = document.getElementById('mobileNav');
+  if (nav && btn && nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+    btn.classList.remove('open');
+    nav.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
 </script>
 </body>
 </html>
