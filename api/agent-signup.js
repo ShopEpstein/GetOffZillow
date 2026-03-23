@@ -144,7 +144,7 @@ export default async function handler(req, res) {
                 <h2 style="color:#1a1a1a">Welcome, ${first_name}! 🏡</h2>
                 <p style="color:#444;line-height:1.6">You're officially a GetOffZillow AI agent.</p>
                 <div style="background:#f0fff8;border-left:4px solid #00C853;padding:16px;border-radius:4px;margin:20px 0">
-                  <strong style="color:#00C853;font-size:20px">1% referral fee — locked for life.</strong><br>
+                  <strong style="color:#00C853;font-size:20px">1% marketing fee — locked for life.</strong><br>
                   <span style="color:#444;font-size:13px">Agent Pronto charges 35%. Zillow charges 40%. You pay $100 on a $10,000 commission. That's it.</span>
                 </div>
                 <p style="color:#444;line-height:1.6"><strong>Your next steps:</strong></p>
