@@ -202,11 +202,27 @@ async function loadAgents() {
   try {
     const { data, error } = await sb
       .from('agents')
-      .select('id, first_name, last_name, photo_url, brokerage, state, commission_rate, markets_served, bio, created_at')
+      .select('id, first_name, last_name, photo_url, brokerage, state, commission_rate, markets_served, bio, created_at, license_number')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    allAgents = data || [];
+
+    // Filter out test/incomplete accounts
+    const raw = data || [];
+    allAgents = raw.filter(a => {
+      const first = (a.first_name || '').trim();
+      const last  = (a.last_name  || '').trim();
+      const name  = (first + ' ' + last).toLowerCase();
+      // Must have both first and last name
+      if (!first || !last) return false;
+      // Name can't be all same character (ZZZZZZZZ etc)
+      if (/^(.)+$/.test(first) || /^(.)+$/.test(last)) return false;
+      // Name can't contain "test" or be obviously fake
+      if (name.includes('test') || name.includes('fake') || name.includes('demo')) return false;
+      // Must have brokerage OR license_number (shows they filled out profile)
+      if (!a.brokerage && !a.license_number) return false;
+      return true;
+    });
 
     // Get listing counts per agent
     if (allAgents.length > 0) {
