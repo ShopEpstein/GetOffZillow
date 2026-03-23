@@ -523,10 +523,27 @@ function toggleListingType(val) {
     const commLabel = document.getElementById('commission_rate')?.previousElementSibling;
     if (commLabel) commLabel.textContent = 'Monthly Rent ($)';
   } else if (val === 'fsbo') {
-    hint.textContent = 'FSBO listing — free to post, flat $49 fee if GOZ buyer closes';
+    hint.textContent = 'FSBO — no agent commission. Flat $49 marketing fee only if a GOZ buyer closes with you.';
     hint.style.color = '#E67E00';
-    if (commGroup) commGroup.style.opacity = '1';
+    // Hide commission for FSBO — not applicable
+    if (commGroup) {
+      commGroup.style.display = 'none';
+    }
+    // Show FSBO notice
+    let fsboNotice = document.getElementById('fsboNotice');
+    if (!fsboNotice) {
+      fsboNotice = document.createElement('div');
+      fsboNotice.id = 'fsboNotice';
+      fsboNotice.style.cssText = 'background:#fff8f0;border-left:3px solid #E67E00;padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;color:#444;line-height:1.6;margin-top:8px';
+      fsboNotice.innerHTML = '<strong style="color:#E67E00">FSBO Listing</strong> — You're selling without an agent. Buyers will contact you directly via your phone and email. GOZ charges a flat $49 marketing fee only if a buyer who contacts you through GOZ closes a deal with you. No close = no charge.';
+      commGroup?.parentElement?.appendChild(fsboNotice);
+    }
+    fsboNotice.style.display = 'block';
   } else {
+    // Show commission field again
+    if (commGroup) commGroup.style.display = '';
+    const fsboNotice = document.getElementById('fsboNotice');
+    if (fsboNotice) fsboNotice.style.display = 'none';
     hint.textContent = 'Agent listing — 3% marketing fee at closing';
     hint.style.color = 'var(--gray)';
     if (commGroup) commGroup.style.opacity = '1';
@@ -542,11 +559,18 @@ function formatPrice(input) {
   const n = parseInt(raw) || 0;
   const disp = document.getElementById('priceDisplay');
   if (n > 0) {
-    const comm = document.getElementById('commission_rate').value;
-    const pct = parseFloat(comm) || 2.5;
-    const commAmt = Math.round(n * pct / 100);
-    const gozFee = Math.round(commAmt * 0.03);
-    disp.textContent = `$${n.toLocaleString()} · ${comm} commission = $${commAmt.toLocaleString()} · GOZ fee: $${gozFee.toLocaleString()}`;
+    const lType = document.getElementById('listing_type')?.value;
+    if (lType === 'fsbo') {
+      disp.textContent = `$${n.toLocaleString()} · FSBO — flat $49 GOZ marketing fee only if buyer closes`;
+    } else if (lType === 'rental') {
+      disp.textContent = `$${n.toLocaleString()}/mo · Rental listing`;
+    } else {
+      const comm = document.getElementById('commission_rate').value;
+      const pct = parseFloat(comm) || 2.5;
+      const commAmt = Math.round(n * pct / 100);
+      const gozFee = Math.round(commAmt * 0.03);
+      disp.textContent = `$${n.toLocaleString()} · ${comm} commission = $${commAmt.toLocaleString()} · GOZ marketing fee: $${gozFee.toLocaleString()}`;
+    }
   } else {
     disp.textContent = '';
   }
