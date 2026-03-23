@@ -447,15 +447,7 @@ window.addEventListener('error', function(e) {
 </div>
 
 <script>
-// Verify Supabase loaded — if not, show auth screen immediately
-if (typeof supabase === 'undefined' && typeof window.supabase === 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
-    const l = document.getElementById('screenLoading');
-    const a = document.getElementById('screenAuth');
-    if (l) l.style.display = 'none';
-    if (a) a.style.display = 'flex';
-  });
-}
+// Supabase CDN loaded above — createClient available
 const { createClient } = (window.supabase || supabase);
 const sb = createClient(
   'https://pneixwmkphakoxmzkblx.supabase.co',
@@ -464,9 +456,11 @@ const sb = createClient(
 
 let agentId = null;
 let currentListingForEdit = null;
+let _initComplete = false;
 
 // Safety timeout — if init hangs for any reason, show auth screen after 8s
 window._gozLoadGuard = setTimeout(() => {
+  if (_initComplete) return; // init already finished — don't interfere
   const loading = document.getElementById('screenLoading');
   const auth    = document.getElementById('screenAuth');
   if (loading && loading.style.display !== 'none') {
@@ -474,7 +468,7 @@ window._gozLoadGuard = setTimeout(() => {
     loading.style.display = 'none';
     if (auth) auth.style.display = 'flex';
   }
-}, 5000);
+}, 12000);
 
 // Clear the timeout once we successfully show the dashboard
 
@@ -513,6 +507,7 @@ async function init() {
 
   const { data: { session }, error: sessionError } = await sb.auth.getSession();
   if (sessionError || !session) {
+    _initComplete = true;
     clearTimeout(window._gozLoadGuard);
     hide('screenLoading');
     show('screenAuth');
@@ -560,6 +555,7 @@ async function init() {
     localStorage.setItem('goz_name', `${agent.first_name} ${agent.last_name}`.trim());
   }
 
+  _initComplete = true;
   clearTimeout(window._gozLoadGuard);
   hide('screenLoading');
   show('screenDashboard');
