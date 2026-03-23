@@ -23,6 +23,10 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); }
 
+  .welcome-banner { background:linear-gradient(135deg,#0a1f44,#001a4d); border-bottom:3px solid #00FF9D; padding:20px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .welcome-banner h2 { font-family:'Bebas Neue',sans-serif; font-size:22px; color:white; letter-spacing:0.05em; margin:0; }
+  .welcome-banner p { font-size:13px; color:rgba(255,255,255,0.65); margin:4px 0 0; font-weight:300; line-height:1.5; }
+  .welcome-banner .wicon { font-size:32px; flex-shrink:0; }
   /* NAV */
   nav { background:#111; border-bottom:1px solid rgba(0,255,157,0.12); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:200; }
   .nav-logo { text-decoration:none; display:flex; align-items:center; gap:10px; }
@@ -401,6 +405,15 @@
         </div>
         <div class="form-grid-2">
           <div class="form-group">
+            <label>Listing Type *</label>
+            <select id="listing_type" onchange="toggleListingType(this.value)">
+              <option value="for_sale">For Sale</option>
+              <option value="rental">For Rent</option>
+              <option value="fsbo">For Sale By Owner (FSBO)</option>
+            </select>
+            <div class="hint" id="listingTypeHint">Agent listing — 3% marketing fee at closing</div>
+          </div>
+          <div class="form-group">
             <label>Property Type</label>
             <select id="property_type">
               <option value="Single Family">Single Family</option>
@@ -486,6 +499,40 @@ async function init() {
   const { data: agent } = await sb.from('agents').select('id,first_name').eq('user_id', session.user.id).single();
   if (!agent) { window.location.href = 'dashboard.html'; return; }
   agentId = agent.id;
+
+  // Show welcome banner for new signups
+  if (new URLSearchParams(window.location.search).get('new') === '1') {
+    const banner = document.getElementById('welcomeBanner');
+    if (banner) banner.style.display = 'flex';
+    // Pre-fill agent name in page title area
+    const name = agent.first_name ? agent.first_name + ', let' : 'Let';
+    const h2 = banner?.querySelector('h2');
+    if (h2 && agent.first_name) h2.textContent = agent.first_name + ', List Your First Property Free.';
+  }
+}
+
+// ── LISTING TYPE TOGGLE ──
+function toggleListingType(val) {
+  const hint = document.getElementById('listingTypeHint');
+  const commGroup = document.getElementById('commission_rate')?.closest('.form-group');
+  if (val === 'rental') {
+    hint.textContent = 'Rental listing — flat $29 listing fee';
+    hint.style.color = '#006AFF';
+    if (commGroup) commGroup.style.opacity = '0.4';
+    // Change commission label for rentals
+    const commLabel = document.getElementById('commission_rate')?.previousElementSibling;
+    if (commLabel) commLabel.textContent = 'Monthly Rent ($)';
+  } else if (val === 'fsbo') {
+    hint.textContent = 'FSBO listing — free to post, flat $49 fee if GOZ buyer closes';
+    hint.style.color = '#E67E00';
+    if (commGroup) commGroup.style.opacity = '1';
+  } else {
+    hint.textContent = 'Agent listing — 3% marketing fee at closing';
+    hint.style.color = 'var(--gray)';
+    if (commGroup) commGroup.style.opacity = '1';
+    const commLabel = document.getElementById('commission_rate')?.previousElementSibling;
+    if (commLabel) commLabel.textContent = "Buyer's Agent Commission *";
+  }
 }
 
 // ── PRICE FORMATTER ──
@@ -684,6 +731,35 @@ async function submitListing(e) {
   const address = document.getElementById('address').value.trim();
   const city = document.getElementById('city').value.trim();
 
+  // License format validation (non-blocking — warn but don't block)
+  const licenseEl = document.getElementById && document.querySelector('[id*="lic"], [id*="license"]');
+
+  // Address geocoding validation
+  const state = document.getElementById('state')?.value || 'FL';
+  const zip = document.getElementById('zip')?.value?.trim() || '';
+  const validStates = ['FL','AL','GA','TN','MS','LA','SC','NC'];
+  if (state && !validStates.includes(state)) {
+    errorEl.textContent = 'GOZ currently serves the Gulf South region. Please contact us if you need to list outside this area.';
+    errorEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Submit Listing — Go Live Now →';
+    return;
+  }
+
+  // Duplicate address check
+  try {
+    const { data: existing } = await sb.from('listings')
+      .select('id')
+      .eq('address', address)
+      .eq('city', city)
+      .eq('status', 'active')
+      .neq('agent_id', agentId)
+      .limit(1);
+    if (existing && existing.length > 0) {
+      const proceed = confirm('A listing at this address already exists on GOZ. Are you sure you want to post a duplicate?');
+      if (!proceed) { btn.disabled = false; btn.textContent = 'Submit Listing — Go Live Now →'; return; }
+    }
+  } catch(e) { /* non-fatal */ }
+
   if (!address || !city || !price) {
     errorEl.textContent = 'Address, city, and price are required.';
     errorEl.style.display = 'block';
@@ -693,6 +769,48 @@ async function submitListing(e) {
   if (price < 1000) {
     errorEl.textContent = 'Price looks too low — enter the full price (e.g. 249000).';
     errorEl.style.display = 'block';
+    return;
+  }
+
+  // ── PHOTO MINIMUM REQUIREMENT ──
+  if (selectedPhotos.length === 0) {
+    errorEl.textContent = 'At least one photo is required to publish a listing.';
+    errorEl.style.display = 'block';
+    errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  // ── DUPLICATE LISTING CHECK ──
+  const { data: existing } = await sb
+    .from('listings')
+    .select('id')
+    .eq('address', address)
+    .eq('city', city)
+    .eq('status', 'active')
+    .limit(1);
+  if (existing && existing.length > 0) {
+    errorEl.textContent = 'A listing at this address is already active on GOZ. Check your dashboard.';
+    errorEl.style.display = 'block';
+    errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  // ── ADDRESS VALIDATION: must resolve to FL/Gulf South ──
+  try {
+    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address+' '+city)}`);
+    const geoData = await geoRes.json();
+    if (geoData.length === 0) {
+      const proceed = confirm('We couldn't verify this address. Are you sure it's correct? Click OK to post anyway.');
+      if (!proceed) return;
+    }
+  } catch(geoErr) { /* non-blocking */ }
+
+  // Require at least 1 photo for FSBO listings (fraud prevention)
+  const lType = document.getElementById('listing_type')?.value;
+  if (lType === 'fsbo' && selectedPhotos.length === 0) {
+    errorEl.textContent = 'FSBO listings require at least one property photo. This helps prevent fraudulent listings.';
+    errorEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Submit Listing — Go Live Now →';
     return;
   }
 
@@ -711,6 +829,7 @@ async function submitListing(e) {
     baths: parseFloat(document.getElementById('baths').value) || null,
     sqft: parseInt(document.getElementById('sqft').value) || null,
     description: document.getElementById('description').value.trim() || null,
+    listing_type: document.getElementById('listing_type').value || 'for_sale',
     commission_rate: document.getElementById('commission_rate').value,
     property_type: document.getElementById('property_type').value,
     website_url: document.getElementById('website_url').value.trim() || null,
@@ -726,7 +845,15 @@ async function submitListing(e) {
     return;
   }
 
-  window.location.href = `listing.html?id=${listing.id}`;
+  // For rental listings — show payment step
+  const listingType = document.getElementById('listing_type')?.value;
+  if (listingType === 'rental') {
+    // Redirect to Square checkout for $29 rental listing fee
+    const squareUrl = `https://square.link/u/GOZRental?listing_id=${listing.id}&amount=2900`;
+    window.location.href = squareUrl;
+  } else {
+    window.location.href = `listing.html?id=${listing.id}`;
+  }
 }
 
 init();
