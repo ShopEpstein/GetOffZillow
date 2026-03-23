@@ -314,7 +314,7 @@ const DEMO=[
 function parsePhotos(r){if(!r)return[];if(Array.isArray(r))return r.filter(Boolean);if(typeof r==='string'){if(r.startsWith('['))try{const p=JSON.parse(r);return Array.isArray(p)?p.filter(Boolean):[]}catch(e){}if(r.startsWith('{')&&r.endsWith('}'))return r.slice(1,-1).split(',').map(s=>s.trim().replace(/^"|"$/g,'')).filter(s=>s.startsWith('http'));if(r.startsWith('http'))return[r]}return[]}
 async function loadListings() {
   try {
-    const {data} = await sb.from('listings').select('id,address,city,state,price,beds,baths,commission_rate,photos,created_at,agents(first_name,last_name)').eq('status','active').order('created_at',{ascending:false}).limit(8);
+    const {data} = await sb.from('listings').select('id,address,city,state,price,beds,baths,commission_rate,photos,created_at,agents(first_name,last_name)').eq('status','active').order('featured',{ascending:false}).order('created_at',{ascending:false}).limit(8);
     const grid = document.getElementById('listingGrid');
     if (!data||!data.length) { grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><div style="font-size:40px;margin-bottom:12px">🏡</div><p style="font-size:15px;font-weight:300">No listings yet. <a href="agents.html" style="color:var(--blue)">Agents — list your first property free →</a></p></div>'; return; }
     grid.innerHTML = data.map((l,i) => {
