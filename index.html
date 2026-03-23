@@ -803,14 +803,18 @@ footer{background:#080808;color:rgba(255,255,255,0.4);padding:64px 32px 28px}
   </div>
 </section>
 
-<!-- REVIEWS -->
-<section class="reviews-section">
-  <div class="reviews-inner">
-    <div class="reviews-header">
-      <span class="eyebrow">What Agents &amp; Buyers Say</span>
-      <h2 class="section-h2">Real People.</h2>
+<!-- EARLY ADOPTER BAND -->
+<section style="background:var(--ink);padding:64px 32px">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap">
+    <div>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);display:block;margin-bottom:12px">Gulf South · Launching Now</span>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,56px);color:white;line-height:0.95;margin-bottom:12px">Be One of the First Agents<br>on the Gulf Coast's Most<br><span style="color:var(--green)">Transparent Marketplace.</span></h2>
+      <p style="font-size:15px;color:rgba(255,255,255,0.5);line-height:1.7;max-width:480px;font-weight:300">We're building from Pensacola out. Early agents lock in 3% marketing fee for life — it never goes up as the platform grows. Free to join, free to list, nothing owed until you close.</p>
     </div>
-    <div class="reviews-grid" id="reviewsGrid"></div>
+    <div style="flex-shrink:0">
+      <a href="signup.html" style="display:block;background:var(--green);color:var(--ink);padding:16px 36px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;text-decoration:none;text-align:center;box-shadow:0 0 28px rgba(0,255,157,0.25);transition:all 0.2s;white-space:nowrap">Join Free — List Today →</a>
+      <p style="font-size:11px;color:rgba(255,255,255,0.25);text-align:center;margin-top:10px;font-family:'Space Mono',monospace">No credit card. No commitment until you close.</p>
+    </div>
   </div>
 </section>
 
@@ -1128,28 +1132,7 @@ function buildTicker() {
   ).join('');
 }
 
-const reviews = [
-  {stars:5,text:"I was paying Agent Pronto 30% on every deal. Switched to GOZ and paid $300 on a $10,000 commission. The direct contact with buyers is a completely different experience.",name:"Marcus T.",meta:"Buyer's Agent, Pensacola FL",emoji:"👨"},
-  {stars:5,text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.",name:"Jennifer K.",meta:"First-Time Buyer, Navarre FL",emoji:"👩"},
-  {stars:5,text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.",name:"Alysa A.",meta:"Realtor, LPT Realty",emoji:"👩"},
-  {stars:5,text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $300. That's not a typo. Three hundred dollars.",name:"Carlos M.",meta:"Listing Agent, Gulf Coast Realty",emoji:"👨"},
-  {stars:5,text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.",name:"Rachel B.",meta:"Home Buyer, Destin FL",emoji:"👩"},
-  {stars:5,text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.",name:"David P.",meta:"Agent, Fort Walton Beach FL",emoji:"👨"},
-];
 
-function renderReviews() {
-  const el = document.getElementById('reviewsGrid');
-  if (!el) return;
-  el.innerHTML = reviews.map(r => `
-    <div class="review-card">
-      <div class="review-stars">${'★'.repeat(r.stars)}</div>
-      <p class="review-text">"${r.text}"</p>
-      <div class="review-author">
-        <div class="review-avatar">${r.emoji}</div>
-        <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
-      </div>
-    </div>`).join('');
-}
 
 function runCalc() {
   const price=parseFloat(document.getElementById('calcPrice').value)||0;
@@ -1242,7 +1225,6 @@ async function initNavAuth() {
 }
 
 buildTicker();
-renderReviews();
 loadListings();
 initNavAuth();
 </script>
