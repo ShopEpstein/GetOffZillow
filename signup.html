@@ -103,8 +103,8 @@
         </div>
         <div class="field"><label>Email *</label><input id="su-email" type="email" placeholder="jane@realty.com" autocomplete="email" /></div>
         <div class="field"><label>Password * (min 8 characters)</label><input id="su-pw" type="password" placeholder="••••••••" autocomplete="new-password" /></div>
-        <div class="field"><label>Phone</label><input id="su-phone" type="tel" placeholder="(850) 555-0100" autocomplete="tel" /></div>
-        <div class="field"><label>License #</label><input id="su-lic" type="text" placeholder="FL-BK12345678" /></div>
+        <div class="field"><label>Phone <span style="font-size:10px;color:var(--gray);font-weight:400">(required for verification)</span></label><input id="su-phone" type="tel" placeholder="(850) 555-0100" autocomplete="tel" required /></div>
+        <div class="field"><label>License # <span style="font-size:10px;color:var(--gray);font-weight:400">(FL format: SL or BK + 7 digits)</span></label><input id="su-lic" type="text" placeholder="SL3456789 or BK1234567" oninput="validateLicense(this)" /></div>
         <div class="field"><label>Brokerage</label><input id="su-brok" type="text" placeholder="Smith Realty Group" /></div>
         <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#666;line-height:1.5;cursor:pointer;margin-bottom:12px">
           <input type="checkbox" id="su-terms" style="width:auto;margin-top:2px;flex-shrink:0" />
@@ -249,6 +249,33 @@ async function doSignup() {
     err.style.display = 'block'; return;
   }
 
+  // Phone format validation (if provided)
+  if (phone) {
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (phoneDigits.length < 10) {
+      err.textContent = 'Enter a valid 10-digit phone number.';
+      err.style.display = 'block'; return;
+    }
+  }
+
+  // FL license format hint (soft validation — warns but doesn't block)
+  if (lic && lic.length > 2) {
+    const licUpper = lic.toUpperCase();
+    const validPrefixes = ['BK','SL','BL','SB','SW','BO','BR','BS','CQ','MV','FE','CV'];
+    const hasValidPrefix = validPrefixes.some(p => licUpper.startsWith(p));
+    if (!hasValidPrefix && !licUpper.match(/^[A-Z]{2}\d/)) {
+      // Soft warning — don't block, just inform
+      console.log('License format note:', lic);
+    }
+  }
+
+  // Terms checkbox
+  const terms = document.getElementById('su-terms');
+  if (terms && !terms.checked) {
+    err.textContent = 'You must agree to the Terms of Service to create an account.';
+    err.style.display = 'block'; return;
+  }
+
   btn.disabled = true; btn.textContent = 'Creating account...';
 
   const { data: authData, error: authErr } = await sb.auth.signUp({
@@ -285,6 +312,22 @@ async function doSignup() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ first_name: first, last_name: last, email: email })
     }).catch(e => console.warn('Welcome email failed:', e));
+
+    // Notify admin of new signup for approval (non-blocking)
+    fetch('/api/notify-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agent_id: agent?.id || authData.user?.id,
+        first_name: first,
+        last_name: last,
+        email: email,
+        phone: phone || null,
+        license_number: lic || null,
+        brokerage: brok || null,
+        state: null
+      })
+    }).catch(e => console.warn('Admin notify failed:', e));
   }
 
   localStorage.setItem('goz_name', `${first} ${last}`);
@@ -295,9 +338,9 @@ async function doSignup() {
     // Store agent id for dashboard
     const { data: agent } = await sb.from('agents').select('id').eq('user_id', authData.user.id).single();
     if (agent) localStorage.setItem('goz_agent_id', agent.id);
-    ok.innerHTML = `🎉 <strong>Welcome, ${first}!</strong> Taking you to your dashboard...`;
+    ok.innerHTML = `🎉 <strong>Welcome, ${first}!</strong> Let's get your first listing live...`;
     ok.style.display = 'block';
-    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+    setTimeout(() => { window.location.href = 'list.html?new=1'; }, 1500);
   } else {
     // Email confirmation is ON — tell them to check email
     ok.innerHTML = `🎉 <strong>Account created, ${first}!</strong><br>Check your email for a confirmation link, then <span class="link" onclick="showTab('signin')">sign in here →</span>`;
