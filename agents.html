@@ -490,6 +490,31 @@ document.addEventListener('click', e => {
     document.body.style.overflow = '';
   }
 });
+
+async function initNavAuth() {
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    const navUl = document.querySelector('.nav-links') || document.querySelector('ul.nav-links');
+    if (!navUl) return;
+    const agentName = localStorage.getItem('goz_name') || session.user.email.split('@')[0];
+    const signInEl = navUl.querySelector('.nav-btn-outline');
+    const listEl   = navUl.querySelector('.nav-btn-green');
+    if (signInEl) {
+      signInEl.href = 'dashboard.html';
+      signInEl.textContent = agentName;
+    }
+    if (listEl) {
+      listEl.href = '#';
+      listEl.textContent = 'Sign Out';
+      listEl.onclick = (e) => { e.preventDefault(); sb.auth.signOut().then(() => location.reload()); };
+    }
+    // Mobile menu CTA
+    const mobCta = document.querySelector('.mob-cta');
+    if (mobCta) { mobCta.href = 'dashboard.html'; mobCta.textContent = 'Go to Dashboard →'; }
+  } catch(e) { console.warn('initNavAuth:', e); }
+}
+initNavAuth();
 </script>
 </body>
 </html>
