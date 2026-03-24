@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script>
-// Hard guard — runs before any other script
-// If page doesn't transition from loading within 6 seconds, show sign-in
 window._gozLoadGuard = setTimeout(function() {
-  // Only fire if still on loading screen
   var l = document.getElementById('screenLoading');
   if (l && l.style.display !== 'none') {
     ['screenLoading','screenDashboard'].forEach(function(s) {
@@ -17,7 +14,6 @@ window._gozLoadGuard = setTimeout(function() {
     if (a) a.style.display = 'flex';
   }
 }, 6000);
-// Also guard against supabase CDN failure
 window.addEventListener('error', function(e) {
   if (e.filename && e.filename.indexOf('supabase') !== -1) {
     clearTimeout(window._gozLoadGuard);
@@ -147,9 +143,9 @@ window.addEventListener('error', function(e) {
   .lead-reply { background:var(--blue); color:white; padding:5px 12px; border-radius:5px; font-size:11px; font-weight:700; text-decoration:none; display:inline-block; margin-top:6px; }
 
   /* EDIT MODAL */
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:500; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:500; align-items:flex-start; justify-content:center; padding:20px; overflow-y:auto; }
   .modal-overlay.open { display:flex; }
-  .modal-box { background:white; border-radius:14px; padding:32px; width:100%; max-width:600px; position:relative; animation:fadeUp 0.2s ease; max-height:90vh; overflow-y:auto; }
+  .modal-box { background:white; border-radius:14px; padding:32px; width:100%; max-width:640px; position:relative; animation:fadeUp 0.2s ease; margin:auto; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
   .modal-title { font-family:'Nunito',sans-serif; font-weight:900; font-size:20px; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
   .modal-close { width:30px; height:30px; border-radius:50%; border:none; background:#f0f0f0; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
@@ -164,14 +160,159 @@ window.addEventListener('error', function(e) {
   .save-btn { background:var(--ai-green); color:#000; border:none; padding:12px 28px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; cursor:pointer; }
   .cancel-btn { background:transparent; color:var(--gray); border:1.5px solid var(--border); padding:11px 20px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:700; font-size:13px; cursor:pointer; margin-left:10px; }
 
+  /* ═══════════════════════════════════
+     EDIT MODAL — PHOTO SECTION
+  ═══════════════════════════════════ */
+  .ep-section {
+    background: #0d0d0d;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .ep-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .ep-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.06em;
+    color: white;
+  }
+  .ep-title span { color: var(--ai-green); }
+  .ep-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--ai-green);
+    background: rgba(0,255,157,0.1);
+    border: 1px solid rgba(0,255,157,0.2);
+    padding: 3px 10px;
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+  /* Drop zone */
+  .ep-drop {
+    position: relative;
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 22px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.02);
+    margin-bottom: 14px;
+  }
+  .ep-drop:hover, .ep-drop.over {
+    border-color: var(--ai-green);
+    background: rgba(0,255,157,0.04);
+  }
+  .ep-drop input { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2; }
+  .ep-drop-inner { pointer-events:none; }
+  .ep-drop-icon { font-size:28px; margin-bottom:6px; }
+  .ep-drop-text { font-size:13px; font-weight:700; color:white; margin-bottom:3px; }
+  .ep-drop-hint { font-size:11px; color:rgba(255,255,255,0.35); }
+  /* Cover photo */
+  .ep-cover-wrap { margin-bottom: 12px; }
+  .ep-cover-label {
+    font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px;
+    color:rgba(255,255,255,0.35); font-family:'Space Mono',monospace; margin-bottom:8px;
+  }
+  .ep-cover {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    background: #1a1a1a;
+    cursor: grab;
+  }
+  .ep-cover:active { cursor: grabbing; }
+  .ep-cover img { width:100%;height:100%;object-fit:cover;display:block;pointer-events:none; }
+  .ep-cover-badge {
+    position:absolute;top:10px;left:10px;
+    background:var(--ai-green);color:#000;
+    font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:0.1em;
+    padding:2px 9px 1px;border-radius:3px;
+    clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);
+    z-index:2;
+  }
+  .ep-cover-overlay {
+    position:absolute;inset:0;background:rgba(0,0,0,0);
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:background 0.2s;z-index:3;
+  }
+  .ep-cover:hover .ep-cover-overlay { background:rgba(0,0,0,0.55); }
+  .ep-ov-btn {
+    background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.25);color:white;
+    padding:8px 16px;border-radius:7px;font-size:12px;font-weight:700;
+    cursor:pointer;opacity:0;transform:translateY(5px);transition:all 0.18s;
+    font-family:'Nunito Sans',sans-serif;
+  }
+  .ep-cover:hover .ep-ov-btn { opacity:1;transform:translateY(0); }
+  .ep-ov-btn:hover { background:rgba(255,255,255,0.28); }
+  .ep-ov-btn.del:hover { background:rgba(232,52,28,0.5); }
+  /* Thumb grid */
+  .ep-thumbs-label {
+    font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;
+    color:rgba(255,255,255,0.3);font-family:'Space Mono',monospace;
+    margin-bottom:8px;display:none;
+  }
+  .ep-grid {
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:7px;
+  }
+  .ep-thumb {
+    position:relative;border-radius:7px;overflow:hidden;aspect-ratio:1;
+    cursor:grab;background:#1a1a1a;border:2px solid transparent;
+    transition:transform 0.15s,box-shadow 0.15s;
+  }
+  .ep-thumb:active { cursor:grabbing; }
+  .ep-thumb:hover { transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.4); }
+  .ep-thumb img { width:100%;height:100%;object-fit:cover;display:block;pointer-events:none; }
+  .ep-thumb.dragging { opacity:0.3;transform:scale(0.95); }
+  .ep-thumb.drag-over { border-color:var(--ai-green);box-shadow:0 0 0 3px rgba(0,255,157,0.2);transform:scale(1.04); }
+  .ep-cover.drag-over { outline:3px solid var(--ai-green);outline-offset:2px; }
+  .ep-th-hover {
+    position:absolute;inset:0;background:rgba(0,0,0,0);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    transition:background 0.15s;z-index:2;
+  }
+  .ep-thumb:hover .ep-th-hover { background:rgba(0,0,0,0.65); }
+  .ep-th-btn {
+    background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
+    color:white;border-radius:5px;padding:4px 9px;font-size:10px;font-weight:700;
+    cursor:pointer;opacity:0;transform:translateY(3px);transition:all 0.15s;
+    white-space:nowrap;font-family:'Nunito Sans',sans-serif;
+  }
+  .ep-thumb:hover .ep-th-btn { opacity:1;transform:translateY(0); }
+  .ep-th-btn:nth-child(2) { transition-delay:0.04s; }
+  .ep-th-btn:hover { background:rgba(255,255,255,0.28); }
+  .ep-th-btn.del:hover { background:rgba(232,52,28,0.55); }
+  .ep-th-num { position:absolute;bottom:4px;right:5px;background:rgba(0,0,0,0.55);color:rgba(255,255,255,0.5);font-size:9px;padding:1px 4px;border-radius:3px;font-family:'Space Mono',monospace;z-index:1; }
+  /* Add more tile */
+  .ep-add {
+    position:relative;border-radius:7px;aspect-ratio:1;
+    border:2px dashed rgba(255,255,255,0.12);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.02);gap:4px;
+  }
+  .ep-add input { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%; }
+  .ep-add:hover { border-color:var(--ai-green);background:rgba(0,255,157,0.04); }
+  .ep-add-plus { font-size:22px;color:rgba(255,255,255,0.3);line-height:1;transition:color 0.2s; }
+  .ep-add-lbl { font-size:9px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;font-family:'Space Mono',monospace;transition:color 0.2s; }
+  .ep-add:hover .ep-add-plus { color:var(--ai-green); }
+  .ep-add:hover .ep-add-lbl { color:rgba(0,255,157,0.7); }
+  /* Upload progress */
+  .ep-progress { display:none;margin-top:10px; }
+  .ep-prog-bar { height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden; }
+  .ep-prog-fill { height:100%;background:var(--ai-green);border-radius:2px;transition:width 0.3s;width:0%;box-shadow:0 0 6px rgba(0,255,157,0.5); }
+  .ep-prog-text { font-size:10px;color:rgba(255,255,255,0.4);margin-top:5px;font-family:'Space Mono',monospace; }
+
   /* CLOSING MODAL */
   .closing-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:600; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
   .closing-modal-overlay.open { display:flex; }
-  .closing-modal {
-    background:white; border-radius:16px; padding:32px; width:100%;
-    max-width:520px; position:relative; animation:fadeUp 0.2s ease;
-    border-top:4px solid var(--green);
-  }
+  .closing-modal { background:white; border-radius:16px; padding:32px; width:100%; max-width:520px; position:relative; animation:fadeUp 0.2s ease; border-top:4px solid var(--green); margin:auto; }
   .closing-modal h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:20px; margin-bottom:6px; }
   .closing-modal .sub { font-size:13px; color:var(--gray); margin-bottom:24px; line-height:1.5; }
   .fee-preview { background:#f0fff8; border:1px solid #b3f0d0; border-radius:10px; padding:16px 20px; margin:16px 0; }
@@ -200,7 +341,7 @@ window.addEventListener('error', function(e) {
   .session-banner a { color:var(--yellow); text-decoration:underline; cursor:pointer; }
 
   @media(max-width:900px) { .stats-row{grid-template-columns:repeat(2,1fr);} .listings-grid{grid-template-columns:repeat(2,1fr);} }
-  @media(max-width:600px) { .listings-grid{grid-template-columns:1fr;} .stats-row{grid-template-columns:repeat(2,1fr);} .profile-card{flex-direction:column;} .form-grid{grid-template-columns:1fr;} }
+  @media(max-width:600px) { .listings-grid{grid-template-columns:1fr;} .stats-row{grid-template-columns:repeat(2,1fr);} .profile-card{flex-direction:column;} .form-grid{grid-template-columns:1fr;} .ep-grid{grid-template-columns:repeat(auto-fill,minmax(70px,1fr));} }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
 </head>
@@ -265,17 +406,14 @@ window.addEventListener('error', function(e) {
         <option value="yes">Yes — I represented both buyer and seller</option>
       </select>
     </div>
-
     <div class="fee-preview" id="feePreview" style="display:none">
       <div class="fee-preview-row"><span class="fee-preview-label">Sale price</span><span class="fee-preview-val" id="fp_price">—</span></div>
       <div class="fee-preview-row"><span class="fee-preview-label">Your gross commission</span><span class="fee-preview-val" id="fp_commission">—</span></div>
       <div class="fee-preview-row"><span class="fee-preview-label">You keep (97%)</span><span class="fee-preview-val green" id="fp_keep">—</span></div>
       <div class="fee-preview-row"><span class="fee-preview-label">GOZ AI fee (3% of commission)</span><span class="fee-preview-val due" id="fp_fee">—</span></div>
     </div>
-
     <div class="modal-err" id="cl_err"></div>
     <div class="modal-ok" id="cl_ok" style="display:none"></div>
-
     <div class="pay-options" id="payOptions" style="display:none">
       <a id="payVenmo" href="#" target="_blank" class="pay-btn venmo">💙 Pay via Venmo</a>
       <a id="payZelle" href="#" target="_blank" class="pay-btn zelle">💜 Pay via Zelle</a>
@@ -298,6 +436,7 @@ window.addEventListener('error', function(e) {
     <div class="modal-err" id="editErr"></div>
     <div class="modal-ok" id="editOk"></div>
     <input type="hidden" id="editListingId" />
+
     <div class="form-grid">
       <div class="form-group" style="grid-column:1/-1"><label>Street Address *</label><input id="el_address" type="text" /></div>
       <div class="form-group"><label>City *</label><input id="el_city" type="text" /></div>
@@ -339,6 +478,59 @@ window.addEventListener('error', function(e) {
     </div>
     <div class="form-group"><label>Description</label><textarea id="el_desc"></textarea></div>
     <div class="form-group"><label>Listing Website URL (optional)</label><input id="el_url" type="url" placeholder="https://yourmls.com/listing/..." /></div>
+
+    <!-- ══════════════ PHOTO SECTION ══════════════ -->
+    <div class="ep-section">
+      <div class="ep-header">
+        <div class="ep-title">Property <span>Photos</span></div>
+        <div class="ep-badge" id="epBadge">0 photos</div>
+      </div>
+
+      <!-- Drop zone -->
+      <div class="ep-drop" id="epDrop"
+        ondragover="event.preventDefault();this.classList.add('over')"
+        ondragleave="this.classList.remove('over')"
+        ondrop="epHandleDrop(event)">
+        <input type="file" id="epInput" accept="image/*" multiple onchange="epHandleSelect(event)" />
+        <div class="ep-drop-inner">
+          <div class="ep-drop-icon">📷</div>
+          <div class="ep-drop-text">Drop photos here or click to browse</div>
+          <div class="ep-drop-hint">JPG · PNG · WEBP · max 10MB each</div>
+        </div>
+      </div>
+
+      <!-- Cover photo slot (shown when ≥1 photo) -->
+      <div id="epCoverWrap" style="display:none">
+        <div class="ep-cover-label">Cover Photo</div>
+        <div class="ep-cover" id="epCover"
+          draggable="true"
+          ondragstart="epDragStart(event,0)"
+          ondragover="epDragOver(event)"
+          ondrop="epDrop(event,0)"
+          ondragend="epDragEnd(event)"
+          ondragleave="this.classList.remove('drag-over')">
+          <img id="epCoverImg" src="" alt="cover" />
+          <div class="ep-cover-badge">★ COVER</div>
+          <div class="ep-cover-overlay">
+            <button class="ep-ov-btn" type="button" onclick="epRemove(0)">✕ Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thumbnails (shown when ≥2 photos) -->
+      <div id="epThumbsWrap" style="margin-top:10px;display:none">
+        <div class="ep-thumbs-label" id="epThumbsLabel" style="display:block">All photos — drag to reorder</div>
+        <div class="ep-grid" id="epGrid"></div>
+      </div>
+
+      <!-- Upload progress -->
+      <div class="ep-progress" id="epProgress">
+        <div class="ep-prog-bar"><div class="ep-prog-fill" id="epProgFill"></div></div>
+        <div class="ep-prog-text" id="epProgText">Uploading...</div>
+      </div>
+    </div>
+    <!-- ══════════════ END PHOTO SECTION ══════════════ -->
+
     <div style="margin-top:4px">
       <button class="save-btn" onclick="saveEditListing()">Save Changes →</button>
       <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
@@ -346,15 +538,12 @@ window.addEventListener('error', function(e) {
   </div>
 </div>
 
-<!-- MAIN CONTENT — single div, JS shows/hides sections -->
+<!-- MAIN CONTENT -->
 <div id="mainContent">
-  <!-- Loading -->
   <div class="loading-screen" id="screenLoading">
     <div class="spinner"></div>
     <p>Loading dashboard...</p>
   </div>
-
-  <!-- Not logged in -->
   <div class="auth-screen" id="screenAuth" style="display:none">
     <div class="auth-card">
       <h2>Agent Sign In</h2>
@@ -362,15 +551,11 @@ window.addEventListener('error', function(e) {
       <a href="signup.html">Sign In / Create Account →</a>
     </div>
   </div>
-
-  <!-- Dashboard -->
   <div class="dashboard" id="screenDashboard" style="display:none">
-
     <div class="profile-alert" id="profileAlert" style="display:none">
       ⚠️ <strong>Profile incomplete.</strong> Add your phone and license number so buyers can reach you.
       <a id="profileAlertLink" href="#">Complete it →</a>
     </div>
-
     <div class="dash-header">
       <div class="dash-greeting">
         <h1 id="dashGreeting">Welcome back! 👋</h1>
@@ -378,53 +563,26 @@ window.addEventListener('error', function(e) {
       </div>
       <a href="list.html" class="dash-new-listing">+ New Listing</a>
     </div>
-
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">Active Listings</div>
-        <div class="stat-value blue" id="statListings">—</div>
-        <div class="stat-sub">Live and searchable</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Total Leads</div>
-        <div class="stat-value green" id="statLeads">—</div>
-        <div class="stat-sub">Buyers who contacted you</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Your Marketing Fee</div>
-        <div class="stat-value ai">3%</div>
-        <div class="stat-sub">Only when you close</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Saved vs Zillow Flex</div>
-        <div class="stat-value green" id="statSaved">$0</div>
-        <div class="stat-sub">Estimated on active listings</div>
-      </div>
+      <div class="stat-card"><div class="stat-label">Active Listings</div><div class="stat-value blue" id="statListings">—</div><div class="stat-sub">Live and searchable</div></div>
+      <div class="stat-card"><div class="stat-label">Total Leads</div><div class="stat-value green" id="statLeads">—</div><div class="stat-sub">Buyers who contacted you</div></div>
+      <div class="stat-card"><div class="stat-label">Your Marketing Fee</div><div class="stat-value ai">3%</div><div class="stat-sub">Only when you close</div></div>
+      <div class="stat-card"><div class="stat-label">Saved vs Zillow Flex</div><div class="stat-value green" id="statSaved">$0</div><div class="stat-sub">Estimated on active listings</div></div>
     </div>
-
     <div class="section">
-      <div class="section-head">
-        <h2>Your Agent Profile</h2>
-        <a id="editProfileLink" href="#">Edit Profile →</a>
-      </div>
+      <div class="section-head"><h2>Your Agent Profile</h2><a id="editProfileLink" href="#">Edit Profile →</a></div>
       <div class="profile-card" id="profileCard"><div class="loading-text">Loading...</div></div>
     </div>
-
     <div class="section">
-      <div class="section-head">
-        <h2>Your Listings</h2>
-        <a href="list.html">+ Add Listing</a>
-      </div>
+      <div class="section-head"><h2>Your Listings</h2><a href="list.html">+ Add Listing</a></div>
       <div id="listingsContainer"><div class="loading-text">Loading listings...</div></div>
     </div>
-
-    <!-- INVITE SECTION -->
     <div class="section" id="inviteSection">
       <div style="background:linear-gradient(135deg,#0a1f44,#002080);border:1.5px solid rgba(0,255,157,0.25);border-radius:14px;padding:24px 28px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;box-shadow:0 0 30px rgba(0,255,157,0.1)">
         <div style="font-size:32px;flex-shrink:0">🤝</div>
         <div style="flex:1;min-width:200px">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ai-green);letter-spacing:0.05em;margin-bottom:4px">Grow Your Network. Every Agent Here Saves.</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:12px">The more agents on this platform, the more buyers come looking — and the more likely they find <em>you</em>. Share your link with agents in your market, your brokerage, your network. Every person you bring in makes the platform more valuable for everyone on it.<br><br><span style="color:rgba(255,255,255,0.5);font-size:12px">Every agent you invite pays 3% of commission at closing — not 3% of the sale price. On a $10K commission that's $300 vs. Zillow's $4,000. Send them your link so they sign up through you.</span></div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:12px">The more agents on this platform, the more buyers come looking — and the more likely they find <em>you</em>. Share your link with agents in your market, your brokerage, your network.<br><br><span style="color:rgba(255,255,255,0.5);font-size:12px">Every agent you invite pays 3% of commission at closing — not 3% of the sale price. On a $10K commission that's $300 vs. Zillow's $4,000.</span></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
             <div id="inviteLink" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--ai-green);background:rgba(0,255,157,0.08);padding:8px 14px;border-radius:6px;border:1px solid rgba(0,255,157,0.2);flex:1;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Loading your invite link...</div>
             <button onclick="copyInviteLink()" style="background:var(--ai-green);color:#000;border:none;padding:8px 18px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:900;font-size:12px;cursor:pointer;white-space:nowrap">Copy Link</button>
@@ -434,20 +592,14 @@ window.addEventListener('error', function(e) {
         </div>
       </div>
     </div>
-
     <div class="section">
-      <div class="section-head">
-        <h2>Recent Leads</h2>
-        <span style="font-size:11px;color:var(--gray);font-weight:400">No per-lead charge — ever</span>
-      </div>
+      <div class="section-head"><h2>Recent Leads</h2><span style="font-size:11px;color:var(--gray);font-weight:400">No per-lead charge — ever</span></div>
       <div id="leadsContainer"><div class="loading-text">Loading leads...</div></div>
     </div>
-
   </div>
 </div>
 
 <script>
-// Supabase CDN loaded above — createClient available
 const { createClient } = (window.supabase || supabase);
 const sb = createClient(
   'https://pneixwmkphakoxmzkblx.supabase.co',
@@ -458,21 +610,178 @@ let agentId = null;
 let currentListingForEdit = null;
 let _initComplete = false;
 
-// Safety timeout — if init hangs for any reason, show auth screen after 8s
-window._gozLoadGuard = setTimeout(() => {
-  if (_initComplete) return; // init already finished — don't interfere
-  const loading = document.getElementById('screenLoading');
-  const auth    = document.getElementById('screenAuth');
-  if (loading && loading.style.display !== 'none') {
-    console.warn('Dashboard load timeout — showing auth screen');
-    loading.style.display = 'none';
-    if (auth) auth.style.display = 'flex';
+// ════════════════════════════════════
+// EDIT MODAL — PHOTO STATE
+// ════════════════════════════════════
+// Each item is either:
+//   { type:'url',  url: 'https://...' }   — existing Supabase photo
+//   { type:'file', file: File }            — newly added local file
+let epPhotos = [];
+let epDragIdx = null;
+
+function epHandleSelect(e) { epAddFiles(Array.from(e.target.files)); e.target.value = ''; }
+function epHandleDrop(e) {
+  e.preventDefault();
+  document.getElementById('epDrop').classList.remove('over');
+  epAddFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
+}
+
+function epAddFiles(files) {
+  const remaining = 20 - epPhotos.length;
+  if (remaining <= 0) return;
+  files.slice(0, remaining).forEach(f => epPhotos.push({ type:'file', file:f }));
+  epRender();
+}
+
+function epRemove(i) {
+  epPhotos.splice(i, 1);
+  epRender();
+}
+
+function epMakeCover(i) {
+  const item = epPhotos.splice(i, 1)[0];
+  epPhotos.unshift(item);
+  epRender();
+}
+
+function epRender() {
+  const n = epPhotos.length;
+  const badge = document.getElementById('epBadge');
+  const coverWrap = document.getElementById('epCoverWrap');
+  const thumbsWrap = document.getElementById('epThumbsWrap');
+
+  badge.textContent = n === 0 ? '0 photos' : `${n} photo${n!==1?'s':''}`;
+
+  if (n === 0) {
+    coverWrap.style.display = 'none';
+    thumbsWrap.style.display = 'none';
+    return;
   }
-}, 12000);
 
-// Clear the timeout once we successfully show the dashboard
+  // Cover
+  coverWrap.style.display = 'block';
+  const coverImg = document.getElementById('epCoverImg');
+  if (coverImg._revokeUrl) { try { URL.revokeObjectURL(coverImg._revokeUrl); } catch(e){} delete coverImg._revokeUrl; }
+  if (epPhotos[0].type === 'file') {
+    const url = URL.createObjectURL(epPhotos[0].file);
+    coverImg._revokeUrl = url;
+    coverImg.src = url;
+  } else {
+    coverImg.src = epPhotos[0].url;
+  }
 
-// Parse Postgres array or JS array
+  // Thumbs
+  if (n > 1) {
+    thumbsWrap.style.display = 'block';
+    const grid = document.getElementById('epGrid');
+    // Revoke old object URLs
+    grid.querySelectorAll('img[data-obj]').forEach(img => { try { URL.revokeObjectURL(img.src); } catch(e){} });
+
+    grid.innerHTML = epPhotos.slice(1).map((item, idx) => {
+      const i = idx + 1;
+      let src;
+      if (item.type === 'file') {
+        src = URL.createObjectURL(item.file);
+      } else {
+        src = item.url;
+      }
+      const isObj = item.type === 'file';
+      return `<div class="ep-thumb" draggable="true"
+        ondragstart="epDragStart(event,${i})"
+        ondragover="epDragOver(event)"
+        ondrop="epDrop(event,${i})"
+        ondragend="epDragEnd(event)"
+        ondragleave="this.classList.remove('drag-over')">
+        <img src="${src}" ${isObj?'data-obj="1"':''} alt="photo ${i+1}" />
+        <div class="ep-th-num">${i+1}</div>
+        <div class="ep-th-hover">
+          <button class="ep-th-btn" type="button" onclick="epMakeCover(${i})">↑ Cover</button>
+          <button class="ep-th-btn del" type="button" onclick="epRemove(${i})">✕ Remove</button>
+        </div>
+      </div>`;
+    }).join('') +
+    (n < 20 ? `<label class="ep-add">
+      <input type="file" accept="image/*" multiple onchange="epHandleSelect(event)" />
+      <div class="ep-add-plus">+</div>
+      <div class="ep-add-lbl">Add More</div>
+    </label>` : '');
+  } else {
+    thumbsWrap.style.display = n < 20 ? 'block' : 'none';
+    document.getElementById('epGrid').innerHTML = n < 20 ? `<label class="ep-add">
+      <input type="file" accept="image/*" multiple onchange="epHandleSelect(event)" />
+      <div class="ep-add-plus">+</div>
+      <div class="ep-add-lbl">Add More</div>
+    </label>` : '';
+  }
+}
+
+// Drag reorder for edit modal
+function epDragStart(e, i) {
+  epDragIdx = i;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function epDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+function epDrop(e, i) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (epDragIdx === null || epDragIdx === i) return;
+  const moved = epPhotos.splice(epDragIdx, 1)[0];
+  epPhotos.splice(i, 0, moved);
+  epDragIdx = null;
+  epRender();
+}
+function epDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.ep-thumb,.ep-cover').forEach(el => el.classList.remove('drag-over'));
+  epDragIdx = null;
+}
+
+// Upload only new files, return final ordered URL array
+async function epUploadAndGetUrls() {
+  const progress = document.getElementById('epProgress');
+  const fill = document.getElementById('epProgFill');
+  const text = document.getElementById('epProgText');
+
+  // Count new files
+  const newFiles = epPhotos.filter(p => p.type === 'file');
+  if (newFiles.length > 0) {
+    progress.style.display = 'block';
+  }
+
+  let uploaded = 0;
+  const urlMap = new Map(); // file object → uploaded url
+
+  for (let i = 0; i < epPhotos.length; i++) {
+    const item = epPhotos[i];
+    if (item.type === 'url') continue; // already uploaded
+    const file = item.file;
+    const ext = file.name.split('.').pop().toLowerCase() || 'jpg';
+    const path = `listings/${agentId}/${Date.now()}_ep${i}.${ext}`;
+    uploaded++;
+    text.textContent = `Uploading photo ${uploaded} of ${newFiles.length}...`;
+    fill.style.width = `${Math.round((uploaded / newFiles.length) * 100)}%`;
+    const { error } = await sb.storage.from('listing-photos').upload(path, file, { upsert:true, contentType:file.type });
+    if (!error) {
+      const { data: urlData } = sb.storage.from('listing-photos').getPublicUrl(path);
+      if (urlData?.publicUrl) urlMap.set(file, urlData.publicUrl);
+    } else { console.error('Photo upload error:', error.message); }
+  }
+
+  fill.style.width = '100%';
+  text.textContent = `Photos ready ✓`;
+
+  // Build final URL array in the correct order
+  return epPhotos
+    .map(item => item.type === 'url' ? item.url : urlMap.get(item.file))
+    .filter(Boolean);
+}
+
+// ── PARSE EXISTING PHOTOS ──
 function parsePhotos(raw) {
   if (!raw) return [];
   if (Array.isArray(raw)) return raw.filter(Boolean);
@@ -486,18 +795,17 @@ function parsePhotos(raw) {
   return [];
 }
 
+// ── SCREENS ──
 function showScreen(id) {
-  // Hide all screens first
   ['screenLoading','screenAuth','screenDashboard'].forEach(s => {
     const el = document.getElementById(s);
     if (el) el.style.display = 'none';
   });
-  // Show the requested screen
   const target = document.getElementById(id);
   if (target) target.style.display = id === 'screenDashboard' ? 'block' : 'flex';
 }
 function show(id) { showScreen(id); }
-function hide(id) { const el = document.getElementById(id); if(el) el.style.display = 'none'; }
+function hide(id) { const el = document.getElementById(id); if(el) el.style.display='none'; }
 
 // ── INIT ──
 async function init() {
@@ -514,37 +822,20 @@ async function init() {
     return;
   }
 
-  // Session exists — get agent profile
-  const { data: agent, error: agentError } = await sb
-    .from('agents')
-    .select('*')
-    .eq('user_id', session.user.id)
-    .single();
+  const { data: agent, error: agentError } = await sb.from('agents').select('*').eq('user_id', session.user.id).single();
 
-  if (agentError && agentError.code !== 'PGRST116') {
-    // Real error (not just "row not found")
-    console.error('Agent fetch error:', agentError);
-  }
+  if (agentError && agentError.code !== 'PGRST116') console.error('Agent fetch error:', agentError);
 
   if (!agent) {
-    // Auth user exists but no agent row — create one now
     const meta = session.user.user_metadata || {};
-    const { data: newAgent, error: createError } = await sb
-      .from('agents')
-      .insert({
-        user_id: session.user.id,
-        first_name: meta.first_name || session.user.email.split('@')[0],
-        last_name: meta.last_name || '',
-        email: session.user.email
-      })
-      .select()
-      .single();
-
-    if (createError) {
-      console.error('Could not create agent profile:', createError);
-      // Still show dashboard — agent can complete profile
-      agentId = null;
-    } else {
+    const { data: newAgent, error: createError } = await sb.from('agents').insert({
+      user_id: session.user.id,
+      first_name: meta.first_name || session.user.email.split('@')[0],
+      last_name: meta.last_name || '',
+      email: session.user.email
+    }).select().single();
+    if (createError) { console.error('Could not create agent profile:', createError); agentId = null; }
+    else {
       agentId = newAgent.id;
       localStorage.setItem('goz_agent_id', agentId);
       localStorage.setItem('goz_name', `${newAgent.first_name} ${newAgent.last_name}`.trim() || session.user.email);
@@ -583,15 +874,10 @@ async function init() {
 // ── PROFILE ──
 function loadProfile(agent) {
   if (!agent) return;
-
-  if (!agent.phone || !agent.license_number) {
-    document.getElementById('profileAlert').style.display = 'block';
-  }
-
+  if (!agent.phone || !agent.license_number) document.getElementById('profileAlert').style.display = 'block';
   const avi = agent.photo_url
     ? `<img src="${agent.photo_url}" alt="${agent.first_name}" />`
     : (agent.first_name?.[0]||'') + (agent.last_name?.[0]||'');
-
   document.getElementById('profileCard').innerHTML = `
     <div class="profile-avi">${avi}</div>
     <div class="profile-info">
@@ -616,34 +902,25 @@ function loadProfile(agent) {
 // ── LISTINGS ──
 async function loadListings() {
   const { data: listings, error } = await sb
-    .from('listings')
-    .select('*')
-    .eq('agent_id', agentId)
-    .neq('status', 'deleted')
-    .order('created_at', { ascending: false });
-
+    .from('listings').select('*').eq('agent_id', agentId)
+    .neq('status', 'deleted').order('created_at', { ascending: false });
   if (error) { console.error('Listings error:', error); return; }
 
   const active = (listings||[]).filter(l => l.status === 'active');
   document.getElementById('statListings').textContent = active.length;
-
-  // Savings estimate
   const saved = Math.round(active.reduce((s,l) => s + (Number(l.price)||0), 0) * 0.025 * 0.37);
   document.getElementById('statSaved').textContent = saved > 0 ? '$' + saved.toLocaleString() : '$0';
 
   if (!listings || !listings.length) {
     document.getElementById('listingsContainer').innerHTML = `
-      <div class="empty-state">
-        <div class="icon">🏡</div>
-        <h3>No listings yet</h3>
-        <p>Free to list. Goes live immediately. Commission shown publicly.</p>
-        <a href="list.html">Submit Your First Listing →</a>
-      </div>`;
+      <div class="empty-state"><div class="icon">🏡</div><h3>No listings yet</h3>
+      <p>Free to list. Goes live immediately. Commission shown publicly.</p>
+      <a href="list.html">Submit Your First Listing →</a></div>`;
     return;
   }
 
   window._cachedListings = listings;
-document.getElementById('listingsContainer').innerHTML = `<div class="listings-grid">` +
+  document.getElementById('listingsContainer').innerHTML = `<div class="listings-grid">` +
     listings.map(l => {
       const photos = parsePhotos(l.photos);
       const imgHtml = photos.length
@@ -651,10 +928,7 @@ document.getElementById('listingsContainer').innerHTML = `<div class="listings-g
         : `<div class="li-img-placeholder">🏡</div>`;
       return `
       <div class="li-card">
-        <div class="li-img">
-          ${imgHtml}
-          <div class="li-status ${l.status}">${l.status.toUpperCase()}</div>
-        </div>
+        <div class="li-img">${imgHtml}<div class="li-status ${l.status}">${l.status.toUpperCase()}</div></div>
         <div class="li-body">
           <div class="li-price">$${Number(l.price).toLocaleString()}</div>
           <div class="li-commission">✓ ${l.commission_rate} commission — shown publicly</div>
@@ -677,38 +951,21 @@ document.getElementById('listingsContainer').innerHTML = `<div class="listings-g
 
 // ── LEADS ──
 async function loadLeads() {
-  const { data: leads, error } = await sb
-    .from('leads')
-    .select('*')
-    .eq('agent_id', agentId)
-    .order('created_at', { ascending: false })
-    .limit(20);
-
+  const { data: leads, error } = await sb.from('leads').select('*').eq('agent_id', agentId).order('created_at', { ascending: false }).limit(20);
   if (error) { console.error('Leads error:', error); return; }
-
   document.getElementById('statLeads').textContent = (leads||[]).length;
-
   if (!leads || !leads.length) {
-    document.getElementById('leadsContainer').innerHTML = `
-      <div class="empty-state">
-        <div class="icon">📬</div>
-        <h3>No leads yet</h3>
-        <p>When buyers contact you from your listings, they appear here. You pay nothing per lead.</p>
-      </div>`;
+    document.getElementById('leadsContainer').innerHTML = `<div class="empty-state"><div class="icon">📬</div><h3>No leads yet</h3><p>When buyers contact you from your listings, they appear here. You pay nothing per lead.</p></div>`;
     return;
   }
-
   document.getElementById('leadsContainer').innerHTML = `<div class="leads-list">` +
     leads.map(l => `
       <div class="lead-item">
         <div class="lead-avi">${(l.buyer_name?.[0]||'?').toUpperCase()}</div>
         <div class="lead-info">
           <div class="lead-name">${l.buyer_name}</div>
-          <div class="lead-contact">
-            📧 <a href="mailto:${l.buyer_email}">${l.buyer_email}</a>
-            ${l.buyer_phone ? ` · 📞 <a href="tel:${l.buyer_phone}">${l.buyer_phone}</a>` : ''}
-          </div>
-          ${l.message ? `<div class="lead-msg">"${l.message}"</div>` : ''}
+          <div class="lead-contact">📧 <a href="mailto:${l.buyer_email}">${l.buyer_email}</a>${l.buyer_phone?` · 📞 <a href="tel:${l.buyer_phone}">${l.buyer_phone}</a>`:''}</div>
+          ${l.message?`<div class="lead-msg">"${l.message}"</div>`:''}
           <a href="mailto:${l.buyer_email}?subject=Re: Your inquiry on GetOffZillow AI" class="lead-reply">Reply →</a>
         </div>
         <div class="lead-time">${timeSince(new Date(l.created_at))}</div>
@@ -719,6 +976,8 @@ async function loadLeads() {
 // ── EDIT LISTING MODAL ──
 function openEditModal(listing) {
   currentListingForEdit = listing;
+
+  // Populate fields
   document.getElementById('editListingId').value = listing.id;
   document.getElementById('el_address').value = listing.address || '';
   document.getElementById('el_city').value = listing.city || '';
@@ -734,6 +993,14 @@ function openEditModal(listing) {
   document.getElementById('el_url').value = listing.website_url || '';
   document.getElementById('editErr').style.display = 'none';
   document.getElementById('editOk').style.display = 'none';
+
+  // ── Load existing photos into epPhotos ──
+  const existingUrls = parsePhotos(listing.photos);
+  epPhotos = existingUrls.map(url => ({ type:'url', url }));
+  document.getElementById('epProgress').style.display = 'none';
+  document.getElementById('epProgFill').style.width = '0%';
+  epRender();
+
   document.getElementById('editModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -742,9 +1009,9 @@ function closeEditModal() {
   document.getElementById('editModal').classList.remove('open');
   document.body.style.overflow = '';
   currentListingForEdit = null;
+  epPhotos = [];
 }
 
-// Event listeners — safe to attach after DOM loads
 document.addEventListener('DOMContentLoaded', () => {
   const _editModal = document.getElementById('editModal');
   if (_editModal) _editModal.addEventListener('click', e => { if (e.target === _editModal) closeEditModal(); });
@@ -769,6 +1036,9 @@ async function saveEditListing() {
     return;
   }
 
+  // Upload any new photos and get final URL array
+  const photoUrls = await epUploadAndGetUrls();
+
   const updates = {
     address, city,
     state: document.getElementById('el_state').value,
@@ -781,6 +1051,7 @@ async function saveEditListing() {
     property_type: document.getElementById('el_type').value,
     description: document.getElementById('el_desc').value.trim() || null,
     website_url: document.getElementById('el_url').value.trim() || null,
+    photos: photoUrls.length > 0 ? photoUrls : (currentListingForEdit?.photos || null),
   };
 
   const { error } = await sb.from('listings').update(updates).eq('id', id);
@@ -791,12 +1062,9 @@ async function saveEditListing() {
     return;
   }
 
-  okEl.textContent = '✅ Listing updated!';
+  okEl.textContent = `✅ Listing updated! ${photoUrls.length} photo${photoUrls.length!==1?'s':''} saved.`;
   okEl.style.display = 'block';
-  setTimeout(() => {
-    closeEditModal();
-    loadListings();
-  }, 1200);
+  setTimeout(() => { closeEditModal(); loadListings(); }, 1400);
 }
 
 // ── LISTING ACTIONS ──
@@ -817,27 +1085,21 @@ async function markSold(id, current) {
 
 function shareListing(id, address) {
   const url = `${window.location.origin}/listing.html?id=${id}`;
-  if (navigator.share) {
-    navigator.share({ title: address + ' — GetOffZillow AI', url });
-  } else {
-    navigator.clipboard.writeText(url).then(() => showToast('Listing URL copied to clipboard!'));
-  }
+  if (navigator.share) { navigator.share({ title: address + ' — GetOffZillow AI', url }); }
+  else { navigator.clipboard.writeText(url).then(() => showToast('Listing URL copied to clipboard!')); }
 }
 
 function copyInviteLink() {
   const link = document.getElementById('inviteLink').textContent.trim();
   if (link.startsWith('Loading')) return;
-  navigator.clipboard.writeText(link).then(() => showToast('Invite link copied! Send it to other agents.'));
+  navigator.clipboard.writeText(link).then(() => showToast('Invite link copied!'));
 }
 
 function shareInviteLink() {
   const link = document.getElementById('inviteLink').textContent.trim();
-  const msg = "I've been using GetOffZillow AI — we pay 3% of our commission at closing (on a $10K commission that's $300), vs Zillow's 40% ($4,000). Free to join, free to list. Sign up here: " + link;
-  if (navigator.share) {
-    navigator.share({ title: 'Join GetOffZillow AI — 3% of commission at close', text: msg, url: link });
-  } else {
-    navigator.clipboard.writeText(msg).then(() => showToast('Invite message copied!'));
-  }
+  const msg = "I've been using GetOffZillow AI — we pay 3% of our commission at closing. Sign up here: " + link;
+  if (navigator.share) { navigator.share({ title: 'Join GetOffZillow AI', text: msg, url: link }); }
+  else { navigator.clipboard.writeText(msg).then(() => showToast('Invite message copied!')); }
 }
 
 function showToast(msg) {
@@ -861,7 +1123,6 @@ async function deleteListing(id) {
   loadListings();
 }
 
-// Trigger closing modal from listing card button (avoids JSON serialization in template)
 function triggerClosingModal(btn) {
   const id = btn.getAttribute('data-id');
   const listing = (window._cachedListings || []).find(l => l.id === id);
@@ -890,18 +1151,14 @@ function closeClosingModal() {
   document.body.style.overflow = '';
 }
 
-
-
 function calcClosingFee() {
   const price = parseFloat(document.getElementById('cl_sale_price').value) || 0;
   const rate  = parseFloat(document.getElementById('cl_commission_rate').value) || 2.5;
   const dual  = document.getElementById('cl_dual').value === 'yes';
   if (!price) { document.getElementById('feePreview').style.display='none'; document.getElementById('payOptions').style.display='none'; return; }
-
   const grossComm = price * (rate / 100) * (dual ? 2 : 1);
   const gozFee    = Math.round(grossComm * 0.03);
   const agentKeep = Math.round(grossComm - gozFee);
-
   document.getElementById('fp_price').textContent      = '$' + price.toLocaleString();
   document.getElementById('fp_commission').textContent  = '$' + Math.round(grossComm).toLocaleString() + (dual ? ' (both sides)' : '');
   document.getElementById('fp_keep').textContent        = '$' + agentKeep.toLocaleString();
@@ -909,8 +1166,6 @@ function calcClosingFee() {
   document.getElementById('feePreview').style.display   = 'block';
   document.getElementById('payOptions').style.display   = 'flex';
   document.getElementById('payNote').style.display      = 'block';
-
-  // Build payment links
   const addr = document.getElementById('cl_address').value;
   const note = encodeURIComponent(`GOZ fee - ${addr}`);
   document.getElementById('payVenmo').href = `https://venmo.com/VinHunter?txn=pay&amount=${gozFee}&note=${note}`;
@@ -924,77 +1179,36 @@ async function reportClosingHonor() {
   const dual      = document.getElementById('cl_dual').value === 'yes';
   const errEl     = document.getElementById('cl_err');
   const okEl      = document.getElementById('cl_ok');
-
   if (!price) { errEl.textContent='Enter the sale price first.'; errEl.style.display='block'; return; }
-
   const grossComm = price * (rate/100) * (dual ? 2 : 1);
   const gozFee    = Math.round(grossComm * 0.03);
-
-  // Log the closing in Supabase
-  const { error } = await sb.from('closings').insert({
-    agent_id:        agentId,
-    listing_id:      listingId,
-    sale_price:      price,
-    commission_rate: rate,
-    dual_agency:     dual,
-    gross_commission: Math.round(grossComm),
-    goz_fee:         gozFee,
-    payment_method:  'honor',
-    status:          'pending_payment'
-  });
-
-  if (error && !error.message.includes('relation "closings" does not exist')) {
-    errEl.textContent = 'Could not log closing: ' + error.message;
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // Mark listing as sold
+  const { error } = await sb.from('closings').insert({ agent_id:agentId, listing_id:listingId, sale_price:price, commission_rate:rate, dual_agency:dual, gross_commission:Math.round(grossComm), goz_fee:gozFee, payment_method:'honor', status:'pending_payment' });
+  if (error && !error.message.includes('relation "closings" does not exist')) { errEl.textContent='Could not log closing: '+error.message; errEl.style.display='block'; return; }
   await sb.from('listings').update({ status:'sold' }).eq('id', listingId);
-
-  okEl.textContent = `✅ Closing logged! GOZ fee of $${gozFee.toLocaleString()} is due within 10 days. Send to Venmo @VinHunter or Zelle campaigns@transbidlive.faith with the property address in the note.`;
+  okEl.textContent = `✅ Closing logged! GOZ fee of $${gozFee.toLocaleString()} is due within 10 days.`;
   okEl.style.display = 'block';
   document.getElementById('payOptions').style.display = 'none';
   setTimeout(() => { closeClosingModal(); loadListings(); }, 4000);
 }
 
-// ── INVITE LINK ──
+// ── INVITE ──
 async function loadInviteLink(aid) {
   const base = window.location.origin;
   const link = `${base}/invite.html?ref=${aid}`;
   document.getElementById('inviteLink').textContent = link;
-
-  // Count referrals + their activity
-  const { data: refs } = await sb
-    .from('agents')
-    .select('id, first_name, last_name, created_at')
-    .eq('referred_by', aid)
-    .order('created_at', { ascending: false });
-
+  const { data: refs } = await sb.from('agents').select('id,first_name,last_name,created_at').eq('referred_by', aid).order('created_at', { ascending: false });
   const refCount = (refs || []).length;
   const countEl = document.getElementById('inviteCount');
-
-  if (refCount === 0) {
-    countEl.textContent = 'No agents referred yet — share your link to grow the network.';
-  } else {
-    // Count their active listings
-    const refIds = refs.map(r => r.id);
-    const { count: listingCount } = await sb
-      .from('listings')
-      .select('*', { count:'exact', head:true })
-      .in('agent_id', refIds)
-      .eq('status', 'active');
-
-    const names = refs.slice(0,3).map(r => r.first_name).join(', ');
-    const more  = refCount > 3 ? ` +${refCount-3} more` : '';
-    countEl.innerHTML = `<strong style="color:var(--ai-green)">${refCount} agent${refCount!==1?'s':''} joined through your link</strong> — ${names}${more}` +
-      (listingCount > 0 ? ` · <span style="color:rgba(255,255,255,0.5)">${listingCount} active listing${listingCount!==1?'s':''} between them</span>` : '');
-  }
+  if (refCount === 0) { countEl.textContent = 'No agents referred yet — share your link to grow the network.'; return; }
+  const refIds = refs.map(r => r.id);
+  const { count: listingCount } = await sb.from('listings').select('*', { count:'exact', head:true }).in('agent_id', refIds).eq('status', 'active');
+  const names = refs.slice(0,3).map(r => r.first_name).join(', ');
+  const more  = refCount > 3 ? ` +${refCount-3} more` : '';
+  countEl.innerHTML = `<strong style="color:var(--ai-green)">${refCount} agent${refCount!==1?'s':''} joined through your link</strong> — ${names}${more}` +
+    (listingCount > 0 ? ` · <span style="color:rgba(255,255,255,0.5)">${listingCount} active listing${listingCount!==1?'s':''} between them</span>` : '');
 }
 
-// ── FEATURED LISTING TOGGLE ──
 async function toggleFeatured(id, currentlyFeatured) {
-  // For now: toggle the featured flag — Square payment flow to be added later
   const newVal = !currentlyFeatured;
   if (newVal) {
     const ok = confirm('Feature this listing? It will appear at the top of search results for 30 days.\n\nFeatured listing fee: $25 (invoiced separately — pay via Venmo @VinHunter with listing address).');
@@ -1005,16 +1219,6 @@ async function toggleFeatured(id, currentlyFeatured) {
   showToast(newVal ? '★ Listing featured! Please send $25 to Venmo @VinHunter.' : 'Listing unfeatured.');
 }
 
-// ── FEATURE LISTING ──
-function featureListing(id) {
-  // Square payment link for $25 featured listing
-  const url = `https://square.link/u/GOZFeatured?listing_id=${id}&amount=2500`;
-  if (confirm('Feature this listing for $25 — it will appear at the top of search results for 30 days. You\'ll be taken to Square to complete payment.')) {
-    window.open(url, '_blank');
-  }
-}
-
-// ── SIGN OUT ──
 async function doSignOut() {
   await sb.auth.signOut();
   localStorage.clear();
@@ -1029,11 +1233,9 @@ function timeSince(date) {
   return Math.floor(s/86400) + 'd ago';
 }
 
-// Wrap init in try/catch so errors surface instead of silent spinner
 (async () => {
-  try {
-    await init();
-  } catch(e) {
+  try { await init(); }
+  catch(e) {
     console.error('Dashboard init failed:', e);
     const loading = document.getElementById('screenLoading');
     const auth    = document.getElementById('screenAuth');
