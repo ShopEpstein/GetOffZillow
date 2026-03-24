@@ -330,6 +330,74 @@ window.addEventListener('error', function(e) {
   .pay-btn.honor { background:var(--bg); color:var(--text); border:1.5px solid var(--border); }
   .pay-btn:hover { opacity:0.88; transform:translateY(-1px); }
 
+  /* PHOTO EDITOR LIGHTBOX */
+  #pebOverlay { position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.93);display:none;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain; }
+  #pebOverlay.open { display:flex; }
+  .peb { background:#1c1c1e;border-radius:16px;width:100%;max-width:500px;max-height:calc(100vh - 32px);overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.7);display:flex;flex-direction:column; }
+  .peb-head { display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0;flex-shrink:0; }
+  .peb-head h3 { color:white;font-size:15px;font-weight:700;margin:0; }
+  .peb-close { background:rgba(255,255,255,0.1);border:none;color:white;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s; }
+  .peb-close:hover { background:rgba(255,255,255,0.25); }
+  .peb-preview { margin:14px 20px 0;background:#000;border-radius:10px;overflow:hidden;min-height:140px;max-height:260px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .peb-preview canvas { max-width:100%;max-height:260px;display:block; }
+  .peb-sliders { padding:14px 20px;display:flex;flex-direction:column;gap:11px; }
+  .peb-row { display:grid;grid-template-columns:76px 1fr 28px;align-items:center;gap:10px; }
+  .peb-row label { color:rgba(255,255,255,0.6);font-size:12px;font-weight:500; }
+  .peb-row input[type=range] { width:100%;accent-color:#00FF9D;cursor:pointer; }
+  .peb-row span { color:rgba(255,255,255,0.75);font-size:11px;text-align:right;font-family:monospace; }
+  .peb-rotates { display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 20px 4px;flex-shrink:0; }
+  .peb-rot-btn { background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);padding:9px;border-radius:8px;font-size:13px;cursor:pointer;transition:background 0.15s; }
+  .peb-rot-btn:hover { background:rgba(255,255,255,0.18); }
+  .peb-footer { display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 20px 18px;flex-shrink:0; }
+  .peb-apply { background:#00FF9D;color:#000;border:none;padding:11px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;transition:background 0.2s;font-family:'Nunito',sans-serif; }
+  .peb-apply:hover { background:#00e88a; }
+  .peb-reset-btn { background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:11px 14px;border-radius:9px;font-size:13px;cursor:pointer; }
+  .peb-reset-btn:hover { background:rgba(255,255,255,0.14); }
+  @media(max-width:480px) { #pebOverlay{padding:0;align-items:flex-end;} .peb{border-radius:20px 20px 0 0;max-height:92vh;} }
+
+  /* SHARE MODAL */
+  #shareModal { position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px); }
+  #shareModal.open { display:flex; }
+  .share-box { background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:440px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6);animation:fadeUp 0.2s ease; }
+  .share-card {
+    position:relative;height:220px;overflow:hidden;background:#0a1f44;
+    display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .share-card-bg { position:absolute;inset:0;object-fit:cover;width:100%;height:100%;display:block; }
+  .share-card-scrim { position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.2) 60%,transparent 100%); }
+  .share-card-goz {
+    position:absolute;top:14px;right:14px;
+    background:var(--ai-green);color:#000;
+    font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:0.15em;
+    padding:3px 10px 2px;
+    clip-path:polygon(0 0,calc(100% - 5px) 0,100% 100%,5px 100%);
+    z-index:2;
+  }
+  .share-card-content { position:relative;z-index:2;padding:16px 18px; }
+  .share-card-price { font-family:'Bebas Neue',sans-serif;font-size:36px;color:white;line-height:1;letter-spacing:-0.5px; }
+  .share-card-specs { font-size:12px;color:rgba(255,255,255,0.75);margin-top:3px;font-weight:600; }
+  .share-card-addr { font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px; }
+  .share-card-comm { display:inline-flex;align-items:center;gap:4px;background:rgba(0,255,157,0.15);color:var(--ai-green);font-size:10px;font-weight:800;padding:2px 8px;border-radius:3px;margin-top:6px;border:1px solid rgba(0,255,157,0.25); }
+  .share-body { padding:18px 20px 20px; }
+  .share-url-row { display:flex;gap:8px;margin-bottom:16px; }
+  .share-url { flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-family:'Space Mono',monospace;font-size:11px;padding:9px 12px;border-radius:7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:all; }
+  .share-copy-btn { background:var(--ai-green);color:#000;border:none;padding:9px 16px;border-radius:7px;font-family:'Nunito',sans-serif;font-weight:900;font-size:12px;cursor:pointer;white-space:nowrap;transition:all 0.2s; }
+  .share-copy-btn:hover { background:#00e88a; }
+  .share-copy-btn.copied { background:#00C853;color:white; }
+  .share-btns { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px; }
+  .share-btn { display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:9px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;border:none;transition:all 0.18s;text-decoration:none; }
+  .share-btn:hover { transform:translateY(-1px);filter:brightness(1.1); }
+  .share-btn.sms { background:#1c8a1c;color:white; }
+  .share-btn.email { background:#0055cc;color:white; }
+  .share-btn.native { background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.12); }
+  .share-agent-row { display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08); }
+  .share-agent-avi { width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0;overflow:hidden; }
+  .share-agent-avi img { width:100%;height:100%;object-fit:cover; }
+  .share-agent-name { font-size:12px;font-weight:700;color:rgba(255,255,255,0.85); }
+  .share-agent-sub { font-size:10px;color:rgba(255,255,255,0.4);margin-top:1px; }
+  .share-close-btn { margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.35);font-size:20px;cursor:pointer;padding:4px;line-height:1;transition:color 0.15s; }
+  .share-close-btn:hover { color:white; }
+
   /* EMPTY STATES */
   .empty-state { text-align:center; padding:36px; color:var(--gray); }
   .empty-state .icon { font-size:36px; margin-bottom:10px; }
@@ -371,6 +439,70 @@ window.addEventListener('error', function(e) {
     <button class="nav-btn outline" id="navSignOutBtn" onclick="doSignOut()" style="display:none">Sign Out</button>
   </div>
 </nav>
+
+<!-- PHOTO EDITOR LIGHTBOX -->
+<div id="pebOverlay" onclick="if(event.target===this)pebClose()">
+  <div class="peb">
+    <div class="peb-head">
+      <h3>✏️ Adjust Photo</h3>
+      <button class="peb-close" onclick="pebClose()" type="button">✕</button>
+    </div>
+    <div class="peb-preview"><canvas id="pebCanvas"></canvas></div>
+    <div class="peb-sliders">
+      <div class="peb-row"><label>☀️ Brightness</label><input type="range" id="pebBright" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebBrightV').textContent=this.value"><span id="pebBrightV">0</span></div>
+      <div class="peb-row"><label>◼ Contrast</label><input type="range" id="pebContrast" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebContrastV').textContent=this.value"><span id="pebContrastV">0</span></div>
+      <div class="peb-row"><label>🌤 Warmth</label><input type="range" id="pebWarmth" min="-60" max="60" value="0" oninput="pebDraw();document.getElementById('pebWarmthV').textContent=this.value"><span id="pebWarmthV">0</span></div>
+    </div>
+    <div class="peb-rotates">
+      <button class="peb-rot-btn" type="button" onclick="pebRotate(-90)">↺ Rotate Left</button>
+      <button class="peb-rot-btn" type="button" onclick="pebRotate(90)">↻ Rotate Right</button>
+    </div>
+    <div class="peb-footer">
+      <button class="peb-apply" type="button" onclick="pebApply()">Apply Changes →</button>
+      <button class="peb-reset-btn" type="button" onclick="pebResetSliders()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE LISTING MODAL -->
+<div id="shareModal" onclick="if(event.target===this)closeShareModal()">
+  <div class="share-box">
+    <!-- Photo card preview -->
+    <div class="share-card" id="shareCard">
+      <img class="share-card-bg" id="shareCardBg" src="" alt="" onerror="this.style.display='none'" />
+      <div class="share-card-scrim"></div>
+      <div class="share-card-goz">GETOFFZILLOW.AI</div>
+      <div class="share-card-content">
+        <div class="share-card-price" id="shareCardPrice"></div>
+        <div class="share-card-specs" id="shareCardSpecs"></div>
+        <div class="share-card-addr" id="shareCardAddr"></div>
+        <div class="share-card-comm" id="shareCardComm"></div>
+      </div>
+    </div>
+    <div class="share-body">
+      <!-- URL row -->
+      <div class="share-url-row">
+        <div class="share-url" id="shareUrlDisplay"></div>
+        <button class="share-copy-btn" id="shareCopyBtn" onclick="shareModalCopy()">Copy Link</button>
+      </div>
+      <!-- Share buttons -->
+      <div class="share-btns">
+        <a class="share-btn sms" id="shareSmsBt" href="#">💬 Text</a>
+        <a class="share-btn email" id="shareEmailBt" href="#">✉️ Email</a>
+        <button class="share-btn native" onclick="shareModalNative()">↑ Share…</button>
+        <button class="share-btn native" onclick="closeShareModal()">✕ Close</button>
+      </div>
+      <!-- Agent row -->
+      <div class="share-agent-row">
+        <div class="share-agent-avi" id="shareAgentAvi"></div>
+        <div>
+          <div class="share-agent-name" id="shareAgentName"></div>
+          <div class="share-agent-sub">GetOffZillow AI · 3% at closing · Commission shown publicly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- CLOSING REPORT MODAL -->
 <div class="closing-modal-overlay" id="closingModal">
@@ -512,7 +644,8 @@ window.addEventListener('error', function(e) {
           <img id="epCoverImg" src="" alt="cover" />
           <div class="ep-cover-badge">★ COVER</div>
           <div class="ep-cover-overlay">
-            <button class="ep-ov-btn" type="button" onclick="epRemove(0)">✕ Remove</button>
+            <button class="ep-ov-btn" type="button" onclick="epOpenEdit(0)">✏️ Adjust</button>
+            <button class="ep-ov-btn del" type="button" onclick="epRemove(0)">✕ Remove</button>
           </div>
         </div>
       </div>
@@ -695,6 +828,7 @@ function epRender() {
         <img src="${src}" ${isObj?'data-obj="1"':''} alt="photo ${i+1}" />
         <div class="ep-th-num">${i+1}</div>
         <div class="ep-th-hover">
+          <button class="ep-th-btn" type="button" onclick="epOpenEdit(${i})">✏️ Adjust</button>
           <button class="ep-th-btn" type="button" onclick="epMakeCover(${i})">↑ Cover</button>
           <button class="ep-th-btn del" type="button" onclick="epRemove(${i})">✕ Remove</button>
         </div>
@@ -1017,6 +1151,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (_editModal) _editModal.addEventListener('click', e => { if (e.target === _editModal) closeEditModal(); });
   const _closingModal = document.getElementById('closingModal');
   if (_closingModal) _closingModal.addEventListener('click', e => { if (e.target === _closingModal) closeClosingModal(); });
+  const _shareModal = document.getElementById('shareModal');
+  if (_shareModal) _shareModal.addEventListener('click', e => { if (e.target === _shareModal) closeShareModal(); });
 });
 
 async function saveEditListing() {
@@ -1084,9 +1220,172 @@ async function markSold(id, current) {
 }
 
 function shareListing(id, address) {
+  const listing = (window._cachedListings || []).find(l => l.id === id);
+  if (listing) { openShareModal(listing); return; }
+  // fallback
   const url = `${window.location.origin}/listing.html?id=${id}`;
   if (navigator.share) { navigator.share({ title: address + ' — GetOffZillow AI', url }); }
-  else { navigator.clipboard.writeText(url).then(() => showToast('Listing URL copied to clipboard!')); }
+  else { navigator.clipboard.writeText(url).then(() => showToast('Listing URL copied!')); }
+}
+
+// ════════════════════════════════════════
+// SHARE MODAL
+// ════════════════════════════════════════
+let _shareUrl = '';
+let _shareListing = null;
+
+function openShareModal(listing) {
+  _shareListing = listing;
+  const url = `${window.location.origin}/listing.html?id=${listing.id}`;
+  _shareUrl = url;
+
+  // Card
+  const photos = parsePhotos(listing.photos);
+  const bg = document.getElementById('shareCardBg');
+  if (photos.length) { bg.src = photos[0]; bg.style.display = 'block'; }
+  else { bg.style.display = 'none'; document.getElementById('shareCard').style.background = 'linear-gradient(135deg,#0a1f44,#001a4d)'; }
+
+  document.getElementById('shareCardPrice').textContent = '$' + Number(listing.price).toLocaleString();
+  const specs = [listing.beds && listing.beds + ' bd', listing.baths && listing.baths + ' ba', listing.sqft && Number(listing.sqft).toLocaleString() + ' sqft'].filter(Boolean).join('  ·  ');
+  document.getElementById('shareCardSpecs').textContent = specs;
+  document.getElementById('shareCardAddr').textContent = listing.address + ', ' + listing.city + ', ' + listing.state;
+  document.getElementById('shareCardComm').textContent = '✓ ' + (listing.commission_rate || '2.5%') + ' commission — shown publicly';
+
+  // URL bar
+  document.getElementById('shareUrlDisplay').textContent = url.replace('https://','');
+
+  // Buttons
+  const msg = `Check out this listing on GetOffZillow AI — $${Number(listing.price).toLocaleString()}, ${listing.address}, ${listing.city} ${listing.state}. Commission shown publicly. ${url}`;
+  document.getElementById('shareSmsBt').href = `sms:?body=${encodeURIComponent(msg)}`;
+  document.getElementById('shareEmailBt').href = `mailto:?subject=${encodeURIComponent(listing.address + ' — ' + '$' + Number(listing.price).toLocaleString() + ' on GetOffZillow AI')}&body=${encodeURIComponent(msg)}`;
+
+  // Agent row
+  const name = localStorage.getItem('goz_name') || 'Your Agent';
+  const initials = name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('shareAgentAvi').textContent = initials;
+  document.getElementById('shareAgentName').textContent = name;
+
+  // Reset copy btn
+  const cb = document.getElementById('shareCopyBtn');
+  cb.textContent = 'Copy Link'; cb.classList.remove('copied');
+
+  document.getElementById('shareModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeShareModal() {
+  document.getElementById('shareModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function shareModalCopy() {
+  navigator.clipboard.writeText(_shareUrl).then(() => {
+    const btn = document.getElementById('shareCopyBtn');
+    btn.textContent = '✓ Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy Link'; btn.classList.remove('copied'); }, 2200);
+  });
+}
+
+function shareModalNative() {
+  if (!_shareListing) return;
+  const title = _shareListing.address + ' — $' + Number(_shareListing.price).toLocaleString() + ' on GetOffZillow AI';
+  if (navigator.share) {
+    navigator.share({ title, url: _shareUrl }).catch(()=>{});
+  } else {
+    shareModalCopy();
+  }
+}
+
+// ════════════════════════════════════════
+// PHOTO EDITOR (edit modal)
+// ════════════════════════════════════════
+let _pebIdx = null, _pebImg = null, _pebRot = 0;
+
+function epOpenEdit(i) {
+  const item = epPhotos[i];
+  if (!item) return;
+  _pebIdx = i; _pebRot = 0;
+  pebResetSliders();
+  const src = item.type === 'file' ? URL.createObjectURL(item.file) : item.url;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() {
+    _pebImg = img;
+    pebDrawBase();
+    document.getElementById('pebOverlay').classList.add('open');
+    // don't change body overflow — edit modal already has it
+  };
+  img.src = src;
+}
+
+function pebClose() {
+  document.getElementById('pebOverlay').classList.remove('open');
+  _pebIdx = null; _pebImg = null; _pebRot = 0;
+}
+
+function pebResetSliders() {
+  ['pebBright','pebContrast','pebWarmth'].forEach(id => { const el=document.getElementById(id); if(el) el.value=0; });
+  ['pebBrightV','pebContrastV','pebWarmthV'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent='0'; });
+  if (_pebImg) pebDrawBase();
+}
+
+function pebRotate(deg) { _pebRot = (_pebRot + deg + 360) % 360; pebDraw(); }
+
+function pebDrawBase() {
+  if (!_pebImg) return;
+  const canvas = document.getElementById('pebCanvas');
+  const isR = _pebRot === 90 || _pebRot === 270;
+  const nw = isR ? _pebImg.naturalHeight : _pebImg.naturalWidth;
+  const nh = isR ? _pebImg.naturalWidth  : _pebImg.naturalHeight;
+  const maxW = Math.min(460, window.innerWidth - 80);
+  const maxH = 240;
+  const scale = Math.min(maxW/nw, maxH/nh, 1);
+  canvas.width = Math.round(nw*scale);
+  canvas.height = Math.round(nh*scale);
+  const ctx = canvas.getContext('2d');
+  ctx.save();
+  ctx.translate(canvas.width/2, canvas.height/2);
+  ctx.rotate(_pebRot * Math.PI / 180);
+  if (isR) { ctx.drawImage(_pebImg, -canvas.height/2, -canvas.width/2, canvas.height, canvas.width); }
+  else { ctx.drawImage(_pebImg, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height); }
+  ctx.restore();
+}
+
+function pebDraw() {
+  if (!_pebImg) return;
+  pebDrawBase();
+  const canvas = document.getElementById('pebCanvas');
+  const ctx = canvas.getContext('2d');
+  const bright   = parseInt(document.getElementById('pebBright').value)   || 0;
+  const contrast = parseInt(document.getElementById('pebContrast').value) || 0;
+  const warmth   = parseInt(document.getElementById('pebWarmth').value)   || 0;
+  if (bright===0 && contrast===0 && warmth===0) return;
+  const id = ctx.getImageData(0,0,canvas.width,canvas.height);
+  const d = id.data;
+  const cf = (contrast+100)/100;
+  const bv = bright*2.55;
+  for (let i=0; i<d.length; i+=4) {
+    d[i]   = _clp((d[i]  +bv-128)*cf+128+warmth*1.5);
+    d[i+1] = _clp((d[i+1]+bv-128)*cf+128+warmth*0.4);
+    d[i+2] = _clp((d[i+2]+bv-128)*cf+128-warmth*1.2);
+  }
+  ctx.putImageData(id,0,0);
+}
+
+function _clp(v) { return v<0?0:v>255?255:Math.round(v); }
+
+function pebApply() {
+  if (_pebIdx === null) return;
+  const canvas = document.getElementById('pebCanvas');
+  pebDraw();
+  canvas.toBlob(blob => {
+    if (!blob) { pebClose(); return; }
+    const oldItem = epPhotos[_pebIdx];
+    const name = oldItem.type==='file' ? oldItem.file.name : ('edited_'+_pebIdx+'.jpg');
+    epPhotos[_pebIdx] = { type:'file', file: new File([blob], name, { type:'image/jpeg' }) };
+    pebClose();
+    epRender();
+  }, 'image/jpeg', 0.93);
 }
 
 function copyInviteLink() {
