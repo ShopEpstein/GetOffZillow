@@ -194,10 +194,48 @@
   .photo-zone-text { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
   .photo-zone-hint { font-size:12px; color:var(--gray); }
   .photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:10px; margin-top:16px; }
-  .photo-thumb { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:1; }
-  .photo-thumb img { width:100%; height:100%; object-fit:cover; }
-  .photo-thumb .remove-btn { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.65); color:white; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; }
-  .photo-thumb.primary-thumb::after { content:'PRIMARY'; position:absolute; bottom:0; left:0; right:0; background:rgba(0,106,255,0.85); color:white; font-size:8px; font-weight:800; text-align:center; padding:2px; letter-spacing:0.5px; }
+  .photo-thumb { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:1; cursor:grab; transition:transform 0.15s; }
+  .photo-thumb:active { cursor:grabbing; }
+  .photo-thumb img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+  .photo-thumb.dragging { opacity:0.3; outline:2px dashed var(--blue); }
+  .photo-thumb.drag-over { outline:3px solid var(--ai-green); transform:scale(1.04); }
+  .photo-thumb .remove-btn { position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.65); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:3; transition:background 0.15s; }
+  .photo-thumb .remove-btn:hover { background:var(--red,#E8341C); }
+  .photo-thumb .thumb-overlay { position:absolute; inset:0; background:rgba(0,0,0,0); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; opacity:0; transition:all 0.18s; z-index:2; }
+  .photo-thumb:hover .thumb-overlay { opacity:1; background:rgba(0,0,0,0.5); }
+  .thumb-btn { background:rgba(255,255,255,0.15); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.3); color:white; border-radius:6px; padding:5px 11px; font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+  .thumb-btn:hover { background:rgba(255,255,255,0.35); }
+  .photo-thumb.primary-thumb::after { content:'PRIMARY'; position:absolute; bottom:0; left:0; right:0; background:rgba(0,106,255,0.88); color:white; font-size:8px; font-weight:800; text-align:center; padding:3px; letter-spacing:0.8px; z-index:1; }
+  .streetview-btn { display:inline-flex; align-items:center; gap:7px; background:#EBF3FF; color:var(--blue); border:1.5px solid #B3D1FF; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; margin-top:10px; }
+  .streetview-btn:hover { background:var(--blue); color:white; border-color:var(--blue); }
+  .streetview-btn:disabled { opacity:0.55; cursor:not-allowed; }
+  /* Lightbox editor */
+  #photoEditOverlay { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.92); display:none; align-items:center; justify-content:center; padding:16px; overscroll-behavior:contain; }
+  #photoEditOverlay.open { display:flex; }
+  .peb { background:#1c1c1e; border-radius:16px; width:100%; max-width:520px; max-height:calc(100vh - 32px); overflow-y:auto; box-shadow:0 32px 80px rgba(0,0,0,0.7); display:flex; flex-direction:column; }
+  .peb-head { display:flex; align-items:center; justify-content:space-between; padding:18px 20px 0; flex-shrink:0; }
+  .peb-head h3 { color:white; font-size:16px; font-weight:700; margin:0; }
+  .peb-close { background:rgba(255,255,255,0.1); border:none; color:white; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background 0.15s; line-height:1; }
+  .peb-close:hover { background:rgba(255,255,255,0.25); }
+  .peb-preview { margin:14px 20px 0; background:#000; border-radius:10px; overflow:hidden; min-height:160px; max-height:280px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .peb-preview canvas { max-width:100%; max-height:280px; display:block; }
+  .peb-sliders { padding:16px 20px; display:flex; flex-direction:column; gap:12px; }
+  .peb-row { display:grid; grid-template-columns:80px 1fr 28px; align-items:center; gap:10px; }
+  .peb-row label { color:rgba(255,255,255,0.65); font-size:12px; font-weight:500; }
+  .peb-row input[type=range] { width:100%; accent-color:#00FF9D; cursor:pointer; }
+  .peb-row span { color:rgba(255,255,255,0.8); font-size:11px; text-align:right; font-family:monospace; }
+  .peb-rotates { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:0 20px 4px; flex-shrink:0; }
+  .peb-rot-btn { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.8); padding:9px; border-radius:8px; font-size:13px; cursor:pointer; transition:background 0.15s; }
+  .peb-rot-btn:hover { background:rgba(255,255,255,0.18); }
+  .peb-footer { display:grid; grid-template-columns:1fr auto; gap:8px; padding:14px 20px 20px; flex-shrink:0; }
+  .peb-apply { background:#00FF9D; color:#000; border:none; padding:12px; border-radius:9px; font-weight:700; font-size:14px; cursor:pointer; transition:background 0.2s; }
+  .peb-apply:hover { background:#00e88a; }
+  .peb-reset { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:12px 16px; border-radius:9px; font-size:13px; cursor:pointer; }
+  .peb-reset:hover { background:rgba(255,255,255,0.14); }
+  @media(max-width:480px) {
+    #photoEditOverlay { padding:0; align-items:flex-end; }
+    .peb { border-radius:20px 20px 0 0; max-height:92vh; }
+  }
   .photo-count { font-size:12px; color:var(--gray); margin-top:8px; }
   .upload-progress { display:none; margin-top:12px; }
   .progress-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
@@ -714,19 +752,18 @@ function renderPhotoGrid() {
 
   grid.innerHTML = selectedPhotos.map((f, i) => {
     const url = URL.createObjectURL(f);
-    return `<div class="photo-thumb${i===0?' primary-thumb':''}" draggable="true"
-        ondragstart="photoDragStart(event,${i})"
-        ondragover="photoDragOver(event)"
-        ondrop="photoDrop(event,${i})"
-        ondragend="photoDragEnd(event)"
-        ondragleave="this.classList.remove('drag-over')">
-      <img src="${url}" alt="photo ${i+1}" style="cursor:grab"/>
-      <button class="remove-btn" onclick="removePhoto(${i})" type="button">&#10005;</button>
-      <div class="photo-tools">
-        <button class="photo-tool-btn" type="button" onclick="openPhotoEdit(${i})">✏️ Edit</button>
-        ${i > 0 ? `<button class="photo-tool-btn" type="button" onclick="movePhotoFirst(${i})">⬆ Primary</button>` : ''}
-      </div>
-    </div>`;
+    return '<div class="photo-thumb' + (i===0?' primary-thumb':'') + '" draggable="true"'
+      + ' ondragstart="photoDragStart(event,'+i+')"'
+      + ' ondragover="photoDragOver(event)"'
+      + ' ondrop="photoDrop(event,'+i+')"'
+      + ' ondragend="photoDragEnd(event)"'
+      + ' ondragleave="this.classList.remove('drag-over')">'
+      + '<img src="' + url + '" alt="photo ' + (i+1) + '"/>'
+      + '<button class="remove-btn" onclick="removePhoto('+i+')" type="button" title="Remove">✕</button>'
+      + '<div class="thumb-overlay">'
+      + '<button class="thumb-btn" type="button" onclick="openPhotoEdit('+i+')">✏️ Adjust</button>'
+      + (i > 0 ? '<button class="thumb-btn" type="button" onclick="movePhotoFirst('+i+'">⬆ Make Primary</button>' : '')
+      + '</div></div>';
   }).join('');
 
   const n = selectedPhotos.length;
@@ -945,159 +982,123 @@ let _editImg = null;
 let _editRotation = 0;
 let _editOriginalFile = null;
 
-function openPhotoEdit(i) {
-  _editIdx = i;
-  _editRotation = 0;
-  _editOriginalFile = selectedPhotos[i];
-  resetFilters();
 
-  const modal = document.getElementById('photoEditModal');
-  const canvas = document.getElementById('editCanvas');
+
+
+// ══════════════════════════
+// PHOTO EDITOR
+// ══════════════════════════
+let _pebIdx = null, _pebImg = null, _pebRot = 0;
+
+function openPhotoEdit(i) {
+  _pebIdx = i;
+  _pebRot = 0;
+  pebReset();
+  const overlay = document.getElementById('photoEditOverlay');
   const img = new Image();
-  img.onload = () => {
-    _editImg = img;
-    drawEditCanvas();
-    modal.classList.add('open');
+  img.onload = function() {
+    _pebImg = img;
+    pebDrawBase();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
   };
-  img.src = URL.createObjectURL(_editOriginalFile);
+  img.src = URL.createObjectURL(selectedPhotos[i]);
 }
 
 function closePhotoEdit() {
-  document.getElementById('photoEditModal').classList.remove('open');
-  _editIdx = null;
-  _editImg = null;
-  _editOriginalFile = null;
+  document.getElementById('photoEditOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  _pebIdx = null; _pebImg = null; _pebRot = 0;
 }
 
-function resetFilters() {
-  ['slBrightness','slContrast','slWarmth','slSharpen'].forEach(id => {
+function pebReset() {
+  ['pebBright','pebContrast','pebWarmth'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = 0;
   });
-  document.getElementById('vBright').textContent = '0';
-  document.getElementById('vContrast').textContent = '0';
-  document.getElementById('vWarmth').textContent = '0';
-  document.getElementById('vSharpen').textContent = '0';
-  if (_editImg) drawEditCanvas();
+  ['pebBrightV','pebContrastV','pebWarmthV'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '0';
+  });
+  if (_pebImg) pebDrawBase();
 }
 
-function rotatePhoto(deg) {
-  _editRotation = (_editRotation + deg + 360) % 360;
-  drawEditCanvas();
+function pebRotate(deg) {
+  _pebRot = (_pebRot + deg + 360) % 360;
+  pebDraw();
 }
 
-function drawEditCanvas() {
-  if (!_editImg) return;
-  const canvas = document.getElementById('editCanvas');
-  const isRotated = _editRotation === 90 || _editRotation === 270;
-  const w = isRotated ? _editImg.naturalHeight : _editImg.naturalWidth;
-  const h = isRotated ? _editImg.naturalWidth : _editImg.naturalHeight;
-
-  // Scale to fit display
-  const maxW = 500, maxH = 300;
-  const scale = Math.min(maxW/w, maxH/h, 1);
-  canvas.width  = Math.round(w * scale);
-  canvas.height = Math.round(h * scale);
-
+function pebDrawBase() {
+  if (!_pebImg) return;
+  const canvas = document.getElementById('pebCanvas');
+  const isR = _pebRot === 90 || _pebRot === 270;
+  const nw = isR ? _pebImg.naturalHeight : _pebImg.naturalWidth;
+  const nh = isR ? _pebImg.naturalWidth  : _pebImg.naturalHeight;
+  const maxW = Math.min(480, window.innerWidth - 72);
+  const maxH = 260;
+  const scale = Math.min(maxW / nw, maxH / nh, 1);
+  canvas.width  = Math.round(nw * scale);
+  canvas.height = Math.round(nh * scale);
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
-  ctx.translate(canvas.width/2, canvas.height/2);
-  ctx.rotate(_editRotation * Math.PI / 180);
-  ctx.drawImage(_editImg,
-    isRotated ? -canvas.height/2 : -canvas.width/2,
-    isRotated ? -canvas.width/2  : -canvas.height/2,
-    isRotated ? canvas.height : canvas.width,
-    isRotated ? canvas.width  : canvas.height
-  );
-  ctx.restore();
-  applyFilters();
-}
-
-function applyFilters() {
-  const canvas = document.getElementById('editCanvas');
-  if (!canvas || !_editImg) return;
-  const ctx = canvas.getContext('2d');
-  const brightness = parseInt(document.getElementById('slBrightness').value) || 0;
-  const contrast   = parseInt(document.getElementById('slContrast').value) || 0;
-  const warmth     = parseInt(document.getElementById('slWarmth').value) || 0;
-
-  // Redraw base image
-  drawEditCanvasBase();
-
-  // Apply pixel manipulation for brightness/contrast/warmth
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-  const bFactor = brightness / 100;
-  const cFactor = (contrast + 100) / 100;
-
-  for (let i = 0; i < data.length; i += 4) {
-    // Brightness
-    data[i]   = clamp(data[i]   + brightness * 2.55);
-    data[i+1] = clamp(data[i+1] + brightness * 2.55);
-    data[i+2] = clamp(data[i+2] + brightness * 2.55);
-    // Contrast
-    data[i]   = clamp((data[i]   - 128) * cFactor + 128);
-    data[i+1] = clamp((data[i+1] - 128) * cFactor + 128);
-    data[i+2] = clamp((data[i+2] - 128) * cFactor + 128);
-    // Warmth (add red/yellow, reduce blue)
-    if (warmth !== 0) {
-      data[i]   = clamp(data[i]   + warmth * 1.5);
-      data[i+1] = clamp(data[i+1] + warmth * 0.5);
-      data[i+2] = clamp(data[i+2] - warmth * 1.5);
-    }
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.rotate(_pebRot * Math.PI / 180);
+  if (isR) {
+    ctx.drawImage(_pebImg, -canvas.height/2, -canvas.width/2, canvas.height, canvas.width);
+  } else {
+    ctx.drawImage(_pebImg, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
   }
-  ctx.putImageData(imageData, 0, 0);
-}
-
-function drawEditCanvasBase() {
-  if (!_editImg) return;
-  const canvas = document.getElementById('editCanvas');
-  const isRotated = _editRotation === 90 || _editRotation === 270;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.save();
-  ctx.translate(canvas.width/2, canvas.height/2);
-  ctx.rotate(_editRotation * Math.PI / 180);
-  ctx.drawImage(_editImg,
-    isRotated ? -canvas.height/2 : -canvas.width/2,
-    isRotated ? -canvas.width/2  : -canvas.height/2,
-    isRotated ? canvas.height : canvas.width,
-    isRotated ? canvas.width  : canvas.height
-  );
   ctx.restore();
 }
 
-function clamp(v) { return Math.max(0, Math.min(255, Math.round(v))); }
+function pebDraw() {
+  if (!_pebImg) return;
+  pebDrawBase();
+  const canvas = document.getElementById('pebCanvas');
+  const ctx = canvas.getContext('2d');
+  const bright   = parseInt(document.getElementById('pebBright').value)   || 0;
+  const contrast = parseInt(document.getElementById('pebContrast').value) || 0;
+  const warmth   = parseInt(document.getElementById('pebWarmth').value)   || 0;
+  if (bright === 0 && contrast === 0 && warmth === 0) return;
+  const id = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d  = id.data;
+  const cf = (contrast + 100) / 100;
+  const bv = bright * 2.55;
+  for (let i = 0; i < d.length; i += 4) {
+    d[i]   = clp((d[i]   + bv - 128) * cf + 128 + warmth * 1.5);
+    d[i+1] = clp((d[i+1] + bv - 128) * cf + 128 + warmth * 0.4);
+    d[i+2] = clp((d[i+2] + bv - 128) * cf + 128 - warmth * 1.2);
+  }
+  ctx.putImageData(id, 0, 0);
+}
 
-async function applyEditToPhoto() {
-  if (_editIdx === null) return;
-  const canvas = document.getElementById('editCanvas');
-  applyFilters();
+function clp(v) { return v < 0 ? 0 : v > 255 ? 255 : Math.round(v); }
 
-  // Export canvas to blob and replace in selectedPhotos array
-  canvas.toBlob(blob => {
+function pebApply() {
+  if (_pebIdx === null) return;
+  const canvas = document.getElementById('pebCanvas');
+  pebDraw();
+  canvas.toBlob(function(blob) {
     if (!blob) { closePhotoEdit(); return; }
-    const originalName = _editOriginalFile.name || 'edited.jpg';
-    const editedFile = new File([blob], originalName, { type: 'image/jpeg' });
-    selectedPhotos[_editIdx] = editedFile;
+    const name = selectedPhotos[_pebIdx].name || 'edited.jpg';
+    selectedPhotos[_pebIdx] = new File([blob], name, { type: 'image/jpeg' });
     closePhotoEdit();
     renderPhotoGrid();
-  }, 'image/jpeg', 0.92);
+  }, 'image/jpeg', 0.93);
 }
 
-// ══════════════════════════════════════════════
-// STREET VIEW AUTO-FETCH
-// ══════════════════════════════════════════════
+// ══════════════════════════
+// STREET VIEW
+// ══════════════════════════
 async function fetchStreetView() {
-  const address = document.getElementById('address').value.trim();
-  const city    = document.getElementById('city').value.trim();
-  const state   = document.getElementById('state').value.trim();
-  const status  = document.getElementById('streetViewStatus');
-  const btn     = document.getElementById('streetViewBtn');
+  const addr  = document.getElementById('address').value.trim();
+  const city  = document.getElementById('city').value.trim();
+  const state = document.getElementById('state').value.trim();
+  const btn   = document.getElementById('streetViewBtn');
+  const status = document.getElementById('streetViewStatus');
 
-  if (!address || !city) {
-    status.textContent = 'Enter an address first, then click this button.';
+  if (!addr || !city) {
+    status.textContent = 'Enter a street address and city first.';
     status.style.color = 'var(--red)';
     status.style.display = 'block';
     return;
@@ -1105,46 +1106,32 @@ async function fetchStreetView() {
 
   btn.disabled = true;
   btn.textContent = 'Fetching...';
-  status.textContent = 'Looking up street view...';
-  status.style.color = 'var(--gray)';
   status.style.display = 'block';
+  status.style.color = 'var(--gray)';
+  status.textContent = 'Looking up address...';
 
   try {
-    // Use Nominatim to geocode address first
-    const query = encodeURIComponent(`${address}, ${city}, ${state}`);
-    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${query}`);
-    const geoData = await geoRes.json();
+    const q = encodeURIComponent(addr + ', ' + city + ', ' + state);
+    const geo = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + q);
+    const gd  = await geo.json();
+    if (!gd.length) throw new Error('Address not found');
 
-    if (!geoData.length) {
-      status.textContent = 'Could not find this address. Try adding the full address first.';
-      status.style.color = 'var(--red)';
-      btn.disabled = false;
-      btn.textContent = '📍 Add Street View Photo';
-      return;
-    }
+    const lat = gd[0].lat, lng = gd[0].lon;
+    status.textContent = 'Found location, fetching street view...';
 
-    const lat = parseFloat(geoData[0].lat);
-    const lng = parseFloat(geoData[0].lon);
+    const sv = await fetch('/api/streetview?lat=' + lat + '&lng=' + lng);
+    if (!sv.ok) throw new Error('No street view');
 
-    // Google Street View Static API — uses URL-based request
-    // NOTE: Requires GOOGLE_MAPS_KEY env var in Vercel — falls back to Mapbox satellite if not set
-    const GOOGLE_KEY = '';  // Leave blank — routed through proxy below
-    const svUrl = `/api/streetview?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`;
+    const blob = await sv.blob();
+    if (blob.size < 4000) throw new Error('No street view image');
 
-    const svRes = await fetch(svUrl);
-    if (!svRes.ok) throw new Error('Street view not available');
-
-    const blob = await svRes.blob();
-    if (blob.size < 5000) throw new Error('No street view available for this address');
-
-    const file = new File([blob], 'street-view.jpg', { type: 'image/jpeg' });
-    selectedPhotos.push(file);
+    selectedPhotos.push(new File([blob], 'street-view.jpg', { type: 'image/jpeg' }));
     renderPhotoGrid();
-    status.textContent = 'Street view photo added! Drag it to reorder.';
-    status.style.color = 'var(--green-dark, #00843d)';
+    status.textContent = 'Street view added! Drag to reorder.';
+    status.style.color = '#00843d';
 
   } catch(e) {
-    status.textContent = 'Street view not available for this address. Try uploading a photo manually.';
+    status.textContent = 'Street view not available for this address. Upload a photo manually.';
     status.style.color = 'var(--gray)';
   }
 
@@ -1154,11 +1141,6 @@ async function fetchStreetView() {
 
 </script>
 
-<!-- PHOTO EDIT MODAL -->
-<div class="photo-edit-overlay" id="photoEditModal">
-  <div class="photo-edit-card">
-    <h3>✏️ Edit Photo</h3>
-    <div class="edit-canvas-wrap"><canvas id="editCanvas"></canvas></div>
     <div class="edit-slider-row">
       <label>☀️ Brightness</label>
       <input type="range" id="slBrightness" min="-100" max="100" value="0" oninput="applyFilters();document.getElementById('vBright').textContent=this.value">
@@ -1187,6 +1169,43 @@ async function fetchStreetView() {
         <button type="button" class="photo-tool-btn" style="background:rgba(255,255,255,0.2);font-size:12px;padding:6px 12px" onclick="rotatePhoto(90)">↻ Rotate Right</button>
       </div>
       <button type="button" class="edit-cancel-btn" onclick="closePhotoEdit()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- PHOTO EDIT LIGHTBOX -->
+<div id="photoEditOverlay" onclick="if(event.target===this)closePhotoEdit()">
+  <div class="peb">
+    <div class="peb-head">
+      <h3>Adjust Photo</h3>
+      <button class="peb-close" onclick="closePhotoEdit()" type="button">&#215;</button>
+    </div>
+    <div class="peb-preview"><canvas id="pebCanvas"></canvas></div>
+    <div class="peb-sliders">
+      <div class="peb-row">
+        <label>&#9728;&#65039; Brightness</label>
+        <input type="range" id="pebBright" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebBrightV').textContent=this.value">
+        <span id="pebBrightV">0</span>
+      </div>
+      <div class="peb-row">
+        <label>&#9632; Contrast</label>
+        <input type="range" id="pebContrast" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebContrastV').textContent=this.value">
+        <span id="pebContrastV">0</span>
+      </div>
+      <div class="peb-row">
+        <label>&#127774; Warmth</label>
+        <input type="range" id="pebWarmth" min="-60" max="60" value="0" oninput="pebDraw();document.getElementById('pebWarmthV').textContent=this.value">
+        <span id="pebWarmthV">0</span>
+      </div>
+    </div>
+    <div class="peb-rotates">
+      <button class="peb-rot-btn" type="button" onclick="pebRotate(-90)">&#8634; Rotate Left</button>
+      <button class="peb-rot-btn" type="button" onclick="pebRotate(90)">&#8635; Rotate Right</button>
+    </div>
+    <div class="peb-footer">
+      <button class="peb-apply" type="button" onclick="pebApply()">Apply Changes &#8594;</button>
+      <button class="peb-reset" type="button" onclick="pebReset()">Reset</button>
     </div>
   </div>
 </div>
