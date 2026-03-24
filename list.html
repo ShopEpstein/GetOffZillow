@@ -11,7 +11,6 @@
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23111111'/%3E%3Cpolyline points='16,86 90,20 149,74' fill='none' stroke='%2300FF9D' stroke-width='11' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='149,74 164,86' fill='none' stroke='%23E8341C' stroke-width='8.6' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='31' y1='86' x2='31' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Cline x1='31' y1='156' x2='144' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='118' r='12' fill='%23111' stroke='%2300FF9D' stroke-width='7'/%3E%3Ccircle cx='90' cy='118' r='5' fill='%2300FF9D'/%3E%3Crect x='16' y='91' width='148' height='8' fill='%23E8341C' opacity='0.2'/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Submit a Listing — GetOffZillow AI</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -27,6 +26,7 @@
   .welcome-banner h2 { font-family:'Bebas Neue',sans-serif; font-size:22px; color:white; letter-spacing:0.05em; margin:0; }
   .welcome-banner p { font-size:13px; color:rgba(255,255,255,0.65); margin:4px 0 0; font-weight:300; line-height:1.5; }
   .welcome-banner .wicon { font-size:32px; flex-shrink:0; }
+
   /* NAV */
   nav { background:#111; border-bottom:1px solid rgba(0,255,157,0.12); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:200; }
   .nav-logo { text-decoration:none; display:flex; align-items:center; gap:10px; }
@@ -42,59 +42,19 @@
   .page-header p { font-size:15px; color:var(--gray); line-height:1.6; }
 
   /* AI BANNER */
-  .ai-banner {
-    background:linear-gradient(135deg,#0a1f44 0%,#002080 100%);
-    border:1.5px solid var(--ai-green);
-    border-radius:14px;
-    padding:22px 24px;
-    margin-bottom:28px;
-    display:flex;
-    align-items:center;
-    gap:20px;
-    box-shadow:0 0 30px rgba(0,255,157,0.12);
-    flex-wrap:wrap;
-  }
+  .ai-banner { background:linear-gradient(135deg,#0a1f44 0%,#002080 100%); border:1.5px solid var(--ai-green); border-radius:14px; padding:22px 24px; margin-bottom:28px; display:flex; align-items:center; gap:20px; box-shadow:0 0 30px rgba(0,255,157,0.12); flex-wrap:wrap; }
   .ai-banner-icon { font-size:36px; flex-shrink:0; }
   .ai-banner-text { flex:1; min-width:200px; }
   .ai-banner-text h3 { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--ai-green); letter-spacing:0.05em; margin-bottom:4px; }
   .ai-banner-text p { font-size:13px; color:rgba(255,255,255,0.75); line-height:1.5; }
-  .ai-banner-btn {
-    background:var(--ai-green); color:#000; border:none;
-    padding:11px 22px; border-radius:8px;
-    font-family:'Nunito',sans-serif; font-weight:900; font-size:14px;
-    cursor:pointer; white-space:nowrap; transition:all 0.2s;
-    box-shadow:0 0 16px rgba(0,255,157,0.3);
-    flex-shrink:0;
-  }
+  .ai-banner-btn { background:var(--ai-green); color:#000; border:none; padding:11px 22px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; cursor:pointer; white-space:nowrap; transition:all 0.2s; box-shadow:0 0 16px rgba(0,255,157,0.3); flex-shrink:0; }
   .ai-banner-btn:hover { background:#00e88a; box-shadow:0 0 24px rgba(0,255,157,0.5); }
   .ai-banner-btn:disabled { background:#555; color:#999; box-shadow:none; cursor:not-allowed; }
 
   /* AI MODAL */
-  .ai-modal-overlay {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.75);
-    z-index:999;
-    align-items:flex-start;
-    justify-content:center;
-    padding:16px;
-    padding-top:max(16px, env(safe-area-inset-top));
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-  }
+  .ai-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:999; align-items:flex-start; justify-content:center; padding:16px; padding-top:max(16px, env(safe-area-inset-top)); overflow-y:auto; -webkit-overflow-scrolling:touch; }
   .ai-modal-overlay.open { display:flex; }
-  .ai-modal {
-    background:#0a1f44;
-    border:1.5px solid rgba(0,255,157,0.3);
-    border-radius:16px;
-    padding:28px;
-    width:100%;
-    max-width:600px;
-    position:relative;
-    box-shadow:0 0 60px rgba(0,255,157,0.15);
-    animation:slideUp 0.25s ease;
-    margin:auto;
-    flex-shrink:0;
-  }
+  .ai-modal { background:#0a1f44; border:1.5px solid rgba(0,255,157,0.3); border-radius:16px; padding:28px; width:100%; max-width:600px; position:relative; box-shadow:0 0 60px rgba(0,255,157,0.15); animation:slideUp 0.25s ease; margin:auto; flex-shrink:0; }
   @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
   .ai-modal h2 { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--ai-green); letter-spacing:0.05em; margin-bottom:6px; }
   .ai-modal p { font-size:13px; color:rgba(255,255,255,0.65); margin-bottom:20px; line-height:1.5; }
@@ -102,42 +62,17 @@
   .ai-close:hover { background:rgba(255,255,255,0.2); }
   .ai-input-group { margin-bottom:16px; }
   .ai-input-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.5); margin-bottom:6px; font-family:'Space Mono',monospace; }
-  .ai-input-group textarea, .ai-input-group input {
-    width:100%; padding:12px 14px;
-    background:rgba(255,255,255,0.08);
-    border:1.5px solid rgba(255,255,255,0.15);
-    border-radius:8px; color:white;
-    font-family:'Nunito Sans',sans-serif; font-size:16px;
-    outline:none; transition:border-color 0.2s;
-    -webkit-appearance:none;
-  }
+  .ai-input-group textarea, .ai-input-group input { width:100%; padding:12px 14px; background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.15); border-radius:8px; color:white; font-family:'Nunito Sans',sans-serif; font-size:16px; outline:none; transition:border-color 0.2s; -webkit-appearance:none; }
   .ai-input-group textarea { min-height:90px; resize:vertical; }
   .ai-input-group textarea:focus, .ai-input-group input:focus { border-color:var(--ai-green); }
   .ai-input-group textarea::placeholder, .ai-input-group input::placeholder { color:rgba(255,255,255,0.3); }
-  .ai-generate-btn {
-    width:100%; background:var(--ai-green); color:#000; border:none;
-    padding:14px; border-radius:8px;
-    font-family:'Nunito',sans-serif; font-weight:900; font-size:15px;
-    cursor:pointer; transition:all 0.2s;
-    box-shadow:0 0 20px rgba(0,255,157,0.3);
-    display:flex; align-items:center; justify-content:center; gap:8px;
-  }
+  .ai-generate-btn { width:100%; background:var(--ai-green); color:#000; border:none; padding:14px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:all 0.2s; box-shadow:0 0 20px rgba(0,255,157,0.3); display:flex; align-items:center; justify-content:center; gap:8px; }
   .ai-generate-btn:hover { background:#00e88a; }
   .ai-generate-btn:disabled { background:#1a3a6a; color:#4a6a9a; box-shadow:none; cursor:not-allowed; }
-  .ai-result {
-    display:none; margin-top:20px;
-    background:rgba(0,255,157,0.06);
-    border:1px solid rgba(0,255,157,0.2);
-    border-radius:10px; padding:16px;
-  }
+  .ai-result { display:none; margin-top:20px; background:rgba(0,255,157,0.06); border:1px solid rgba(0,255,157,0.2); border-radius:10px; padding:16px; }
   .ai-result-label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--ai-green); margin-bottom:8px; font-family:'Space Mono',monospace; }
   .ai-result-text { font-size:13px; color:rgba(255,255,255,0.85); line-height:1.7; white-space:pre-wrap; }
-  .ai-apply-btn {
-    margin-top:14px; background:var(--blue); color:white; border:none;
-    padding:10px 22px; border-radius:7px;
-    font-family:'Nunito',sans-serif; font-weight:900; font-size:13px;
-    cursor:pointer; transition:background 0.2s; display:block; width:100%;
-  }
+  .ai-apply-btn { margin-top:14px; background:var(--blue); color:white; border:none; padding:10px 22px; border-radius:7px; font-family:'Nunito',sans-serif; font-weight:900; font-size:13px; cursor:pointer; transition:background 0.2s; display:block; width:100%; }
   .ai-apply-btn:hover { background:#0050CC; }
   .ai-thinking { display:none; align-items:center; gap:10px; margin-top:14px; color:rgba(255,255,255,0.6); font-size:13px; }
   .ai-dots span { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--ai-green); animation:blink 1.2s infinite; }
@@ -153,13 +88,7 @@
   .form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
   .form-group { margin-bottom:14px; }
   .form-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
-  .form-group input, .form-group select, .form-group textarea {
-    width:100%; padding:11px 14px;
-    border:1.5px solid var(--border); border-radius:8px;
-    font-family:'Nunito Sans',sans-serif; font-size:16px;
-    outline:none; transition:border-color 0.2s, box-shadow 0.2s;
-    background:white; -webkit-appearance:none;
-  }
+  .form-group input, .form-group select, .form-group textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:8px; font-family:'Nunito Sans',sans-serif; font-size:16px; outline:none; transition:border-color 0.2s, box-shadow 0.2s; background:white; -webkit-appearance:none; }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
   .form-group textarea { resize:vertical; min-height:120px; }
   .form-group .hint { font-size:11px; color:var(--gray); margin-top:4px; }
@@ -167,13 +96,7 @@
 
   /* ADDRESS AUTOCOMPLETE */
   .address-wrap { position:relative; }
-  .autocomplete-list {
-    position:absolute; top:calc(100% + 4px); left:0; right:0;
-    background:white; border:1.5px solid var(--blue);
-    border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12);
-    z-index:100; max-height:220px; overflow-y:auto;
-    display:none;
-  }
+  .autocomplete-list { position:absolute; top:calc(100% + 4px); left:0; right:0; background:white; border:1.5px solid var(--blue); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:100; max-height:220px; overflow-y:auto; display:none; }
   .autocomplete-list.open { display:block; }
   .ac-item { padding:10px 14px; cursor:pointer; font-size:13px; border-bottom:1px solid var(--border); transition:background 0.1s; }
   .ac-item:last-child { border-bottom:none; }
@@ -181,35 +104,524 @@
   .ac-main { font-weight:600; }
   .ac-sub { font-size:11px; color:var(--gray); margin-top:1px; }
 
-  /* PHOTOS */
-  .photo-zone {
-    border:2px dashed var(--border); border-radius:10px;
-    padding:28px; text-align:center; cursor:pointer;
-    transition:all 0.2s; position:relative; background:var(--bg);
+  /* ═══════════════════════════════════════
+     PHOTOS — UPGRADED SECTION
+  ═══════════════════════════════════════ */
+
+  .photos-section-wrap {
+    background: #0d0d0d;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 0;
   }
-  .photo-zone:hover { border-color:var(--blue); background:#EBF3FF; }
-  .photo-zone.dragover { border-color:var(--ai-green); background:#E8FBF0; }
-  .photo-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-  .photo-zone-icon { font-size:40px; margin-bottom:8px; }
-  .photo-zone-text { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
-  .photo-zone-hint { font-size:12px; color:var(--gray); }
-  .photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:10px; margin-top:16px; }
-  .photo-thumb { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:1; cursor:grab; transition:transform 0.15s; }
-  .photo-thumb:active { cursor:grabbing; }
-  .photo-thumb img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
-  .photo-thumb.dragging { opacity:0.3; outline:2px dashed var(--blue); }
-  .photo-thumb.drag-over { outline:3px solid var(--ai-green); transform:scale(1.04); }
-  .photo-thumb .remove-btn { position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.65); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:3; transition:background 0.15s; }
-  .photo-thumb .remove-btn:hover { background:var(--red,#E8341C); }
-  .photo-thumb .thumb-overlay { position:absolute; inset:0; background:rgba(0,0,0,0); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; opacity:0; transition:all 0.18s; z-index:2; }
-  .photo-thumb:hover .thumb-overlay { opacity:1; background:rgba(0,0,0,0.5); }
-  .thumb-btn { background:rgba(255,255,255,0.15); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.3); color:white; border-radius:6px; padding:5px 11px; font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
-  .thumb-btn:hover { background:rgba(255,255,255,0.35); }
-  .photo-thumb.primary-thumb::after { content:'PRIMARY'; position:absolute; bottom:0; left:0; right:0; background:rgba(0,106,255,0.88); color:white; font-size:8px; font-weight:800; text-align:center; padding:3px; letter-spacing:0.8px; z-index:1; }
-  .streetview-btn { display:inline-flex; align-items:center; gap:7px; background:#EBF3FF; color:var(--blue); border:1.5px solid #B3D1FF; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; margin-top:10px; }
-  .streetview-btn:hover { background:var(--blue); color:white; border-color:var(--blue); }
-  .streetview-btn:disabled { opacity:0.55; cursor:not-allowed; }
-  /* Lightbox editor */
+
+  .photos-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .photos-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    color: white;
+    line-height: 1;
+  }
+
+  .photos-section-title span {
+    color: var(--ai-green);
+  }
+
+  .photos-section-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .photos-count-badge {
+    background: rgba(0,255,157,0.1);
+    border: 1px solid rgba(0,255,157,0.25);
+    color: var(--ai-green);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  /* Street View button */
+  .streetview-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 14px;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  .streetview-btn:hover { background: rgba(0,255,157,0.1); color: var(--ai-green); border-color: rgba(0,255,157,0.3); }
+  .streetview-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  #streetViewStatus {
+    font-size: 12px;
+    margin-bottom: 12px;
+    display: none;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* DROP ZONE */
+  .photo-drop-zone {
+    position: relative;
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: rgba(255,255,255,0.03);
+    overflow: hidden;
+  }
+
+  .photo-drop-zone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(0,255,157,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .photo-drop-zone:hover,
+  .photo-drop-zone.dragover {
+    border-color: var(--ai-green);
+    background: rgba(0,255,157,0.04);
+  }
+
+  .photo-drop-zone:hover::before,
+  .photo-drop-zone.dragover::before {
+    opacity: 1;
+  }
+
+  .photo-drop-zone.dragover {
+    border-style: solid;
+    box-shadow: 0 0 0 4px rgba(0,255,157,0.12), inset 0 0 40px rgba(0,255,157,0.05);
+  }
+
+  .photo-drop-zone input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .drop-zone-inner {
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .drop-zone-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(0,255,157,0.08);
+    border: 1.5px solid rgba(0,255,157,0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: all 0.25s;
+    margin-bottom: 4px;
+  }
+
+  .photo-drop-zone:hover .drop-zone-icon,
+  .photo-drop-zone.dragover .drop-zone-icon {
+    background: rgba(0,255,157,0.15);
+    border-color: var(--ai-green);
+    transform: scale(1.05);
+  }
+
+  .drop-zone-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: white;
+  }
+
+  .drop-zone-hint {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .drop-zone-or {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 200px;
+    margin-top: 4px;
+  }
+
+  .drop-zone-or::before, .drop-zone-or::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .drop-zone-or span {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .drop-zone-btn {
+    background: var(--ai-green);
+    color: #000;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    padding: 9px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+    pointer-events: auto;
+    position: relative;
+    z-index: 3;
+  }
+
+  .drop-zone-btn:hover { background: #00e88a; }
+
+  /* PHOTO GRID — UPGRADED */
+  .photo-grid-wrap {
+    margin-top: 20px;
+    display: none;
+  }
+
+  .photo-grid-wrap.has-photos {
+    display: block;
+  }
+
+  .photo-grid-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 12px;
+  }
+
+  /* Primary photo — large featured slot */
+  .photo-primary-slot {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    background: #1a1a1a;
+    margin-bottom: 10px;
+    cursor: grab;
+  }
+
+  .photo-primary-slot:active { cursor: grabbing; }
+
+  .photo-primary-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .primary-label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--ai-green);
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    padding: 3px 10px 2px;
+    border-radius: 4px;
+    clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 100%, 5px 100%);
+    z-index: 2;
+  }
+
+  .primary-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s;
+    z-index: 3;
+  }
+
+  .photo-primary-slot:hover .primary-overlay {
+    background: rgba(0,0,0,0.55);
+  }
+
+  .primary-overlay .pov-btn {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: all 0.2s;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  .photo-primary-slot:hover .primary-overlay .pov-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .pov-btn:hover { background: rgba(255,255,255,0.25) !important; }
+
+  .pov-btn.danger:hover { background: rgba(232,52,28,0.5) !important; }
+
+  /* Thumbnail strip */
+  .photo-thumb-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+
+  .photo-thumb {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    cursor: grab;
+    background: #1a1a1a;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 2px solid transparent;
+  }
+
+  .photo-thumb:active { cursor: grabbing; }
+
+  .photo-thumb:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .photo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* Drag states */
+  .photo-thumb.dragging,
+  .photo-primary-slot.dragging {
+    opacity: 0.3;
+    border-color: rgba(0,106,255,0.5);
+    transform: scale(0.96);
+  }
+
+  .photo-thumb.drag-over {
+    border-color: var(--ai-green);
+    box-shadow: 0 0 0 3px rgba(0,255,157,0.25);
+    transform: scale(1.04);
+  }
+
+  .photo-primary-slot.drag-over {
+    outline: 3px solid var(--ai-green);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px rgba(0,255,157,0.15);
+  }
+
+  /* Thumb hover overlay */
+  .thumb-hover {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: background 0.15s;
+    z-index: 2;
+  }
+
+  .photo-thumb:hover .thumb-hover {
+    background: rgba(0,0,0,0.62);
+  }
+
+  .th-btn {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: white;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px);
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  .photo-thumb:hover .th-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .th-btn:nth-child(2) { transition-delay: 0.04s; }
+
+  .th-btn:hover { background: rgba(255,255,255,0.28); }
+  .th-btn.th-del:hover { background: rgba(232,52,28,0.55); border-color: transparent; }
+
+  /* Thumb index badge */
+  .thumb-idx {
+    position: absolute;
+    bottom: 5px;
+    right: 6px;
+    background: rgba(0,0,0,0.6);
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    padding: 2px 5px;
+    border-radius: 3px;
+    z-index: 1;
+  }
+
+  /* Drag handle hint */
+  .drag-hint {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .photo-thumb:hover .drag-hint {
+    opacity: 1;
+  }
+
+  .drag-dots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    padding: 3px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 4px;
+  }
+
+  .drag-dots span {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
+    display: block;
+  }
+
+  /* Add more button in grid */
+  .photo-add-more {
+    position: relative;
+    border-radius: 8px;
+    aspect-ratio: 1;
+    border: 2px dashed rgba(255,255,255,0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.02);
+    gap: 6px;
+  }
+
+  .photo-add-more input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .photo-add-more:hover {
+    border-color: var(--ai-green);
+    background: rgba(0,255,157,0.04);
+  }
+
+  .photo-add-more .plus {
+    font-size: 24px;
+    color: rgba(255,255,255,0.3);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .photo-add-more:hover .plus { color: var(--ai-green); }
+
+  .photo-add-more .add-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Space Mono', monospace;
+    transition: color 0.2s;
+  }
+
+  .photo-add-more:hover .add-label { color: rgba(0,255,157,0.7); }
+
+  /* Upload progress */
+  .upload-progress { display:none; margin-top:16px; }
+  .progress-bar { height:3px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--ai-green); border-radius:2px; transition:width 0.3s; width:0%; box-shadow: 0 0 8px rgba(0,255,157,0.5); }
+  .progress-text { font-size:11px; color:rgba(255,255,255,0.45); margin-top:6px; font-family:'Space Mono',monospace; }
+
+  /* SUBMIT */
+  .submit-btn { width:100%; background:var(--ai-green); color:#000; border:none; padding:16px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; cursor:pointer; transition:all 0.2s; box-shadow:0 0 20px rgba(0,255,157,0.3); }
+  .submit-btn:hover { background:#00e88a; }
+  .submit-btn:disabled { background:var(--border); color:var(--gray); box-shadow:none; cursor:not-allowed; }
+  .error-msg { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; display:none; }
+
+  /* PRICE DISPLAY */
+  .price-display { font-size:11px; color:var(--green); font-weight:700; margin-top:4px; min-height:16px; }
+
+  /* PHOTO EDIT LIGHTBOX */
   #photoEditOverlay { position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.92); display:none; align-items:center; justify-content:center; padding:16px; overscroll-behavior:contain; }
   #photoEditOverlay.open { display:flex; }
   .peb { background:#1c1c1e; border-radius:16px; width:100%; max-width:520px; max-height:calc(100vh - 32px); overflow-y:auto; box-shadow:0 32px 80px rgba(0,0,0,0.7); display:flex; flex-direction:column; }
@@ -232,24 +644,12 @@
   .peb-apply:hover { background:#00e88a; }
   .peb-reset { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:12px 16px; border-radius:9px; font-size:13px; cursor:pointer; }
   .peb-reset:hover { background:rgba(255,255,255,0.14); }
+
   @media(max-width:480px) {
     #photoEditOverlay { padding:0; align-items:flex-end; }
     .peb { border-radius:20px 20px 0 0; max-height:92vh; }
+    .photo-thumb-strip { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
   }
-  .photo-count { font-size:12px; color:var(--gray); margin-top:8px; }
-  .upload-progress { display:none; margin-top:12px; }
-  .progress-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
-  .progress-fill { height:100%; background:var(--ai-green); border-radius:2px; transition:width 0.3s; width:0%; }
-  .progress-text { font-size:11px; color:var(--gray); margin-top:4px; }
-
-  /* SUBMIT */
-  .submit-btn { width:100%; background:var(--ai-green); color:#000; border:none; padding:16px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; cursor:pointer; transition:all 0.2s; box-shadow:0 0 20px rgba(0,255,157,0.3); }
-  .submit-btn:hover { background:#00e88a; }
-  .submit-btn:disabled { background:var(--border); color:var(--gray); box-shadow:none; cursor:not-allowed; }
-  .error-msg { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; display:none; }
-
-  /* PRICE DISPLAY */
-  .price-display { font-size:11px; color:var(--green); font-weight:700; margin-top:4px; min-height:16px; }
 
   @media(max-width:768px) {
     .form-grid-3 { grid-template-columns:1fr 1fr; }
@@ -264,12 +664,13 @@
     .nav-links a { font-size:12px; }
     .page-header h1 { font-size:clamp(28px,8vw,40px); }
     .submit-btn { font-size:15px; padding:14px; }
-    .photo-grid { grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); }
+    .photos-section-wrap { padding: 16px; }
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
 </head>
 <body>
+
 <nav>
   <a href="index.html" class="nav-logo">
     <div style="width:36px;height:36px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #00FF9D,0 0 10px rgba(0,255,157,0.2);flex-shrink:0">
@@ -305,26 +706,21 @@
     <button class="ai-close" onclick="closeAiModal()">&#10005;</button>
     <h2>&#128161; AI Listing Writer</h2>
     <p>Type one line about the property — address, beds, baths, price, anything you know. Claude will write a complete professional listing description in seconds.</p>
-
     <div class="ai-input-group">
       <label>Tell Claude about this property</label>
       <textarea id="aiPrompt" placeholder="e.g. 3bed 2bath ranch, 1850sqft, Pensacola FL 32506, $249k, 2.5% commission, updated kitchen, large fenced yard, new roof 2022, quiet neighborhood near good schools"></textarea>
     </div>
-
     <div class="ai-input-group">
       <label>Anything to emphasize? (optional)</label>
       <input type="text" id="aiEmphasis" placeholder="e.g. investment property, military friendly, motivated seller, waterfront" />
     </div>
-
     <button class="ai-generate-btn" id="aiGenerateBtn" onclick="generateDescription()">
       <span id="aiGenerateBtnText">&#10024; Write My Listing</span>
     </button>
-
     <div class="ai-thinking" id="aiThinking">
       <div class="ai-dots"><span></span><span></span><span></span></div>
       <span>Claude is writing your listing...</span>
     </div>
-
     <div class="ai-result" id="aiResult">
       <div class="ai-result-label">Generated Description</div>
       <div class="ai-result-text" id="aiResultText"></div>
@@ -487,30 +883,72 @@
         <div class="char-count" id="descCount">0 chars</div>
       </div>
 
-      <!-- PHOTOS -->
+      <!-- ═══════════════════════════════
+           PHOTOS — UPGRADED
+      ═══════════════════════════════ -->
       <div class="form-section">
-        <span class="section-label">Photos (up to 20)</span>
-        <p style="font-size:12px;color:var(--gray);margin-bottom:12px">First photo becomes the main image. Drag to reorder after upload.</p>
-        <!-- STREET VIEW FETCH -->
-        <button type="button" class="streetview-btn" onclick="fetchStreetView()" id="streetViewBtn">
-          📍 Add Street View Photo (auto-fetches from address)
-        </button>
-        <div id="streetViewStatus" style="font-size:12px;color:var(--gray);margin-top:4px;display:none"></div>
+        <span class="section-label">Photos</span>
 
-        <div class="photo-zone" id="photoZone"
-          ondragover="event.preventDefault();this.classList.add('dragover')"
-          ondragleave="this.classList.remove('dragover')"
-          ondrop="handleDrop(event)">
-          <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotoSelect(event)" />
-          <div class="photo-zone-icon">&#128247;</div>
-          <div class="photo-zone-text">Click or drag photos here</div>
-          <div class="photo-zone-hint">JPG, PNG, WEBP &#183; max 10MB each &#183; first photo = primary</div>
-        </div>
-        <div class="photo-grid" id="photoGrid"></div>
-        <div class="photo-count" id="photoCount"></div>
-        <div class="upload-progress" id="uploadProgress">
-          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-          <div class="progress-text" id="progressText">Uploading photos...</div>
+        <div class="photos-section-wrap">
+          <div class="photos-section-header">
+            <div>
+              <div class="photos-section-title">Property <span>Photos</span></div>
+              <div class="photos-section-sub">First photo = cover image · Drag to reorder · Up to 20 photos</div>
+            </div>
+            <div class="photos-count-badge" id="photosBadge">0 / 20</div>
+          </div>
+
+          <!-- Street View -->
+          <button type="button" class="streetview-btn" onclick="fetchStreetView()" id="streetViewBtn">
+            📍 Fetch Street View Photo
+          </button>
+          <div id="streetViewStatus"></div>
+
+          <!-- Drop Zone -->
+          <div class="photo-drop-zone" id="photoZone"
+            ondragover="event.preventDefault();this.classList.add('dragover')"
+            ondragleave="this.classList.remove('dragover')"
+            ondrop="handleDrop(event)">
+            <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotoSelect(event)" />
+            <div class="drop-zone-inner">
+              <div class="drop-zone-icon">📷</div>
+              <div class="drop-zone-title">Drop photos here</div>
+              <div class="drop-zone-hint">JPG, PNG, WEBP · max 10MB each</div>
+              <div class="drop-zone-or"><span>or</span></div>
+              <div class="drop-zone-btn" onclick="event.stopPropagation();document.getElementById('photoInput').click()">Browse Files</div>
+            </div>
+          </div>
+
+          <!-- Photo Grid (hidden until photos added) -->
+          <div class="photo-grid-wrap" id="photoGridWrap">
+            <div class="photo-grid-label">Cover Photo</div>
+
+            <!-- Primary / cover photo slot -->
+            <div class="photo-primary-slot" id="primarySlot"
+              draggable="true"
+              ondragstart="photoDragStart(event, 0)"
+              ondragover="photoDragOver(event)"
+              ondrop="photoDrop(event, 0)"
+              ondragend="photoDragEnd(event)"
+              ondragleave="this.classList.remove('drag-over')">
+              <img id="primaryImg" src="" alt="Cover photo" />
+              <div class="primary-label">★ COVER</div>
+              <div class="primary-overlay">
+                <button class="pov-btn" type="button" onclick="openPhotoEdit(0)">✏️ Adjust</button>
+                <button class="pov-btn danger" type="button" onclick="removePhoto(0)">✕ Remove</button>
+              </div>
+            </div>
+
+            <!-- Thumbnail strip -->
+            <div class="photo-grid-label" id="thumbStripLabel" style="margin-top:16px;display:none">All Photos — drag to reorder</div>
+            <div class="photo-thumb-strip" id="photoThumbStrip"></div>
+          </div>
+
+          <!-- Upload progress -->
+          <div class="upload-progress" id="uploadProgress">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-text" id="progressText">Uploading photos...</div>
+          </div>
         </div>
       </div>
 
@@ -518,6 +956,42 @@
         Submit Listing &#8212; Go Live Now &#10230;
       </button>
     </form>
+  </div>
+</div>
+
+<!-- PHOTO EDIT LIGHTBOX -->
+<div id="photoEditOverlay" onclick="if(event.target===this)closePhotoEdit()">
+  <div class="peb">
+    <div class="peb-head">
+      <h3>Adjust Photo</h3>
+      <button class="peb-close" onclick="closePhotoEdit()" type="button">&#215;</button>
+    </div>
+    <div class="peb-preview"><canvas id="pebCanvas"></canvas></div>
+    <div class="peb-sliders">
+      <div class="peb-row">
+        <label>☀️ Brightness</label>
+        <input type="range" id="pebBright" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebBrightV').textContent=this.value">
+        <span id="pebBrightV">0</span>
+      </div>
+      <div class="peb-row">
+        <label>◼ Contrast</label>
+        <input type="range" id="pebContrast" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebContrastV').textContent=this.value">
+        <span id="pebContrastV">0</span>
+      </div>
+      <div class="peb-row">
+        <label>🌤 Warmth</label>
+        <input type="range" id="pebWarmth" min="-60" max="60" value="0" oninput="pebDraw();document.getElementById('pebWarmthV').textContent=this.value">
+        <span id="pebWarmthV">0</span>
+      </div>
+    </div>
+    <div class="peb-rotates">
+      <button class="peb-rot-btn" type="button" onclick="pebRotate(-90)">↺ Rotate Left</button>
+      <button class="peb-rot-btn" type="button" onclick="pebRotate(90)">↻ Rotate Right</button>
+    </div>
+    <div class="peb-footer">
+      <button class="peb-apply" type="button" onclick="pebApply()">Apply Changes →</button>
+      <button class="peb-reset" type="button" onclick="pebReset()">Reset</button>
+    </div>
   </div>
 </div>
 
@@ -544,14 +1018,9 @@ async function init() {
   if (!agent) { window.location.href = 'dashboard.html'; return; }
   agentId = agent.id;
 
-  // Show welcome banner for new signups
   if (new URLSearchParams(window.location.search).get('new') === '1') {
     const banner = document.getElementById('welcomeBanner');
     if (banner) banner.style.display = 'flex';
-    // Pre-fill agent name in page title area
-    const name = agent.first_name ? agent.first_name + ', let' : 'Let';
-    const h2 = banner?.querySelector('h2');
-    if (h2 && agent.first_name) h2.textContent = agent.first_name + ', List Your First Property Free.';
   }
 }
 
@@ -563,17 +1032,12 @@ function toggleListingType(val) {
     hint.textContent = 'Rental listing — flat $29 listing fee';
     hint.style.color = '#006AFF';
     if (commGroup) commGroup.style.opacity = '0.4';
-    // Change commission label for rentals
     const commLabel = document.getElementById('commission_rate')?.previousElementSibling;
     if (commLabel) commLabel.textContent = 'Monthly Rent ($)';
   } else if (val === 'fsbo') {
     hint.textContent = 'FSBO — no agent commission. Flat $49 marketing fee only if a GOZ buyer closes with you.';
     hint.style.color = '#E67E00';
-    // Hide commission for FSBO — not applicable
-    if (commGroup) {
-      commGroup.style.display = 'none';
-    }
-    // Show FSBO notice
+    if (commGroup) commGroup.style.display = 'none';
     let fsboNotice = document.getElementById('fsboNotice');
     if (!fsboNotice) {
       fsboNotice = document.createElement('div');
@@ -584,7 +1048,6 @@ function toggleListingType(val) {
     }
     fsboNotice.style.display = 'block';
   } else {
-    // Show commission field again
     if (commGroup) commGroup.style.display = '';
     const fsboNotice = document.getElementById('fsboNotice');
     if (fsboNotice) fsboNotice.style.display = 'none';
@@ -613,11 +1076,9 @@ function formatPrice(input) {
       const pct = parseFloat(comm) || 2.5;
       const commAmt = Math.round(n * pct / 100);
       const gozFee = Math.round(commAmt * 0.03);
-      disp.textContent = `$${n.toLocaleString()} · ${comm} commission = $${commAmt.toLocaleString()} · GOZ marketing fee: $${gozFee.toLocaleString()}`;
+      disp.textContent = `$${n.toLocaleString()} · ${comm} commission = $${commAmt.toLocaleString()} · GOZ fee: $${gozFee.toLocaleString()}`;
     }
-  } else {
-    disp.textContent = '';
-  }
+  } else { disp.textContent = ''; }
 }
 
 // ── ADDRESS AUTOCOMPLETE (Nominatim) ──
@@ -630,8 +1091,7 @@ async function onAddressInput(val) {
       const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&countrycodes=us&q=${encodeURIComponent(val)}`;
       const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
       const data = await res.json();
-      acItems = data;
-      acSelected = -1;
+      acItems = data; acSelected = -1;
       if (!data.length) { list.classList.remove('open'); return; }
       list.innerHTML = data.map((item, i) => {
         const addr = item.address;
@@ -655,8 +1115,7 @@ function selectAcItem(i) {
   document.getElementById('address').value = street || item.display_name.split(',')[0];
   document.getElementById('city').value = addr.city || addr.town || addr.village || addr.county || '';
   const stateMap = { Florida:'FL',Alabama:'AL',Georgia:'GA',Mississippi:'MS',Tennessee:'TN',Texas:'TX','South Carolina':'SC','North Carolina':'NC',Virginia:'VA' };
-  const stateVal = stateMap[addr.state] || addr.state || 'FL';
-  document.getElementById('state').value = stateVal;
+  document.getElementById('state').value = stateMap[addr.state] || addr.state || 'FL';
   document.getElementById('zip').value = addr.postcode || '';
   document.getElementById('acList').classList.remove('open');
 }
@@ -676,13 +1135,13 @@ document.addEventListener('click', e => {
 // ── AI MODAL ──
 function openAiModal() { document.getElementById('aiModal').classList.add('open'); document.body.style.overflow='hidden'; }
 function closeAiModal() { document.getElementById('aiModal').classList.remove('open'); document.body.style.overflow=''; }
-const _aiModal = document.getElementById('aiModal'); if(_aiModal) _aiModal.addEventListener('click', e => { if(e.target===_aiModal) closeAiModal(); });
+const _aiModal = document.getElementById('aiModal');
+if(_aiModal) _aiModal.addEventListener('click', e => { if(e.target===_aiModal) closeAiModal(); });
 
 async function generateDescription() {
   const prompt = document.getElementById('aiPrompt').value.trim();
   if (!prompt) { alert('Tell Claude something about the property first.'); return; }
   const emphasis = document.getElementById('aiEmphasis').value.trim();
-
   const btn = document.getElementById('aiGenerateBtn');
   const thinking = document.getElementById('aiThinking');
   const result = document.getElementById('aiResult');
@@ -690,34 +1149,18 @@ async function generateDescription() {
   document.getElementById('aiGenerateBtnText').textContent = 'Writing...';
   thinking.style.display = 'flex';
   result.style.display = 'none';
-
   try {
-    // Call server-side proxy — keeps API key off the browser
     const response = await fetch('/api/ai-listing', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ propertyInfo: prompt, emphasis })
     });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error || `Server error ${response.status}`);
-    }
-
+    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err.error || `Server error ${response.status}`); }
     const data = await response.json();
     const text = data.description || '';
-
-    if (text) {
-      document.getElementById('aiResultText').textContent = text;
-      result.style.display = 'block';
-    } else {
-      throw new Error('Empty response from AI');
-    }
-  } catch(e) {
-    alert('AI writer failed. Write your description manually or try again.');
-    console.error('AI error:', e);
-  }
-
+    if (text) { document.getElementById('aiResultText').textContent = text; result.style.display = 'block'; }
+    else { throw new Error('Empty response from AI'); }
+  } catch(e) { alert('AI writer failed. Write your description manually or try again.'); console.error('AI error:', e); }
   btn.disabled = false;
   document.getElementById('aiGenerateBtnText').textContent = '✨ Write My Listing';
   thinking.style.display = 'none';
@@ -733,64 +1176,117 @@ function applyDescription() {
   setTimeout(() => { document.getElementById('description').style.borderColor = ''; }, 2000);
 }
 
-// ── PHOTOS ──
-function handlePhotoSelect(e) { addPhotos(Array.from(e.target.files)); }
+// ════════════════════════════════════════
+// PHOTOS — UPGRADED LOGIC
+// ════════════════════════════════════════
+
+function handlePhotoSelect(e) { addPhotos(Array.from(e.target.files)); e.target.value = ''; }
 function handleDrop(e) {
   e.preventDefault();
   document.getElementById('photoZone').classList.remove('dragover');
   addPhotos(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
 }
+
 function addPhotos(files) {
   const remaining = 20 - selectedPhotos.length;
+  if (remaining <= 0) return;
   selectedPhotos = [...selectedPhotos, ...files.slice(0, remaining)];
-  renderPhotoGrid();
+  renderPhotoUI();
 }
-function renderPhotoGrid() {
-  const grid = document.getElementById('photoGrid');
-  // Revoke old object URLs to avoid memory leaks
-  grid.querySelectorAll('img').forEach(img => { try { URL.revokeObjectURL(img.src); } catch(e){} });
 
-  grid.innerHTML = selectedPhotos.map((f, i) => {
-    const url = URL.createObjectURL(f);
-    return '<div class="photo-thumb' + (i===0?' primary-thumb':'') + '" draggable="true"'
-      + ' ondragstart="photoDragStart(event,'+i+')"'
-      + ' ondragover="photoDragOver(event)"'
-      + ' ondrop="photoDrop(event,'+i+')"'
-      + ' ondragend="photoDragEnd(event)"'
-      + ' ondragleave="this.classList.remove(\'drag-over\')">'
-      + '<img src="' + url + '" alt="photo ' + (i+1) + '"/>'
-      + '<button class="remove-btn" onclick="removePhoto('+i+')" type="button" title="Remove">✕</button>'
-      + '<div class="thumb-overlay">'
-      + '<button class="thumb-btn" type="button" onclick="openPhotoEdit('+i+')">✏️ Adjust</button>'
-      + (i > 0 ? '<button class="thumb-btn" type="button" onclick="movePhotoFirst('+i+')">&#8679; Make Primary</button>' : '')
-      + '</div></div>';
-  }).join('');
-
+function renderPhotoUI() {
   const n = selectedPhotos.length;
-  document.getElementById('photoCount').textContent = n > 0
-    ? `${n} photo${n!==1?'s':''} — drag to reorder · hover for edit tools · first = primary`
-    : '';
+  const wrap = document.getElementById('photoGridWrap');
+  const badge = document.getElementById('photosBadge');
+
+  badge.textContent = `${n} / 20`;
+  badge.style.background = n > 0 ? 'rgba(0,255,157,0.15)' : 'rgba(0,255,157,0.05)';
+
+  if (n === 0) {
+    wrap.classList.remove('has-photos');
+    return;
+  }
+
+  wrap.classList.add('has-photos');
+
+  // Update primary / cover slot
+  const primaryImg = document.getElementById('primaryImg');
+  // Revoke old if any
+  if (primaryImg._objUrl) { try { URL.revokeObjectURL(primaryImg._objUrl); } catch(e){} }
+  const primaryUrl = URL.createObjectURL(selectedPhotos[0]);
+  primaryImg._objUrl = primaryUrl;
+  primaryImg.src = primaryUrl;
+
+  // Thumbnail strip (photos 1+)
+  const strip = document.getElementById('photoThumbStrip');
+  const stripLabel = document.getElementById('thumbStripLabel');
+
+  // Revoke old thumb urls
+  strip.querySelectorAll('img').forEach(img => { try { URL.revokeObjectURL(img.src); } catch(e){} });
+
+  if (n > 1) {
+    stripLabel.style.display = '';
+    strip.innerHTML = selectedPhotos.slice(1).map((f, idx) => {
+      const i = idx + 1; // actual index in selectedPhotos
+      const url = URL.createObjectURL(f);
+      return `<div class="photo-thumb" draggable="true"
+        ondragstart="photoDragStart(event,${i})"
+        ondragover="photoDragOver(event)"
+        ondrop="photoDrop(event,${i})"
+        ondragend="photoDragEnd(event)"
+        ondragleave="this.classList.remove('drag-over')">
+        <img src="${url}" alt="photo ${i+1}" />
+        <div class="drag-hint"><div class="drag-dots"><span></span><span></span><span></span><span></span></div></div>
+        <div class="thumb-idx">${i+1}</div>
+        <div class="thumb-hover">
+          <button class="th-btn" type="button" onclick="openPhotoEdit(${i})">✏️ Adjust</button>
+          <button class="th-btn" type="button" onclick="movePhotoFirst(${i})">↑ Make Cover</button>
+          <button class="th-btn th-del" type="button" onclick="removePhoto(${i})">✕ Remove</button>
+        </div>
+      </div>`;
+    }).join('') +
+    // "Add more" slot if under limit
+    (n < 20 ? `<label class="photo-add-more">
+      <input type="file" accept="image/*" multiple onchange="handlePhotoSelect(event)" />
+      <div class="plus">+</div>
+      <div class="add-label">Add More</div>
+    </label>` : '');
+  } else {
+    stripLabel.style.display = 'none';
+    strip.innerHTML = n < 20 ? `<label class="photo-add-more">
+      <input type="file" accept="image/*" multiple onchange="handlePhotoSelect(event)" />
+      <div class="plus">+</div>
+      <div class="add-label">Add More</div>
+    </label>` : '';
+  }
 }
 
-function removePhoto(i) { selectedPhotos.splice(i, 1); renderPhotoGrid(); }
+function removePhoto(i) {
+  selectedPhotos.splice(i, 1);
+  renderPhotoUI();
+}
+
 function movePhotoFirst(i) {
   const photo = selectedPhotos.splice(i, 1)[0];
   selectedPhotos.unshift(photo);
-  renderPhotoGrid();
+  renderPhotoUI();
 }
 
 // ── DRAG TO REORDER ──
 let _dragIdx = null;
+
 function photoDragStart(e, i) {
   _dragIdx = i;
   e.currentTarget.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
 }
+
 function photoDragOver(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'move';
   e.currentTarget.classList.add('drag-over');
 }
+
 function photoDrop(e, i) {
   e.preventDefault();
   e.currentTarget.classList.remove('drag-over');
@@ -798,21 +1294,22 @@ function photoDrop(e, i) {
   const moved = selectedPhotos.splice(_dragIdx, 1)[0];
   selectedPhotos.splice(i, 0, moved);
   _dragIdx = null;
-  renderPhotoGrid();
+  renderPhotoUI();
 }
+
 function photoDragEnd(e) {
   e.currentTarget.classList.remove('dragging');
-  document.querySelectorAll('.photo-thumb').forEach(t => t.classList.remove('drag-over'));
+  document.querySelectorAll('.photo-thumb, .photo-primary-slot').forEach(t => t.classList.remove('drag-over'));
   _dragIdx = null;
 }
 
+// ── UPLOAD ──
 async function uploadPhotos() {
   if (selectedPhotos.length === 0) return [];
   const progress = document.getElementById('uploadProgress');
   const fill = document.getElementById('progressFill');
   const text = document.getElementById('progressText');
   progress.style.display = 'block';
-  const token = currentSession.access_token;
   const urls = [];
   for (let i = 0; i < selectedPhotos.length; i++) {
     const file = selectedPhotos[i];
@@ -847,26 +1344,6 @@ async function submitListing(e) {
   const address = document.getElementById('address').value.trim();
   const city = document.getElementById('city').value.trim();
 
-  // License format validation (non-blocking — warn but don't block)
-  const licenseEl = document.getElementById && document.querySelector('[id*="lic"], [id*="license"]');
-
-  // Nationwide — no geographic restriction
-
-  // Duplicate address check
-  try {
-    const { data: existing } = await sb.from('listings')
-      .select('id')
-      .eq('address', address)
-      .eq('city', city)
-      .eq('status', 'active')
-      .neq('agent_id', agentId)
-      .limit(1);
-    if (existing && existing.length > 0) {
-      const proceed = confirm('A listing at this address already exists on GOZ. Are you sure you want to post a duplicate?');
-      if (!proceed) { btn.disabled = false; btn.textContent = 'Submit Listing — Go Live Now →'; return; }
-    }
-  } catch(e) { /* non-fatal */ }
-
   if (!address || !city || !price) {
     errorEl.textContent = 'Address, city, and price are required.';
     errorEl.style.display = 'block';
@@ -878,8 +1355,6 @@ async function submitListing(e) {
     errorEl.style.display = 'block';
     return;
   }
-
-  // ── PHOTO MINIMUM REQUIREMENT ──
   if (selectedPhotos.length === 0) {
     errorEl.textContent = 'At least one photo is required to publish a listing.';
     errorEl.style.display = 'block';
@@ -887,22 +1362,18 @@ async function submitListing(e) {
     return;
   }
 
-  // ── DUPLICATE LISTING CHECK ──
-  const { data: existing } = await sb
-    .from('listings')
-    .select('id')
-    .eq('address', address)
-    .eq('city', city)
-    .eq('status', 'active')
-    .limit(1);
-  if (existing && existing.length > 0) {
-    errorEl.textContent = 'A listing at this address is already active on GOZ. Check your dashboard.';
-    errorEl.style.display = 'block';
-    errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
-    return;
-  }
+  // Duplicate check
+  try {
+    const { data: existing } = await sb.from('listings').select('id').eq('address', address).eq('city', city).eq('status', 'active').limit(1);
+    if (existing && existing.length > 0) {
+      errorEl.textContent = 'A listing at this address is already active on GOZ. Check your dashboard.';
+      errorEl.style.display = 'block';
+      errorEl.scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+  } catch(e) { /* non-fatal */ }
 
-  // ── ADDRESS VALIDATION: verify address resolves ──
+  // Address validation
   try {
     const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address+' '+city)}`);
     const geoData = await geoRes.json();
@@ -911,15 +1382,6 @@ async function submitListing(e) {
       if (!proceed) return;
     }
   } catch(geoErr) { /* non-blocking */ }
-
-  // Require at least 1 photo for FSBO listings (fraud prevention)
-  const lType = document.getElementById('listing_type')?.value;
-  if (lType === 'fsbo' && selectedPhotos.length === 0) {
-    errorEl.textContent = 'FSBO listings require at least one property photo. This helps prevent fraudulent listings.';
-    errorEl.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Submit Listing — Go Live Now →';
-    return;
-  }
 
   btn.disabled = true;
   btn.textContent = 'Uploading photos...';
@@ -952,10 +1414,8 @@ async function submitListing(e) {
     return;
   }
 
-  // For rental listings — show payment step
   const listingType = document.getElementById('listing_type')?.value;
   if (listingType === 'rental') {
-    // Redirect to Square checkout for $29 rental listing fee
     const squareUrl = `https://square.link/u/GOZRental?listing_id=${listing.id}&amount=2900`;
     window.location.href = squareUrl;
   } else {
@@ -963,22 +1423,9 @@ async function submitListing(e) {
   }
 }
 
-init();
-
-// ══════════════════════════════════════════════
-// PHOTO EDITOR — brightness, contrast, warmth, rotate
-// ══════════════════════════════════════════════
-let _editIdx = null;
-let _editImg = null;
-let _editRotation = 0;
-let _editOriginalFile = null;
-
-
-
-
-// ══════════════════════════
+// ════════════════════════════════════════
 // PHOTO EDITOR
-// ══════════════════════════
+// ════════════════════════════════════════
 let _pebIdx = null, _pebImg = null, _pebRot = 0;
 
 function openPhotoEdit(i) {
@@ -1014,10 +1461,7 @@ function pebReset() {
   if (_pebImg) pebDrawBase();
 }
 
-function pebRotate(deg) {
-  _pebRot = (_pebRot + deg + 360) % 360;
-  pebDraw();
-}
+function pebRotate(deg) { _pebRot = (_pebRot + deg + 360) % 360; pebDraw(); }
 
 function pebDrawBase() {
   if (!_pebImg) return;
@@ -1034,11 +1478,8 @@ function pebDrawBase() {
   ctx.save();
   ctx.translate(canvas.width / 2, canvas.height / 2);
   ctx.rotate(_pebRot * Math.PI / 180);
-  if (isR) {
-    ctx.drawImage(_pebImg, -canvas.height/2, -canvas.width/2, canvas.height, canvas.width);
-  } else {
-    ctx.drawImage(_pebImg, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
-  }
+  if (isR) { ctx.drawImage(_pebImg, -canvas.height/2, -canvas.width/2, canvas.height, canvas.width); }
+  else { ctx.drawImage(_pebImg, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height); }
   ctx.restore();
 }
 
@@ -1074,13 +1515,11 @@ function pebApply() {
     const name = selectedPhotos[_pebIdx].name || 'edited.jpg';
     selectedPhotos[_pebIdx] = new File([blob], name, { type: 'image/jpeg' });
     closePhotoEdit();
-    renderPhotoGrid();
+    renderPhotoUI();
   }, 'image/jpeg', 0.93);
 }
 
-// ══════════════════════════
-// STREET VIEW
-// ══════════════════════════
+// ── STREET VIEW ──
 async function fetchStreetView() {
   const addr  = document.getElementById('address').value.trim();
   const city  = document.getElementById('city').value.trim();
@@ -1089,7 +1528,7 @@ async function fetchStreetView() {
   const status = document.getElementById('streetViewStatus');
 
   if (!addr || !city) {
-    status.textContent = 'Enter a street address and city first.';
+    status.textContent = '⚠ Enter a street address and city first.';
     status.style.color = 'var(--red)';
     status.style.display = 'block';
     return;
@@ -1098,7 +1537,7 @@ async function fetchStreetView() {
   btn.disabled = true;
   btn.textContent = 'Fetching...';
   status.style.display = 'block';
-  status.style.color = 'var(--gray)';
+  status.style.color = 'rgba(255,255,255,0.5)';
   status.textContent = 'Looking up address...';
 
   try {
@@ -1106,67 +1545,27 @@ async function fetchStreetView() {
     const geo = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + q);
     const gd  = await geo.json();
     if (!gd.length) throw new Error('Address not found');
-
     const lat = gd[0].lat, lng = gd[0].lon;
     status.textContent = 'Found location, fetching street view...';
-
     const sv = await fetch('/api/streetview?lat=' + lat + '&lng=' + lng);
     if (!sv.ok) throw new Error('No street view');
-
     const blob = await sv.blob();
     if (blob.size < 4000) throw new Error('No street view image');
-
     selectedPhotos.push(new File([blob], 'street-view.jpg', { type: 'image/jpeg' }));
-    renderPhotoGrid();
-    status.textContent = 'Street view added! Drag to reorder.';
-    status.style.color = '#00843d';
-
+    renderPhotoUI();
+    status.textContent = '✓ Street view added! Drag to reorder.';
+    status.style.color = 'var(--ai-green)';
   } catch(e) {
     status.textContent = 'Street view not available for this address. Upload a photo manually.';
-    status.style.color = 'var(--gray)';
+    status.style.color = 'rgba(255,255,255,0.4)';
   }
 
   btn.disabled = false;
-  btn.textContent = '📍 Add Street View Photo';
+  btn.textContent = '📍 Fetch Street View Photo';
 }
 
+init();
 </script>
-
-<!-- PHOTO EDIT LIGHTBOX -->
-<div id="photoEditOverlay" onclick="if(event.target===this)closePhotoEdit()">
-  <div class="peb">
-    <div class="peb-head">
-      <h3>Adjust Photo</h3>
-      <button class="peb-close" onclick="closePhotoEdit()" type="button">&#215;</button>
-    </div>
-    <div class="peb-preview"><canvas id="pebCanvas"></canvas></div>
-    <div class="peb-sliders">
-      <div class="peb-row">
-        <label>&#9728;&#65039; Brightness</label>
-        <input type="range" id="pebBright" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebBrightV').textContent=this.value">
-        <span id="pebBrightV">0</span>
-      </div>
-      <div class="peb-row">
-        <label>&#9632; Contrast</label>
-        <input type="range" id="pebContrast" min="-100" max="100" value="0" oninput="pebDraw();document.getElementById('pebContrastV').textContent=this.value">
-        <span id="pebContrastV">0</span>
-      </div>
-      <div class="peb-row">
-        <label>&#127774; Warmth</label>
-        <input type="range" id="pebWarmth" min="-60" max="60" value="0" oninput="pebDraw();document.getElementById('pebWarmthV').textContent=this.value">
-        <span id="pebWarmthV">0</span>
-      </div>
-    </div>
-    <div class="peb-rotates">
-      <button class="peb-rot-btn" type="button" onclick="pebRotate(-90)">&#8634; Rotate Left</button>
-      <button class="peb-rot-btn" type="button" onclick="pebRotate(90)">&#8635; Rotate Right</button>
-    </div>
-    <div class="peb-footer">
-      <button class="peb-apply" type="button" onclick="pebApply()">Apply Changes &#8594;</button>
-      <button class="peb-reset" type="button" onclick="pebReset()">Reset</button>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
