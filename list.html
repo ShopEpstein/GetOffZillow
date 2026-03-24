@@ -850,16 +850,7 @@ async function submitListing(e) {
   // License format validation (non-blocking — warn but don't block)
   const licenseEl = document.getElementById && document.querySelector('[id*="lic"], [id*="license"]');
 
-  // Address geocoding validation
-  const state = document.getElementById('state')?.value || 'FL';
-  const zip = document.getElementById('zip')?.value?.trim() || '';
-  const validStates = ['FL','AL','GA','TN','MS','LA','SC','NC'];
-  if (state && !validStates.includes(state)) {
-    errorEl.textContent = 'GOZ currently serves the Gulf South region. Please contact us if you need to list outside this area.';
-    errorEl.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Submit Listing — Go Live Now →';
-    return;
-  }
+  // Nationwide — no geographic restriction
 
   // Duplicate address check
   try {
@@ -911,7 +902,7 @@ async function submitListing(e) {
     return;
   }
 
-  // ── ADDRESS VALIDATION: must resolve to FL/Gulf South ──
+  // ── ADDRESS VALIDATION: verify address resolves ──
   try {
     const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address+' '+city)}`);
     const geoData = await geoRes.json();
