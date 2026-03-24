@@ -280,7 +280,7 @@
         <div class="form-group"><label>Message</label><textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea></div>
         <button type="submit" class="contact-btn" id="contactBtn">Send Message →</button>
       </form>
-      <p class="no-fee-note"><strong>Free lead for this agent.</strong> GOZ charges 3% of the agent's commission at closing — not 3% of the sale price. This contact costs the agent nothing.</p>
+      <p class="no-fee-note"><strong>Free for buyers.</strong> GOZ is free to search and free to contact agents. The buyer's agent fee shown above is paid by the seller — not you.</p>
     </div>
   </div>
 </div>
@@ -361,7 +361,7 @@ async function loadListing() {
   const pageUrl = `https://getoffzillow.com/listing.html?id=${listing.id}`;
   // Clean title — no raw template literals in the tab
   const pageTitle = `${listing.address}, ${listing.city} — $${Number(listing.price).toLocaleString()} | GOZ`;
-  const pageDesc = `${listing.beds ? listing.beds + 'bd ' : ''}${listing.baths ? listing.baths + 'ba · ' : ''}${listing.commission_rate || '2.5%'} commission shown publicly · Contact agent directly on GOZ.`;
+  const pageDesc = `${listing.beds ? listing.beds + 'bd ' : ''}${listing.baths ? listing.baths + 'ba · ' : ''}${listing.commission_rate || '2.5%'} buyer's agent fee paid by seller · Free for buyers · Contact agent directly on GOZ.`;
 
   document.title = pageTitle;
   document.getElementById('og-title').setAttribute('content', pageTitle);
@@ -406,7 +406,7 @@ function renderListing() {
   }
 
   document.getElementById('detPrice').textContent = '$' + Number(listing.price).toLocaleString();
-  document.getElementById('detCommission').innerHTML = `✓ ${listing.commission_rate || '2.5%'} buyer's agent commission — shown publicly`;
+  document.getElementById('detCommission').innerHTML = `✓ ${listing.commission_rate || '2.5%'} buyer's agent fee — paid by seller, not you`;
   document.getElementById('detAddress').textContent = listing.address;
   document.getElementById('detCity').textContent = `${listing.city}, ${listing.state}${listing.zip ? ' ' + listing.zip : ''}`;
 
@@ -431,7 +431,7 @@ function renderListing() {
       <div>
         <div class="agent-name">${agent.first_name} ${agent.last_name}</div>
         <div class="agent-brokerage">${agent.brokerage || 'Independent Agent'}</div>
-        <div class="agent-badge">GOZ Agent · 3% marketing fee</div>
+        <div class="agent-badge">GOZ Agent · Direct contact · No middleman</div>
         <div class="agent-direct">
           ${agent.phone ? `<a href="tel:${agent.phone}">📞 ${agent.phone}</a>` : ''}
           ${agent.email ? `<a href="mailto:${agent.email}">📧 ${agent.email}</a>` : ''}
@@ -472,7 +472,7 @@ function openShare() {
   const specsStr = [listing.beds ? listing.beds + ' bd' : '', listing.baths ? listing.baths + ' ba' : ''].filter(Boolean).join(' · ');
   document.getElementById('shareCardSpecs').textContent = specsStr;
   document.getElementById('shareCardAddr').textContent = `${listing.address}, ${listing.city}, ${listing.state}`;
-  document.getElementById('shareCardComm').textContent = `✓ ${listing.commission_rate || '2.5%'} commission — shown publicly`;
+  document.getElementById('shareCardComm').textContent = `✓ ${listing.commission_rate || '2.5%'} buyer's agent fee — paid by seller`;
 
   // URL input
   document.getElementById('shareUrlInput').value = url;
@@ -522,7 +522,7 @@ function shareText() {
 function shareEmail() {
   const url = `https://getoffzillow.com/listing.html?id=${listing.id}`;
   const subject = `Home For Sale — $${Number(listing.price).toLocaleString()}, ${listing.address}`;
-  const body = `Check out this listing on GetOffZillow AI:\n\n${listing.address}, ${listing.city}, ${listing.state}\n$${Number(listing.price).toLocaleString()} · ${listing.commission_rate || '2.5%'} commission shown publicly\n\n${url}`;
+  const body = `Check out this listing on GetOffZillow AI:\n\n${listing.address}, ${listing.city}, ${listing.state}\n$${Number(listing.price).toLocaleString()} · ${listing.commission_rate || '2.5%'} buyer's agent fee paid by seller · Free for buyers\n\n${url}`;
   window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
 }
 
@@ -531,7 +531,7 @@ async function shareNative() {
   try {
     await navigator.share({
       title: `$${Number(listing.price).toLocaleString()} — ${listing.address}`,
-      text: `${listing.address}, ${listing.city} ${listing.state} · ${listing.commission_rate || '2.5%'} commission shown publicly`,
+      text: `${listing.address}, ${listing.city} ${listing.state} · ${listing.commission_rate || '2.5%'} buyer's agent fee paid by seller · Free for buyers`,
       url
     });
   } catch(e) { /* user cancelled */ }
