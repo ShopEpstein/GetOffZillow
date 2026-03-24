@@ -62,7 +62,7 @@ export default async function handler(req, res) {
       <tr>
         <td style="padding:12px 16px;background:#f7f7f7;border-radius:8px;margin-bottom:8px;display:block">
           <span style="font-weight:700;color:#006AFF">01 —</span>
-          <a href="https://get-off-zillow.vercel.app/list.html" style="color:#006AFF;font-weight:600;text-decoration:none">Submit your first listing →</a>
+          <a href="https://getoffzillow.com/list.html" style="color:#006AFF;font-weight:600;text-decoration:none">Submit your first listing →</a>
           <div style="font-size:12px;color:#6B6B6B;margin-top:3px">Takes 3 minutes. AI writes the description for you. Photos included.</div>
         </td>
       </tr>
@@ -70,7 +70,7 @@ export default async function handler(req, res) {
       <tr>
         <td style="padding:12px 16px;background:#f7f7f7;border-radius:8px;display:block">
           <span style="font-weight:700;color:#006AFF">02 —</span>
-          <a href="https://get-off-zillow.vercel.app/dashboard.html" style="color:#006AFF;font-weight:600;text-decoration:none">Visit your dashboard →</a>
+          <a href="https://getoffzillow.com/dashboard.html" style="color:#006AFF;font-weight:600;text-decoration:none">Visit your dashboard →</a>
           <div style="font-size:12px;color:#6B6B6B;margin-top:3px">Manage listings, view buyer leads, get your invite link.</div>
         </td>
       </tr>
@@ -101,8 +101,8 @@ export default async function handler(req, res) {
   <!-- FOOTER -->
   <div style="background:#f4f1eb;padding:20px 32px;text-align:center;font-size:11px;color:#999;border-top:1px solid #e8e3d8">
     GOZ · GetOffZillow AI · TransBid LLC · Pensacola, FL<br>
-    <a href="https://get-off-zillow.vercel.app/terms.html" style="color:#999;text-decoration:none">Terms</a> ·
-    <a href="https://get-off-zillow.vercel.app/privacy.html" style="color:#999;text-decoration:none">Privacy</a>
+    <a href="https://getoffzillow.com/terms.html" style="color:#999;text-decoration:none">Terms</a> ·
+    <a href="https://getoffzillow.com/privacy.html" style="color:#999;text-decoration:none">Privacy</a>
   </div>
 </div>
 </body>
