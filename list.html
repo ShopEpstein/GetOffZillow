@@ -632,7 +632,7 @@ document.addEventListener('click', e => {
 // ── AI MODAL ──
 function openAiModal() { document.getElementById('aiModal').classList.add('open'); document.body.style.overflow='hidden'; }
 function closeAiModal() { document.getElementById('aiModal').classList.remove('open'); document.body.style.overflow=''; }
-document.getElementById('aiModal').addEventListener('click', e => { if(e.target===document.getElementById('aiModal')) closeAiModal(); });
+const _aiModal = document.getElementById('aiModal'); if(_aiModal) _aiModal.addEventListener('click', e => { if(e.target===_aiModal) closeAiModal(); });
 
 async function generateDescription() {
   const prompt = document.getElementById('aiPrompt').value.trim();
