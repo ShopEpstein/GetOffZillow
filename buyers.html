@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Find homes on GOZ — commission shown on every listing. Contact agents directly. No lead forms, no data sold, no middlemen.">
+<meta name="description" content="Search homes on GOZ — free for buyers. Buyer's agent fee shown on every listing, paid by the seller not you. Contact agents directly, no middlemen, no data sold.">
 <title>For Buyers — GOZ | GetOffZillow AI</title>
 <meta name="theme-color" content="#0D0D0D">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
@@ -163,18 +163,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   <div class="hero-inner">
     <div>
       <span class="hero-eyebrow">For Home Buyers</span>
-      <h1 class="hero-h1">Search Homes.<br>See Every<br>Commission.<br>No Middlemen.</h1>
-      <p class="hero-desc">On GOZ, every listing shows the agent's commission rate — no hidden fees, no surprises at closing. When you're ready to connect, you contact the agent directly. <strong>No lead forms, no call centers, no middlemen.</strong></p>
+      <h1 class="hero-h1">Search Homes.<br>See Who Gets<br>Paid What.<br>Free. Always.</h1>
+      <p class="hero-desc">GOZ is completely free for buyers. Every listing shows the buyer's agent fee — paid by the seller, not you. When you're ready to connect, you contact the agent directly. <strong>No lead forms, no call centers, no middlemen.</strong></p>
       <div class="hero-trust">
-        <span class="trust-chip">Commission shown on every listing</span>
+        <span class="trust-chip">Free for buyers — always</span>
+        <span class="trust-chip">Buyer's agent fee paid by seller</span>
+        <span class="trust-chip">No account needed to browse</span>
         <span class="trust-chip">Contact agents directly</span>
-        <span class="trust-chip">No account, email, or sign-up to browse</span>
-        <span class="trust-chip">Free mortgage calculator</span>
       </div>
     </div>
     <div class="search-hero">
       <h3>Search Listings</h3>
-      <p>Commission shown on every result</p>
+      <p>Buyer's agent fee shown on every result — paid by seller, not you</p>
       <input class="search-input" id="buyerSearch" type="text" placeholder="City, ZIP, or address...">
       <button class="search-btn" onclick="doSearch()">Find Homes →</button>
       <p class="search-note">No account needed to browse</p>
@@ -196,12 +196,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
       </div>
       <div class="diff-card us">
         <div class="diff-label us">GOZ</div>
-        <div class="diff-item"><span class="di">✅</span><span>Commission shown on every listing card — before you click, before you call</span></div>
-        <!-- CHANGED: added the 3-5 agents comparison -->
+        <div class="diff-item"><span class="di">✅</span><span><strong>Free for buyers. Always.</strong> GOZ never charges buyers anything — not to search, not to contact an agent, not at closing.</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>Buyer's agent fee shown on every listing — paid by the seller, not you. You see it before you call.</span></div>
         <div class="diff-item"><span class="di">✅</span><span>One message goes to one agent — their real phone and email, not a lead distribution system</span></div>
-        <div class="diff-item"><span class="di">✅</span><span>Listings sort by recency, not ad spend — no pay-to-rank</span></div>
-        <!-- CHANGED: removed 3% reference -->
-        <div class="diff-item"><span class="di">✅</span><span>We don't sell your data. We earn a small fee from agents only when a deal closes — that's our only revenue.</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>We don't sell your data. Agents pay a small fee to GOZ only when their deal closes — that's our only revenue.</span></div>
       </div>
     </div>
   </div>
@@ -211,7 +209,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   <div class="section-inner">
     <span class="eyebrow">Active Listings</span>
     <h2 class="section-h2">Homes for Sale.<br><span class="green">Commission Shown. Always.</span></h2>
-    <p class="section-sub">Every listing below shows the buyer's agent commission publicly. Click to view details and contact the agent directly.</p>
+    <p class="section-sub">Every listing shows the buyer's agent fee — paid by the seller, not you. Click to view details and contact the agent directly. Free to use.</p>
     <div class="listings-grid" id="listingGrid">
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
@@ -314,7 +312,7 @@ async function loadListings() {
     if (!data||!data.length) { grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><div style="font-size:40px;margin-bottom:12px">🏡</div><p style="font-size:15px;font-weight:300">No listings yet. <a href="agents.html" style="color:var(--blue)">Agents — list your first property free →</a></p></div>'; return; }
     grid.innerHTML = data.map((l,i) => {
       const photos=parsePhotos(l.photos);const src=photos.length?photos[0]:DEMO[i%DEMO.length];const fb=DEMO[i%DEMO.length];const agentName=l.agents?`${l.agents.first_name} ${l.agents.last_name[0]}.`:'GOZ Agent';
-      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'"><div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy"><div class="commission-banner">✓ ${l.commission_rate||'2.5%'} buyer's agent commission</div></div><div class="listing-body"><div class="listing-price">$${Number(l.price).toLocaleString()}</div><div class="listing-addr">${l.address}</div><div class="listing-city">${l.city}, ${l.state}</div><div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div><a class="contact-btn" href="listing.html?id=${l.id}">View & Contact ${agentName} →</a></div></div>`;
+      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'"><div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy"><div class="commission-banner">✓ ${l.commission_rate||'2.5%'} buyer's agent fee — paid by seller</div></div><div class="listing-body"><div class="listing-price">$${Number(l.price).toLocaleString()}</div><div class="listing-addr">${l.address}</div><div class="listing-city">${l.city}, ${l.state}</div><div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div><a class="contact-btn" href="listing.html?id=${l.id}">View & Contact ${agentName} →</a></div></div>`;
     }).join('');
   } catch(e) { console.error(e); }
 }
@@ -328,7 +326,7 @@ async function doSearch() {
     if (!data||!data.length) { grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><p style="font-size:15px;font-weight:300">No listings found for "${q}" yet.</p></div>`; showToast(`No listings found for "${q}"`); return; }
     grid.innerHTML = data.map((l,i) => {
       const photos=parsePhotos(l.photos);const src=photos.length?photos[0]:DEMO[i%DEMO.length];const fb=DEMO[i%DEMO.length];const agentName=l.agents?`${l.agents.first_name} ${l.agents.last_name[0]}.`:'GOZ Agent';
-      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'"><div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy"><div class="commission-banner">✓ ${l.commission_rate||'2.5%'} commission</div></div><div class="listing-body"><div class="listing-price">$${Number(l.price).toLocaleString()}</div><div class="listing-addr">${l.address}</div><div class="listing-city">${l.city}, ${l.state}</div><div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div><a class="contact-btn" href="listing.html?id=${l.id}">Contact ${agentName} →</a></div></div>`;
+      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'"><div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy"><div class="commission-banner">✓ ${l.commission_rate||'2.5%'} buyer's agent fee — paid by seller</div></div><div class="listing-body"><div class="listing-price">$${Number(l.price).toLocaleString()}</div><div class="listing-addr">${l.address}</div><div class="listing-city">${l.city}, ${l.state}</div><div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div><a class="contact-btn" href="listing.html?id=${l.id}">Contact ${agentName} →</a></div></div>`;
     }).join('');
     showToast(`${data.length} listing${data.length!==1?'s':''} found for "${q}"`);
   } catch(e) { showToast('Search failed. Try again.'); }
