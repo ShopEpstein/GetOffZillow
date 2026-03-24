@@ -1215,9 +1215,10 @@ async function initNavAuth() {
     if(!session) return;
     const navUl=document.querySelector('.nav-links');
     if(navUl){
-      const signInLi=navUl.querySelector('a[href="signup.html"].nav-btn-outline')?.closest('li');
-      const listLi=navUl.querySelector('a[href="signup.html"].nav-btn-green')?.closest('li');
-      if(signInLi) signInLi.innerHTML='<a href="dashboard.html" class="nav-btn-outline" style="display:inline-block;padding:8px 16px;border:1px solid rgba(255,255,255,0.2);border-radius:7px;color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px">Dashboard</a>';
+      const signInLi=navUl.querySelector('.nav-btn-outline')?.closest('li');
+      const listLi=navUl.querySelector('.nav-btn-green')?.closest('li');
+      const agentName = localStorage.getItem('goz_name') || session.user.email.split('@')[0];
+      if(signInLi) signInLi.innerHTML='<a href="dashboard.html" class="nav-btn-outline" style="display:inline-block;padding:8px 16px;border:1px solid rgba(255,255,255,0.2);border-radius:7px;color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px">'+agentName+'</a>';
       if(listLi) listLi.innerHTML='<a href="#" onclick="sb.auth.signOut().then(()=>location.reload())" class="nav-btn-green" style="display:inline-block;padding:8px 18px;background:var(--green);color:var(--ink);border-radius:7px;font-weight:700;font-size:13px;text-decoration:none">Sign Out</a>';
     }
     const mobCta=document.querySelector('.mob-cta');
