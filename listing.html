@@ -14,7 +14,7 @@
 <meta property="og:title" content="Home For Sale — GOZ" id="og-title">
 <meta property="og:description" content="Commission shown publicly. Contact the agent directly. Free to search on GOZ." id="og-desc">
 <meta property="og:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop" id="og-image">
-<meta property="og:url" content="https://get-off-zillow.vercel.app" id="og-url">
+<meta property="og:url" content="https://getoffzillow.com" id="og-url">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GOZ — GetOffZillow AI">
 <meta name="twitter:card" content="summary_large_image">
@@ -208,7 +208,7 @@ async function loadListing() {
   const pageDesc = `${'$'}{listing.beds || ''}${'$'}{listing.beds ? 'bd ' : ''}${'$'}{listing.baths || ''}${'$'}{listing.baths ? 'ba · ' : ''}${'$'}{listing.commission_rate || '2.5%'} commission shown publicly · Contact agent directly on GOZ.`;
   const photos = parsePhotos(listing.photos);
   const pageImg = photos.length > 0 ? photos[0] : 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop';
-  const pageUrl = `https://get-off-zillow.vercel.app/listing.html?id=${'$'}{listing.id}`;
+  const pageUrl = `https://getoffzillow.com/listing.html?id=${'$'}{listing.id}`;
   document.title = pageTitle;
   document.getElementById('og-title').setAttribute('content', pageTitle);
   document.getElementById('og-desc').setAttribute('content', pageDesc);
