@@ -465,7 +465,7 @@
       <div class="hero-logo-tagline">Real Estate Without The Extraction</div>
     </div>
     <p class="hero-sub">
-      Free to list. Commission shown on every listing. Buyers contact agents directly. $300 on a $10,000 commission — only when you close.
+      Free for buyers. Agents pay $300 on a $10,000 commission — only when you close. Zero upfront.
     </p>
     <div class="hero-tabs">
       <div class="hero-tab active" onclick="window.location.href='buyers.html'">🏠 Buy</div>
@@ -770,9 +770,9 @@
         <li>Email notifications when buyers contact you — direct to your inbox</li>
       </ul>
       <div style="background:#E8FBF0;border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.6">
-        <strong>💰 The math on a $400K sale (2.5% commission = $10,000):</strong><br>
+        <strong>💰 The math on a $400K sale (2.5% buyer's agent commission = $10,000 agent gross):</strong><br>
         Agent Pronto (35%): you lose $3,500 · Zillow Flex (40%): you lose $4,000<br>
-        <strong style="color:var(--green)">GetOffZillow AI (3%): you pay $300. You keep $9,700. Per deal.</strong>
+        <strong style="color:var(--green)">GetOffZillow AI (3% of your commission): you pay $300. You keep $9,700. Per deal.</strong>
       </div>
     </div>
     <div class="agent-cta-card">
@@ -1086,7 +1086,7 @@ function renderListings() {
       </div>
       <div class="listing-body">
         <div class="listing-price">$${Number(l.price).toLocaleString()}</div>
-        <div class="commission-tag">✓ ${l.commission_rate || '2.5%'} commission</div>
+        <div class="commission-tag">✓ ${l.commission_rate || '2.5%'} buyer's agent fee — paid by seller</div>
         <div class="listing-address">${l.address}</div>
         <div class="listing-city">${l.city}, ${l.state}${l.zip ? ' ' + l.zip : ''}</div>
         <div class="listing-specs">
@@ -1142,7 +1142,7 @@ function renderMapList() {
         <div class="mli-addr">${l.address}</div>
         <div class="mli-addr" style="color:#999">${l.city}, ${l.state}</div>
         ${l.beds || l.baths ? `<div class="mli-specs">${l.beds?l.beds+'bd':''} ${l.baths?'· '+l.baths+'ba':''} ${l.sqft?'· '+Number(l.sqft).toLocaleString()+' sqft':''}</div>` : ''}
-        <div class="mli-commission">\u2713 ${l.commission_rate || '2.5%'} commission</div>
+        <div class="mli-commission">\u2713 ${l.commission_rate || '2.5%'} buyer's agent fee — paid by seller</div>
       </div>
     </div>`;
   }).join('');
