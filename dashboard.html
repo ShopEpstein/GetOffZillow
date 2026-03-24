@@ -497,7 +497,7 @@ window.addEventListener('error', function(e) {
         <div class="share-agent-avi" id="shareAgentAvi"></div>
         <div>
           <div class="share-agent-name" id="shareAgentName"></div>
-          <div class="share-agent-sub">GetOffZillow AI · 3% at closing · Commission shown publicly</div>
+          <div class="share-agent-sub">GetOffZillow AI · Direct contact · Commission shown publicly</div>
         </div>
       </div>
     </div>
@@ -740,7 +740,7 @@ window.addEventListener('error', function(e) {
     <div class="dash-header">
       <div class="dash-greeting">
         <h1 id="dashGreeting">Welcome back! 👋</h1>
-        <p>Your GetOffZillow AI dashboard — 3% of your commission at closing, not 3% of the sale price.</p>
+        <p>Your listings, leads, and closings — all in one place.</p>
       </div>
       <a href="list.html" class="dash-new-listing">+ New Listing</a>
     </div>
@@ -763,7 +763,7 @@ window.addEventListener('error', function(e) {
         <div style="font-size:32px;flex-shrink:0">🤝</div>
         <div style="flex:1;min-width:200px">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ai-green);letter-spacing:0.05em;margin-bottom:4px">Grow Your Network. Every Agent Here Saves.</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:12px">The more agents on this platform, the more buyers come looking — and the more likely they find <em>you</em>. Share your link with agents in your market, your brokerage, your network.<br><br><span style="color:rgba(255,255,255,0.5);font-size:12px">Every agent you invite pays 3% of commission at closing — not 3% of the sale price. On a $10K commission that's $300 vs. Zillow's $4,000.</span></div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:12px">The more agents on this platform, the more buyers come looking — and the more likely they find <em>you</em>. Share your link with agents in your market, your brokerage, your network.<br><br><span style="color:rgba(255,255,255,0.5);font-size:12px">Every agent you invite pays $300 on a $10K commission close — vs. Zillow's $4,000. Send them your link.</span></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
             <div id="inviteLink" style="font-family:'Space Mono',monospace;font-size:12px;color:var(--ai-green);background:rgba(0,255,157,0.08);padding:8px 14px;border-radius:6px;border:1px solid rgba(0,255,157,0.2);flex:1;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Loading your invite link...</div>
             <button onclick="copyInviteLink()" style="background:var(--ai-green);color:#000;border:none;padding:8px 18px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:900;font-size:12px;cursor:pointer;white-space:nowrap">Copy Link</button>
@@ -1072,7 +1072,7 @@ function loadProfile(agent) {
         ${agent.commission_rate ? `<br>💰 Typical rate: ${agent.commission_rate}` : ''}
         ${agent.website ? `<br><a href="${agent.website}" target="_blank" style="color:var(--blue)">${agent.website.replace(/^https?:\/\//,'')}</a>` : ''}
       </div>
-      <div class="profile-badge">GOZ Agent · 3% of commission — not the sale price</div>
+      <div class="profile-badge">GOZ Agent · 3% at closing</div>
       <div class="profile-actions">
         <a href="agent.html?id=${agentId}" class="pa-primary" target="_blank">Public Profile →</a>
         <a href="agent.html?id=${agentId}&edit=true" class="pa-outline">Edit Profile</a>
