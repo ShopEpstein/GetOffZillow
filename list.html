@@ -757,12 +757,12 @@ function renderPhotoGrid() {
       + ' ondragover="photoDragOver(event)"'
       + ' ondrop="photoDrop(event,'+i+')"'
       + ' ondragend="photoDragEnd(event)"'
-      + ' ondragleave="this.classList.remove('drag-over')">'
+      + ' ondragleave="this.classList.remove(\'drag-over\')">'
       + '<img src="' + url + '" alt="photo ' + (i+1) + '"/>'
       + '<button class="remove-btn" onclick="removePhoto('+i+')" type="button" title="Remove">✕</button>'
       + '<div class="thumb-overlay">'
       + '<button class="thumb-btn" type="button" onclick="openPhotoEdit('+i+')">✏️ Adjust</button>'
-      + (i > 0 ? '<button class="thumb-btn" type="button" onclick="movePhotoFirst('+i+'">⬆ Make Primary</button>' : '')
+      + (i > 0 ? '<button class="thumb-btn" type="button" onclick="movePhotoFirst('+i+')">&#8679; Make Primary</button>' : '')
       + '</div></div>';
   }).join('');
 
