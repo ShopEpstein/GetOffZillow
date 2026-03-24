@@ -8,7 +8,7 @@
 <meta property="og:title" content="Real Estate Agent — GOZ" id="og-title">
 <meta property="og:description" content="Licensed real estate agent on GOZ. Free listings, direct buyer contact, 3% of commission at closing." id="og-desc">
 <meta property="og:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop" id="og-image">
-<meta property="og:url" content="https://get-off-zillow.vercel.app" id="og-url">
+<meta property="og:url" content="https://getoffzillow.com" id="og-url">
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="GOZ — GetOffZillow AI">
 <meta name="twitter:card" content="summary_large_image">
@@ -221,7 +221,7 @@ async function init() {
   const agentTitle = `${'$'}{agent.first_name} ${'$'}{agent.last_name}${'$'}{agent.brokerage ? ' · '+agent.brokerage : ''} | GOZ`;
   const agentDesc = `Licensed real estate agent${'$'}{agent.markets_served ? ' in '+agent.markets_served : ''}. ${'$'}{agent.commission_rate || '2.5%'} commission · Direct contact · Free listings on GOZ.`;
   const agentImg = agent.photo_url || 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop';
-  const agentUrl = `https://get-off-zillow.vercel.app/agent.html?id=${'$'}{agent.id}`;
+  const agentUrl = `https://getoffzillow.com/agent.html?id=${'$'}{agent.id}`;
   document.title = agentTitle;
   document.getElementById('og-title').setAttribute('content', agentTitle);
   document.getElementById('og-desc').setAttribute('content', agentDesc);
