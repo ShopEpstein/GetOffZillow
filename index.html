@@ -1129,18 +1129,20 @@ async function renderMapList() {
     return;
   }
 
-  el.innerHTML = items.map((l, i) => {
+  el.innerHTML = items.map(function(l, i) {
     const photos = parsePhotos(l.photos);
     const src = photos.length > 0 ? photos[0] : DEMO_PHOTOS[i % DEMO_PHOTOS.length];
     const fb = DEMO_PHOTOS[i % DEMO_PHOTOS.length];
-    return '<div onclick="window.location.href='listing.html?id=' + l.id + ''" style="display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid #D8D8D8;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background=''">'
-      + '<div style="width:76px;height:62px;border-radius:6px;overflow:hidden;flex-shrink:0"><img src="' + src + '" data-fallback="' + fb + '" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" style="width:100%;height:100%;object-fit:cover"/></div>'
-      + '<div>'
-      + '<div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px">$' + Number(l.price).toLocaleString() + '</div>'
-      + '<div style="font-size:12px;color:#6B6B6B;margin-top:1px">' + l.address + '</div>'
-      + '<div style="font-size:12px;color:#999">' + l.city + ', ' + l.state + '</div>'
-      + '<div style="font-size:11px;color:#00843d;font-weight:700;margin-top:3px">&#10003; ' + (l.commission_rate || '2.5%') + ' buyer's agent fee</div>'
-      + '</div></div>';
+    const url = 'listing.html?id=' + l.id;
+    const comm = l.commission_rate || '2.5%';
+    return `<div onclick="window.location.href='${url}'" style="display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid #D8D8D8;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background=''">
+      <div style="width:76px;height:62px;border-radius:6px;overflow:hidden;flex-shrink:0"><img src="${src}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" style="width:100%;height:100%;object-fit:cover"/></div>
+      <div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px">$${Number(l.price).toLocaleString()}</div>
+        <div style="font-size:12px;color:#6B6B6B;margin-top:1px">${l.address}</div>
+        <div style="font-size:12px;color:#999">${l.city}, ${l.state}</div>
+        <div style="font-size:11px;color:#00843d;font-weight:700;margin-top:3px">&#10003; ${comm} buyer&apos;s agent fee</div>
+      </div></div>`;
   }).join('');
 
   initMap();
@@ -1166,7 +1168,7 @@ async function renderMapList() {
     const popup = '<strong style="font-size:15px;display:block;margin-bottom:3px">$' + Number(l.price).toLocaleString() + '</strong>'
       + l.address + '<br>' + l.city + ', ' + l.state + '<br>'
       + (l.beds ? l.beds + 'bd ' : '') + (l.baths ? l.baths + 'ba' : '')
-      + '<div style="color:#00843d;font-weight:700;font-size:11px;margin-top:4px">&#10003; ' + (l.commission_rate || '2.5%') + ' buyer's agent fee — paid by seller</div>'
+      + '<div style="color:#00843d;font-weight:700;font-size:11px;margin-top:4px">&#10003; ' + (l.commission_rate || '2.5%') + ' buyer&apos;s agent fee &mdash; paid by seller</div>'
       + '<a href="listing.html?id=' + l.id + '" style="display:block;margin-top:8px;background:#006AFF;color:white;text-align:center;padding:7px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12px">View Listing &amp; Contact Agent &rarr;</a>';
     const marker = L.marker([coords.lat, coords.lng], { icon }).bindPopup(popup).addTo(gozMap);
     mapMarkers.push(marker);
