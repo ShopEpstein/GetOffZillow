@@ -148,16 +148,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .share-agent-name{font-weight:700;color:var(--ink);font-size:13px}
 
 /* FULL-WIDTH FEE BAR */
-.fee-bar{background:var(--ink);width:100%;border-bottom:1px solid rgba(0,255,157,0.12)}
-.fee-bar-inner{max-width:1180px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(3,1fr)}
-.fee-bar-item{padding:18px 20px;display:flex;flex-direction:column;gap:4px;border-right:1px solid rgba(255,255,255,0.07);position:relative}
-.fee-bar-item:last-child{border-right:none}
-.fee-bar-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35)}
-.fee-bar-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.02em;line-height:1;color:white}
-.fee-bar-val.green{color:var(--green)}
-.fee-bar-sub{font-size:11px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.4}
-.fee-bar-item.highlight .fee-bar-val{color:var(--green)}
-.fee-bar-item.highlight::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);opacity:0.6}
+.fee-bar{background:var(--ink);width:100%;border-bottom:2px solid rgba(0,255,157,0.15)}
+.fee-bar-inner{max-width:1180px;margin:0 auto;padding:28px 24px;display:grid;grid-template-columns:1fr 260px;gap:32px;align-items:center}
+.fee-bar-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:10px}
+.fee-bar-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3vw,34px);color:white;line-height:1.1;letter-spacing:0.02em;margin-bottom:12px}
+.fee-bar-rate{color:var(--green)}
+.fee-bar-detail{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7;font-weight:300;max-width:640px}
+.fee-bar-detail strong{color:rgba(255,255,255,0.85);font-weight:600}
+.fee-bar-detail em{font-style:normal;color:rgba(255,255,255,0.75)}
+.fee-bar-aside{display:flex;flex-direction:column;gap:0;border-left:1px solid rgba(255,255,255,0.08);padding-left:32px}
+.fee-bar-aside-item{padding:12px 0}
+.fee-bar-aside-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px}
+.fee-bar-aside-val{font-family:'Bebas Neue',sans-serif;font-size:32px;color:white;line-height:1}
+.fee-bar-aside-val.green{color:var(--green)}
+.fee-bar-aside-sub{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px}
+.fee-bar-aside-divider{height:1px;background:rgba(255,255,255,0.06);margin:4px 0}
 
 /* IN-CARD FEE SUMMARY (replaces no-fee-note) */
 .card-fee-summary{background:#f0fff8;border:1px solid rgba(0,200,83,0.25);border-radius:8px;padding:12px 14px;margin-top:12px}
@@ -167,11 +172,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .card-fee-val.zero{color:var(--green-dark)}
 
 /* RESPONSIVE FEE BAR */
-@media(max-width:640px){
-  .fee-bar-inner{grid-template-columns:1fr 1fr}
-  .fee-bar-item:nth-child(1){grid-column:1/-1;border-right:none;border-bottom:1px solid rgba(255,255,255,0.07)}
-  .fee-bar-item:last-child{border-right:none}
-  .fee-bar-val{font-size:22px}
+@media(max-width:760px){
+  .fee-bar-inner{grid-template-columns:1fr}
+  .fee-bar-aside{border-left:none;border-top:1px solid rgba(255,255,255,0.08);padding-left:0;padding-top:20px;flex-direction:row;gap:24px}
+  .fee-bar-aside-item{flex:1}
+  .fee-bar-aside-divider{width:1px;height:auto;margin:0}
 }
 /* RESPONSIVE LAYOUT */
 @media(max-width:900px){
@@ -248,20 +253,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
   <!-- FULL-WIDTH FEE BAR -->
   <div class="fee-bar">
     <div class="fee-bar-inner">
-      <div class="fee-bar-item">
-        <div class="fee-bar-eyebrow">Buyer's Agent Fee</div>
-        <div class="fee-bar-val" id="feeBarBuyer">—</div>
-        <div class="fee-bar-sub">Offered by seller · shown publicly</div>
+      <div class="fee-bar-main">
+        <div class="fee-bar-eyebrow">Post-NAR Settlement · What Zillow Still Hides</div>
+        <div class="fee-bar-headline">The seller is offering <span class="fee-bar-rate" id="feeBarBuyer">—</span> to your buyer's agent.</div>
+        <div class="fee-bar-detail">Since August 2024, buyers must sign an agent agreement <em>before</em> touring homes — locking in what they'll pay their agent. If the seller offers less than that rate, <strong>you could owe the difference out of pocket.</strong> Most platforms still hide this number. Every GOZ listing shows it before you call, before you tour, before you fall in love with the house.</div>
       </div>
-      <div class="fee-bar-item highlight">
-        <div class="fee-bar-eyebrow">Your Cost as a Buyer</div>
-        <div class="fee-bar-val green">$0</div>
-        <div class="fee-bar-sub">Free to search · free to contact · always</div>
-      </div>
-      <div class="fee-bar-item">
-        <div class="fee-bar-eyebrow">GOZ Marketing Fee</div>
-        <div class="fee-bar-val" id="feeBarGoz">—</div>
-        <div class="fee-bar-sub">Paid by agent at closing · never by you</div>
+      <div class="fee-bar-aside">
+        <div class="fee-bar-aside-item">
+          <div class="fee-bar-aside-label">Your cost to search &amp; contact</div>
+          <div class="fee-bar-aside-val green">$0</div>
+          <div class="fee-bar-aside-sub">Always free for buyers</div>
+        </div>
+        <div class="fee-bar-aside-divider"></div>
+        <div class="fee-bar-aside-item">
+          <div class="fee-bar-aside-label">GOZ fee (agent pays at closing)</div>
+          <div class="fee-bar-aside-val" id="feeBarGoz">—</div>
+          <div class="fee-bar-aside-sub">Never charged to you</div>
+        </div>
       </div>
     </div>
   </div>
@@ -300,12 +308,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
           </form>
           <div class="card-fee-summary">
             <div class="card-fee-row">
-              <span class="card-fee-label">Buyer's agent fee (seller pays)</span>
+              <span class="card-fee-label">Seller is offering your agent</span>
               <span class="card-fee-val" id="cardFeeBuyer">—</span>
             </div>
             <div class="card-fee-row">
-              <span class="card-fee-label">Your cost to contact &amp; search</span>
-              <span class="card-fee-val zero">$0 · Free</span>
+              <span class="card-fee-label">Your cost to contact this agent</span>
+              <span class="card-fee-val zero">$0 · Always free</span>
             </div>
           </div>
         </div>
