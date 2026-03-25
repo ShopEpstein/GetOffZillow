@@ -5,12 +5,9 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="GetOffZillow AI">
 <meta name="theme-color" content="#111111">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23111111'/%3E%3Cpolyline points='16,86 90,20 149,74' fill='none' stroke='%2300FF9D' stroke-width='11' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='31' y1='86' x2='31' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Cline x1='31' y1='156' x2='144' y2='156' stroke='%2300FF9D' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='118' r='12' fill='%23111' stroke='%2300FF9D' stroke-width='7'/%3E%3Ccircle cx='90' cy='118' r='5' fill='%2300FF9D'/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Title set dynamically by JS after listing loads — default is clean -->
 <title>Home For Sale — GOZ | GetOffZillow AI</title>
 <meta property="og:title" content="Home For Sale — GOZ" id="og-title">
 <meta property="og:description" content="Commission shown publicly. Contact the agent directly. Free to search on GOZ." id="og-desc">
@@ -22,265 +19,266 @@
 <meta name="twitter:title" content="Home For Sale — GOZ" id="tw-title">
 <meta name="twitter:description" content="Commission shown publicly. Contact the agent directly." id="tw-desc">
 <meta name="twitter:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop" id="tw-image">
-
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root { --blue:#006AFF; --dark-blue:#0050CC; --navy:#0a1f44; --green:#00C853; --ai-green:#00FF9D; --red:#E8341C; --bg:#F7F7F7; --white:#fff; --text:#1A1A1A; --gray:#6B6B6B; --border:#D8D8D8; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Nunito Sans',sans-serif; background:var(--bg); color:var(--text); }
-
-  /* NAV */
-  nav { background:#111; border-bottom:1px solid rgba(0,255,157,0.12); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-  .nav-logo { text-decoration:none; display:flex; align-items:center; gap:10px; flex-shrink:0; }
-  .nav-goz { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.12em; color:#00FF9D; line-height:1; }
-  .nav-full { font-size:10px; color:rgba(255,255,255,0.3); font-family:'Space Mono',monospace; line-height:1; }
-  .nav-back { font-size:13px; color:rgba(255,255,255,0.7); text-decoration:none; font-weight:700; transition:color 0.2s; }
-  .nav-back:hover { color:#00FF9D; }
-
-  /* LAYOUT */
-  .page { max-width:1100px; margin:0 auto; padding:32px 24px; display:grid; grid-template-columns:1fr 360px; gap:28px; align-items:start; }
-
-  /* PHOTO */
-  .photo-wrap { position:relative; }
-  .photo-main { border-radius:12px; overflow:hidden; background:#c8d8f0; aspect-ratio:16/9; position:relative; }
-  .photo-main img { width:100%; height:100%; object-fit:cover; display:block; }
-  .photo-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); color:#6b8ab0; font-size:14px; font-weight:600; flex-direction:column; gap:8px; min-height:200px; }
-  .photo-placeholder svg { width:48px; height:48px; opacity:0.5; }
-
-  /* SHARE BUTTON — top right of photo */
-  .share-btn {
-    position:absolute;
-    top:12px;
-    right:12px;
-    z-index:10;
-    background:rgba(0,0,0,0.55);
-    backdrop-filter:blur(6px);
-    -webkit-backdrop-filter:blur(6px);
-    border:1px solid rgba(255,255,255,0.2);
-    color:white;
-    border-radius:8px;
-    padding:8px 14px;
-    font-family:'Nunito',sans-serif;
-    font-weight:800;
-    font-size:13px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    gap:6px;
-    transition:background 0.2s;
-  }
-  .share-btn:hover { background:rgba(0,0,0,0.75); }
-  .share-btn svg { width:15px; height:15px; flex-shrink:0; }
-
-  /* SHARE MODAL */
-  .share-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1000;
-    display:none; align-items:flex-end; justify-content:center;
-    padding:0;
-  }
-  .share-overlay.open { display:flex; }
-  @media(min-width:600px) {
-    .share-overlay { align-items:center; }
-    .share-modal { border-radius:20px !important; max-width:420px; width:100%; margin:0 16px; }
-  }
-  .share-modal {
-    background:white;
-    border-radius:20px 20px 0 0;
-    padding:0;
-    width:100%;
-    overflow:hidden;
-    animation:slideUp 0.25s ease;
-  }
-  @keyframes slideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
-
-  /* MODAL PHOTO CARD */
-  .share-card {
-    position:relative;
-    height:200px;
-    overflow:hidden;
-    background:linear-gradient(135deg,#c8d8f0,#a8c0e8);
-  }
-  .share-card img { width:100%; height:100%; object-fit:cover; display:block; }
-  .share-card-overlay {
-    position:absolute; inset:0;
-    background:linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 60%, transparent 100%);
-  }
-  .share-card-goz {
-    position:absolute; top:12px; right:12px;
-    background:#00FF9D; color:#111;
-    font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:0.15em;
-    padding:3px 10px; border-radius:4px;
-  }
-  .share-card-info {
-    position:absolute; bottom:14px; left:14px; color:white;
-  }
-  .share-card-price { font-family:'Bebas Neue',sans-serif; font-size:32px; line-height:1; }
-  .share-card-specs { font-size:13px; opacity:0.85; margin-top:2px; }
-  .share-card-addr { font-size:13px; font-weight:600; margin-top:2px; }
-  .share-card-commission {
-    display:inline-flex; align-items:center; gap:4px;
-    background:rgba(0,200,83,0.85); color:white;
-    font-size:11px; font-weight:700; padding:3px 9px; border-radius:4px; margin-top:6px;
-  }
-
-  /* MODAL ACTIONS */
-  .share-actions { padding:20px 16px 28px; display:flex; flex-direction:column; gap:10px; }
-  .share-url-row { display:flex; gap:8px; }
-  .share-url-input {
-    flex:1; padding:10px 12px; border:1.5px solid var(--border); border-radius:8px;
-    font-family:'Space Mono',monospace; font-size:11px; color:var(--gray);
-    outline:none; background:#fafafa; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-  }
-  .share-copy-btn {
-    background:#00FF9D; color:#111; border:none; border-radius:8px;
-    padding:10px 18px; font-family:'Nunito',sans-serif; font-weight:800; font-size:13px;
-    cursor:pointer; white-space:nowrap; transition:all 0.2s; flex-shrink:0;
-  }
-  .share-copy-btn.copied { background:#00C853; color:white; }
-  .share-btns-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .share-action-btn {
-    padding:13px; border-radius:10px; border:none; font-family:'Nunito',sans-serif;
-    font-weight:800; font-size:14px; cursor:pointer; display:flex; align-items:center;
-    justify-content:center; gap:8px; transition:opacity 0.15s;
-  }
-  .share-action-btn:hover { opacity:0.88; }
-  .share-action-btn.text { background:#34C759; color:white; }
-  .share-action-btn.email { background:#006AFF; color:white; }
-  .share-action-btn.native { background:#1A1A1A; color:white; }
-  .share-action-btn.close { background:#F0F0F0; color:#1A1A1A; }
-  .share-agent-row {
-    display:flex; align-items:center; gap:10px;
-    padding-top:12px; border-top:1px solid var(--border);
-    font-size:12px; color:var(--gray);
-  }
-  .share-agent-avi {
-    width:32px; height:32px; border-radius:50%; background:var(--blue);
-    color:white; display:flex; align-items:center; justify-content:center;
-    font-size:13px; font-weight:700; flex-shrink:0; overflow:hidden;
-  }
-  .share-agent-avi img { width:100%; height:100%; object-fit:cover; }
-  .share-agent-name { font-weight:700; color:var(--text); font-size:13px; }
-
-  /* REST OF PAGE STYLES */
-  .photo-strip { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; margin-top:10px; }
-  .photo-thumb { width:80px; height:60px; border-radius:6px; overflow:hidden; flex-shrink:0; cursor:pointer; border:2px solid transparent; transition:border-color 0.15s; }
-  .photo-thumb.active { border-color:var(--blue); }
-  .photo-thumb img { width:100%; height:100%; object-fit:cover; }
-  .listing-details { margin-top:24px; }
-  .listing-price { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--text); line-height:1; }
-  .listing-commission { display:inline-flex; align-items:center; gap:6px; background:#E8FBF0; color:var(--green); font-size:13px; font-weight:700; padding:4px 12px; border-radius:6px; margin-top:6px; }
-  .listing-address { font-size:18px; font-weight:700; margin-top:8px; }
-  .listing-city { font-size:14px; color:var(--gray); margin-top:2px; }
-  .specs-row { display:flex; gap:24px; margin:20px 0; padding:16px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); flex-wrap:wrap; }
-  .spec { text-align:center; min-width:60px; }
-  .spec-val { font-family:'Nunito',sans-serif; font-weight:900; font-size:22px; }
-  .spec-label { font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
-  .description { font-size:15px; line-height:1.7; color:var(--text); margin-top:16px; }
-  .description h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; margin-bottom:8px; }
-  .listing-link { display:inline-flex; align-items:center; gap:6px; color:var(--blue); font-weight:700; font-size:14px; text-decoration:none; margin-top:12px; }
-  .listing-link:hover { text-decoration:underline; }
-  .contact-card { background:white; border-radius:16px; padding:28px; box-shadow:0 4px 24px rgba(0,0,0,0.1); position:sticky; top:76px; }
-  .agent-block { display:flex; gap:14px; align-items:center; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border); }
-  .agent-avi { width:56px; height:56px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; overflow:hidden; }
-  .agent-avi img { width:100%; height:100%; object-fit:cover; }
-  .agent-name { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; }
-  .agent-brokerage { font-size:12px; color:var(--gray); margin-top:1px; }
-  .agent-badge { font-size:11px; color:var(--green); font-weight:700; margin-top:4px; }
-  .agent-direct { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
-  .agent-direct a { font-size:13px; color:var(--blue); text-decoration:none; font-weight:600; }
-  .agent-direct a:hover { text-decoration:underline; }
-  .contact-form-title { font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; margin-bottom:4px; }
-  .contact-form-sub { font-size:12px; color:var(--gray); margin-bottom:16px; }
-  .form-group { margin-bottom:12px; }
-  .form-group label { display:block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
-  .form-group input, .form-group textarea { width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:8px; font-family:'Nunito Sans',sans-serif; font-size:16px; outline:none; transition:border-color 0.2s; }
-  .form-group input:focus, .form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,106,255,0.1); }
-  .form-group textarea { resize:none; height:70px; }
-  .contact-btn { width:100%; background:var(--blue); color:white; border:none; padding:13px; border-radius:8px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:background 0.2s; margin-top:4px; }
-  .contact-btn:hover { background:var(--dark-blue); }
-  .contact-btn:disabled { background:var(--border); cursor:not-allowed; }
-  .no-fee-note { font-size:11px; color:var(--gray); text-align:center; margin-top:8px; line-height:1.5; }
-  .no-fee-note strong { color:var(--green); }
-  .contact-success { background:#f0fff8; border:1px solid #b3f0d0; color:#00843d; padding:14px; border-radius:8px; font-size:13px; display:none; text-align:center; line-height:1.6; }
-  .contact-error { background:#fff5f5; border:1px solid #ffcccc; color:var(--red); padding:10px; border-radius:8px; font-size:12px; display:none; margin-bottom:10px; }
-  .loading { text-align:center; padding:80px; font-size:15px; color:var(--gray); }
-  .not-found { text-align:center; padding:80px; }
-  @media(max-width:900px) { .page { grid-template-columns:1fr; } .contact-card { position:static; } }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#0D0D0D;--cream:#F4F1EB;--green:#00FF9D;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--blue-dark:#0050CC;--gold:#C9A84C;--gray:#6B6B6B;--border:#D4CFC4;--bg:#F0EDE7;--white:#fff}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+.nav{background:var(--ink);height:60px;display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(0,255,157,0.1)}
+.nav-logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-goz{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.12em;color:var(--green);line-height:1}
+.nav-full{font-size:10px;color:rgba(255,255,255,0.3);font-family:'Space Mono',monospace;line-height:1}
+.nav-back{margin-left:auto;color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;transition:color 0.2s}
+.nav-back:hover{color:var(--green)}
+
+/* STATE SCREENS */
+.state-screen{text-align:center;padding:100px 24px;color:var(--gray);font-size:15px}
+.state-screen a{color:var(--blue);text-decoration:none;font-weight:600}
+
+/* HERO PHOTO */
+.hero-photo{position:relative;width:100%;background:var(--ink);overflow:hidden;user-select:none}
+.hero-img{width:100%;height:min(65vh,540px);object-fit:cover;display:block;opacity:0;transition:opacity 0.5s ease}
+.hero-img.loaded{opacity:1}
+.hero-placeholder{width:100%;height:min(65vh,540px);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#16213e);color:rgba(255,255,255,0.25);font-size:14px;flex-direction:column;gap:12px}
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.2) 50%,rgba(0,0,0,0.05) 100%);pointer-events:none}
+
+/* Top bar inside hero */
+.hero-top{position:absolute;top:0;left:0;right:0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;z-index:10;background:linear-gradient(to bottom,rgba(0,0,0,0.4),transparent)}
+.photo-count-badge{background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.15);color:white;font-size:11px;font-weight:600;padding:6px 13px;border-radius:20px;font-family:'Space Mono',monospace;letter-spacing:0.05em}
+.share-btn{background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:8px;padding:8px 16px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.2s}
+.share-btn:hover{background:rgba(0,0,0,0.7)}
+.share-btn svg{width:15px;height:15px}
+
+/* Price + address overlay at bottom of hero */
+.hero-bottom{position:absolute;bottom:0;left:0;right:0;padding:24px 28px 28px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.hero-price-col{}
+.hero-price{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);color:white;line-height:1;letter-spacing:-1px;text-shadow:0 2px 20px rgba(0,0,0,0.3)}
+.hero-comm-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,180,80,0.92);backdrop-filter:blur(4px);color:white;font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px;margin-top:10px;font-family:'Space Mono',monospace;letter-spacing:0.04em;border:1px solid rgba(255,255,255,0.2)}
+.hero-addr-col{text-align:right}
+.hero-address{font-size:18px;font-weight:600;color:white;line-height:1.3;text-shadow:0 1px 8px rgba(0,0,0,0.5)}
+.hero-city{font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px;font-family:'Space Mono',monospace}
+
+/* THUMBNAIL STRIP */
+.thumb-strip{background:#0a0a0a;padding:8px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.thumb-strip::-webkit-scrollbar{display:none}
+.thumb{width:76px;height:54px;border-radius:5px;overflow:hidden;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s,opacity 0.15s;opacity:0.6}
+.thumb.active,.thumb:hover{border-color:var(--green);opacity:1}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* BODY LAYOUT */
+.body-wrap{max-width:1180px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+
+/* SPECS BAR */
+.specs-bar{display:flex;background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:24px;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+.spec-item{flex:1;padding:18px 16px;text-align:center;border-right:1px solid var(--border);min-width:0}
+.spec-item:last-child{border-right:none}
+.spec-val{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--ink);line-height:1}
+.spec-label{font-size:10px;color:var(--gray);font-family:'Space Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-top:3px}
+
+/* ABOUT CARD */
+.card{background:white;border-radius:12px;border:1px solid var(--border);padding:28px;margin-bottom:24px;box-shadow:0 1px 6px rgba(0,0,0,0.05)}
+.card-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gray);margin-bottom:14px}
+.about-text{font-size:15px;line-height:1.8;color:#2a2a2a;font-weight:300}
+.listing-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-weight:600;font-size:14px;text-decoration:none;margin-top:18px;padding:9px 18px;border-radius:8px;border:1.5px solid var(--blue);transition:all 0.2s}
+.listing-link:hover{background:var(--blue);color:white}
+
+/* FEE EXPLAINER */
+.fee-card{background:var(--ink);border-radius:12px;padding:24px 28px;margin-bottom:24px}
+.fee-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.04em;color:var(--green);margin-bottom:16px}
+.fee-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.07);gap:12px}
+.fee-row:last-child{border-bottom:none;padding-bottom:0}
+.fee-row-label{color:rgba(255,255,255,0.55);font-size:13px;font-weight:300;flex:1}
+.fee-row-val{font-weight:600;color:white;font-family:'Space Mono',monospace;font-size:12px;text-align:right;white-space:nowrap}
+.fee-row-val.green{color:var(--green)}
+
+/* CONTACT CARD */
+.contact-card{background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;position:sticky;top:76px;box-shadow:0 8px 40px rgba(0,0,0,0.1)}
+.agent-stripe{background:var(--ink);padding:20px 22px;display:flex;gap:14px;align-items:center;border-bottom:2px solid rgba(0,255,157,0.18)}
+.agent-avi{width:52px;height:52px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;overflow:hidden;border:2px solid rgba(255,255,255,0.12)}
+.agent-avi img{width:100%;height:100%;object-fit:cover}
+.agent-info{}
+.agent-name{font-weight:600;font-size:15px;color:white;line-height:1.2}
+.agent-brokerage{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+.agent-goz-tag{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-size:10px;font-weight:700;font-family:'Space Mono',monospace;margin-top:5px;letter-spacing:0.04em}
+.agent-contacts{padding:12px 22px;display:flex;flex-direction:column;gap:7px;border-bottom:1px solid var(--border)}
+.agent-link{font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:7px;transition:color 0.15s}
+.agent-link:hover{color:var(--blue-dark)}
+.form-wrap{padding:20px 22px 22px}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.04em;margin-bottom:3px}
+.form-sub{font-size:12px;color:var(--gray);margin-bottom:16px;line-height:1.5}
+.form-group{margin-bottom:11px}
+.form-group label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;color:var(--gray)}
+.form-group input,.form-group textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;background:white;-webkit-appearance:none}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,106,255,0.08)}
+.form-group textarea{resize:none;height:68px}
+.contact-btn{width:100%;background:var(--blue);color:white;border:none;padding:14px;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:background 0.2s;margin-top:6px}
+.contact-btn:hover{background:var(--blue-dark)}
+.contact-btn:disabled{background:var(--border);cursor:not-allowed;color:var(--gray)}
+.no-fee-note{font-size:11px;color:var(--gray);text-align:center;margin-top:12px;line-height:1.6;padding:0 2px}
+.no-fee-note strong{color:var(--green-dark)}
+.contact-success{background:#f0fff8;border:1px solid #b3f0d0;color:#00843d;padding:16px;border-radius:9px;font-size:13px;display:none;text-align:center;line-height:1.7}
+.contact-error{background:#fff5f5;border:1px solid #ffcccc;color:var(--red);padding:10px;border-radius:8px;font-size:12px;display:none;margin-bottom:10px}
+
+/* SHARE MODAL */
+.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1000;display:none;align-items:flex-end;justify-content:center}
+.share-overlay.open{display:flex}
+@media(min-width:600px){.share-overlay{align-items:center}.share-modal{border-radius:20px!important;max-width:420px;width:100%;margin:0 16px}}
+.share-modal{background:white;border-radius:20px 20px 0 0;width:100%;overflow:hidden;animation:slideUp 0.25s ease}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.share-card{position:relative;height:200px;overflow:hidden;background:linear-gradient(135deg,#c8d8f0,#a8c0e8)}
+.share-card img{width:100%;height:100%;object-fit:cover;display:block}
+.share-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.78) 0%,rgba(0,0,0,0.15) 60%,transparent 100%)}
+.share-card-goz{position:absolute;top:12px;right:12px;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:0.15em;padding:3px 10px;border-radius:4px}
+.share-card-info{position:absolute;bottom:14px;left:14px;color:white}
+.share-card-price{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1}
+.share-card-specs{font-size:13px;opacity:0.85;margin-top:2px}
+.share-card-addr{font-size:13px;font-weight:600;margin-top:2px}
+.share-card-commission{display:inline-flex;align-items:center;gap:4px;background:rgba(0,200,83,0.85);color:white;font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;margin-top:6px}
+.share-actions{padding:20px 16px 28px;display:flex;flex-direction:column;gap:10px}
+.share-url-row{display:flex;gap:8px}
+.share-url-input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--gray);outline:none;background:#fafafa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.share-copy-btn{background:#00FF9D;color:#111;border:none;border-radius:8px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0}
+.share-copy-btn.copied{background:#00C853;color:white}
+.share-btns-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.share-action-btn{padding:13px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.15s}
+.share-action-btn:hover{opacity:0.88}
+.share-action-btn.text{background:#34C759;color:white}
+.share-action-btn.email{background:#006AFF;color:white}
+.share-action-btn.native{background:#1A1A1A;color:white}
+.share-action-btn.close{background:#F0F0F0;color:#1A1A1A}
+.share-agent-row{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--gray)}
+.share-agent-avi{width:32px;height:32px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;overflow:hidden}
+.share-agent-avi img{width:100%;height:100%;object-fit:cover}
+.share-agent-name{font-weight:700;color:var(--ink);font-size:13px}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .body-wrap{grid-template-columns:1fr}
+  .contact-card{position:static}
+}
+@media(max-width:640px){
+  .hero-bottom{padding:16px 18px 20px;gap:12px}
+  .hero-price{font-size:42px}
+  .hero-addr-col{text-align:left}
+  .body-wrap{padding:20px 16px}
+  .specs-bar{flex-wrap:wrap}
+  .spec-item{min-width:50%}
+  .spec-item:nth-child(odd){border-right:1px solid var(--border)}
+  .spec-item:nth-child(even){border-right:none}
+  .card{padding:20px}
+  .fee-card{padding:20px}
+}
+</style>
 </head>
 <body>
 
-<nav>
+<nav class="nav">
   <a href="index.html" class="nav-logo">
     <div style="width:32px;height:32px;background:#111;border-radius:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #00FF9D">
       <svg width="20" height="20" viewBox="0 0 46 46" fill="none"><polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/><line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/><circle cx="23" cy="30" r="1.2" fill="#00FF9D"/></svg>
     </div>
     <div><div class="nav-goz">GOZ</div><div class="nav-full">GetOffZillow AI</div></div>
   </a>
-  <a href="index.html" class="nav-back">← Back to Search</a>
+  <a href="index.html" class="nav-back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to Search
+  </a>
 </nav>
 
-<div id="loadingState" class="loading">Loading listing...</div>
-<div id="notFoundState" class="not-found" style="display:none">
-  <h2>Listing not found</h2>
-  <p style="margin-top:8px"><a href="index.html" style="color:var(--blue)">← Back to search</a></p>
+<div id="loadingState" class="state-screen">Loading listing...</div>
+<div id="notFoundState" class="state-screen" style="display:none">
+  <h2 style="color:var(--ink);margin-bottom:10px">Listing not found</h2>
+  <a href="index.html">← Back to search</a>
 </div>
 
-<div class="page" id="listingPage" style="display:none">
-  <div>
-    <!-- PHOTO WRAP — share button sits inside here, top-right -->
-    <div class="photo-wrap">
-      <div id="photoMain" class="photo-main">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          No photos uploaded
-        </div>
-      </div>
-      <!-- SHARE BUTTON -->
+<div id="listingPage" style="display:none">
+
+  <!-- HERO -->
+  <div class="hero-photo">
+    <div class="hero-top">
+      <div class="photo-count-badge" id="photoCountBadge" style="display:none"></div>
       <button class="share-btn" onclick="openShare()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
-          <polyline points="16 6 12 2 8 6"/>
-          <line x1="12" y1="2" x2="12" y2="15"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         Share
       </button>
     </div>
-
-    <div class="photo-strip" id="photoStrip"></div>
-    <div class="listing-details">
-      <div class="listing-price" id="detPrice"></div>
-      <div class="listing-commission" id="detCommission"></div>
-      <div class="listing-address" id="detAddress"></div>
-      <div class="listing-city" id="detCity"></div>
-      <div class="specs-row" id="specsRow"></div>
-      <div class="description">
-        <h3>About this property</h3>
-        <p id="detDescription" style="color:var(--gray)">No description provided.</p>
+    <div id="heroImgSlot">
+      <div class="hero-placeholder" id="heroPlaceholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        No photos uploaded
       </div>
-      <div id="detWebsite"></div>
+    </div>
+    <div class="hero-gradient"></div>
+    <div class="hero-bottom">
+      <div class="hero-price-col">
+        <div class="hero-price" id="heroPrice"></div>
+        <div class="hero-comm-badge" id="heroComm"></div>
+      </div>
+      <div class="hero-addr-col">
+        <div class="hero-address" id="heroAddress"></div>
+        <div class="hero-city" id="heroCity"></div>
+      </div>
     </div>
   </div>
 
-  <div>
-    <div class="contact-card">
-      <div class="agent-block" id="agentBlock"></div>
-      <div class="contact-form-title">Contact Agent Directly</div>
-      <div class="contact-form-sub">Your message goes straight to them — zero middleman. No lead tax.</div>
-      <div class="contact-error" id="contactError"></div>
-      <div class="contact-success" id="contactSuccess">
-        ✅ <strong>Message sent!</strong><br>
-        The agent will contact you directly. Check your email for a confirmation.
+  <!-- THUMB STRIP -->
+  <div class="thumb-strip" id="thumbStrip" style="display:none"></div>
+
+  <!-- BODY -->
+  <div class="body-wrap">
+    <div>
+      <div class="specs-bar" id="specsBar"></div>
+
+      <div class="card">
+        <div class="card-label">About This Property</div>
+        <p class="about-text" id="detDescription">No description provided.</p>
+        <div id="detWebsite"></div>
       </div>
-      <form id="contactForm" onsubmit="sendMessage(event)">
-        <div class="form-group"><label>Your Name *</label><input type="text" id="buyerName" placeholder="John Buyer" required /></div>
-        <div class="form-group"><label>Your Email *</label><input type="email" id="buyerEmail" placeholder="john@email.com" required /></div>
-        <div class="form-group"><label>Your Phone</label><input type="tel" id="buyerPhone" placeholder="(850) 555-0100" /></div>
-        <div class="form-group"><label>Message</label><textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea></div>
-        <button type="submit" class="contact-btn" id="contactBtn">Send Message →</button>
-      </form>
-      <p class="no-fee-note"><strong>Free for buyers.</strong> GOZ is free to search and free to contact agents. The buyer's agent fee shown above is paid by the seller — not you.</p>
+
+      <div class="fee-card">
+        <div class="fee-title">Who Pays What</div>
+        <div class="fee-row">
+          <span class="fee-row-label">Buyer's agent fee — offered by seller</span>
+          <span class="fee-row-val" id="feeBuyerAgent">—</span>
+        </div>
+        <div class="fee-row">
+          <span class="fee-row-label">Your cost to search &amp; contact this agent</span>
+          <span class="fee-row-val green">$0 · Free</span>
+        </div>
+        <div class="fee-row">
+          <span class="fee-row-label">GOZ marketing fee (paid by agent at closing)</span>
+          <span class="fee-row-val" id="feeGoz">3% of agent commission</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STICKY CONTACT CARD -->
+    <div>
+      <div class="contact-card">
+        <div class="agent-stripe" id="agentStripe"></div>
+        <div class="agent-contacts" id="agentContacts" style="display:none"></div>
+        <div class="form-wrap">
+          <div class="form-title">Contact Agent Directly</div>
+          <div class="form-sub">Your message goes straight to them — zero middleman. No lead tax.</div>
+          <div class="contact-error" id="contactError"></div>
+          <div class="contact-success" id="contactSuccess">
+            ✅ <strong>Message sent!</strong><br>
+            The agent will contact you directly. Check your email for a confirmation.
+          </div>
+          <form id="contactForm" onsubmit="sendMessage(event)">
+            <div class="form-group"><label>Your Name *</label><input type="text" id="buyerName" placeholder="John Buyer" required /></div>
+            <div class="form-group"><label>Your Email *</label><input type="email" id="buyerEmail" placeholder="john@email.com" required /></div>
+            <div class="form-group"><label>Your Phone</label><input type="tel" id="buyerPhone" placeholder="(850) 555-0100" /></div>
+            <div class="form-group"><label>Message</label><textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea></div>
+            <button type="submit" class="contact-btn" id="contactBtn">Send Message →</button>
+          </form>
+          <p class="no-fee-note"><strong>Free for buyers.</strong> GOZ is free to search and contact agents. The buyer's agent fee above is paid by the seller — not you.</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -352,16 +350,14 @@ async function loadListing() {
     .single();
 
   if (error || !data) { showNotFound(); return; }
-
   listing = data;
   agent = data.agents;
 
   const photos = parsePhotos(listing.photos);
   const pageImg = photos.length > 0 ? photos[0] : 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop';
-  const pageUrl = `https://getoffzillow.com/listing.html?id=${listing.id}`;
-  // Clean title — no raw template literals in the tab
-  const pageTitle = `${listing.address}, ${listing.city} — $${Number(listing.price).toLocaleString()} | GOZ`;
-  const pageDesc = `${listing.beds ? listing.beds + 'bd ' : ''}${listing.baths ? listing.baths + 'ba · ' : ''}${listing.commission_rate || '2.5%'} buyer's agent fee paid by seller · Free for buyers · Contact agent directly on GOZ.`;
+  const pageUrl = 'https://getoffzillow.com/listing.html?id=' + listing.id;
+  const pageTitle = listing.address + ', ' + listing.city + ' — $' + Number(listing.price).toLocaleString() + ' | GOZ';
+  const pageDesc = (listing.beds ? listing.beds+'bd ' : '') + (listing.baths ? listing.baths+'ba · ' : '') + (listing.commission_rate||'2.5%') + " buyer's agent fee paid by seller · Free for buyers · Contact agent directly on GOZ.";
 
   document.title = pageTitle;
   document.getElementById('og-title').setAttribute('content', pageTitle);
@@ -377,164 +373,173 @@ async function loadListing() {
 
 function renderListing() {
   document.getElementById('loadingState').style.display = 'none';
-  document.getElementById('listingPage').style.display = 'grid';
+  document.getElementById('listingPage').style.display = 'block';
 
   const photos = parsePhotos(listing.photos);
-  const FALLBACK = [
-    'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=675&fit=crop',
-    'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=1200&h=675&fit=crop',
-    'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1200&h=675&fit=crop',
-  ];
-  const fallbackSrc = FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
-  const mainSrc = photos.length > 0 ? photos[0] : fallbackSrc;
+  const FALLBACK = 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=675&fit=crop';
+  const mainSrc = photos.length > 0 ? photos[0] : null;
 
-  const img = document.createElement('img');
-  img.src = mainSrc;
-  img.alt = listing.address;
-  img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
-  img.onerror = () => { img.onerror = null; img.src = fallbackSrc; };
-  const mainEl = document.getElementById('photoMain');
-  mainEl.innerHTML = '';
-  mainEl.appendChild(img);
+  // Hero image
+  if (mainSrc) {
+    const placeholder = document.getElementById('heroPlaceholder');
+    if (placeholder) placeholder.remove();
+    const img = document.createElement('img');
+    img.className = 'hero-img';
+    img.src = mainSrc;
+    img.alt = listing.address;
+    img.onload = () => img.classList.add('loaded');
+    img.onerror = () => { img.onerror = null; img.src = FALLBACK; };
+    document.getElementById('heroImgSlot').appendChild(img);
 
+    if (photos.length > 1) {
+      const badge = document.getElementById('photoCountBadge');
+      badge.textContent = '📷 ' + photos.length + ' photos';
+      badge.style.display = 'block';
+    }
+  }
+
+  // Hero text overlay
+  document.getElementById('heroPrice').textContent = '$' + Number(listing.price).toLocaleString();
+  document.getElementById('heroComm').textContent = '✓ ' + (listing.commission_rate || '2.5%') + " buyer's agent fee — paid by seller";
+  document.getElementById('heroAddress').textContent = listing.address;
+  document.getElementById('heroCity').textContent = listing.city + ', ' + listing.state + (listing.zip ? ' ' + listing.zip : '');
+
+  // Thumbnail strip
   if (photos.length > 1) {
-    document.getElementById('photoStrip').innerHTML = photos.map((p, i) =>
-      `<div class="photo-thumb ${i === 0 ? 'active' : ''}" onclick="switchPhoto(${i}, this)">
-        <img src="${p}" alt="photo ${i+1}" />
+    const strip = document.getElementById('thumbStrip');
+    strip.style.display = 'flex';
+    strip.innerHTML = photos.map((p, i) =>
+      `<div class="thumb ${i===0?'active':''}" onclick="switchPhoto(${i},this)">
+        <img src="${p}" alt="Photo ${i+1}" loading="lazy" />
       </div>`
     ).join('');
   }
 
-  document.getElementById('detPrice').textContent = '$' + Number(listing.price).toLocaleString();
-  document.getElementById('detCommission').innerHTML = `✓ ${listing.commission_rate || '2.5%'} buyer's agent fee — paid by seller, not you`;
-  document.getElementById('detAddress').textContent = listing.address;
-  document.getElementById('detCity').textContent = `${listing.city}, ${listing.state}${listing.zip ? ' ' + listing.zip : ''}`;
-
+  // Specs bar
+  const landTypes = ['Vacant Land','Acreage','Waterfront Land'];
+  const isLand = landTypes.includes(listing.property_type);
   const specs = [];
-  if (listing.beds) specs.push(`<div class="spec"><div class="spec-val">${listing.beds}</div><div class="spec-label">Bedrooms</div></div>`);
-  if (listing.baths) specs.push(`<div class="spec"><div class="spec-val">${listing.baths}</div><div class="spec-label">Bathrooms</div></div>`);
-  if (listing.sqft) specs.push(`<div class="spec"><div class="spec-val">${Number(listing.sqft).toLocaleString()}</div><div class="spec-label">Sq Ft</div></div>`);
-  if (listing.property_type) specs.push(`<div class="spec"><div class="spec-val" style="font-size:14px;font-weight:700">${listing.property_type}</div><div class="spec-label">Type</div></div>`);
-  document.getElementById('specsRow').innerHTML = specs.join('');
+  if (!isLand) {
+    if (listing.beds) specs.push(['Beds', listing.beds]);
+    if (listing.baths) specs.push(['Baths', listing.baths]);
+    if (listing.sqft) specs.push(['Sq Ft', Number(listing.sqft).toLocaleString()]);
+  } else {
+    if (listing.acreage) specs.push(['Acres', listing.acreage]);
+  }
+  if (listing.property_type) specs.push(['Type', listing.property_type.replace(' Home','').replace(' Building','')]);
+  if (listing.year_built) specs.push(['Built', listing.year_built]);
 
+  document.getElementById('specsBar').innerHTML = specs.length
+    ? specs.map(([label, val]) => `<div class="spec-item"><div class="spec-val">${val}</div><div class="spec-label">${label}</div></div>`).join('')
+    : '<div style="padding:16px 20px;color:var(--gray);font-size:13px">Property details not provided</div>';
+
+  // Description
   if (listing.description) document.getElementById('detDescription').textContent = listing.description;
   if (listing.website_url) {
     document.getElementById('detWebsite').innerHTML = `<a href="${listing.website_url}" target="_blank" class="listing-link">🔗 View full listing / virtual tour →</a>`;
   }
 
+  // Fee explainer
+  const commRate = listing.commission_rate || '2.5%';
+  const commPct = parseFloat(commRate);
+  document.getElementById('feeBuyerAgent').textContent = commRate + ' of sale price';
+  if (commPct && !isNaN(commPct)) {
+    const gross = Math.round(listing.price * commPct / 100);
+    const gozFee = Math.round(gross * 0.03);
+    document.getElementById('feeGoz').textContent = '$' + gozFee.toLocaleString() + ' on a $' + gross.toLocaleString() + ' commission';
+  }
+
+  // Agent stripe
   if (agent) {
     const avi = agent.photo_url
       ? `<img src="${agent.photo_url}" alt="${agent.first_name}" />`
-      : (agent.first_name?.[0] || '') + (agent.last_name?.[0] || '');
-    document.getElementById('agentBlock').innerHTML = `
+      : (agent.first_name?.[0]||'') + (agent.last_name?.[0]||'');
+    document.getElementById('agentStripe').innerHTML = `
       <div class="agent-avi">${avi}</div>
-      <div>
+      <div class="agent-info">
         <div class="agent-name">${agent.first_name} ${agent.last_name}</div>
         <div class="agent-brokerage">${agent.brokerage || 'Independent Agent'}</div>
-        <div class="agent-badge">GOZ Agent · Direct contact · No middleman</div>
-        <div class="agent-direct">
-          ${agent.phone ? `<a href="tel:${agent.phone}">📞 ${agent.phone}</a>` : ''}
-          ${agent.email ? `<a href="mailto:${agent.email}">📧 ${agent.email}</a>` : ''}
-          ${agent.website ? `<a href="${agent.website}" target="_blank">🌐 ${agent.website}</a>` : ''}
-        </div>
+        <div class="agent-goz-tag">● GOZ Agent · Direct contact · No middleman</div>
       </div>`;
+
+    const links = [];
+    if (agent.phone) links.push(`<a href="tel:${agent.phone}" class="agent-link">📞 ${agent.phone}</a>`);
+    if (agent.email) links.push(`<a href="mailto:${agent.email}" class="agent-link">📧 ${agent.email}</a>`);
+    if (agent.website) links.push(`<a href="${agent.website}" target="_blank" class="agent-link">🌐 ${agent.website.replace(/^https?:\/\//,'')}</a>`);
+    if (links.length) {
+      const c = document.getElementById('agentContacts');
+      c.innerHTML = links.join('');
+      c.style.display = 'flex';
+    }
   }
 
-  // Show native share button only if supported
-  if (navigator.share) {
-    const btn = document.getElementById('shareNativeBtn');
-    btn.style.display = 'flex';
-  }
+  if (navigator.share) document.getElementById('shareNativeBtn').style.display = 'flex';
 }
 
 function switchPhoto(i, el) {
   const photos = parsePhotos(listing.photos);
   if (!photos[i]) return;
-  document.getElementById('photoMain').innerHTML = `<img src="${photos[i]}" alt="photo ${i+1}" style="width:100%;height:100%;object-fit:cover;display:block" />`;
-  document.querySelectorAll('.photo-thumb').forEach(t => t.classList.remove('active'));
+  const img = document.querySelector('#heroImgSlot .hero-img');
+  if (img) {
+    img.style.opacity = '0';
+    setTimeout(() => {
+      img.src = photos[i];
+      img.onload = () => { img.style.opacity = '1'; };
+    }, 150);
+  }
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 }
 
-// ── SHARE MODAL ──
+// SHARE MODAL — identical logic, preserved
 function openShare() {
   if (!listing) return;
-  const url = `https://getoffzillow.com/listing.html?id=${listing.id}`;
+  const url = 'https://getoffzillow.com/listing.html?id=' + listing.id;
   const photos = parsePhotos(listing.photos);
-  const photoSrc = photos.length > 0 ? photos[0] : '';
-
-  // Populate card
-  if (photoSrc) {
+  if (photos.length > 0) {
     const si = document.getElementById('shareCardImg');
-    si.src = photoSrc;
-    si.style.display = 'block';
+    si.src = photos[0]; si.style.display = 'block';
   }
   document.getElementById('shareCardPrice').textContent = '$' + Number(listing.price).toLocaleString();
-  const specsStr = [listing.beds ? listing.beds + ' bd' : '', listing.baths ? listing.baths + ' ba' : ''].filter(Boolean).join(' · ');
+  const specsStr = [listing.beds ? listing.beds+' bd' : '', listing.baths ? listing.baths+' ba' : ''].filter(Boolean).join(' · ');
   document.getElementById('shareCardSpecs').textContent = specsStr;
-  document.getElementById('shareCardAddr').textContent = `${listing.address}, ${listing.city}, ${listing.state}`;
-  document.getElementById('shareCardComm').textContent = `✓ ${listing.commission_rate || '2.5%'} buyer's agent fee — paid by seller`;
-
-  // URL input
+  document.getElementById('shareCardAddr').textContent = listing.address + ', ' + listing.city + ', ' + listing.state;
+  document.getElementById('shareCardComm').textContent = '✓ ' + (listing.commission_rate||'2.5%') + " buyer's agent fee — paid by seller";
   document.getElementById('shareUrlInput').value = url;
-
-  // Agent row
   if (agent) {
     const avi = agent.photo_url
       ? `<img src="${agent.photo_url}" style="width:100%;height:100%;object-fit:cover">`
-      : (agent.first_name?.[0] || '') + (agent.last_name?.[0] || '');
+      : (agent.first_name?.[0]||'') + (agent.last_name?.[0]||'');
     document.getElementById('shareAgentRow').innerHTML = `
       <div class="share-agent-avi">${avi}</div>
-      <div>
-        <div class="share-agent-name">${agent.first_name} ${agent.last_name}</div>
-        <div>GetOffZillow AI · Free for buyers · Agent contact shown publicly</div>
-      </div>`;
+      <div><div class="share-agent-name">${agent.first_name} ${agent.last_name}</div>
+      <div>GetOffZillow AI · Free for buyers · Agent contact shown publicly</div></div>`;
   }
-
   document.getElementById('shareOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
-function closeShare() {
-  document.getElementById('shareOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('shareOverlay')) closeShare();
-}
-
+function closeShare() { document.getElementById('shareOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+function handleOverlayClick(e) { if (e.target === document.getElementById('shareOverlay')) closeShare(); }
 function copyLink() {
-  const url = `https://getoffzillow.com/listing.html?id=${listing.id}`;
+  const url = 'https://getoffzillow.com/listing.html?id=' + listing.id;
   navigator.clipboard.writeText(url).then(() => {
     const btn = document.getElementById('shareCopyBtn');
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('copied');
+    btn.textContent = '✓ Copied!'; btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'Copy Link'; btn.classList.remove('copied'); }, 2000);
   });
 }
-
 function shareText() {
-  const url = `https://getoffzillow.com/listing.html?id=${listing.id}`;
-  const msg = `Check out this listing on GetOffZillow AI — $${Number(listing.price).toLocaleString()}, ${listing.address}, ${listing.city} ${listing.state}. Commission shown publicly. ${url}`;
-  window.open(`sms:?&body=${encodeURIComponent(msg)}`);
+  const url = 'https://getoffzillow.com/listing.html?id=' + listing.id;
+  window.open('sms:?&body=' + encodeURIComponent('Check out this listing on GetOffZillow AI — $' + Number(listing.price).toLocaleString() + ', ' + listing.address + ', ' + listing.city + ' ' + listing.state + '. Commission shown publicly. ' + url));
 }
-
 function shareEmail() {
-  const url = `https://getoffzillow.com/listing.html?id=${listing.id}`;
-  const subject = `Home For Sale — $${Number(listing.price).toLocaleString()}, ${listing.address}`;
-  const body = `Check out this listing on GetOffZillow AI:\n\n${listing.address}, ${listing.city}, ${listing.state}\n$${Number(listing.price).toLocaleString()} · ${listing.commission_rate || '2.5%'} buyer's agent fee paid by seller · Free for buyers\n\n${url}`;
-  window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+  const url = 'https://getoffzillow.com/listing.html?id=' + listing.id;
+  const subject = 'Home For Sale — $' + Number(listing.price).toLocaleString() + ', ' + listing.address;
+  const body = 'Check out this listing on GetOffZillow AI:\n\n' + listing.address + ', ' + listing.city + ', ' + listing.state + '\n$' + Number(listing.price).toLocaleString() + ' · ' + (listing.commission_rate||'2.5%') + " buyer's agent fee paid by seller · Free for buyers\n\n" + url;
+  window.open('mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
 }
-
 async function shareNative() {
-  const url = `https://getoffzillow.com/listing.html?id=${listing.id}`;
-  try {
-    await navigator.share({
-      title: `$${Number(listing.price).toLocaleString()} — ${listing.address}`,
-      text: `${listing.address}, ${listing.city} ${listing.state} · ${listing.commission_rate || '2.5%'} buyer's agent fee paid by seller · Free for buyers`,
-      url
-    });
-  } catch(e) { /* user cancelled */ }
+  try { await navigator.share({ title: '$' + Number(listing.price).toLocaleString() + ' — ' + listing.address, text: listing.address + ', ' + listing.city + ' ' + listing.state + ' · ' + (listing.commission_rate||'2.5%') + " buyer's agent fee paid by seller", url: 'https://getoffzillow.com/listing.html?id=' + listing.id }); } catch(e) {}
 }
 
 async function sendMessage(e) {
@@ -542,42 +547,17 @@ async function sendMessage(e) {
   const btn = document.getElementById('contactBtn');
   const errEl = document.getElementById('contactError');
   errEl.style.display = 'none';
-
-  const buyerName = document.getElementById('buyerName').value.trim();
+  const buyerName  = document.getElementById('buyerName').value.trim();
   const buyerEmail = document.getElementById('buyerEmail').value.trim();
   const buyerPhone = document.getElementById('buyerPhone').value.trim();
-  const message = document.getElementById('buyerMessage').value.trim();
-
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
-
+  const message    = document.getElementById('buyerMessage').value.trim();
+  btn.disabled = true; btn.textContent = 'Sending...';
   try {
-    await sb.from('leads').insert({
-      listing_id: listing.id,
-      agent_id: agent?.id || null,
-      buyer_name: buyerName,
-      buyer_email: buyerEmail,
-      buyer_phone: buyerPhone || null,
-      message: message || null
-    });
-    await fetch('/api/contact-agent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        agent_email: agent?.email,
-        agent_name: agent ? `${agent.first_name} ${agent.last_name}` : '',
-        agent_first: agent?.first_name,
-        listing_address: listing.address,
-        listing_price: listing.price,
-        buyer_name: buyerName,
-        buyer_email: buyerEmail,
-        buyer_phone: buyerPhone,
-        message
-      })
-    });
+    await sb.from('leads').insert({ listing_id: listing.id, agent_id: agent?.id||null, buyer_name: buyerName, buyer_email: buyerEmail, buyer_phone: buyerPhone||null, message: message||null });
+    await fetch('/api/contact-agent', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ agent_email: agent?.email, agent_name: agent ? agent.first_name+' '+agent.last_name : '', agent_first: agent?.first_name, listing_address: listing.address, listing_price: listing.price, buyer_name: buyerName, buyer_email: buyerEmail, buyer_phone: buyerPhone, message }) });
     document.getElementById('contactForm').style.display = 'none';
     document.getElementById('contactSuccess').style.display = 'block';
-  } catch (err) {
+  } catch(err) {
     console.error(err);
     document.getElementById('contactForm').style.display = 'none';
     document.getElementById('contactSuccess').style.display = 'block';
