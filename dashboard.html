@@ -625,12 +625,24 @@ window.addEventListener('error', function(e) {
       </div>
       <div class="form-group"><label>ZIP Code</label><input id="el_zip" type="text" /></div>
       <div class="form-group"><label>Asking Price ($) *</label><input id="el_price" type="number" /></div>
-      <div class="form-group"><label>Commission Rate</label>
-        <select id="el_commission">
-          <option value="2%">2%</option><option value="2.5%">2.5%</option>
-          <option value="2.75%">2.75%</option><option value="3%">3%</option>
-          <option value="Negotiable">Negotiable</option>
-        </select>
+      <div class="form-group"><label>Buyer's Agent Commission You're Offering</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="el_commission_select" onchange="elHandleCommSelect(this.value)" style="flex:1">
+            <option value="1%">1%</option>
+            <option value="1.5%">1.5%</option>
+            <option value="2%">2%</option>
+            <option value="2.4%">2.4%</option>
+            <option value="2.5%">2.5%</option>
+            <option value="2.75%">2.75%</option>
+            <option value="3%">3%</option>
+            <option value="3.5%">3.5%</option>
+            <option value="Negotiable">Negotiable</option>
+            <option value="custom">Custom %...</option>
+          </select>
+          <input type="text" id="el_commission_custom" placeholder="e.g. 2.4%" style="width:100px;display:none;padding:9px 12px;border:1.5px solid #D4CFC4;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none" oninput="elSyncCustomComm(this.value)" />
+        </div>
+        <input type="hidden" id="el_commission" value="2.5%" />
+        <div style="font-size:11px;color:#6B6B6B;margin-top:4px">What you'll pay a buyer's agent at closing — shown publicly on your listing</div>
       </div>
       <div class="form-group"><label>Bedrooms</label>
         <select id="el_beds">
@@ -644,11 +656,26 @@ window.addEventListener('error', function(e) {
           <option>2</option><option>2.5</option><option>3</option><option>4+</option>
         </select>
       </div>
-      <div class="form-group"><label>Sq Ft</label><input id="el_sqft" type="number" /></div>
+      <div class="form-group" id="el_sqft_group"><label>Sq Ft</label><input id="el_sqft" type="number" /></div>
+      <div class="form-group" id="el_acreage_group" style="display:none"><label>Acreage</label><input id="el_acreage" type="number" step="0.1" placeholder="e.g. 12.5" /><div style="font-size:11px;color:#6B6B6B;margin-top:4px">Total acres</div></div>
       <div class="form-group"><label>Property Type</label>
-        <select id="el_type">
-          <option>Single Family</option><option>Condo</option><option>Townhouse</option>
-          <option>Multi-Family</option><option>Land</option><option>Commercial</option>
+        <select id="el_type" onchange="elTogglePropertyType(this.value)">
+          <optgroup label="── RESIDENTIAL ──">
+            <option value="Single Family">Single Family Home</option>
+            <option value="Condo">Condo / Townhouse</option>
+            <option value="Multi-Family">Multi-Family (2–4 units)</option>
+            <option value="Mobile Home">Mobile / Manufactured Home</option>
+          </optgroup>
+          <optgroup label="── LAND ──">
+            <option value="Vacant Land">Vacant Land / Lot</option>
+            <option value="Acreage">Acreage (5+ acres)</option>
+            <option value="Waterfront Land">Waterfront Land</option>
+          </optgroup>
+          <optgroup label="── COMMERCIAL ──">
+            <option value="Commercial">Commercial Building</option>
+            <option value="Industrial">Industrial / Warehouse</option>
+            <option value="Mixed Use">Mixed Use</option>
+          </optgroup>
         </select>
       </div>
     </div>
@@ -1151,6 +1178,42 @@ async function loadLeads() {
     ).join('') + `</div>`;
 }
 
+// ── EDIT MODAL COMMISSION HELPERS ──
+function elHandleCommSelect(val) {
+  const customInput = document.getElementById('el_commission_custom');
+  const hidden = document.getElementById('el_commission');
+  if (val === 'custom') {
+    customInput.style.display = 'block';
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    if (hidden) hidden.value = val;
+  }
+}
+
+function elSyncCustomComm(val) {
+  const hidden = document.getElementById('el_commission');
+  const clean = val.replace(/[^0-9.]/g,'');
+  if (clean && hidden) hidden.value = clean + '%';
+}
+
+// ── EDIT MODAL PROPERTY TYPE TOGGLE ──
+function elTogglePropertyType(val) {
+  const landTypes = ['Vacant Land','Acreage','Waterfront Land'];
+  const commTypes = ['Commercial','Industrial','Mixed Use'];
+  const isLand = landTypes.includes(val);
+  const isComm = commTypes.includes(val);
+  const sqftGroup = document.getElementById('el_sqft_group');
+  const acreageGroup = document.getElementById('el_acreage_group');
+  const bedsEl = document.getElementById('el_beds');
+  const bathsEl = document.getElementById('el_baths');
+  if (sqftGroup) sqftGroup.style.display = isLand ? 'none' : '';
+  if (acreageGroup) acreageGroup.style.display = isLand ? '' : 'none';
+  const hideBedBath = isLand || isComm;
+  if (bedsEl) bedsEl.closest('.form-group').style.display = hideBedBath ? 'none' : '';
+  if (bathsEl) bathsEl.closest('.form-group').style.display = hideBedBath ? 'none' : '';
+}
+
 // ── EDIT LISTING MODAL ──
 function openEditModal(listing) {
   currentListingForEdit = listing;
@@ -1162,11 +1225,29 @@ function openEditModal(listing) {
   document.getElementById('el_state').value = listing.state || '';
   document.getElementById('el_zip').value = listing.zip || '';
   document.getElementById('el_price').value = listing.price || '';
-  document.getElementById('el_commission').value = listing.commission_rate || '2.5%';
+
+  // Commission — handle custom values
+  const commVal = listing.commission_rate || '2.5%';
+  const commSelect = document.getElementById('el_commission_select');
+  const commHidden = document.getElementById('el_commission');
+  const commCustom = document.getElementById('el_commission_custom');
+  const knownValues = ['1%','1.5%','2%','2.4%','2.5%','2.75%','3%','3.5%','Negotiable'];
+  if (knownValues.includes(commVal)) {
+    commSelect.value = commVal;
+    commCustom.style.display = 'none';
+  } else {
+    commSelect.value = 'custom';
+    commCustom.style.display = 'block';
+    commCustom.value = commVal.replace('%','');
+  }
+  commHidden.value = commVal;
+
   document.getElementById('el_beds').value = listing.beds || '';
   document.getElementById('el_baths').value = listing.baths || '';
   document.getElementById('el_sqft').value = listing.sqft || '';
+  document.getElementById('el_acreage').value = listing.acreage || '';
   document.getElementById('el_type').value = listing.property_type || 'Single Family';
+  elTogglePropertyType(listing.property_type || 'Single Family');
   document.getElementById('el_desc').value = listing.description || '';
   document.getElementById('el_url').value = listing.website_url || '';
   document.getElementById('editErr').style.display = 'none';
@@ -1228,6 +1309,7 @@ async function saveEditListing() {
     beds: parseInt(document.getElementById('el_beds').value) || null,
     baths: parseFloat(document.getElementById('el_baths').value) || null,
     sqft: parseInt(document.getElementById('el_sqft').value) || null,
+    acreage: parseFloat(document.getElementById('el_acreage').value) || null,
     property_type: document.getElementById('el_type').value,
     description: document.getElementById('el_desc').value.trim() || null,
     website_url: document.getElementById('el_url').value.trim() || null,
