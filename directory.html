@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Browse GOZ agents on the Emerald Coast and Gulf South. Commission shown on every listing. Contact agents directly.">
+<meta name="description" content="Browse GOZ agents nationwide. Buyer's agent fee shown on every listing. Contact agents directly. No middlemen.">
 <meta property="og:title" content="Find an Agent — GOZ | GetOffZillow AI">
-<meta property="og:description" content="Browse licensed agents on GOZ. Commission shown publicly. Direct contact. Pensacola, Destin, Fort Walton, Gulf South.">
+<meta property="og:description" content="Browse licensed agents on GOZ. Buyer's agent fee shown publicly. Direct contact. All 50 states.">
 <meta property="og:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="GOZ — GetOffZillow AI">
@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0D0D0D;--cream:#F4F1EB;--cream2:#EAE6DC;--green:#00FF9D;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--white:#fff;--gray:#6B6B6B;--border:#D4CFC4}
+:root{--ink:#0D0D0D;--cream:#F4F1EB;--cream2:#EAE6DC;--green:#00FF9D;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--gold:#C9A84C;--white:#fff;--gray:#6B6B6B;--border:#D4CFC4}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -40,13 +40,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;display:block}
 .hero-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);line-height:0.9;color:white;letter-spacing:-0.5px;margin-bottom:14px}
 .hero-h1 .green{color:var(--green)}
-.hero-desc{font-size:16px;color:rgba(255,255,255,0.55);max-width:480px;line-height:1.6;font-weight:300;margin-bottom:32px}
+.hero-desc{font-size:16px;color:rgba(255,255,255,0.55);max-width:520px;line-height:1.6;font-weight:300;margin-bottom:32px}
 
-/* SEARCH + FILTER BAR */
+/* FILTER BAR */
 .filter-bar{background:white;border-bottom:1px solid var(--border);padding:16px 32px;position:sticky;top:60px;z-index:200}
 .filter-inner{max-width:1100px;margin:0 auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .search-wrap{flex:1;min-width:200px;max-width:340px;position:relative}
-.search-wrap input{width:100%;padding:9px 36px 9px 12px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;background:white;font-size:16px;-webkit-appearance:none}
+.search-wrap input{width:100%;padding:9px 36px 9px 12px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;background:white;-webkit-appearance:none}
 .search-wrap input:focus{border-color:var(--blue)}
 .search-wrap .ico{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:14px;pointer-events:none}
 .filter-select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;background:white;cursor:pointer;-webkit-appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
@@ -65,6 +65,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .agent-name{font-weight:600;font-size:16px;color:var(--ink);line-height:1.2}
 .agent-brokerage{font-size:12px;color:var(--gray);margin-top:3px;font-weight:300}
 .agent-market{font-size:11px;color:var(--blue);margin-top:4px;font-family:'Space Mono',monospace;letter-spacing:0.03em}
+
+/* GOZ APPROVED BADGE */
+.goz-approved{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#C9A84C,#E5C56B);color:white;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:0.05em;margin-top:6px;box-shadow:0 1px 4px rgba(201,168,76,0.35)}
+
 .agent-card-bottom{padding:12px 16px;display:flex;gap:10px;justify-content:space-between;align-items:center;background:var(--cream)}
 .agent-stat{text-align:center}
 .agent-stat-num{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ink);line-height:1}
@@ -85,7 +89,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .empty-state .icon{font-size:48px;margin-bottom:16px;display:block}
 .empty-state h3{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--ink);margin-bottom:8px}
 
-/* ARE YOU AN AGENT BANNER */
+/* AGENT CTA BAND */
 .agent-cta-band{background:var(--ink);margin:0 32px 40px;border-radius:14px;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
 .agent-cta-band h3{font-family:'Bebas Neue',sans-serif;font-size:26px;color:white;letter-spacing:0.04em}
 .agent-cta-band p{font-size:14px;color:rgba(255,255,255,0.55);margin-top:4px;font-weight:300}
@@ -132,13 +136,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
     <a href="agents.html" class="nav-link">For Agents</a>
     <a href="signup.html" class="btn-green">List Free →</a>
   </div>
-
   <button class="hamburger" id="mobileHamburger" onclick="toggleMobileNav()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- MOBILE NAV -->
 <nav class="mobile-nav" id="mobileNav">
   <a href="index.html">🏠 Home</a>
   <a href="buyers.html">🔍 Browse Listings</a>
@@ -147,20 +149,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   <a href="signup.html" class="mob-cta">List Free →</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <span class="eyebrow">Gulf South · Emerald Coast</span>
+    <span class="eyebrow">Licensed Agents · All 50 States</span>
     <h1 class="hero-h1">Find a <span class="green">GOZ</span><br>Agent Near You.</h1>
-    <p class="hero-desc">Every agent below lists properties free and charges 3% of commission at closing — not 3% of the sale price. Contact them directly, no middlemen.</p>
+    <p class="hero-desc">Every agent below lists properties free and pays GOZ 3% of their commission at closing — not 3% of the sale price. Contact them directly. No middlemen, no lead auctions.</p>
   </div>
 </section>
 
-<!-- FILTER BAR -->
 <div class="filter-bar">
   <div class="filter-inner">
     <div class="search-wrap">
-      <input type="text" id="agentSearch" placeholder="Search by name or brokerage..." oninput="filterAgents()" >
+      <input type="text" id="agentSearch" placeholder="Search by name or brokerage..." oninput="filterAgents()">
       <span class="ico">🔍</span>
     </div>
     <select class="filter-select" id="marketFilter" onchange="filterAgents()">
@@ -169,19 +169,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
       <option value="AL">Alabama</option>
       <option value="GA">Georgia</option>
       <option value="TN">Tennessee</option>
+      <option value="TX">Texas</option>
+      <option value="NC">North Carolina</option>
+      <option value="SC">South Carolina</option>
+      <option value="VA">Virginia</option>
+      <option value="CO">Colorado</option>
     </select>
-    <select class="filter-select" id="commissionFilter" onchange="filterAgents()">
-      <option value="">All Rates</option>
-      <option value="2%">2%</option>
-      <option value="2.5%">2.5%</option>
-      <option value="2.75%">2.75%</option>
-      <option value="3%">3%</option>
+    <select class="filter-select" id="verifiedFilter" onchange="filterAgents()">
+      <option value="">All Agents</option>
+      <option value="verified">★ GOZ Approved Only</option>
     </select>
     <div class="filter-count" id="filterCount"></div>
   </div>
 </div>
 
-<!-- AGENT GRID -->
 <div class="directory-section">
   <div class="agent-grid" id="agentGrid">
     <div class="skeleton-card"><div class="skeleton-avi"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div style="height:40px;margin:12px 16px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:7px"></div></div>
@@ -191,19 +192,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   </div>
 </div>
 
-<!-- ARE YOU AN AGENT BANNER -->
 <div style="max-width:1100px;margin:0 auto">
   <div class="agent-cta-band">
     <div>
       <h3>Are You a Licensed Agent?</h3>
-      <p>List free. Pay 3% of your commission only when a GOZ buyer closes with you.</p>
+      <p>List free. Pay 3% of your commission only when a GOZ buyer closes with you. $300 on a $10K commission.</p>
     </div>
     <a href="agents.html" class="btn-green" style="white-space:nowrap;padding:13px 28px;font-size:14px">Join GOZ — Free →</a>
   </div>
 </div>
 
 <div class="footer-simple">
-  <div>© 2026 GOZ · GetOffZillow AI · TransBid LLC · Pensacola FL</div>
+  <div>© 2026 GOZ · GetOffZillow AI · TransBid LLC · Pensacola FL · Open to agents in all 50 states</div>
   <div style="display:flex;gap:20px">
     <a href="index.html">Home</a>
     <a href="buyers.html">Buy</a>
@@ -228,29 +228,26 @@ async function loadAgents() {
   try {
     const { data, error } = await sb
       .from('agents')
-      .select('id, first_name, last_name, photo_url, brokerage, state, commission_rate, markets_served, bio, created_at, license_number')
+      .select('id, first_name, last_name, photo_url, brokerage, state, commission_rate, markets_served, bio, created_at, license_number, verified, approved')
+      .eq('approved', true)   // ← only show approved agents
       .order('created_at', { ascending: false });
 
     if (error) throw error;
 
-    // Filter out test/incomplete accounts
     const raw = data || [];
+
+    // Filter out test/incomplete accounts as a safety net
     allAgents = raw.filter(a => {
       const first = (a.first_name || '').trim();
       const last  = (a.last_name  || '').trim();
       const name  = (first + ' ' + last).toLowerCase();
-      // Must have both first and last name
       if (!first || !last) return false;
-      // Name can't be all same character (ZZZZZZZZ etc)
-      if (/^(.)+$/.test(first) || /^(.)+$/.test(last)) return false;
-      // Name can't contain "test" or be obviously fake
+      if (/^(.)\1+$/.test(first) || /^(.)\1+$/.test(last)) return false;
       if (name.includes('test') || name.includes('fake') || name.includes('demo')) return false;
-      // Must have brokerage OR license_number (shows they filled out profile)
-      if (!a.brokerage && !a.license_number) return false;
       return true;
     });
 
-    // Get listing counts per agent
+    // Get listing counts for approved agents only
     if (allAgents.length > 0) {
       const { data: listings } = await sb
         .from('listings')
@@ -295,7 +292,12 @@ function renderAgents(agents) {
     const listingCount = listingCounts[a.id] || 0;
     const market = a.markets_served
       ? a.markets_served.split(',')[0].trim()
-      : (a.state || 'Gulf South');
+      : (a.state || 'Nationwide');
+
+    // GOZ Approved badge — only if verified = true in database
+    const approvedBadge = a.verified
+      ? `<span class="goz-approved">★ GOZ Approved</span>`
+      : '';
 
     return `<a href="agent.html?id=${a.id}" class="agent-card">
       <div class="agent-card-top">
@@ -303,6 +305,7 @@ function renderAgents(agents) {
         <div class="agent-name">${a.first_name} ${a.last_name}</div>
         ${a.brokerage ? `<div class="agent-brokerage">${a.brokerage}</div>` : ''}
         <div class="agent-market">📍 ${market}</div>
+        ${approvedBadge}
       </div>
       <div class="agent-card-bottom">
         <div class="agent-stat">
@@ -311,8 +314,8 @@ function renderAgents(agents) {
         </div>
         <div class="agent-commission">${a.commission_rate || '2.5%'}</div>
         <div class="agent-stat">
-          <div class="agent-stat-num">GOZ</div>
-          <div class="agent-stat-label">Verified</div>
+          <div class="agent-stat-num" style="font-size:13px;font-family:'DM Sans',sans-serif;font-weight:600">GOZ</div>
+          <div class="agent-stat-label">Agent</div>
         </div>
       </div>
       <span class="agent-card-cta">View Profile & Listings →</span>
@@ -323,15 +326,15 @@ function renderAgents(agents) {
 function filterAgents() {
   const q = document.getElementById('agentSearch').value.toLowerCase().trim();
   const market = document.getElementById('marketFilter').value;
-  const commission = document.getElementById('commissionFilter').value;
+  const verifiedOnly = document.getElementById('verifiedFilter').value === 'verified';
 
   const filtered = allAgents.filter(a => {
     const name = `${a.first_name} ${a.last_name}`.toLowerCase();
     const brok = (a.brokerage || '').toLowerCase();
     const matchSearch = !q || name.includes(q) || brok.includes(q);
     const matchMarket = !market || a.state === market;
-    const matchCommission = !commission || a.commission_rate === commission;
-    return matchSearch && matchMarket && matchCommission;
+    const matchVerified = !verifiedOnly || a.verified === true;
+    return matchSearch && matchMarket && matchVerified;
   });
 
   renderAgents(filtered);
@@ -363,31 +366,6 @@ document.addEventListener('click', e => {
     document.body.style.overflow = '';
   }
 });
-
-async function initNavAuth() {
-  try {
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) return;
-    const navUl = document.querySelector('.nav-links') || document.querySelector('ul.nav-links');
-    if (!navUl) return;
-    const agentName = localStorage.getItem('goz_name') || session.user.email.split('@')[0];
-    const signInEl = navUl.querySelector('.nav-btn-outline');
-    const listEl   = navUl.querySelector('.nav-btn-green');
-    if (signInEl) {
-      signInEl.href = 'dashboard.html';
-      signInEl.textContent = agentName;
-    }
-    if (listEl) {
-      listEl.href = '#';
-      listEl.textContent = 'Sign Out';
-      listEl.onclick = (e) => { e.preventDefault(); sb.auth.signOut().then(() => location.reload()); };
-    }
-    // Mobile menu CTA
-    const mobCta = document.querySelector('.mob-cta');
-    if (mobCta) { mobCta.href = 'dashboard.html'; mobCta.textContent = 'Go to Dashboard →'; }
-  } catch(e) { console.warn('initNavAuth:', e); }
-}
-initNavAuth();
 </script>
 </body>
 </html>
