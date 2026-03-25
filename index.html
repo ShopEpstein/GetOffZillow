@@ -389,8 +389,7 @@
     <span class="search-ico">🔍</span>
   </div>
   <ul class="header-nav">
-    <li><a href="#listings">Buy</a></li>
-    <li><a href="buyers.html">For Buyers</a></li>
+    <li><a href="buyers.html">Browse Homes</a></li>
     <li><a href="agents.html">For Agents</a></li>
     <li><a href="directory.html">Find an Agent</a></li>
     <li style="margin-left:8px"><a href="signup.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Sign In</a></li>
@@ -403,8 +402,7 @@
 
 <!-- MOBILE MENU -->
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="#listings" onclick="closeMobileMenu()">🏠 Browse Listings</a>
-  <a href="buyers.html" onclick="closeMobileMenu()">🔍 For Buyers</a>
+  <a href="buyers.html" onclick="closeMobileMenu()">🔍 Browse Homes</a>
   <a href="agents.html" onclick="closeMobileMenu()">🤝 For Agents</a>
   <a href="directory.html" onclick="closeMobileMenu()">👤 Find an Agent</a>
   <a href="signup.html" onclick="closeMobileMenu()">💰 Sell / List Free</a>
@@ -455,7 +453,7 @@
       Zillow hides what sellers offer your agent. We show it — on every listing, before you tour. Free for buyers. Always.
     </p>
     <div class="hero-tabs">
-      <div class="hero-tab active" onclick="window.location.href='buyers.html'">🏠 Buy</div>
+      <div class="hero-tab active" onclick="window.location.href='buyers.html'">🏠 Browse Homes</div>
       <div class="hero-tab" onclick="window.location.href='signup.html'">💰 Sell</div>
       <div class="hero-tab" onclick="window.location.href='agents.html'">🤝 Agents</div>
     </div>
@@ -480,8 +478,8 @@
 <!-- FEE BATTLE -->
 <section class="fee-battle" id="compare">
   <div class="section-eyebrow">Fee Comparison</div>
-  <h2 class="section-title">Understand <span class="accent">What You're Paying.</span><br>Then Decide.</h2>
-  <p class="section-sub">Most platforms charge a percentage of your commission when a deal closes. Here's how the fees compare across the major options.</p>
+  <h2 class="section-title">What Platforms Take.<br><span class="accent">What You Keep.</span></h2>
+  <p class="section-sub">Every platform in this space charges agents a percentage of commission when a deal closes. Here's exactly how they compare.</p>
   <table class="fee-table">
     <thead>
       <tr>
@@ -681,7 +679,7 @@
         <div class="feature-icon teal">📞</div>
         <div class="feature-content">
           <div class="feature-title">Direct Agent Contact</div>
-          <div class="feature-desc">Buyers get the agent's real phone and email immediately. No lead tax, no middleman, no platform sitting between them.</div>
+          <div class="feature-desc">Your message goes to one agent — their real phone and email. No lead distribution, no lender-referred agent who's optimizing for someone else's deal, no platform sitting between you.</div>
           <div class="feature-tag">✓ Live now</div>
         </div>
       </div>
@@ -871,6 +869,11 @@
     <div class="section-eyebrow">Common Questions</div>
     <h2 class="section-title">FAQ</h2>
     <div style="margin-top:40px;display:flex;flex-direction:column;gap:0" id="faqList">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">If I'm a buyer, can I see what the seller is offering before I make an offer?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Yes — that's the whole point. Every GOZ listing shows the seller's offered buyer's agent commission before you contact anyone. This matters because since August 2024, you must sign a buyer's agent agreement before touring homes, locking in a rate. If the seller is offering less than your agent's rate, you may owe the difference at closing. Seeing this number upfront — before you're emotionally invested in a house — is information Zillow and most platforms still don't show you.</div>
+      </div>
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">Does GOZ cost anything for buyers?<span class="faq-arrow">▾</span></button>
