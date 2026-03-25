@@ -5,19 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpolyline points='38,19 42,22' fill='none' stroke='%23E8341C' stroke-width='2.2' stroke-linecap='round' opacity='0.9'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3Crect x='4' y='23.5' width='38' height='2' fill='%23E8341C' opacity='0.25'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Crect width='46' height='46' rx='10' fill='%23111'/%3E%3Cpolyline points='4,22 23,5 38,19' fill='none' stroke='%2300FF9D' stroke-width='2.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cline x1='8' y1='22' x2='8' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Cline x1='8' y1='40' x2='37' y2='40' stroke='%2300FF9D' stroke-width='2.8' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%23111' stroke='%2300FF9D' stroke-width='1.8'/%3E%3Ccircle cx='23' cy='30' r='1.2' fill='%2300FF9D'/%3E%3C/svg%3E">
-<meta name="description" content="Zillow hides what the seller is offering your agent. GOZ shows it on every listing — before you tour, before you fall in love. Free for buyers. Always.">
-<meta property="og:title" content="GetOffZillow AI — See What Zillow Hides">
-<meta property="og:description" content="Since Aug 2024, buyers must sign agent agreements before touring. Zillow still hides what sellers offer. GOZ shows it on every listing. Free for buyers.">
+<meta name="description" content="GetOffZillow AI — See what sellers offer your agent before you tour. Free for buyers. Free listings for agents. 3% at closing only. Real estate without the extraction.">
+<meta property="og:title" content="GetOffZillow AI — Real Estate Without The Extraction">
+<meta property="og:description" content="Zillow hides what sellers offer your agent. We show it on every listing — before you tour. Free for buyers. Free listings. 3% at closing only.">
 <meta property="og:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 <meta property="og:url" content="https://getoffzillow.com">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="GetOffZillow AI — See What Zillow Hides">
-<meta name="twitter:description" content="Zillow still hides what sellers offer your agent. GOZ shows it on every listing. Free for buyers. Always.">
+<meta name="twitter:title" content="GetOffZillow AI — Real Estate Without The Extraction">
+<meta name="twitter:description" content="See what sellers offer your agent before you tour. Free for buyers always. Agents pay 3% at closing only. No middlemen.">
 <meta name="twitter:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 <title>GetOffZillow AI — Real Estate. No Extraction.</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   :root {
     --blue: #006AFF; --dark-blue: #0050CC; --teal: #00B2A9; --navy: #0a1f44;
@@ -197,15 +196,33 @@
   .map-layout { display:grid; grid-template-columns:360px 1fr; gap:20px; min-height:500px; margin-top:40px; }
   .map-sidebar { background:white; border-radius:12px; overflow:hidden; box-shadow:0 1px 8px rgba(0,0,0,0.08); display:flex; flex-direction:column; }
   .map-sidebar-header { padding:14px 16px; background:var(--blue); color:white; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; display:flex; align-items:center; justify-content:space-between; }
-  #gozMap { border-radius:12px; overflow:hidden; box-shadow:0 1px 8px rgba(0,0,0,0.08); min-height:500px; z-index:1; }
-  .goz-map-pin { background:var(--blue); color:white; border:none; border-radius:6px; padding:5px 10px; font-family:'Nunito',sans-serif; font-weight:900; font-size:12px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.25); white-space:nowrap; }
-  .goz-map-pin::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:var(--blue); border-bottom:none; }
-  .goz-map-pin.low { background:var(--green); color:#111; }
-  .goz-map-pin.low::after { border-top-color:var(--green); }
-  .leaflet-popup-content { font-family:'Nunito Sans',sans-serif; font-size:13px; line-height:1.5; min-width:180px; }
-  .leaflet-popup-content strong { font-size:15px; display:block; margin-bottom:3px; }
-  .leaflet-popup-content .pop-comm { color:var(--green-dark); font-weight:700; font-size:11px; margin-top:4px; }
-  .leaflet-popup-content a { display:block; margin-top:8px; background:var(--blue); color:white; text-align:center; padding:7px; border-radius:6px; text-decoration:none; font-weight:700; font-size:12px; }
+  .map-filters { display:flex; gap:8px; padding:10px 12px; flex-wrap:wrap; border-bottom:1px solid var(--border); }
+  .mf-chip { padding:5px 12px; border:1.5px solid var(--border); border-radius:16px; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.15s; background:white; }
+  .mf-chip.active,.mf-chip:hover { background:var(--blue); color:white; border-color:var(--blue); }
+  .map-list { overflow-y:auto; flex:1; }
+  .map-list-item { display:flex; gap:12px; padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.15s; }
+  .map-list-item:hover { background:var(--bg); }
+  .map-thumb { width:76px; height:62px; border-radius:6px; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+  .mli-price { font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; }
+  .mli-addr { font-size:12px; color:var(--gray); margin-top:1px; }
+  .mli-specs { font-size:11px; color:var(--gray); margin-top:4px; }
+  .mli-commission { font-size:11px; color:var(--green); font-weight:700; margin-top:3px; }
+  .fake-map { background:#dce8f5; border-radius:12px; position:relative; overflow:hidden; box-shadow:0 1px 8px rgba(0,0,0,0.08); }
+  .map-grid-lines { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.6) 1px,transparent 1px); background-size:44px 44px; }
+  .fake-road { position:absolute; background:rgba(255,255,255,0.85); border-radius:3px; }
+  .road-h { left:0; right:0; height:7px; }
+  .road-v { top:0; bottom:0; width:7px; }
+  .map-pin { position:absolute; background:var(--blue); color:white; font-family:'Nunito',sans-serif; font-weight:900; font-size:11px; padding:5px 10px; border-radius:5px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.2); transition:transform 0.2s; }
+  .map-pin::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:var(--blue); border-bottom:none; }
+  .map-pin:hover { transform:scale(1.1) translateY(-2px); }
+  .map-pin.low { background:var(--green); }
+  .map-pin.low::after { border-top-color:var(--green); }
+  .map-pin.hot { background:var(--goz-accent); }
+  .map-pin.hot::after { border-top-color:var(--goz-accent); }
+  .map-legend { position:absolute; bottom:16px; right:16px; background:rgba(255,255,255,0.95); border-radius:8px; padding:10px 14px; font-size:11px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+  .map-legend-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+  .map-legend-row:last-child { margin-bottom:0; }
+  .legend-dot { width:10px; height:10px; border-radius:2px; }
 
   /* AGENT SIGNUP SECTION */
   .agent-section { background:#EBF3FF; padding:80px 24px; }
@@ -238,6 +255,17 @@
   .calc-result { background:rgba(0,200,83,0.12); border:1px solid rgba(0,200,83,0.3); border-radius:10px; padding:20px; text-align:center; margin-top:16px; display:none; }
   .calc-result .result-amount { font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--green); line-height:1; }
   .calc-result .result-label { font-size:12px; color:rgba(255,255,255,0.6); margin-top:4px; }
+
+  /* REVIEWS */
+  .social-section { padding:80px 24px; max-width:1100px; margin:0 auto; }
+  .reviews-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+  .review-card { background:white; border-radius:12px; padding:24px; box-shadow:0 1px 6px rgba(0,0,0,0.07); }
+  .review-stars { color:var(--yellow); font-size:16px; margin-bottom:10px; }
+  .review-text { font-size:14px; color:var(--text); line-height:1.6; margin-bottom:14px; font-style:italic; }
+  .review-author { display:flex; align-items:center; gap:10px; }
+  .review-avatar { width:36px; height:36px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .review-name { font-weight:700; font-size:13px; }
+  .review-meta { font-size:11px; color:var(--gray); }
 
   /* FINAL CTA */
   .final-cta { background:var(--goz-accent); padding:100px 24px; text-align:center; position:relative; overflow:hidden; }
@@ -276,9 +304,10 @@
   @media(max-width:1024px) {
     .listings-grid { grid-template-columns:repeat(2,1fr); }
     .map-layout { grid-template-columns:1fr; }
-    #gozMap { min-height:300px; }
+    .fake-map { min-height:300px; }
     .referral-grid,.agent-inner,.mortgage-inner { grid-template-columns:1fr; gap:32px; }
     .steps-grid { grid-template-columns:repeat(2,1fr); }
+    .reviews-grid { grid-template-columns:1fr 1fr; }
     .footer-top { grid-template-columns:1fr 1fr 1fr; }
     .features-grid { grid-template-columns:1fr 1fr; }
   }
@@ -302,6 +331,7 @@
     .hamburger { display:flex; margin-left:auto; }
     .listings-grid { grid-template-columns:1fr 1fr; }
     .steps-grid { grid-template-columns:1fr; }
+    .reviews-grid { grid-template-columns:1fr; }
     .footer-top { grid-template-columns:1fr 1fr; }
     .features-grid { grid-template-columns:1fr; }
     .fee-table { font-size:12px; }
@@ -332,7 +362,70 @@
     .fee-table th:nth-child(5), .fee-table td:nth-child(5) { display:none; }
   }
 
-  /* FAQ */
+  /* BUYER SECTION */
+  .buyer-section { background:white; padding:80px 24px; border-top:4px solid var(--ai-green); }
+  .buyer-inner { max-width:1100px; margin:0 auto; }
+  .buyer-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; margin-top:48px; }
+  .buyer-card { background:var(--bg); border-radius:12px; padding:28px; border-left:4px solid var(--ai-green); }
+  .buyer-card h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:17px; margin-bottom:10px; }
+  .buyer-card p { font-size:13px; color:var(--gray); line-height:1.7; }
+  .buyer-card .tag { display:inline-flex; background:#E8FBF0; color:var(--green); font-size:11px; font-weight:800; padding:3px 9px; border-radius:4px; margin-top:10px; text-transform:uppercase; letter-spacing:0.5px; }
+  .buyer-steps { display:flex; flex-direction:column; gap:16px; }
+  .buyer-step { display:flex; gap:16px; align-items:flex-start; }
+  .buyer-step-num { width:32px; height:32px; background:var(--goz-black); color:var(--ai-green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:16px; flex-shrink:0; }
+  .buyer-step-body h4 { font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; margin-bottom:4px; }
+  .buyer-step-body p { font-size:13px; color:var(--gray); line-height:1.6; }
+  .buyer-cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:32px; }
+
+  /* SANCTUARY SECTION */
+  .sanctuary-section { background:var(--goz-black); padding:72px 24px; color:white; }
+  .sanctuary-inner { max-width:900px; margin:0 auto; text-align:center; }
+  .sanctuary-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,64px); line-height:0.95; margin-bottom:20px; }
+  .sanctuary-title .green { color:var(--ai-green); }
+  .sanctuary-desc { font-size:15px; color:rgba(255,255,255,0.72); line-height:1.7; max-width:660px; margin:0 auto 36px; }
+  .sanctuary-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; text-align:left; margin-top:40px; }
+  .sanctuary-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:24px; }
+  .sanctuary-card .icon { font-size:28px; margin-bottom:12px; display:block; }
+  .sanctuary-card h4 { font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; color:white; margin-bottom:6px; }
+  .sanctuary-card p { font-size:12px; color:rgba(255,255,255,0.55); line-height:1.6; }
+
+  /* FSBO SECTION */
+  .fsbo-band { background:#EBF3FF; padding:56px 24px; }
+  .fsbo-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+  .fsbo-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(32px,4vw,52px); line-height:0.95; margin-bottom:14px; }
+  .fsbo-title .blue { color:var(--blue); }
+  .fsbo-desc { font-size:14px; color:var(--gray); line-height:1.7; margin-bottom:20px; }
+  .fsbo-card { background:white; border-radius:12px; padding:32px; box-shadow:0 2px 16px rgba(0,0,0,0.08); }
+  .fsbo-card h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; margin-bottom:8px; }
+  .fsbo-card p { font-size:13px; color:var(--gray); line-height:1.6; margin-bottom:16px; }
+  .fsbo-price { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--blue); line-height:1; }
+  .fsbo-price-label { font-size:12px; color:var(--gray); margin-bottom:16px; }
+
+  /* TRANSBID SECTION */
+  .transbid-section { background:linear-gradient(135deg,#0a1f44 0%,#051535 100%); padding:72px 24px; color:white; }
+  .transbid-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+  .transbid-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(32px,4vw,56px); line-height:0.95; margin-bottom:16px; }
+  .transbid-title .yellow { color:var(--yellow); }
+  .transbid-desc { font-size:14px; color:rgba(255,255,255,0.72); line-height:1.7; margin-bottom:20px; }
+  .transbid-bullets { list-style:none; margin-bottom:28px; }
+  .transbid-bullets li { display:flex; align-items:flex-start; gap:10px; font-size:13px; margin-bottom:10px; line-height:1.5; color:rgba(255,255,255,0.8); }
+  .transbid-bullets li::before { content:'✓'; color:var(--ai-green); font-weight:900; flex-shrink:0; }
+  .transbid-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:32px; }
+  .transbid-card h3 { font-family:'Nunito',sans-serif; font-weight:900; font-size:18px; color:white; margin-bottom:10px; }
+  .transbid-card p { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.6; margin-bottom:20px; }
+  .transbid-examples { display:flex; flex-direction:column; gap:10px; }
+  .transbid-example { background:rgba(255,255,255,0.05); border-radius:8px; padding:12px 16px; font-size:12px; color:rgba(255,255,255,0.65); display:flex; justify-content:space-between; align-items:center; }
+  .transbid-example .ex-label { font-weight:700; color:rgba(255,255,255,0.85); }
+
+  @media(max-width:1024px) {
+    .buyer-grid { grid-template-columns:1fr; }
+    .fsbo-inner { grid-template-columns:1fr; }
+    .transbid-inner { grid-template-columns:1fr; }
+    .sanctuary-cards { grid-template-columns:1fr 1fr; }
+  }
+  @media(max-width:768px) {
+    .sanctuary-cards { grid-template-columns:1fr; }
+  }
   .faq-item { border-bottom:1px solid var(--border); }
   .faq-q { width:100%; text-align:left; padding:18px 0; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px; background:none; border:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; color:var(--text); }
   .faq-q:hover { color:var(--blue); }
@@ -358,13 +451,34 @@
 
 <!-- HEADER -->
 <header>
-  <a href="index.html" class="logo" style="text-decoration:none;display:flex;align-items:center;gap:10px;flex-shrink:0">
-    <div style="width:32px;height:32px;background:#111;border-radius:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #00FF9D">
-      <svg width="20" height="20" viewBox="0 0 46 46" fill="none"><polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/><line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round"/><circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/><circle cx="23" cy="30" r="1.2" fill="#00FF9D"/></svg>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">
+      <svg width="26" height="26" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><filter id="glnav"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <polyline points="4,22 23,5 38,19" fill="none" stroke="#00FF9D" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#glnav)"/>
+        <polyline points="38,19 42,22" fill="none" stroke="#E8341C" stroke-width="2.2" stroke-linecap="round" opacity="0.9"/>
+        <line x1="8" y1="22" x2="8" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" filter="url(#glnav)"/>
+        <line x1="38" y1="22" x2="38" y2="32" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" opacity="0.7"/>
+        <polyline points="38,32 41,37 37,40" fill="none" stroke="#00FF9D" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="8" y1="40" x2="37" y2="40" stroke="#00FF9D" stroke-width="2.8" stroke-linecap="round" filter="url(#glnav)"/>
+        <line x1="14" y1="27" x2="32" y2="27" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+        <line x1="14" y1="33" x2="32" y2="33" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+        <line x1="20" y1="27" x2="20" y2="33" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+        <line x1="26" y1="27" x2="26" y2="33" stroke="#00FF9D" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="20" cy="27" r="2.2" fill="#00FF9D" filter="url(#glnav)"/>
+        <circle cx="26" cy="27" r="2.2" fill="#00FF9D" filter="url(#glnav)"/>
+        <circle cx="23" cy="30" r="3" fill="#111" stroke="#00FF9D" stroke-width="1.8"/>
+        <circle cx="23" cy="30" r="1.2" fill="#00FF9D"/>
+        <rect x="4" y="23.5" width="38" height="2" fill="#E8341C" opacity="0.15"/>
+      </svg>
     </div>
-    <div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.12em;color:#00FF9D;line-height:1">GOZ</div>
-      <div style="font-size:10px;color:rgba(255,255,255,0.3);font-family:'Space Mono',monospace;line-height:1">GetOffZillow AI</div>
+    <div class="logo-wordmark">
+      <div class="logo-getoff">GET OFF</div>
+      <div class="logo-zillow-row">
+        <span class="logo-zillow">ZILLOW</span>
+        <span class="logo-x">✕</span>
+      </div>
+      <div class="logo-ai-badge">AI</div>
     </div>
   </a>
   <div class="header-search">
@@ -372,9 +486,10 @@
     <span class="search-ico">🔍</span>
   </div>
   <ul class="header-nav">
-    <li><a href="buyers.html">Browse Homes</a></li>
-    <li><a href="agents.html">For Agents</a></li>
-    <li><a href="directory.html">Find an Agent</a></li>
+    <li><a href="#listings">Buy</a></li>
+    <li><a href="#buyers">No Agent?</a></li>
+    <li><a href="signup.html">Sell / List Free</a></li>
+    <li><a href="#agents">For Agents</a></li>
     <li style="margin-left:8px"><a href="signup.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Sign In</a></li>
     <li style="margin-left:6px"><a href="signup.html" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">List Free</a></li>
   </ul>
@@ -383,15 +498,16 @@
   </button>
 </header>
 
-<!-- MOBILE MENU -->
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="buyers.html" onclick="closeMobileMenu()">🔍 Browse Homes</a>
-  <a href="agents.html" onclick="closeMobileMenu()">🤝 For Agents</a>
-  <a href="directory.html" onclick="closeMobileMenu()">👤 Find an Agent</a>
-  <a href="signup.html" onclick="closeMobileMenu()">💰 Sell / List Free</a>
+  <a href="#listings">🏠 Buy a Home</a>
+  <a href="#buyers" onclick="closeMobileMenu()">🤝 Buying Without an Agent</a>
+  <a href="signup.html">💰 Sell / List Free</a>
+  <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — $49 Flat Fee</a>
+  <a href="#agents" onclick="closeMobileMenu()">🏷️ For Agents — 3% at close</a>
   <a href="signup.html">📊 My Dashboard</a>
   <a href="#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
-  <a href="signup.html" class="mob-cta">List Free →</a>
+  <a href="https://transbid.live" target="_blank">🔨 Contractor Bids — TransBid</a>
+  <a href="signup.html" class="mob-cta">List Free — Lock In 3% →</a>
   <div style="text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
     <a href="signup.html" style="color:rgba(255,255,255,0.5);font-size:13px;border:none">Already have an account? Sign in →</a>
   </div>
@@ -430,15 +546,16 @@
       <div class="hero-logo-ai-row">
         <div class="hero-logo-ai-badge">AI</div>
       </div>
-      <div class="hero-logo-tagline">Real Estate Without The Extraction</div>
+      <div class="hero-logo-tagline">Real Estate Intelligence — No Middlemen</div>
     </div>
     <p class="hero-sub">
-      Zillow hides what sellers offer your agent. We show it — on every listing, before you tour. Free for buyers. Always.
+      Zillow hides what sellers offer your agent. We show it on every listing — before you tour, before you fall in love. Free for buyers, always. No buyer's agent required.
     </p>
     <div class="hero-tabs">
-      <div class="hero-tab active" onclick="window.location.href='buyers.html'">🏠 Browse Homes</div>
-      <div class="hero-tab" onclick="window.location.href='signup.html'">💰 Sell</div>
-      <div class="hero-tab" onclick="window.location.href='agents.html'">🤝 Agents</div>
+      <div class="hero-tab active" onclick="setHeroTab(this,'buy')">🏠 Buy</div>
+      <div class="hero-tab" onclick="setHeroTab(this,'noagent')">🤝 No Agent? No Problem</div>
+      <div class="hero-tab" onclick="setHeroTab(this,'sell')">💰 Sell / FSBO</div>
+      <div class="hero-tab" onclick="setHeroTab(this,'agent')">📋 Agents</div>
     </div>
     <div class="hero-search">
       <input id="heroSearchInput" type="text" placeholder="Enter city, ZIP, or address..." />
@@ -447,7 +564,7 @@
     <div class="hero-trust">
       <div class="trust-item"><span class="trust-check">✓</span> Free for buyers — always</div>
       <div class="trust-item"><span class="trust-check">✓</span> Seller's offer shown before you tour</div>
-      <div class="trust-item"><span class="trust-check">✓</span> Agents pay $300 on a $10K deal</div>
+      <div class="trust-item"><span class="trust-check">✓</span> No buyer's agent required</div>
       <div class="trust-item"><span class="trust-check">✓</span> Zero data sold</div>
     </div>
   </div>
@@ -461,8 +578,8 @@
 <!-- FEE BATTLE -->
 <section class="fee-battle" id="compare">
   <div class="section-eyebrow">Fee Comparison</div>
-  <h2 class="section-title">What Platforms Take.<br><span class="accent">What You Keep.</span></h2>
-  <p class="section-sub">Every platform in this space charges agents a percentage of commission when a deal closes. Here's exactly how they compare.</p>
+  <h2 class="section-title">Understand <span class="accent">What You're Paying.</span><br>Then Decide.</h2>
+  <p class="section-sub">Most platforms charge a percentage of your commission when a deal closes. Here's how the fees compare across the major options.</p>
   <table class="fee-table">
     <thead>
       <tr>
@@ -519,35 +636,6 @@
     </tbody>
   </table>
   <p style="font-size:11px;color:var(--gray);margin-top:12px;font-style:italic">Sources: Agent Pronto, Zillow Help Center, The Close, RealEstateWitch.com. Rates as of early 2026.</p>
-</section>
-
-<!-- ZILLOW FACTS CALLOUT -->
-<section style="background:#0D0D0D;padding:48px 24px;border-top:1px solid rgba(0,255,157,0.1);border-bottom:1px solid rgba(0,255,157,0.1)">
-  <div style="max-width:1100px;margin:0 auto">
-    <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:20px">What Zillow Won't Tell You</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden">
-      <div style="background:#0D0D0D;padding:22px 20px">
-        <div style="font-size:18px;margin-bottom:8px">🙈</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;font-weight:500">They hide what sellers offer your agent. You find out at closing.</div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;font-family:'Space Mono',monospace">GOZ shows it on every card</div>
-      </div>
-      <div style="background:#0D0D0D;padding:22px 20px">
-        <div style="font-size:18px;margin-bottom:8px">⚖️</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;font-weight:500">FTC sued Zillow &amp; Redfin in 2025 for allegedly suppressing rental ad competition.</div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;font-family:'Space Mono',monospace">Source: FTC.gov</div>
-      </div>
-      <div style="background:#0D0D0D;padding:22px 20px">
-        <div style="font-size:18px;margin-bottom:8px">🏦</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;font-weight:500">Class-action alleges Premier Agent steers buyers toward Zillow-affiliated lenders.</div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;font-family:'Space Mono',monospace">Source: Hagens Berman, 2024</div>
-      </div>
-      <div style="background:#0D0D0D;padding:22px 20px">
-        <div style="font-size:18px;margin-bottom:8px">🌊</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;font-weight:500">Removed wildfire &amp; flood risk data after sellers complained it hurt home values.</div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px;font-family:'Space Mono',monospace">Source: Grist, 2024</div>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- LISTINGS -->
@@ -630,7 +718,175 @@
       <span class="step-num">04</span>
       <span class="step-icon">🎉</span>
       <h3>You Close. We Take 3%.</h3>
-      <p>Deal closes, you report it in your dashboard and pay GOZ $300 on a $10,000 commission via Venmo or Zelle. You keep $9,700. That's it.</p>
+      <p>Deal closes, you pay GOZ AI 3% of your gross commission. On a $10,000 commission, you pay $300. You keep $9,700. That's it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BUYER SECTION — FOR PEOPLE WHO DON'T WANT OR NEED AN AGENT -->
+<section class="buyer-section" id="buyers">
+  <div class="buyer-inner">
+    <div class="section-eyebrow">For Home Buyers</div>
+    <h2 class="section-title">You Don't Need A<br><span class="blue">Buyer's Agent.</span></h2>
+    <p class="section-sub">Since the August 2024 NAR settlement, buyers must sign a commission agreement <em>before</em> touring a home — locking in a rate before you know if you even like the place. On GOZ, you see what the seller is offering before you tour, before you sign anything, before you're emotionally attached. You decide what makes sense.</p>
+    <div class="buyer-grid">
+      <div>
+        <div class="buyer-steps">
+          <div class="buyer-step">
+            <div class="buyer-step-num">1</div>
+            <div class="buyer-step-body">
+              <h4>Search listings — commission shown on every card</h4>
+              <p>Every GOZ listing shows what the seller is offering a buyer's agent upfront. Not buried in disclosures. Not revealed at closing. Right on the card, before you tour.</p>
+            </div>
+          </div>
+          <div class="buyer-step">
+            <div class="buyer-step-num">2</div>
+            <div class="buyer-step-body">
+              <h4>Contact the listing agent directly — or bring an attorney</h4>
+              <p>Click any listing to get the agent's real phone and email. You can work with the listing agent directly, bring your own real estate attorney, or represent yourself. No platform sitting in the middle, no timed acceptance window.</p>
+            </div>
+          </div>
+          <div class="buyer-step">
+            <div class="buyer-step-num">3</div>
+            <div class="buyer-step-body">
+              <h4>Know exactly what everyone is being paid</h4>
+              <p>Transparent commissions mean nobody is pocketing anything without you knowing. What the seller offers is what gets paid. No hidden steering, no Rocket Mortgage referral bonus, no platform that profits from sending you to their preferred lender.</p>
+            </div>
+          </div>
+          <div class="buyer-step">
+            <div class="buyer-step-num">4</div>
+            <div class="buyer-step-body">
+              <h4>We cost buyers nothing. Ever.</h4>
+              <p>GOZ is free for buyers forever. We only earn 3% of the agent's commission when a deal closes through our platform. If you go without an agent entirely, you pay us nothing. The seller's agent handles the paperwork — or you use a real estate attorney.</p>
+            </div>
+          </div>
+        </div>
+        <div class="buyer-cta-row">
+          <a href="#listings" class="btn btn-red" style="padding:13px 28px;font-size:15px">Browse Listings Free →</a>
+          <a href="#faq" class="btn btn-outline" style="background:#f0f0f0;color:#111;border-color:#ddd;padding:13px 24px;font-size:15px">Buyer FAQ</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="buyer-card">
+          <h3>🤝 Going without a buyer's agent?</h3>
+          <p>You can contact the listing agent directly. They represent the seller, but they can still handle the transaction. Many buyers also hire a real estate attorney for a flat fee — often $500–$1,500 — to review contracts and handle the closing. That's usually far less than a full buyer's agent commission.</p>
+          <span class="tag">✓ Fully supported on GOZ</span>
+        </div>
+        <div class="buyer-card">
+          <h3>📋 What about the NAR settlement?</h3>
+          <p>Since August 2024, you must sign a buyer representation agreement before touring most homes — and that locks in a commission rate. On GOZ, you see what the seller already agreed to offer before you commit to anything. Know your exposure before you fall in love with the house.</p>
+          <span class="tag">✓ Commission shown pre-tour, always</span>
+        </div>
+        <div class="buyer-card">
+          <h3>💡 Can the seller's commission cover me?</h3>
+          <p>If the seller is offering a buyer's agent commission (shown on every GOZ listing), and you bring a buyer's agent, that fee covers your agent. If you go without an agent, that commission may stay with the seller — or you can negotiate it as a price reduction. Either way, you'll know the number before you walk through the door.</p>
+          <span class="tag">✓ No surprises at closing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FSBO SECTION -->
+<section class="fsbo-band" id="fsbo">
+  <div class="fsbo-inner">
+    <div>
+      <div class="section-eyebrow">For Sellers &amp; FSBO</div>
+      <h2 class="fsbo-title">Sell Your Home.<br><span class="blue">Keep More.</span></h2>
+      <p class="fsbo-desc">List your home free as a licensed agent listing, or sell it yourself with a flat-fee FSBO listing. Either way, your commission is shown publicly — exactly what the NAR settlement requires — and buyers contact you directly.</p>
+      <ul style="list-style:none;margin-bottom:24px;">
+        <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Commission shown on every listing — NAR compliant</li>
+        <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Buyers contact you directly — no gated leads</li>
+        <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> No pay-to-rank, no Premier tiers, sorted by recency</li>
+        <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> AI listing writer — type one sentence, get a full description</li>
+        <li style="display:flex;gap:10px;font-size:14px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Street View photo tool built right into the listing form</li>
+      </ul>
+      <a href="signup.html" class="btn btn-red" style="background:var(--blue);color:white;padding:13px 28px;font-size:15px">List Your Home →</a>
+    </div>
+    <div class="fsbo-card">
+      <h3>FSBO — For Sale By Owner</h3>
+      <p>Selling yourself? We support that. Post a FSBO listing for a flat one-time fee. Your contact info goes straight to buyers. No agent required, no recurring charges, no percentage taken until you decide to close through an agent on our platform.</p>
+      <div class="fsbo-price">$49</div>
+      <div class="fsbo-price-label">flat fee · one-time · no recurring charge</div>
+      <ul style="list-style:none;margin-bottom:20px;">
+        <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Full listing with photos</li>
+        <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Your phone &amp; email shown directly to buyers</li>
+        <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> AI listing writer included</li>
+        <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo @VinHunter or Zelle hello@getoffzillow.com</li>
+      </ul>
+      <a href="signup.html" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;">Post FSBO Listing — $49 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SANCTUARY SECTION -->
+<section class="sanctuary-section">
+  <div class="sanctuary-inner">
+    <div class="section-eyebrow" style="color:rgba(255,255,255,0.4)">Why We Exist</div>
+    <h2 class="sanctuary-title">This Is Where Real Estate<br>Comes To <span class="green">GET OFF ZILLOW.</span></h2>
+    <p class="sanctuary-desc">Not to sit longer. Not to be buried. Not to be shown to the wrong people at the wrong price to generate ad revenue for a platform that profits from your confusion. We built this as a sanctuary — for buyers who want straight answers, agents who want to keep what they earn, and sellers who are tired of the extraction.</p>
+    <p style="font-size:13px;color:rgba(255,255,255,0.35);margin-bottom:0">We're new. We have real listings from real agents. We're building this in public, transparently — the way real estate should have worked all along. Pensacola, FL · TransBid LLC</p>
+    <div class="sanctuary-cards">
+      <div class="sanctuary-card">
+        <span class="icon">🙈</span>
+        <h4>Zillow hides the commission</h4>
+        <p>You find out what the seller offered your agent at closing — after you're already emotionally invested. We show it before you tour.</p>
+      </div>
+      <div class="sanctuary-card">
+        <span class="icon">💸</span>
+        <h4>They charge agents 25–40%</h4>
+        <p>On a $10,000 commission, platforms like Zillow Flex and Agent Pronto take $2,500–$4,000. We take $300. The rest stays with your agent.</p>
+      </div>
+      <div class="sanctuary-card">
+        <span class="icon">🔒</span>
+        <h4>Your data is their product</h4>
+        <p>Zillow sells your search history, contact info, and behavior to advertisers, lenders, and data brokers. We sell nothing. Our only revenue is 3% at close.</p>
+      </div>
+      <div class="sanctuary-card">
+        <span class="icon">🏦</span>
+        <h4>Lender steering is real</h4>
+        <p>Zillow's Premier Agent program has a class-action alleging it steers buyers toward Zillow Home Loans. We have no mortgage arm, no lender partners, no referral bonuses.</p>
+      </div>
+      <div class="sanctuary-card">
+        <span class="icon">⚖️</span>
+        <h4>FTC sued Zillow in 2025</h4>
+        <p>The FTC filed suit against Zillow and Redfin in 2025 for allegedly coordinating to suppress competition in rental advertising. Independent. Bootstrapped. Not affiliated.</p>
+      </div>
+      <div class="sanctuary-card">
+        <span class="icon">🌊</span>
+        <h4>They removed flood risk data</h4>
+        <p>Zillow removed wildfire and flood risk data from listings after sellers complained it hurt home values. We don't remove inconvenient data. Climate risk matters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSBID SECTION -->
+<section class="transbid-section" id="transbid">
+  <div class="transbid-inner">
+    <div>
+      <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">From TransBid LLC</div>
+      <h2 class="transbid-title">Tired of Mystery<br><span class="yellow">Contractor Quotes?</span></h2>
+      <p class="transbid-desc">Whether you're prepping to sell, just bought a fixer-upper, or managing an investment property — getting repair and renovation quotes shouldn't feel like negotiating in the dark. TransBid brings transparent, competitive bidding to home services.</p>
+      <ul class="transbid-bullets">
+        <li>Post your project once — licensed contractors bid openly</li>
+        <li>See real prices side by side, not negotiated guesses</li>
+        <li>No mystery pricing, no pressure, no obligation to accept</li>
+        <li>Built by the same team behind GetOffZillow AI</li>
+        <li>Especially useful before listing — know your repair costs before you price</li>
+      </ul>
+      <a href="https://transbid.live" target="_blank" rel="noopener" class="btn btn-red" style="background:var(--yellow);color:#111;padding:13px 28px;font-size:15px">Visit TransBid.live →</a>
+    </div>
+    <div class="transbid-card">
+      <h3>How TransBid Works</h3>
+      <p>Post your repair or renovation project. Contractors in your area see it and submit bids. You see all of them openly — no "call for a quote," no back-and-forth pressure tactics.</p>
+      <div class="transbid-examples">
+        <div class="transbid-example"><span class="ex-label">New roof · 2,200 sqft</span><span>3 bids · $8,400–$11,200</span></div>
+        <div class="transbid-example"><span class="ex-label">Kitchen renovation</span><span>5 bids · $22,000–$34,500</span></div>
+        <div class="transbid-example"><span class="ex-label">HVAC replacement</span><span>4 bids · $6,800–$9,100</span></div>
+        <div class="transbid-example"><span class="ex-label">Foundation repair</span><span>2 bids · $4,200–$7,800</span></div>
+      </div>
+      <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.3);font-style:italic">Example bids for illustration. Actual prices vary by market and scope.</div>
     </div>
   </div>
 </section>
@@ -662,7 +918,7 @@
         <div class="feature-icon teal">📞</div>
         <div class="feature-content">
           <div class="feature-title">Direct Agent Contact</div>
-          <div class="feature-desc">Your message goes to one agent — their real phone and email. No lead distribution, no lender-referred agent who's optimizing for someone else's deal, no platform sitting between you.</div>
+          <div class="feature-desc">Buyers get the agent's real phone and email immediately. No lead tax, no middleman, no platform sitting between them.</div>
           <div class="feature-tag">✓ Live now</div>
         </div>
       </div>
@@ -685,9 +941,9 @@
       <div class="feature-card">
         <div class="feature-icon red">🤖</div>
         <div class="feature-content">
-          <div class="feature-title">AI Listing Writer</div>
-          <div class="feature-desc">Type one sentence about the property. The AI generates a professional listing description instantly. Edit, regenerate, or use as-is. Built into the listing form.</div>
-          <div class="feature-tag">✓ Live now</div>
+          <div class="feature-title">AI Agent Matching</div>
+          <div class="feature-desc">Our team manually reviews and matches buyer inquiries to agents by market, expertise, and responsiveness. Algorithmic matching in development.</div>
+          <div class="coming-badge">🔧 In Development</div>
         </div>
       </div>
     </div>
@@ -701,35 +957,52 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#111;border-radius:14px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.12);margin-top:40px">
     <div style="background:#fff5f5;padding:40px 36px">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟡 Zillow + Agent Pronto</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span>What the seller is offering your agent — <strong>hidden</strong>. You find out at closing, after you're already emotionally invested.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span>Premier Agent sends your inquiry to whoever <strong>paid most for your ZIP code</strong> — not whoever is best for you.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🏦</span><span>Zillow Home Loans creates financial incentives to steer buyers toward their affiliated lender. <span style="font-size:12px;color:#888">(Class-action, Hagens Berman, 2024)</span></span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">⚖️</span><span>In 2025, the FTC sued Zillow and Redfin for allegedly coordinating to suppress competition in rental advertising. <span style="font-size:12px;color:#888">(FTC.gov)</span></span></div>
-      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🌊</span><span>Removed wildfire and flood risk data from listings after sellers complained it hurt home values. <span style="font-size:12px;color:#888">(Grist, 2024)</span></span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span>Referral fees between <strong>25–40%</strong> of commission at closing</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📉</span><span>Lead quality and accuracy varies — with no refund when leads don't convert</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span>Agent contact info is often gated — the platform controls the introduction</span></div>
+      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🔒</span><span><strong>Commissions hidden;</strong> your data sold to advertisers and lenders</span></div>
     </div>
     <div style="background:#f0fff8;padding:40px 36px">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟢 GetOffZillow AI</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span>What the seller is offering your agent — <strong>shown on every listing card, before you tour</strong>. Know your exposure before you're attached to the house.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span>One message goes to one agent — their real phone and email. <strong>No lead auction. No competing agents calling you simultaneously.</strong></span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span>No affiliated lenders. No mortgage arm. <strong>No financial incentive to steer you anywhere.</strong> Our only revenue is 3% from the agent at closing.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span>Not a Zillow-affiliated company. Not subject to their conflicts. <strong>Independent. Bootstrapped. Pensacola, FL.</strong></span></div>
-      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span>We don't remove inconvenient data. <strong>Zero data sold. NAR settlement compliant by design.</strong></span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>3% at closing only.</strong> Zero upfront cost. Zero per-lead charge. You keep 97%.</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Transparent comps and pricing.</strong> No black box. No fake accuracy claims.</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Direct phone and email in one click.</strong> No lead auction. No middleman.</span></div>
+      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Commissions shown publicly.</strong> Zero data sold. NAR settlement compliant.</span></div>
     </div>
   </div>
-  <p style="font-size:11px;color:var(--gray);margin-top:12px;font-style:italic;font-family:'Space Mono',monospace">Sources: FTC.gov (2025), Hagens Berman class-action filing (2024), Grist.org (2024), Zillow Help Center. GOZ is not affiliated with Zillow Group, Inc.</p>
 </section>
 
 <!-- MAP SECTION -->
 <section class="map-section" id="map">
   <div class="section-eyebrow">Search by Map</div>
   <h2 class="section-title">Browse by <span class="blue">Neighborhood.</span></h2>
-  <p class="section-sub">Every pin shows the seller's offered commission. Click any pin to contact the agent directly.</p>
+  <p class="section-sub">Every pin shows commission upfront. Click to contact the agent directly.</p>
   <div class="map-layout">
     <div class="map-sidebar">
       <div class="map-sidebar-header"><span id="mapCount">Loading...</span><span style="font-size:11px;font-weight:400;opacity:0.75">commissions shown</span></div>
+      <div class="map-filters">
+        <div class="mf-chip active">For Sale</div>
+        <div class="mf-chip" onclick="this.classList.toggle('active')">Price ▾</div>
+        <div class="mf-chip" onclick="this.classList.toggle('active')">Beds ▾</div>
+        <div class="mf-chip" onclick="this.classList.toggle('active')">Type ▾</div>
+      </div>
       <div class="map-list" id="mapListEl"></div>
     </div>
-    <div id="gozMap"></div>
+    <div class="fake-map">
+      <div class="map-grid-lines"></div>
+      <div class="fake-road road-h" style="top:28%"></div>
+      <div class="fake-road road-h" style="top:52%"></div>
+      <div class="fake-road road-h" style="top:73%"></div>
+      <div class="fake-road road-v" style="left:22%"></div>
+      <div class="fake-road road-v" style="left:48%"></div>
+      <div class="fake-road road-v" style="left:70%"></div>
+      <div id="mapPins"></div>
+      <div class="map-legend">
+        <div class="map-legend-row"><div class="legend-dot" style="background:var(--blue)"></div><span>Active listing</span></div>
+        <div class="map-legend-row"><div class="legend-dot" style="background:var(--green)"></div><span>Under $200K</span></div>
+        <div class="map-legend-row"><div class="legend-dot" style="background:var(--goz-accent)"></div><span>New today</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -750,9 +1023,9 @@
         <li>Email notifications when buyers contact you — direct to your inbox</li>
       </ul>
       <div style="background:#E8FBF0;border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.6">
-        <strong>💰 The math on a $400K sale (2.5% buyer's agent commission = $10,000 agent gross):</strong><br>
+        <strong>💰 The math on a $400K sale (2.5% commission = $10,000):</strong><br>
         Agent Pronto (35%): you lose $3,500 · Zillow Flex (40%): you lose $4,000<br>
-        <strong style="color:var(--green)">GetOffZillow AI (3% of your commission): you pay $300. You keep $9,700. Per deal.</strong>
+        <strong style="color:var(--green)">GetOffZillow AI (3%): you pay $300. You keep $9,700. Per deal.</strong>
       </div>
     </div>
     <div class="agent-cta-card">
@@ -794,9 +1067,16 @@
         <div class="result-amount" id="calcMonthly">$0</div>
         <div class="result-label" id="calcBreakdown">Enter values above</div>
       </div>
-      <button class="btn btn-primary" style="width:100%;margin-top:14px;padding:13px" onclick="window.print()">Save Estimate →</button>
+      <button class="btn btn-primary" style="width:100%;margin-top:14px;padding:13px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;cursor:pointer" onclick="window.print()">Save Estimate →</button>
     </div>
   </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="social-section">
+  <div class="section-eyebrow">What Agents & Buyers Say</div>
+  <h2 class="section-title">Real People.<br><span class="blue">Real Results.</span></h2>
+  <div class="reviews-grid" id="reviewsGrid"></div>
 </section>
 
 
@@ -809,18 +1089,18 @@
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px">
       <div style="background:var(--bg);border-radius:12px;padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🤝</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">3% at Closing. Nothing Else.</div>
-        <p style="font-size:13px;color:var(--gray);line-height:1.7">When a transaction closes with a buyer who found the agent through GOZ, the agent pays 3% of their gross commission. On a $10,000 commission that's $300. No other fees exist.</p>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">When You Close</div>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">We charge 3% of the agent's gross commission — only when a transaction closes. If no deal closes, we earn nothing.</p>
       </div>
       <div style="background:var(--bg);border-radius:12px;padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🚫</div>
         <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">Never Upfront</div>
-        <p style="font-size:13px;color:var(--gray);line-height:1.7">No monthly fees. No listing fees. No per-lead charges. Agents pay nothing to join, list, or receive buyer inquiries. Buyers pay nothing ever.</p>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">No monthly fees, no listing fees, no lead fees. Agents pay nothing to join, list, or receive buyer inquiries.</p>
       </div>
       <div style="background:var(--bg);border-radius:12px;padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🔒</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">No Lenders. No Advertisers. No Data Sales.</div>
-        <p style="font-size:13px;color:var(--gray);line-height:1.7">We have no affiliated mortgage arm, no advertising partnerships, no data brokers. Our only revenue is the 3% at close. That alignment is intentional.</p>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">We Don't Sell Data</div>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">We don't sell buyer or agent data to third parties. No advertisers. No lender partnerships. No data brokers.</p>
       </div>
     </div>
   </div>
@@ -835,12 +1115,22 @@
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">If I'm a buyer, can I see what the seller is offering before I make an offer?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Yes — that's the whole point. Every GOZ listing shows the seller's offered buyer's agent commission before you contact anyone. This matters because since August 2024, you must sign a buyer's agent agreement before touring homes, locking in a rate. If the seller is offering less than your agent's rate, you may owe the difference at closing. Seeing this number upfront — before you're emotionally invested in a house — is information Zillow and most platforms still don't show you.</div>
+        <div class="faq-a">Yes — that's the whole point. Every GOZ listing shows the buyer's agent commission before you tour, before you sign a buyer representation agreement, before you're emotionally attached to the house. Zillow doesn't show this. We always do.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Can I buy a home without a buyer's agent?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Yes. You are not required to have a buyer's agent. You can contact the listing agent directly through GOZ — they represent the seller but can facilitate the transaction. Many buyers also hire a real estate attorney for a flat fee ($500–$1,500 typically) to review contracts and handle closing. That's often far less than a buyer's agent commission on a $300K+ home. GOZ makes this easy — every listing shows the agent's direct phone and email.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What happens to the seller's offered commission if I don't have a buyer's agent?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">If the seller has offered a buyer's agent commission and you don't bring one, that commission typically stays with the seller — or you can negotiate it as a price reduction or closing cost credit. Since GOZ shows the offered commission upfront, you know exactly what's on the table before you start negotiating. Nothing is hidden.</div>
       </div>
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">Does GOZ cost anything for buyers?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Nothing. GOZ is completely free for buyers to search, browse, and contact agents. The buyer's agent fee shown on each listing is paid by the seller — not you. We earn a fee from the agent only when a deal closes.</div>
+        <div class="faq-a">Nothing. GOZ is completely free for buyers, forever. We only earn 3% of the agent's gross commission when a deal closes through our platform — paid by the agent, not the buyer. If you buy without a buyer's agent, you pay us nothing at all.</div>
       </div>
 
       <div class="faq-item">
@@ -850,12 +1140,12 @@
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">Is this too good to be true?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">The model is simple: no call centers, no lead teams, no middlemen. Agents list themselves, buyers search directly, we take 3% only at closing. Lower overhead means lower fees. Zillow charges 40% because they spend billions on marketing and acquisition. We don't. That's the whole difference.</div>
+        <div class="faq-a">We understand the skepticism. Traditional platforms charge 25–40% because they invest heavily in lead generation and marketing. We don't — buyers come to the marketplace directly and contact agents themselves. Lower overhead means we can charge less and still operate profitably.</div>
       </div>
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">When exactly do I pay the 3%?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing.</div>
+        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing via Venmo @VinHunter or Zelle hello@getoffzillow.com.</div>
       </div>
 
       <div class="faq-item">
@@ -879,13 +1169,14 @@
 
 <!-- FINAL CTA -->
 <section class="final-cta">
-  <h2 class="final-cta-title">See What Zillow Hides.<br>Search Free. Always.</h2>
-  <p class="final-cta-sub">Every listing shows what the seller is offering your agent — before you tour, before you fall in love. Free for buyers. $300 on a $10K commission for agents, only when you close.</p>
+  <h2 class="final-cta-title">A Better Way<br>To Buy, Sell, and List.</h2>
+  <p class="final-cta-sub">Free to join. Free to list. We earn 3% only when you close.</p>
   <div class="final-cta-btns">
-    <a href="buyers.html" class="white-btn">Search Listings Free →</a>
-    <a href="signup.html" class="outline-btn">List as an Agent</a>
+    <a href="signup.html" class="white-btn">Create Agent Account — Free →</a>
+    <a href="#buyers" class="outline-btn">Buying Without an Agent</a>
+    <a href="signup.html" class="outline-btn">Sign In</a>
   </div>
-  <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:20px;position:relative;z-index:1">No spam. No lead auction. No data sold. Pensacola, FL · TransBid LLC</p>
+  <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:20px;position:relative;z-index:1">No spam. No lead auction. No data sold. Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com" style="color:rgba(255,255,255,0.4)">hello@getoffzillow.com</a></p>
 </section>
 
 <!-- FOOTER -->
@@ -906,7 +1197,7 @@
             <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:0.18em;padding:1px 7px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start">AI</div>
           </div>
         </div>
-        <p class="footer-tagline">Real estate without the extraction.<br>3% marketplace fee at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC</p>
+        <p class="footer-tagline">Real estate without the extraction.<br>3% marketplace fee at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com" style="color:rgba(255,255,255,0.35)">hello@getoffzillow.com</a></p>
         <div class="footer-social">
           <a class="social-btn" href="#" onclick="showToast('𝕏 Coming soon!')">𝕏</a>
           <a class="social-btn" href="#" onclick="showToast('Instagram coming soon!')">📸</a>
@@ -915,52 +1206,55 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Real Estate</h4>
+        <h4>For Buyers</h4>
         <ul>
           <li><a href="#listings">Homes for Sale</a></li>
+          <li><a href="#buyers">Buying Without an Agent</a></li>
           <li><a href="#map">Search by Map</a></li>
           <li><a href="#mortgage">Mortgage Calculator</a></li>
           <li><a href="#compare">Fee Comparison</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>For Agents</h4>
+        <h4>For Sellers</h4>
         <ul>
-          <li><a href="signup.html">List for Free</a></li>
-          <li><a href="signup.html">Agent Dashboard</a></li>
+          <li><a href="signup.html">List as Agent — Free</a></li>
+          <li><a href="#fsbo">FSBO — $49 Flat Fee</a></li>
           <li><a href="#referral">Our Fee Model</a></li>
-          <li><a href="#compare">Fee Comparison</a></li>
+          <li><a href="https://transbid.live" target="_blank" rel="noopener">Get Repair Bids — TransBid</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Account</h4>
+        <h4>For Agents</h4>
         <ul>
-          <li><a href="signup.html">Create Account</a></li>
-          <li><a href="signup.html">Sign In</a></li>
-          <li><a href="dashboard.html">My Dashboard</a></li>
+          <li><a href="signup.html">Create Agent Account</a></li>
+          <li><a href="signup.html">Agent Dashboard</a></li>
+          <li><a href="#compare">Fee Comparison</a></li>
           <li><a href="list.html">Submit Listing</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="mailto:campaigns@transbidlive.faith">Contact Us</a></li>
+          <li><a href="mailto:hello@getoffzillow.com">hello@getoffzillow.com</a></li>
+          <li><a href="https://transbid.live" target="_blank" rel="noopener">TransBid.live</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Service</a></li>
-
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026.</div>
-      <div>Equal Housing Opportunity 🏠</div>
+      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026. · <a href="mailto:hello@getoffzillow.com" style="color:#555">hello@getoffzillow.com</a></div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <a href="https://transbid.live" target="_blank" rel="noopener" style="color:var(--ai-green);font-size:12px;font-weight:700;text-decoration:none">🔨 TransBid.live</a>
+        <span>Equal Housing Opportunity 🏠</span>
+      </div>
     </div>
   </div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
@@ -1032,7 +1326,7 @@ async function loadListings() {
     liveListings = [];
   }
   renderListings();
-  renderMapList(); // async — geocodes and places real pins
+  renderMapList();
 }
 
 function getPhoto(listing, index) {
@@ -1070,7 +1364,7 @@ function renderListings() {
       </div>
       <div class="listing-body">
         <div class="listing-price">$${Number(l.price).toLocaleString()}</div>
-        <div class="commission-tag">✓ ${l.commission_rate || '2.5%'} buyer's agent fee — paid by seller</div>
+        <div class="commission-tag">✓ ${l.commission_rate || '2.5%'} commission</div>
         <div class="listing-address">${l.address}</div>
         <div class="listing-city">${l.city}, ${l.state}${l.zip ? ' ' + l.zip : ''}</div>
         <div class="listing-specs">
@@ -1092,92 +1386,52 @@ function renderListings() {
 }
 
 // Distribute pins across the fake map based on listing index
-// ── REAL MAP (Leaflet + OpenStreetMap — no API key required) ──
-let gozMap = null;
-let mapMarkers = [];
+const PIN_POSITIONS = [
+  {top:'18%',left:'14%'},{top:'60%',left:'30%'},{top:'30%',left:'55%'},
+  {top:'65%',left:'60%'},{top:'22%',left:'72%'},{top:'45%',left:'80%'},
+  {top:'78%',left:'45%'},{top:'38%',left:'18%'}
+];
 
-function initMap() {
-  if (gozMap) return;
-  gozMap = L.map('gozMap', { zoomControl: true, scrollWheelZoom: false });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-    maxZoom: 19
-  }).addTo(gozMap);
-}
-
-async function geocodeListing(listing) {
-  try {
-    const q = encodeURIComponent(listing.address + ', ' + listing.city + ', ' + listing.state);
-    const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q=' + q, {
-      headers: { 'Accept-Language': 'en' }
-    });
-    const data = await res.json();
-    if (data.length > 0) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-  } catch(e) {}
-  return null;
-}
-
-async function renderMapList() {
+function renderMapList() {
   const el = document.getElementById('mapListEl');
   const count = document.getElementById('mapCount');
+  const pinsEl = document.getElementById('mapPins');
   const items = liveListings.slice(0, 8);
 
-  if (count) count.textContent = items.length + ' home' + (items.length !== 1 ? 's' : '') + ' available';
+  if (count) count.textContent = `${items.length} home${items.length !== 1 ? 's' : ''} available`;
 
   if (!items.length) {
     el.innerHTML = '<div style="padding:20px;text-align:center;color:#999;font-size:13px">No listings yet</div>';
+    if (pinsEl) pinsEl.innerHTML = '';
     return;
   }
 
-  el.innerHTML = items.map(function(l, i) {
+  // Sidebar list
+  el.innerHTML = items.map((l, i) => {
     const photos = parsePhotos(l.photos);
-    const src = photos.length > 0 ? photos[0] : DEMO_PHOTOS[i % DEMO_PHOTOS.length];
-    const fb = DEMO_PHOTOS[i % DEMO_PHOTOS.length];
-    const url = 'listing.html?id=' + l.id;
-    const comm = l.commission_rate || '2.5%';
-    return `<div onclick="window.location.href='${url}'" style="display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid #D8D8D8;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background=''">
-      <div style="width:76px;height:62px;border-radius:6px;overflow:hidden;flex-shrink:0"><img src="${src}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" style="width:100%;height:100%;object-fit:cover"/></div>
+    const thumb = photos.length > 0
+      ? `<img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover" data-fallback="${DEMO_PHOTOS[i%DEMO_PHOTOS.length]}" onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback}" />`
+      : `<img src="${DEMO_PHOTOS[i % DEMO_PHOTOS.length]}" style="width:100%;height:100%;object-fit:cover" />`;
+    return `
+    <div class="map-list-item" onclick="window.location.href='listing.html?id=${l.id}'">
+      <div class="map-thumb" style="overflow:hidden;position:relative">${thumb}</div>
       <div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px">$${Number(l.price).toLocaleString()}</div>
-        <div style="font-size:12px;color:#6B6B6B;margin-top:1px">${l.address}</div>
-        <div style="font-size:12px;color:#999">${l.city}, ${l.state}</div>
-        <div style="font-size:11px;color:#00843d;font-weight:700;margin-top:3px">&#10003; ${comm} buyer&apos;s agent fee</div>
-      </div></div>`;
+        <div class="mli-price">$${Number(l.price).toLocaleString()}</div>
+        <div class="mli-addr">${l.address}</div>
+        <div class="mli-addr" style="color:#999">${l.city}, ${l.state}</div>
+        ${l.beds || l.baths ? `<div class="mli-specs">${l.beds?l.beds+'bd':''} ${l.baths?'· '+l.baths+'ba':''} ${l.sqft?'· '+Number(l.sqft).toLocaleString()+' sqft':''}</div>` : ''}
+        <div class="mli-commission">\u2713 ${l.commission_rate || '2.5%'} commission</div>
+      </div>
+    </div>`;
   }).join('');
 
-  initMap();
-  mapMarkers.forEach(m => m.remove());
-  mapMarkers = [];
-
-  const bounds = [];
-  for (const l of items) {
-    const coords = await geocodeListing(l);
-    if (!coords) continue;
-    bounds.push([coords.lat, coords.lng]);
-    const isLow = l.price < 200000;
-    const color = isLow ? '#00C853' : '#006AFF';
-    const priceLabel = '$' + (Number(l.price)/1000).toFixed(0) + 'K';
-    const icon = L.divIcon({
-      className: '',
-      html: '<div style="background:' + color + ';color:white;border-radius:6px;padding:5px 10px;font-family:Nunito,sans-serif;font-weight:900;font-size:12px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.25);white-space:nowrap;position:relative">'
-        + priceLabel
-        + '<div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:' + color + ';border-bottom:none"></div></div>',
-      iconAnchor: [25, 30],
-      popupAnchor: [0, -32]
-    });
-    const popup = '<strong style="font-size:15px;display:block;margin-bottom:3px">$' + Number(l.price).toLocaleString() + '</strong>'
-      + l.address + '<br>' + l.city + ', ' + l.state + '<br>'
-      + (l.beds ? l.beds + 'bd ' : '') + (l.baths ? l.baths + 'ba' : '')
-      + '<div style="color:#00843d;font-weight:700;font-size:11px;margin-top:4px">&#10003; ' + (l.commission_rate || '2.5%') + ' buyer&apos;s agent fee &mdash; paid by seller</div>'
-      + '<a href="listing.html?id=' + l.id + '" style="display:block;margin-top:8px;background:#006AFF;color:white;text-align:center;padding:7px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12px">View Listing &amp; Contact Agent &rarr;</a>';
-    const marker = L.marker([coords.lat, coords.lng], { icon }).bindPopup(popup).addTo(gozMap);
-    mapMarkers.push(marker);
-  }
-
-  if (bounds.length > 0) {
-    bounds.length === 1 ? gozMap.setView(bounds[0], 13) : gozMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
-  } else {
-    gozMap.setView([32.5, -88], 5);
+  // Map pins from real listings
+  if (pinsEl) {
+    pinsEl.innerHTML = items.map((l, i) => {
+      const pos = PIN_POSITIONS[i % PIN_POSITIONS.length];
+      const price = '$' + (Number(l.price)/1000).toFixed(0) + 'K';
+      return `<div class="map-pin" style="top:${pos.top};left:${pos.left}" onclick="window.location.href='listing.html?id=${l.id}'">${price}</div>`;
+    }).join('');
   }
 }
 
@@ -1219,11 +1473,25 @@ function runCalc() {
     `P&I $${Math.round(payment).toLocaleString()} + Taxes $${Math.round(estTax).toLocaleString()} + Insurance $${Math.round(estIns).toLocaleString()} · ${rate}% ${term}yr`;
 }
 
+const reviews = [
+  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $300 on a $10,000 commission. The direct contact with buyers is a completely different experience.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
+  { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"👩" },
+  { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"👩" },
+  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $300. That's not a typo. Three hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
+  { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"👩" },
+  { stars:5, text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"👨" },
+];
+
 function setHeroTab(el,type) {
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  const msgs = {sell:'💰 Sell — list free in minutes',agent:'🤝 Agents: 3% at closing, free listings'};
-  if (msgs[type]) showToast(msgs[type]);
+  const actions = {
+    buy: () => document.getElementById('listings').scrollIntoView({behavior:'smooth'}),
+    noagent: () => document.getElementById('buyers').scrollIntoView({behavior:'smooth'}),
+    sell: () => document.getElementById('fsbo').scrollIntoView({behavior:'smooth'}),
+    agent: () => document.getElementById('agents').scrollIntoView({behavior:'smooth'}),
+  };
+  if (actions[type]) actions[type]();
 }
 
 async function doSearch() {
@@ -1287,6 +1555,19 @@ function showToast(msg) {
   t._t = setTimeout(()=>t.classList.remove('show'),4500);
 }
 
+function renderReviews() {
+  document.getElementById('reviewsGrid').innerHTML = reviews.map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'\u2605'.repeat(r.stars)}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.emoji}</div>
+        <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
+      </div>
+    </div>`).join('');
+}
+
+
 // ── NAV AUTH STATE — swap nav buttons when logged in ──
 async function initNavAuth() {
   const { data: { session } } = await sb.auth.getSession();
@@ -1310,6 +1591,7 @@ async function initNavAuth() {
 }
 
 buildTicker();
+renderReviews();
 loadListings();
 initNavAuth();
 </script>
