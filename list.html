@@ -156,7 +156,7 @@
     transition: all 0.2s;
   }
 
-  /* Street View button */
+  /* Street View */
   .streetview-btn {
     display: inline-flex;
     align-items: center;
@@ -182,6 +182,89 @@
     display: none;
     color: rgba(255,255,255,0.5);
   }
+
+  /* Street View Preview Panel */
+  #svPreviewPanel {
+    display: none;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  #svPreviewImg {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    background: #111;
+  }
+  .sv-controls {
+    padding: 14px 16px;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sv-control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sv-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.45);
+    width: 56px;
+    flex-shrink: 0;
+    font-family: 'Space Mono', monospace;
+  }
+  .sv-slider {
+    flex: 1;
+    accent-color: var(--ai-green);
+    height: 4px;
+    cursor: pointer;
+  }
+  .sv-val {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    width: 38px;
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+  }
+  .sv-actions {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px 14px;
+  }
+  .sv-use-btn {
+    flex: 1;
+    padding: 10px;
+    background: var(--ai-green);
+    color: #111;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Nunito Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .sv-use-btn:hover { background: #00e88a; }
+  .sv-retake-btn {
+    padding: 10px 14px;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Nunito Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .sv-retake-btn:hover { border-color: var(--ai-green); color: var(--ai-green); }
 
   /* DROP ZONE */
   .photo-drop-zone {
@@ -953,6 +1036,32 @@
           </button>
           <div id="streetViewStatus"></div>
 
+          <!-- Street View Preview + 360° Controls -->
+          <div id="svPreviewPanel">
+            <img id="svPreviewImg" src="" alt="Street View" />
+            <div class="sv-controls">
+              <div class="sv-control-row">
+                <span class="sv-label">Heading</span>
+                <input type="range" class="sv-slider" id="svHeading" min="0" max="359" value="0" oninput="updateSvPreview()" />
+                <span class="sv-val" id="svHeadingVal">0°</span>
+              </div>
+              <div class="sv-control-row">
+                <span class="sv-label">Pitch</span>
+                <input type="range" class="sv-slider" id="svPitch" min="-45" max="45" value="5" oninput="updateSvPreview()" />
+                <span class="sv-val" id="svPitchVal">5°</span>
+              </div>
+              <div class="sv-control-row">
+                <span class="sv-label">Zoom</span>
+                <input type="range" class="sv-slider" id="svFov" min="40" max="120" value="90" oninput="updateSvPreview()" />
+                <span class="sv-val" id="svFovVal">90°</span>
+              </div>
+            </div>
+            <div class="sv-actions">
+              <button type="button" class="sv-use-btn" onclick="useStreetView()">✓ Use This Photo →</button>
+              <button type="button" class="sv-retake-btn" onclick="closeSvPreview()">✕ Cancel</button>
+            </div>
+          </div>
+
           <!-- Drop Zone -->
           <div class="photo-drop-zone" id="photoZone"
             ondragover="event.preventDefault();this.classList.add('dragover')"
@@ -1617,11 +1726,13 @@ function pebApply() {
 }
 
 // ── STREET VIEW ──
+let _svLat = null, _svLng = null, _svDebounce = null;
+
 async function fetchStreetView() {
-  const addr  = document.getElementById('address').value.trim();
-  const city  = document.getElementById('city').value.trim();
-  const state = document.getElementById('state').value.trim();
-  const btn   = document.getElementById('streetViewBtn');
+  const addr   = document.getElementById('address').value.trim();
+  const city   = document.getElementById('city').value.trim();
+  const state  = document.getElementById('state').value.trim();
+  const btn    = document.getElementById('streetViewBtn');
   const status = document.getElementById('streetViewStatus');
 
   if (!addr || !city) {
@@ -1632,33 +1743,113 @@ async function fetchStreetView() {
   }
 
   btn.disabled = true;
-  btn.textContent = 'Fetching...';
+  btn.textContent = '⏳ Looking up address...';
   status.style.display = 'block';
   status.style.color = 'rgba(255,255,255,0.5)';
-  status.textContent = 'Looking up address...';
+  status.textContent = '';
 
   try {
+    // Geocode the address
     const q = encodeURIComponent(addr + ', ' + city + ', ' + state);
     const geo = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + q);
     const gd  = await geo.json();
     if (!gd.length) throw new Error('Address not found');
-    const lat = gd[0].lat, lng = gd[0].lon;
-    status.textContent = 'Found location, fetching street view...';
-    const sv = await fetch('/api/streetview?lat=' + lat + '&lng=' + lng);
-    if (!sv.ok) throw new Error('No street view');
-    const blob = await sv.blob();
-    if (blob.size < 4000) throw new Error('No street view image');
-    selectedPhotos.push(new File([blob], 'street-view.jpg', { type: 'image/jpeg' }));
-    renderPhotoUI();
-    status.textContent = '✓ Street view added! Drag to reorder.';
-    status.style.color = 'var(--ai-green)';
+
+    _svLat = gd[0].lat;
+    _svLng = gd[0].lon;
+
+    btn.textContent = '⏳ Fetching street view...';
+
+    // Check imagery exists first
+    const check = await fetch('/api/streetview?lat=' + _svLat + '&lng=' + _svLng + '&check=1');
+    if (!check.ok) throw new Error('No street view imagery at this address');
+
+    // Set default controls
+    document.getElementById('svHeading').value = 0;
+    document.getElementById('svPitch').value = 5;
+    document.getElementById('svFov').value = 90;
+    document.getElementById('svHeadingVal').textContent = '0°';
+    document.getElementById('svPitchVal').textContent = '5°';
+    document.getElementById('svFovVal').textContent = '90°';
+
+    // Load initial image
+    await loadSvPreview(0, 5, 90);
+
+    // Show panel, hide fetch button
+    document.getElementById('svPreviewPanel').style.display = 'block';
+    btn.style.display = 'none';
+    status.style.display = 'none';
+
   } catch(e) {
     status.textContent = 'Street view not available for this address. Upload a photo manually.';
     status.style.color = 'rgba(255,255,255,0.4)';
+    btn.disabled = false;
+    btn.textContent = '📍 Fetch Street View Photo';
   }
+}
 
+async function loadSvPreview(heading, pitch, fov) {
+  const img = document.getElementById('svPreviewImg');
+  img.style.opacity = '0.4';
+  const url = '/api/streetview?lat=' + _svLat + '&lng=' + _svLng
+    + '&heading=' + heading + '&pitch=' + pitch + '&fov=' + fov + '&width=800&height=450';
+  // Use a timestamp to bust cache when controls change
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('fetch failed');
+  const blob = await res.blob();
+  const objUrl = URL.createObjectURL(blob);
+  img.src = objUrl;
+  img.style.opacity = '1';
+}
+
+function updateSvPreview() {
+  const heading = parseInt(document.getElementById('svHeading').value);
+  const pitch   = parseInt(document.getElementById('svPitch').value);
+  const fov     = parseInt(document.getElementById('svFov').value);
+  document.getElementById('svHeadingVal').textContent = heading + '°';
+  document.getElementById('svPitchVal').textContent   = pitch + '°';
+  document.getElementById('svFovVal').textContent     = fov + '°';
+  // Debounce — wait 400ms after user stops sliding before fetching
+  clearTimeout(_svDebounce);
+  _svDebounce = setTimeout(() => loadSvPreview(heading, pitch, fov), 400);
+}
+
+async function useStreetView() {
+  const heading = parseInt(document.getElementById('svHeading').value);
+  const pitch   = parseInt(document.getElementById('svPitch').value);
+  const fov     = parseInt(document.getElementById('svFov').value);
+  const btn     = document.getElementById('svPreviewPanel').querySelector('.sv-use-btn');
+  btn.textContent = '⏳ Saving...';
+  btn.disabled = true;
+  try {
+    const url = '/api/streetview?lat=' + _svLat + '&lng=' + _svLng
+      + '&heading=' + heading + '&pitch=' + pitch + '&fov=' + fov + '&width=1200&height=800';
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('failed');
+    const blob = await res.blob();
+    if (blob.size < 4000) throw new Error('too small');
+    selectedPhotos.push(new File([blob], 'street-view.jpg', { type: 'image/jpeg' }));
+    renderPhotoUI();
+    closeSvPreview();
+    const status = document.getElementById('streetViewStatus');
+    status.textContent = '✓ Street view added to your photos — drag to reorder.';
+    status.style.color = 'var(--ai-green)';
+    status.style.display = 'block';
+  } catch(e) {
+    btn.textContent = '✓ Use This Photo →';
+    btn.disabled = false;
+    alert('Could not save photo. Try again.');
+  }
+}
+
+function closeSvPreview() {
+  document.getElementById('svPreviewPanel').style.display = 'none';
+  const btn = document.getElementById('streetViewBtn');
+  btn.style.display = 'inline-flex';
   btn.disabled = false;
   btn.textContent = '📍 Fetch Street View Photo';
+  _svLat = null;
+  _svLng = null;
 }
 
 init();
