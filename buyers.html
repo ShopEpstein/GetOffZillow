@@ -177,7 +177,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
       <p>Buyer's agent fee shown on every result — paid by seller, not you</p>
       <input class="search-input" id="buyerSearch" type="text" placeholder="City, ZIP, or address...">
       <button class="search-btn" onclick="doSearch()">Find Homes →</button>
-      <p class="search-note">No account needed to browse</p>
     </div>
   </div>
 </section>
@@ -190,8 +189,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
       <div class="diff-card them">
         <div class="diff-label them">Other Platforms</div>
         <div class="diff-item"><span class="di">🙈</span><span>What the seller is offering your agent — hidden. You find out at the negotiating table or at closing, after you're already emotionally invested.</span></div>
-        <div class="diff-item"><span class="di">📋</span><span>Click "contact agent" → your info goes to 3–5 agents simultaneously → inbox flooded with competing calls</span></div>
-        <div class="diff-item"><span class="di">🤖</span><span>Pay-to-rank listings, sponsored agents at the top, not the best match</span></div>
+        <div class="diff-item"><span class="di">📋</span><span>Click "contact agent" → your info goes to 3–5 agents simultaneously → inbox flooded with competing calls from agents optimizing for their referral fee</span></div>
+        <div class="diff-item"><span class="di">🏦</span><span>Lender-referred agents (Rocket Mortgage, Zillow Home Loans) are optimizing for the lender's deal — not yours. You may be steered toward homes or areas that don't fit your needs.</span></div>
         <div class="diff-item"><span class="di">💰</span><span>Platform profits from your data — sold to lenders, advertisers, data brokers</span></div>
       </div>
       <div class="diff-card us">
@@ -209,7 +208,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   <div class="section-inner">
     <span class="eyebrow">Active Listings</span>
     <h2 class="section-h2">Homes for Sale.<br><span class="green">Commission Shown. Always.</span></h2>
-    <p class="section-sub">Every listing shows the buyer's agent fee — paid by the seller, not you. Click to view details and contact the agent directly. Free to use.</p>
+    <p class="section-sub">Every listing shows what the seller is offering your agent — before you call, before you tour, before you fall in love with the house. Free to search, free to contact.</p>
     <div class="listings-grid" id="listingGrid">
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
@@ -240,7 +239,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
         <span class="how-num">3</span>
         <span class="how-icon">📞</span>
         <h3 class="how-title">Contact the Agent Directly</h3>
-        <p class="how-desc">Click "Contact Agent" on any listing. Your message goes directly to that one agent — their real phone and email. On Zillow and Realtor.com, clicking "contact" sends your info to 3–5 agents simultaneously and starts a lead auction. Here it goes to one person.</p>
+        <p class="how-desc">Click "Contact Agent" on any listing. Your message goes to that one agent — their real phone and email. No lead auction, no competing agents, and critically: no lender-referred agent who's optimizing for Rocket Mortgage's deal instead of yours. You pick who you talk to.</p>
       </div>
     </div>
     <div class="nar-box">
@@ -275,7 +274,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
         <div class="result-num" id="calcMonthly">$0</div>
         <div class="result-sub" id="calcBreakdown">Enter values above</div>
       </div>
-      <button class="calc-btn" onclick="showToast('Lender connections coming soon!')">Get My Rate →</button>
+      <button class="calc-btn" onclick="window.print()">Save Estimate →</button>
     </div>
   </div>
 </section>
