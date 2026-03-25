@@ -1309,7 +1309,7 @@ async function saveEditListing() {
     beds: parseInt(document.getElementById('el_beds').value) || null,
     baths: parseFloat(document.getElementById('el_baths').value) || null,
     sqft: parseInt(document.getElementById('el_sqft').value) || null,
-    acreage: parseFloat(document.getElementById('el_acreage').value) || null,
+    acreage: parseFloat(document.getElementById('el_acreage').value) || undefined,
     property_type: document.getElementById('el_type').value,
     description: document.getElementById('el_desc').value.trim() || null,
     website_url: document.getElementById('el_url').value.trim() || null,
