@@ -87,13 +87,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .listing-link:hover{background:var(--blue);color:white}
 
 /* FEE EXPLAINER */
-.fee-card{background:var(--ink);border-radius:12px;padding:24px 28px;margin-bottom:24px}
-.fee-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.04em;color:var(--green);margin-bottom:16px}
-.fee-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.07);gap:12px}
-.fee-row:last-child{border-bottom:none;padding-bottom:0}
-.fee-row-label{color:rgba(255,255,255,0.55);font-size:13px;font-weight:300;flex:1}
-.fee-row-val{font-weight:600;color:white;font-family:'Space Mono',monospace;font-size:12px;text-align:right;white-space:nowrap}
-.fee-row-val.green{color:var(--green)}
+/* IN-CARD FEE SUMMARY (replaces no-fee-note) */
 
 /* CONTACT CARD */
 .contact-card{background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;position:sticky;top:76px;box-shadow:0 8px 40px rgba(0,0,0,0.1)}
@@ -118,8 +112,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .contact-btn{width:100%;background:var(--blue);color:white;border:none;padding:14px;border-radius:9px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:background 0.2s;margin-top:6px}
 .contact-btn:hover{background:var(--blue-dark)}
 .contact-btn:disabled{background:var(--border);cursor:not-allowed;color:var(--gray)}
-.no-fee-note{font-size:11px;color:var(--gray);text-align:center;margin-top:12px;line-height:1.6;padding:0 2px}
-.no-fee-note strong{color:var(--green-dark)}
 .contact-success{background:#f0fff8;border:1px solid #b3f0d0;color:#00843d;padding:16px;border-radius:9px;font-size:13px;display:none;text-align:center;line-height:1.7}
 .contact-error{background:#fff5f5;border:1px solid #ffcccc;color:var(--red);padding:10px;border-radius:8px;font-size:12px;display:none;margin-bottom:10px}
 
@@ -155,7 +147,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .share-agent-avi img{width:100%;height:100%;object-fit:cover}
 .share-agent-name{font-weight:700;color:var(--ink);font-size:13px}
 
-/* RESPONSIVE */
+/* FULL-WIDTH FEE BAR */
+.fee-bar{background:var(--ink);width:100%;border-bottom:1px solid rgba(0,255,157,0.12)}
+.fee-bar-inner{max-width:1180px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(3,1fr)}
+.fee-bar-item{padding:18px 20px;display:flex;flex-direction:column;gap:4px;border-right:1px solid rgba(255,255,255,0.07);position:relative}
+.fee-bar-item:last-child{border-right:none}
+.fee-bar-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35)}
+.fee-bar-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.02em;line-height:1;color:white}
+.fee-bar-val.green{color:var(--green)}
+.fee-bar-sub{font-size:11px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.4}
+.fee-bar-item.highlight .fee-bar-val{color:var(--green)}
+.fee-bar-item.highlight::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);opacity:0.6}
+
+/* IN-CARD FEE SUMMARY (replaces no-fee-note) */
+.card-fee-summary{background:#f0fff8;border:1px solid rgba(0,200,83,0.25);border-radius:8px;padding:12px 14px;margin-top:12px}
+.card-fee-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:3px 0}
+.card-fee-label{color:var(--gray);font-weight:400}
+.card-fee-val{font-weight:700;font-family:'Space Mono',monospace;font-size:11px;color:var(--ink)}
+.card-fee-val.zero{color:var(--green-dark)}
+
+/* RESPONSIVE FEE BAR */
+@media(max-width:640px){
+  .fee-bar-inner{grid-template-columns:1fr 1fr}
+  .fee-bar-item:nth-child(1){grid-column:1/-1;border-right:none;border-bottom:1px solid rgba(255,255,255,0.07)}
+  .fee-bar-item:last-child{border-right:none}
+  .fee-bar-val{font-size:22px}
+}
+/* RESPONSIVE LAYOUT */
 @media(max-width:900px){
   .body-wrap{grid-template-columns:1fr}
   .contact-card{position:static}
@@ -170,7 +188,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
   .spec-item:nth-child(odd){border-right:1px solid var(--border)}
   .spec-item:nth-child(even){border-right:none}
   .card{padding:20px}
-  .fee-card{padding:20px}
 }
 </style>
 </head>
@@ -228,6 +245,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
   <!-- THUMB STRIP -->
   <div class="thumb-strip" id="thumbStrip" style="display:none"></div>
 
+  <!-- FULL-WIDTH FEE BAR -->
+  <div class="fee-bar">
+    <div class="fee-bar-inner">
+      <div class="fee-bar-item">
+        <div class="fee-bar-eyebrow">Buyer's Agent Fee</div>
+        <div class="fee-bar-val" id="feeBarBuyer">—</div>
+        <div class="fee-bar-sub">Offered by seller · shown publicly</div>
+      </div>
+      <div class="fee-bar-item highlight">
+        <div class="fee-bar-eyebrow">Your Cost as a Buyer</div>
+        <div class="fee-bar-val green">$0</div>
+        <div class="fee-bar-sub">Free to search · free to contact · always</div>
+      </div>
+      <div class="fee-bar-item">
+        <div class="fee-bar-eyebrow">GOZ Marketing Fee</div>
+        <div class="fee-bar-val" id="feeBarGoz">—</div>
+        <div class="fee-bar-sub">Paid by agent at closing · never by you</div>
+      </div>
+    </div>
+  </div>
+
   <!-- BODY -->
   <div class="body-wrap">
     <div>
@@ -237,22 +275,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
         <div class="card-label">About This Property</div>
         <p class="about-text" id="detDescription">No description provided.</p>
         <div id="detWebsite"></div>
-      </div>
-
-      <div class="fee-card">
-        <div class="fee-title">Who Pays What</div>
-        <div class="fee-row">
-          <span class="fee-row-label">Buyer's agent fee — offered by seller</span>
-          <span class="fee-row-val" id="feeBuyerAgent">—</span>
-        </div>
-        <div class="fee-row">
-          <span class="fee-row-label">Your cost to search &amp; contact this agent</span>
-          <span class="fee-row-val green">$0 · Free</span>
-        </div>
-        <div class="fee-row">
-          <span class="fee-row-label">GOZ marketing fee (paid by agent at closing)</span>
-          <span class="fee-row-val" id="feeGoz">3% of agent commission</span>
-        </div>
       </div>
     </div>
 
@@ -276,7 +298,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
             <div class="form-group"><label>Message</label><textarea id="buyerMessage" placeholder="I'm interested in this property..."></textarea></div>
             <button type="submit" class="contact-btn" id="contactBtn">Send Message →</button>
           </form>
-          <p class="no-fee-note"><strong>Free for buyers.</strong> GOZ is free to search and contact agents. The buyer's agent fee above is paid by the seller — not you.</p>
+          <div class="card-fee-summary">
+            <div class="card-fee-row">
+              <span class="card-fee-label">Buyer's agent fee (seller pays)</span>
+              <span class="card-fee-val" id="cardFeeBuyer">—</span>
+            </div>
+            <div class="card-fee-row">
+              <span class="card-fee-label">Your cost to contact &amp; search</span>
+              <span class="card-fee-val zero">$0 · Free</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -439,15 +470,21 @@ function renderListing() {
     document.getElementById('detWebsite').innerHTML = `<a href="${listing.website_url}" target="_blank" class="listing-link">🔗 View full listing / virtual tour →</a>`;
   }
 
-  // Fee explainer
+  // Fee bar + in-card fee summary
   const commRate = listing.commission_rate || '2.5%';
   const commPct = parseFloat(commRate);
-  document.getElementById('feeBuyerAgent').textContent = commRate + ' of sale price';
+  // Fee bar
+  document.getElementById('feeBarBuyer').textContent = commRate;
   if (commPct && !isNaN(commPct)) {
     const gross = Math.round(listing.price * commPct / 100);
     const gozFee = Math.round(gross * 0.03);
-    document.getElementById('feeGoz').textContent = '$' + gozFee.toLocaleString() + ' on a $' + gross.toLocaleString() + ' commission';
+    document.getElementById('feeBarGoz').textContent = '$' + gozFee.toLocaleString();
+  } else {
+    document.getElementById('feeBarBuyer').textContent = commRate;
+    document.getElementById('feeBarGoz').textContent = '3% of commission';
   }
+  // In-card fee
+  document.getElementById('cardFeeBuyer').textContent = commRate;
 
   // Agent stripe
   if (agent) {
