@@ -22,8 +22,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .err{color:var(--red);font-size:13px;margin-bottom:12px;display:none}
 .btn-primary{width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:background 0.2s}
 .btn-primary:hover{background:#0050CC}
-
-/* ADMIN LAYOUT */
 .admin{display:none;min-height:100vh}
 .admin-nav{background:var(--ink);height:56px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(0,255,157,0.12)}
 .admin-nav-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:2px}
@@ -32,35 +30,38 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .admin-tab{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.55);background:transparent;border:none;transition:all 0.2s}
 .admin-tab.active,.admin-tab:hover{background:rgba(255,255,255,0.1);color:white}
 .admin-tab.active{color:var(--green)}
+.admin-tab.has-pending{position:relative}
+.admin-tab.has-pending::after{content:attr(data-count);position:absolute;top:-4px;right:-4px;background:var(--red);color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;font-family:'Space Mono',monospace}
 .admin-signout{margin-left:auto;font-size:12px;color:rgba(255,255,255,0.4);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
 .admin-signout:hover{color:white}
-
 .admin-body{max-width:1200px;margin:0 auto;padding:28px 24px}
 .panel{display:none}
 .panel.active{display:block}
-
-/* STATS ROW */
 .stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:28px}
 .stat-card{background:white;border-radius:10px;padding:18px;border:1px solid var(--border)}
 .stat-num{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;margin-bottom:2px}
 .stat-num.green{color:var(--green-dark)}
 .stat-num.blue{color:var(--blue)}
 .stat-num.gold{color:var(--gold)}
+.stat-num.red{color:var(--red)}
 .stat-label{font-size:11px;color:var(--gray);font-family:'Space Mono',monospace;letter-spacing:0.05em}
-
-/* TABLE */
 .data-table{width:100%;border-collapse:collapse;background:white;border-radius:10px;overflow:hidden;border:1px solid var(--border);font-size:13px}
 .data-table th{padding:12px 14px;text-align:left;font-size:10px;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);background:var(--cream);border-bottom:1px solid var(--border);white-space:nowrap}
 .data-table td{padding:12px 14px;border-bottom:1px solid rgba(0,0,0,0.05);vertical-align:middle}
 .data-table tr:last-child td{border-bottom:none}
 .data-table tr:hover td{background:#fafafa}
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:0.05em}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:0.05em;gap:3px}
 .badge.green{background:#e8f8f0;color:var(--green-dark)}
 .badge.red{background:#fff0ee;color:var(--red)}
 .badge.gold{background:#fff8e6;color:#8B6914}
 .badge.blue{background:#ebf3ff;color:var(--blue)}
 .badge.gray{background:#f0f0f0;color:var(--gray)}
-.action-btn{padding:5px 10px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;border:none;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.badge.orange{background:#fff3e0;color:#E67E00}
+
+/* GOZ APPROVED BADGE */
+.goz-approved-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#C9A84C,#E5C56B);color:white;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:0.05em;box-shadow:0 1px 4px rgba(201,168,76,0.4)}
+
+.action-btn{padding:5px 10px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;border:none;transition:all 0.15s;font-family:'DM Sans',sans-serif;white-space:nowrap}
 .action-btn.danger{background:#fff0ee;color:var(--red)}
 .action-btn.danger:hover{background:var(--red);color:white}
 .action-btn.primary{background:#ebf3ff;color:var(--blue)}
@@ -69,16 +70,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .action-btn.success:hover{background:var(--green-dark);color:white}
 .action-btn.warn{background:#fff8e6;color:#8B6914}
 .action-btn.warn:hover{background:var(--gold);color:white}
+.action-btn.orange{background:#fff3e0;color:#E67E00}
+.action-btn.orange:hover{background:#E67E00;color:white}
+
+/* PENDING QUEUE */
+.pending-banner{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:1px solid #E67E00;border-radius:10px;padding:20px 24px;margin-bottom:24px;display:none}
+.pending-banner h3{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#E67E00;letter-spacing:0.04em;margin-bottom:4px}
+.pending-banner p{font-size:13px;color:#5D3A00}
 
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .section-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.04em;color:var(--ink)}
+.section-divider{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.08em;color:var(--gray);padding:12px 0 8px;border-top:1px solid var(--border);margin-top:24px}
 .search-filter{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .search-filter input,.search-filter select{padding:8px 12px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:white;-webkit-appearance:none}
 .search-filter input:focus,.search-filter select:focus{border-color:var(--blue)}
 .refresh-btn{padding:7px 14px;background:var(--ink);color:white;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s}
 .refresh-btn:hover{background:#333}
-
-/* MESSAGE COMPOSER */
 .message-card{background:white;border-radius:10px;border:1px solid var(--border);padding:24px;margin-bottom:16px}
 .message-card h3{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:16px;letter-spacing:0.04em}
 .msg-field{margin-bottom:14px}
@@ -91,20 +98,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 .msg-status{font-size:13px;margin-top:10px;padding:10px 14px;border-radius:7px;display:none}
 .msg-status.ok{background:#e8f8f0;color:var(--green-dark)}
 .msg-status.err{background:#fff0ee;color:var(--red)}
-
-/* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:white;padding:12px 18px;border-radius:10px;font-size:13px;box-shadow:0 4px 24px rgba(0,0,0,0.2);z-index:9999;max-width:340px;transform:translateY(80px);opacity:0;transition:all 0.3s;border-left:3px solid var(--green)}
 .toast.show{transform:translateY(0);opacity:1}
-
-/* LOADING */
 .loading-row td{text-align:center;padding:40px;color:var(--gray);font-size:14px}
-
+.actions-cell{display:flex;gap:4px;flex-wrap:wrap}
 @media(max-width:768px){.stats-row{grid-template-columns:repeat(2,1fr)}.admin-tabs{display:none}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="login-goz">GOZ</div>
@@ -116,7 +118,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
 <div class="admin" id="adminScreen">
   <nav class="admin-nav">
     <div>
@@ -124,12 +125,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
       <div class="admin-nav-sub">GetOffZillow AI · TransBid LLC</div>
     </div>
     <div class="admin-tabs">
-      <button class="admin-tab active" onclick="showPanel('overview')">Overview</button>
-      <button class="admin-tab" onclick="showPanel('agents')">Agents</button>
-      <button class="admin-tab" onclick="showPanel('listings')">Listings</button>
-      <button class="admin-tab" onclick="showPanel('leads')">Leads</button>
-      <button class="admin-tab" onclick="showPanel('closings')">Closings</button>
-      <button class="admin-tab" onclick="showPanel('messages')">Message</button>
+      <button class="admin-tab active" onclick="showPanel('overview',this)">Overview</button>
+      <button class="admin-tab" id="tabAgents" onclick="showPanel('agents',this)">Agents</button>
+      <button class="admin-tab" onclick="showPanel('listings',this)">Listings</button>
+      <button class="admin-tab" onclick="showPanel('leads',this)">Leads</button>
+      <button class="admin-tab" onclick="showPanel('closings',this)">Closings</button>
+      <button class="admin-tab" onclick="showPanel('messages',this)">Message</button>
     </div>
     <button class="admin-signout" onclick="doSignout()">Sign Out</button>
   </nav>
@@ -140,16 +141,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
     <div class="panel active" id="panel-overview">
       <div class="stats-row" id="statsRow">
         <div class="stat-card"><div class="stat-num blue" id="s-agents">—</div><div class="stat-label">Total Agents</div></div>
+        <div class="stat-card"><div class="stat-num red" id="s-pending">—</div><div class="stat-label">Pending Approval</div></div>
         <div class="stat-card"><div class="stat-num green" id="s-listings">—</div><div class="stat-label">Active Listings</div></div>
         <div class="stat-card"><div class="stat-num blue" id="s-leads">—</div><div class="stat-label">Total Leads</div></div>
-        <div class="stat-card"><div class="stat-num gold" id="s-closings">—</div><div class="stat-label">Reported Closings</div></div>
-        <div class="stat-card"><div class="stat-num green" id="s-revenue">—</div><div class="stat-label">Total Revenue</div></div>
+        <div class="stat-card"><div class="stat-num gold" id="s-revenue">—</div><div class="stat-label">Total GOZ Revenue</div></div>
       </div>
+
+      <!-- PENDING BANNER -->
+      <div class="pending-banner" id="pendingBanner">
+        <h3>⚠ Agents Awaiting Approval</h3>
+        <p id="pendingBannerText">New agents have signed up and are waiting for your review.</p>
+      </div>
+
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div>
-          <div class="section-header"><h2 class="section-title">Recent Signups</h2></div>
+          <div class="section-header"><h2 class="section-title">Recent Signups</h2><button class="action-btn primary" onclick="showPanel('agents',document.getElementById('tabAgents'))">Review All →</button></div>
           <table class="data-table" id="recentAgentsTable">
-            <thead><tr><th>Agent</th><th>Brokerage</th><th>Joined</th><th>Listings</th></tr></thead>
+            <thead><tr><th>Agent</th><th>Status</th><th>Joined</th><th>Listings</th></tr></thead>
             <tbody><tr class="loading-row"><td colspan="4">Loading...</td></tr></tbody>
           </table>
         </div>
@@ -165,21 +173,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
 
     <!-- AGENTS -->
     <div class="panel" id="panel-agents">
+
+      <!-- PENDING QUEUE -->
+      <div id="pendingSection" style="margin-bottom:32px;display:none">
+        <div class="section-header">
+          <h2 class="section-title" style="color:var(--red)">⏳ Pending Approval <span id="pendingCount" style="font-size:14px;color:var(--gray);font-weight:400"></span></h2>
+          <button class="refresh-btn" onclick="loadAgents()">↻ Refresh</button>
+        </div>
+        <table class="data-table" id="pendingTable">
+          <thead><tr><th>Name</th><th>Email</th><th>Brokerage</th><th>License</th><th>Phone</th><th>State</th><th>Signed Up</th><th>Actions</th></tr></thead>
+          <tbody><tr class="loading-row"><td colspan="8">Loading...</td></tr></tbody>
+        </table>
+      </div>
+
+      <!-- ALL AGENTS -->
       <div class="section-header">
-        <h2 class="section-title">All Agents <span id="agentCount" style="font-size:14px;color:var(--gray);font-weight:400"></span></h2>
+        <h2 class="section-title">Approved Agents <span id="agentCount" style="font-size:14px;color:var(--gray);font-weight:400"></span></h2>
         <div class="search-filter">
           <input type="text" id="agentSearchAdmin" placeholder="Search name, email..." oninput="filterAdminAgents()">
-          <select id="agentStatusFilter" onchange="filterAdminAgents()">
-            <option value="">All</option>
-            <option value="real">Real (has brokerage/license)</option>
-            <option value="test">Test / Incomplete</option>
-          </select>
           <button class="refresh-btn" onclick="loadAgents()">↻ Refresh</button>
         </div>
       </div>
       <table class="data-table" id="agentsTable">
-        <thead><tr><th>Name</th><th>Email</th><th>Brokerage</th><th>License</th><th>Phone</th><th>Joined</th><th>Listings</th><th>Actions</th></tr></thead>
-        <tbody><tr class="loading-row"><td colspan="8">Loading agents...</td></tr></tbody>
+        <thead><tr><th>Name</th><th>Email</th><th>Brokerage</th><th>License</th><th>Phone</th><th>Joined</th><th>Listings</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody><tr class="loading-row"><td colspan="9">Loading agents...</td></tr></tbody>
       </table>
     </div>
 
@@ -235,9 +252,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
         <div class="msg-field">
           <label>Recipient</label>
           <select id="msgTo">
-            <option value="all">All Agents</option>
+            <option value="all">All Approved Agents</option>
             <option value="active">Agents with Active Listings</option>
-            <option value="no_listing">Agents with No Listings (nudge to list)</option>
+            <option value="no_listing">Agents with No Listings</option>
             <option value="single">Single Agent (pick below)</option>
           </select>
         </div>
@@ -251,18 +268,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);-web
         </div>
         <div class="msg-field">
           <label>Message</label>
-          <textarea id="msgBody" placeholder="Write your message here...&#10;&#10;Keep it short. Agents are busy."></textarea>
+          <textarea id="msgBody" placeholder="Write your message here..."></textarea>
         </div>
         <button class="msg-send-btn" onclick="sendMessage()">Send Message →</button>
         <div class="msg-status" id="msgStatus"></div>
       </div>
-
       <div class="message-card">
         <h3>Quick Templates</h3>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <button class="action-btn primary" onclick="setTemplate('nudge')">📋 List Your First Property (nudge)</button>
+          <button class="action-btn primary" onclick="setTemplate('nudge')">📋 List Your First Property</button>
           <button class="action-btn success" onclick="setTemplate('welcome')">👋 Personal Welcome</button>
-          <button class="action-btn warn" onclick="setTemplate('closing')">💰 Reminder: Report Your Closings</button>
+          <button class="action-btn warn" onclick="setTemplate('closing')">💰 Report Your Closings</button>
         </div>
       </div>
     </div>
@@ -279,15 +295,18 @@ const sb = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
 );
 
-// ── ADMIN EMAIL — only this email can access ──
-const ADMIN_EMAIL = 'campaigns@transbidlive.faith';
+// ── BOTH ADMIN EMAILS ──
+const ADMIN_EMAILS = [
+  'campaigns@transbidlive.faith',
+  'contactfire757@gmail.com'
+];
 
 let allAgentsData = [];
 let allListingsData = [];
 
 // ── LOGIN ──
 async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
   const pw    = document.getElementById('loginPw').value;
   const err   = document.getElementById('loginErr');
   err.style.display = 'none';
@@ -298,10 +317,9 @@ async function doLogin() {
 
   if (error) { err.textContent = 'Invalid credentials.'; err.style.display = 'block'; return; }
 
-  // Verify admin email
-  if (data.user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+  if (!ADMIN_EMAILS.includes(data.user.email.toLowerCase())) {
     await sb.auth.signOut();
-    err.textContent = 'Access denied. This portal is restricted.';
+    err.textContent = 'Access denied.';
     err.style.display = 'block';
     return;
   }
@@ -316,7 +334,7 @@ async function doSignout() {
 
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
-  if (session && session.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+  if (session && ADMIN_EMAILS.includes(session.user.email.toLowerCase())) {
     showAdmin();
   }
 }
@@ -331,54 +349,67 @@ function showAdmin() {
   loadClosings();
 }
 
-function showPanel(name) {
+function showPanel(name, tabEl) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  event.target.classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
 }
 
 // ── OVERVIEW ──
 async function loadOverview() {
   const [
     { count: agentCount },
+    { count: pendingCount },
     { count: listingCount },
     { count: leadCount },
     { data: closingsData }
   ] = await Promise.all([
-    sb.from('agents').select('*', { count:'exact', head:true }),
+    sb.from('agents').select('*', { count:'exact', head:true }).eq('approved', true),
+    sb.from('agents').select('*', { count:'exact', head:true }).eq('approved', false),
     sb.from('listings').select('*', { count:'exact', head:true }).eq('status','active'),
     sb.from('leads').select('*', { count:'exact', head:true }),
-    sb.from('closings').select('goz_fee, status').limit(100)
+    sb.from('closings').select('goz_fee, status').limit(200)
   ]);
 
   document.getElementById('s-agents').textContent   = agentCount || 0;
+  document.getElementById('s-pending').textContent  = pendingCount || 0;
   document.getElementById('s-listings').textContent = listingCount || 0;
   document.getElementById('s-leads').textContent    = leadCount || 0;
 
   const closings = closingsData || [];
-  document.getElementById('s-closings').textContent = closings.length;
   const revenue = closings.reduce((sum, c) => sum + (c.goz_fee || 0), 0);
   document.getElementById('s-revenue').textContent = '$' + revenue.toLocaleString();
 
-  // Recent agents
-  const { data: recentAgents } = await sb.from('agents')
-    .select('id, first_name, last_name, brokerage, created_at')
-    .order('created_at', { ascending: false }).limit(8);
-
-  // Get listing counts
-  const agentIds = (recentAgents || []).map(a => a.id);
-  let lCounts = {};
-  if (agentIds.length) {
-    const { data: lData } = await sb.from('listings').select('agent_id').eq('status','active').in('agent_id', agentIds);
-    (lData || []).forEach(l => lCounts[l.agent_id] = (lCounts[l.agent_id]||0)+1);
+  // Show pending banner
+  if (pendingCount > 0) {
+    const banner = document.getElementById('pendingBanner');
+    banner.style.display = 'block';
+    document.getElementById('pendingBannerText').textContent =
+      `${pendingCount} agent${pendingCount!==1?'s have':' has'} signed up and ${pendingCount!==1?'are':'is'} waiting for your review. Listings are hidden until you approve.`;
+    // Badge on Agents tab
+    const tab = document.getElementById('tabAgents');
+    tab.classList.add('has-pending');
+    tab.setAttribute('data-count', pendingCount);
   }
 
-  const agentTbody = document.querySelector('#recentAgentsTable tbody');
-  agentTbody.innerHTML = (recentAgents||[]).map(a => `
+  // Recent agents
+  const { data: recentAgents } = await sb.from('agents')
+    .select('id, first_name, last_name, brokerage, approved, verified, created_at')
+    .order('created_at', { ascending: false }).limit(8);
+
+  let lCounts = {};
+  if ((recentAgents||[]).length) {
+    const { data: lData } = await sb.from('listings').select('agent_id').eq('status','active').in('agent_id', recentAgents.map(a=>a.id));
+    (lData||[]).forEach(l => lCounts[l.agent_id] = (lCounts[l.agent_id]||0)+1);
+  }
+
+  document.querySelector('#recentAgentsTable tbody').innerHTML = (recentAgents||[]).map(a => `
     <tr>
-      <td><strong>${a.first_name} ${a.last_name}</strong></td>
-      <td style="color:var(--gray)">${a.brokerage||'—'}</td>
+      <td><strong>${a.first_name} ${a.last_name}</strong>
+        ${a.verified ? ' <span class="goz-approved-badge">★ GOZ</span>' : ''}
+      </td>
+      <td><span class="badge ${a.approved?'green':'orange'}">${a.approved?'Approved':'Pending'}</span></td>
       <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gray)">${timeAgo(a.created_at)}</td>
       <td><span class="badge ${(lCounts[a.id]||0)>0?'green':'gray'}">${lCounts[a.id]||0}</span></td>
     </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--gray);padding:20px">No agents yet</td></tr>';
@@ -388,8 +419,7 @@ async function loadOverview() {
     .select('buyer_name, buyer_email, created_at, listings(address, city)')
     .order('created_at', { ascending:false }).limit(8);
 
-  const leadTbody = document.querySelector('#recentLeadsTable tbody');
-  leadTbody.innerHTML = (recentLeads||[]).map(l => `
+  document.querySelector('#recentLeadsTable tbody').innerHTML = (recentLeads||[]).map(l => `
     <tr>
       <td><strong>${l.buyer_name}</strong><br><span style="font-size:11px;color:var(--gray)">${l.buyer_email}</span></td>
       <td style="font-size:12px;color:var(--gray)">${l.listings?.address||'—'}, ${l.listings?.city||''}</td>
@@ -400,40 +430,53 @@ async function loadOverview() {
 // ── AGENTS ──
 async function loadAgents() {
   const { data } = await sb.from('agents')
-    .select('id, first_name, last_name, email, brokerage, license_number, phone, state, commission_rate, created_at, approved')
+    .select('id, first_name, last_name, email, brokerage, license_number, phone, state, created_at, approved, verified')
     .order('created_at', { ascending:false });
 
   allAgentsData = data || [];
-  document.getElementById('agentCount').textContent = `(${allAgentsData.length})`;
 
-  // Get listing counts
   let lCounts = {};
   if (allAgentsData.length) {
     const { data: lData } = await sb.from('listings').select('agent_id').in('agent_id', allAgentsData.map(a=>a.id));
     (lData||[]).forEach(l => lCounts[l.agent_id] = (lCounts[l.agent_id]||0)+1);
   }
 
-  renderAgentsTable(allAgentsData, lCounts);
-}
+  const pending  = allAgentsData.filter(a => !a.approved);
+  const approved = allAgentsData.filter(a => a.approved);
 
-function isTestAgent(a) {
-  const name = `${a.first_name} ${a.last_name}`.toLowerCase();
-  if (/^(.)\1+$/.test(a.first_name||'')) return true;
-  if (name.includes('test') || name.includes('fake') || name.includes('demo')) return true;
-  if (!a.brokerage && !a.license_number) return true;
-  return false;
+  // Pending section
+  const pendingSection = document.getElementById('pendingSection');
+  pendingSection.style.display = pending.length ? 'block' : 'none';
+  document.getElementById('pendingCount').textContent = pending.length ? `(${pending.length})` : '';
+
+  document.querySelector('#pendingTable tbody').innerHTML = pending.length
+    ? pending.map(a => `
+      <tr style="background:#fffbf0">
+        <td><strong>${a.first_name} ${a.last_name}</strong></td>
+        <td><a href="mailto:${a.email}" style="color:var(--blue);font-size:12px">${a.email||'—'}</a></td>
+        <td style="font-size:12px;color:var(--gray)">${a.brokerage||'—'}</td>
+        <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gray)">${a.license_number||'—'}</td>
+        <td style="font-size:12px;color:var(--gray)">${a.phone||'—'}</td>
+        <td style="font-size:12px;color:var(--gray)">${a.state||'—'}</td>
+        <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gray)">${timeAgo(a.created_at)}</td>
+        <td><div class="actions-cell">
+          <button class="action-btn success" onclick="approveAgent('${a.id}','${a.first_name}','${a.last_name}','${a.email}')">✓ Approve</button>
+          <button class="action-btn danger" onclick="deleteAgent('${a.id}','${a.first_name} ${a.last_name}')">✗ Reject</button>
+        </div></td>
+      </tr>`).join('')
+    : '<tr><td colspan="8" style="text-align:center;color:var(--gray);padding:20px">No pending agents</td></tr>';
+
+  // Approved agents count
+  document.getElementById('agentCount').textContent = `(${approved.length})`;
+  renderAgentsTable(approved, lCounts);
 }
 
 function filterAdminAgents() {
   const q = document.getElementById('agentSearchAdmin').value.toLowerCase();
-  const status = document.getElementById('agentStatusFilter').value;
-  let filtered = allAgentsData.filter(a => {
+  const approved = allAgentsData.filter(a => a.approved);
+  const filtered = !q ? approved : approved.filter(a => {
     const name = `${a.first_name} ${a.last_name}`.toLowerCase();
-    const matchQ = !q || name.includes(q) || (a.email||'').toLowerCase().includes(q) || (a.brokerage||'').toLowerCase().includes(q);
-    const matchStatus = !status ||
-      (status === 'real' && !isTestAgent(a)) ||
-      (status === 'test' && isTestAgent(a));
-    return matchQ && matchStatus;
+    return name.includes(q) || (a.email||'').toLowerCase().includes(q) || (a.brokerage||'').toLowerCase().includes(q);
   });
   renderAgentsTable(filtered, {});
 }
@@ -441,51 +484,95 @@ function filterAdminAgents() {
 function renderAgentsTable(agents, lCounts) {
   const tbody = document.querySelector('#agentsTable tbody');
   tbody.innerHTML = agents.map(a => {
-    const isTest = isTestAgent(a);
-    const listingCount = lCounts[a.id] || 0;
-    return `<tr style="${isTest?'opacity:0.5':''}">
+    const lCount = lCounts[a.id] || 0;
+    return `<tr>
       <td>
         <strong>${a.first_name} ${a.last_name}</strong>
-        ${isTest ? '<span class="badge red" style="margin-left:6px">Test</span>' : ''}
+        ${a.verified ? ' <span class="goz-approved-badge">★ GOZ</span>' : ''}
       </td>
       <td style="font-size:12px"><a href="mailto:${a.email}" style="color:var(--blue)">${a.email||'—'}</a></td>
       <td style="font-size:12px;color:var(--gray)">${a.brokerage||'—'}</td>
       <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gray)">${a.license_number||'—'}</td>
       <td style="font-size:12px;color:var(--gray)">${a.phone||'—'}</td>
       <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gray)">${timeAgo(a.created_at)}</td>
-      <td><span class="badge ${listingCount>0?'green':'gray'}">${listingCount}</span></td>
-      <td style="display:flex;gap:4px;flex-wrap:wrap">
+      <td><span class="badge ${lCount>0?'green':'gray'}">${lCount}</span></td>
+      <td>
+        ${a.verified
+          ? '<span class="goz-approved-badge">★ GOZ Approved</span>'
+          : '<span class="badge gray">Unverified</span>'}
+      </td>
+      <td><div class="actions-cell">
+        ${!a.verified
+          ? `<button class="action-btn warn" onclick="grantApproved('${a.id}','${a.first_name} ${a.last_name}')">★ Grant GOZ</button>`
+          : `<button class="action-btn orange" onclick="revokeApproved('${a.id}','${a.first_name} ${a.last_name}')">Revoke</button>`}
         <button class="action-btn primary" onclick="emailAgent('${a.email}','${a.first_name}')">Email</button>
         <button class="action-btn danger" onclick="deleteAgent('${a.id}','${a.first_name} ${a.last_name}')">Delete</button>
-      </td>
+      </div></td>
     </tr>`;
-  }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--gray);padding:24px">No agents found</td></tr>';
+  }).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--gray);padding:24px">No approved agents</td></tr>';
+}
+
+// ── APPROVE / REJECT ──
+async function approveAgent(id, firstName, lastName, email) {
+  const { error } = await sb.from('agents').update({ approved: true }).eq('id', id);
+  if (error) { showToast('Error: ' + error.message); return; }
+
+  // Send approval email via API
+  try {
+    await fetch('/api/agent-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ _action: 'send_approval', email, first_name: firstName, last_name: lastName })
+    });
+  } catch(e) { /* non-fatal */ }
+
+  // Also make their listings active
+  await sb.from('listings').update({ status: 'active' }).eq('agent_id', id).eq('status', 'pending_approval');
+
+  showToast(`✓ ${firstName} ${lastName} approved — listings now live`);
+  loadAgents();
+  loadOverview();
 }
 
 async function deleteAgent(id, name) {
-  if (!confirm(`Delete agent "${name}"?\n\nThis will remove their account and all listings. This cannot be undone.`)) return;
-  // Delete listings first
+  if (!confirm(`Delete agent "${name}"?\n\nThis will remove their account and all listings. Cannot be undone.`)) return;
   await sb.from('listings').delete().eq('agent_id', id);
-  // Delete agent
   const { error } = await sb.from('agents').delete().eq('id', id);
   if (error) { showToast('Delete failed: ' + error.message); return; }
-  showToast(`✓ ${name} deleted`);
+  showToast(`✓ ${name} removed`);
   loadAgents();
   loadOverview();
+}
+
+// ── GOZ APPROVED BADGE ──
+async function grantApproved(id, name) {
+  if (!confirm(`Grant GOZ Approved badge to ${name}?\n\nThis means you have personally verified this agent's license and identity.`)) return;
+  const { error } = await sb.from('agents').update({ verified: true }).eq('id', id);
+  if (error) { showToast('Error: ' + error.message); return; }
+  showToast(`★ GOZ Approved badge granted to ${name}`);
+  loadAgents();
+}
+
+async function revokeApproved(id, name) {
+  if (!confirm(`Revoke GOZ Approved badge from ${name}?`)) return;
+  const { error } = await sb.from('agents').update({ verified: false }).eq('id', id);
+  if (error) { showToast('Error: ' + error.message); return; }
+  showToast(`Badge revoked from ${name}`);
+  loadAgents();
 }
 
 function emailAgent(email, name) {
   document.getElementById('msgTo').value = 'single';
   document.getElementById('singleAgentField').style.display = 'block';
   document.getElementById('msgSingleEmail').value = email;
-  showPanel('messages');
-  document.querySelectorAll('.admin-tab').forEach((t,i) => t.classList.toggle('active', i === 5));
+  showPanel('messages', null);
+  document.querySelectorAll('.admin-tab').forEach((t,i) => t.classList.toggle('active', i===5));
 }
 
 // ── LISTINGS ──
 async function loadListings() {
   const { data } = await sb.from('listings')
-    .select('id, address, city, state, price, commission_rate, listing_type, status, created_at, featured, agents(first_name, last_name, email)')
+    .select('id, address, city, state, price, commission_rate, listing_type, status, created_at, featured, agents(first_name, last_name, email, approved)')
     .order('created_at', { ascending:false });
 
   allListingsData = data || [];
@@ -507,19 +594,23 @@ function renderListingsTable(listings) {
   const tbody = document.querySelector('#listingsTable tbody');
   tbody.innerHTML = listings.map(l => {
     const agentName = l.agents ? `${l.agents.first_name} ${l.agents.last_name}` : '—';
+    const agentApproved = l.agents?.approved;
     return `<tr>
       <td><strong>${l.address}</strong><br><span style="font-size:11px;color:var(--gray)">${l.city}, ${l.state}</span></td>
       <td style="font-family:'Bebas Neue',sans-serif;font-size:17px">$${Number(l.price).toLocaleString()}</td>
-      <td style="font-size:12px;color:var(--gray)">${agentName}</td>
+      <td style="font-size:12px;color:var(--gray)">
+        ${agentName}
+        ${!agentApproved ? '<span class="badge orange" style="margin-left:4px">Pending</span>' : ''}
+      </td>
       <td><span class="badge green">${l.commission_rate||'2.5%'}</span></td>
       <td><span class="badge blue">${l.listing_type||'for_sale'}</span></td>
       <td><span class="badge ${l.status==='active'?'green':l.status==='sold'?'gold':'gray'}">${l.status}</span>
-          ${l.featured?'<span class="badge gold" style="margin-left:4px">★ Featured</span>':''}</td>
+          ${l.featured?'<span class="badge gold" style="margin-left:4px">★</span>':''}</td>
       <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gray)">${timeAgo(l.created_at)}</td>
-      <td style="display:flex;gap:4px">
+      <td><div class="actions-cell">
         <button class="action-btn warn" onclick="toggleFeaturedAdmin('${l.id}',${!!l.featured})">${l.featured?'Unfeature':'Feature'}</button>
         <button class="action-btn danger" onclick="deleteListing('${l.id}','${l.address}')">Delete</button>
-      </td>
+      </div></td>
     </tr>`;
   }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--gray);padding:24px">No listings</td></tr>';
 }
@@ -530,7 +621,6 @@ async function deleteListing(id, address) {
   if (error) { showToast('Delete failed: ' + error.message); return; }
   showToast('✓ Listing deleted');
   loadListings();
-  loadOverview();
 }
 
 async function toggleFeaturedAdmin(id, current) {
@@ -543,11 +633,9 @@ async function toggleFeaturedAdmin(id, current) {
 async function loadLeads() {
   const { data } = await sb.from('leads')
     .select('id, buyer_name, buyer_email, buyer_phone, created_at, ip_address, listings(address, city), agents(first_name, last_name)')
-    .order('created_at', { ascending:false })
-    .limit(100);
+    .order('created_at', { ascending:false }).limit(100);
 
-  const tbody = document.querySelector('#leadsTable tbody');
-  tbody.innerHTML = (data||[]).map(l => `
+  document.querySelector('#leadsTable tbody').innerHTML = (data||[]).map(l => `
     <tr>
       <td><strong>${l.buyer_name}</strong></td>
       <td style="font-size:12px"><a href="mailto:${l.buyer_email}" style="color:var(--blue)">${l.buyer_email}</a></td>
@@ -565,8 +653,7 @@ async function loadClosings() {
     .select('id, sale_price, commission_rate, dual_agency, gross_commission, goz_fee, payment_method, status, created_at, agents(first_name, last_name, email), listings(address, city)')
     .order('created_at', { ascending:false });
 
-  const tbody = document.querySelector('#closingsTable tbody');
-  tbody.innerHTML = (data||[]).map(c => `
+  document.querySelector('#closingsTable tbody').innerHTML = (data||[]).map(c => `
     <tr>
       <td style="font-size:12px">${c.agents?`${c.agents.first_name} ${c.agents.last_name}`:'—'}<br>
         <span style="color:var(--gray);font-size:11px">${c.agents?.email||''}</span></td>
@@ -577,10 +664,8 @@ async function loadClosings() {
       <td style="font-size:12px;color:var(--gray)">${c.payment_method||'honor'}</td>
       <td><span class="badge ${c.status==='paid'?'green':c.status==='pending_payment'?'gold':'gray'}">${c.status||'pending'}</span></td>
       <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gray)">${timeAgo(c.created_at)}</td>
-      <td>
-        ${c.status !== 'paid' ? `<button class="action-btn success" onclick="markPaid('${c.id}')">Mark Paid</button>` : ''}
-      </td>
-    </tr>`).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--gray);padding:24px">No closings reported yet</td></tr>';
+      <td>${c.status!=='paid'?`<button class="action-btn success" onclick="markPaid('${c.id}')">Mark Paid</button>`:''}</td>
+    </tr>`).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--gray);padding:24px">No closings yet</td></tr>';
 }
 
 async function markPaid(id) {
@@ -601,16 +686,20 @@ async function sendMessage() {
   const body    = document.getElementById('msgBody').value.trim();
   const status  = document.getElementById('msgStatus');
 
-  if (!subject || !body) { status.textContent = 'Subject and message are required.'; status.className = 'msg-status err'; status.style.display='block'; return; }
+  if (!subject || !body) {
+    status.textContent = 'Subject and message required.';
+    status.className = 'msg-status err';
+    status.style.display = 'block';
+    return;
+  }
 
-  // Get recipient emails
   let emails = [];
   if (to === 'single') {
     const single = document.getElementById('msgSingleEmail').value.trim();
     if (!single) { status.textContent = 'Enter agent email.'; status.className = 'msg-status err'; status.style.display='block'; return; }
     emails = [single];
   } else {
-    const { data: agents } = await sb.from('agents').select('email, first_name');
+    const { data: agents } = await sb.from('agents').select('id, email').eq('approved', true);
     if (to === 'all') {
       emails = (agents||[]).map(a => a.email).filter(Boolean);
     } else if (to === 'active') {
@@ -626,7 +715,6 @@ async function sendMessage() {
 
   if (!emails.length) { status.textContent = 'No recipients found.'; status.className = 'msg-status err'; status.style.display='block'; return; }
 
-  // Send via API
   try {
     const resp = await fetch('/api/admin-message', {
       method: 'POST',
@@ -635,14 +723,14 @@ async function sendMessage() {
     });
     const result = await resp.json();
     if (result.success) {
-      status.textContent = `✓ Message sent to ${emails.length} recipient${emails.length!==1?'s':''}.`;
+      status.textContent = `✓ Sent to ${emails.length} recipient${emails.length!==1?'s':''}.`;
       status.className = 'msg-status ok';
     } else {
-      status.textContent = 'Send failed: ' + (result.error||'Unknown error');
+      status.textContent = 'Failed: ' + (result.error||'Unknown error');
       status.className = 'msg-status err';
     }
   } catch(e) {
-    status.textContent = 'Send failed: ' + e.message;
+    status.textContent = 'Failed: ' + e.message;
     status.className = 'msg-status err';
   }
   status.style.display = 'block';
@@ -652,22 +740,19 @@ function setTemplate(type) {
   const templates = {
     nudge: {
       subject: "Your GOZ listing is one step away",
-      body: "Hey [name],\n\nYou signed up for GOZ but haven't listed a property yet.\n\nTakes 3 minutes. The AI writes the description for you. Your listing goes live immediately — free, no commitment until a GOZ buyer closes with you.\n\nList your first property: https://getoffzillow.com/list.html\n\n— The GOZ Team"
+      body: "Hey [name],\n\nYou signed up for GOZ but haven't listed a property yet.\n\nTakes 3 minutes. The AI writes the description. Your listing goes live immediately — free, no commitment until a GOZ buyer closes.\n\nhttps://getoffzillow.com/list.html\n\n— The GOZ Team"
     },
     welcome: {
       subject: "Welcome to GOZ — a quick note",
-      body: "Hey [name],\n\nJust wanted to personally reach out. You're one of the first agents on GOZ in the Gulf South — that means something.\n\nIf you have any questions or want to talk through the platform, just reply to this email.\n\n— The GOZ Team\nPensacola, FL"
+      body: "Hey [name],\n\nJust wanted to personally reach out. You're one of the first agents on GOZ — that means something.\n\nIf you have any questions, just reply.\n\n— Chase\nGetOffZillow AI · Pensacola, FL"
     },
     closing: {
       subject: "Quick reminder: report your GOZ closings",
-      body: "Hey [name],\n\nIf you've closed a deal with a buyer who originally contacted you through GOZ, please report it in your dashboard.\n\nThe GOZ marketing fee is 3% of your gross commission — not 3% of the sale price. On a $10K commission that's $300. Report it here:\n\nhttps://getoffzillow.com/dashboard.html\n\nPay via Venmo @VinHunter with the property address in the note.\n\n— The GOZ Team"
+      body: "Hey [name],\n\nIf you closed a deal with a buyer who contacted you through GOZ, please log it in your dashboard.\n\nYour GOZ fee is 3% of your gross commission — not 3% of the sale price. On a $10K commission that's $300.\n\nhttps://getoffzillow.com/dashboard.html\n\nPay via Venmo @VinHunter with the property address in the note.\n\n— The GOZ Team"
     }
   };
   const t = templates[type];
-  if (t) {
-    document.getElementById('msgSubject').value = t.subject;
-    document.getElementById('msgBody').value = t.body;
-  }
+  if (t) { document.getElementById('msgSubject').value = t.subject; document.getElementById('msgBody').value = t.body; }
 }
 
 // ── UTILS ──
