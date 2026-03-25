@@ -1493,7 +1493,7 @@ async function submitListing(e) {
     beds: parseInt(document.getElementById('beds').value) || null,
     baths: parseFloat(document.getElementById('baths').value) || null,
     sqft: parseInt(document.getElementById('sqft').value) || null,
-    acreage: parseFloat(document.getElementById('acreage').value) || null,
+    acreage: parseFloat(document.getElementById('acreage').value) || undefined,
     description: document.getElementById('description').value.trim() || null,
     listing_type: document.getElementById('listing_type').value || 'for_sale',
     commission_rate: getCommissionValue(),
