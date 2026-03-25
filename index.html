@@ -17,6 +17,7 @@
 <meta name="twitter:image" content="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 <title>GetOffZillow AI — Real Estate. No Extraction.</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   :root {
     --blue: #006AFF; --dark-blue: #0050CC; --teal: #00B2A9; --navy: #0a1f44;
@@ -196,33 +197,15 @@
   .map-layout { display:grid; grid-template-columns:360px 1fr; gap:20px; min-height:500px; margin-top:40px; }
   .map-sidebar { background:white; border-radius:12px; overflow:hidden; box-shadow:0 1px 8px rgba(0,0,0,0.08); display:flex; flex-direction:column; }
   .map-sidebar-header { padding:14px 16px; background:var(--blue); color:white; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; display:flex; align-items:center; justify-content:space-between; }
-  .map-filters { display:flex; gap:8px; padding:10px 12px; flex-wrap:wrap; border-bottom:1px solid var(--border); }
-  .mf-chip { padding:5px 12px; border:1.5px solid var(--border); border-radius:16px; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.15s; background:white; }
-  .mf-chip.active,.mf-chip:hover { background:var(--blue); color:white; border-color:var(--blue); }
-  .map-list { overflow-y:auto; flex:1; }
-  .map-list-item { display:flex; gap:12px; padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.15s; }
-  .map-list-item:hover { background:var(--bg); }
-  .map-thumb { width:76px; height:62px; border-radius:6px; background:linear-gradient(135deg,#c8d8f0,#a8c0e8); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
-  .mli-price { font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; }
-  .mli-addr { font-size:12px; color:var(--gray); margin-top:1px; }
-  .mli-specs { font-size:11px; color:var(--gray); margin-top:4px; }
-  .mli-commission { font-size:11px; color:var(--green); font-weight:700; margin-top:3px; }
-  .fake-map { background:#dce8f5; border-radius:12px; position:relative; overflow:hidden; box-shadow:0 1px 8px rgba(0,0,0,0.08); }
-  .map-grid-lines { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.6) 1px,transparent 1px); background-size:44px 44px; }
-  .fake-road { position:absolute; background:rgba(255,255,255,0.85); border-radius:3px; }
-  .road-h { left:0; right:0; height:7px; }
-  .road-v { top:0; bottom:0; width:7px; }
-  .map-pin { position:absolute; background:var(--blue); color:white; font-family:'Nunito',sans-serif; font-weight:900; font-size:11px; padding:5px 10px; border-radius:5px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.2); transition:transform 0.2s; }
-  .map-pin::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:var(--blue); border-bottom:none; }
-  .map-pin:hover { transform:scale(1.1) translateY(-2px); }
-  .map-pin.low { background:var(--green); }
-  .map-pin.low::after { border-top-color:var(--green); }
-  .map-pin.hot { background:var(--goz-accent); }
-  .map-pin.hot::after { border-top-color:var(--goz-accent); }
-  .map-legend { position:absolute; bottom:16px; right:16px; background:rgba(255,255,255,0.95); border-radius:8px; padding:10px 14px; font-size:11px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-  .map-legend-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
-  .map-legend-row:last-child { margin-bottom:0; }
-  .legend-dot { width:10px; height:10px; border-radius:2px; }
+  #gozMap { border-radius:12px; overflow:hidden; box-shadow:0 1px 8px rgba(0,0,0,0.08); min-height:500px; z-index:1; }
+  .goz-map-pin { background:var(--blue); color:white; border:none; border-radius:6px; padding:5px 10px; font-family:'Nunito',sans-serif; font-weight:900; font-size:12px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.25); white-space:nowrap; }
+  .goz-map-pin::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:var(--blue); border-bottom:none; }
+  .goz-map-pin.low { background:var(--green); color:#111; }
+  .goz-map-pin.low::after { border-top-color:var(--green); }
+  .leaflet-popup-content { font-family:'Nunito Sans',sans-serif; font-size:13px; line-height:1.5; min-width:180px; }
+  .leaflet-popup-content strong { font-size:15px; display:block; margin-bottom:3px; }
+  .leaflet-popup-content .pop-comm { color:var(--green-dark); font-weight:700; font-size:11px; margin-top:4px; }
+  .leaflet-popup-content a { display:block; margin-top:8px; background:var(--blue); color:white; text-align:center; padding:7px; border-radius:6px; text-decoration:none; font-weight:700; font-size:12px; }
 
   /* AGENT SIGNUP SECTION */
   .agent-section { background:#EBF3FF; padding:80px 24px; }
@@ -293,7 +276,7 @@
   @media(max-width:1024px) {
     .listings-grid { grid-template-columns:repeat(2,1fr); }
     .map-layout { grid-template-columns:1fr; }
-    .fake-map { min-height:300px; }
+    #gozMap { min-height:300px; }
     .referral-grid,.agent-inner,.mortgage-inner { grid-template-columns:1fr; gap:32px; }
     .steps-grid { grid-template-columns:repeat(2,1fr); }
     .footer-top { grid-template-columns:1fr 1fr 1fr; }
@@ -740,33 +723,13 @@
 <section class="map-section" id="map">
   <div class="section-eyebrow">Search by Map</div>
   <h2 class="section-title">Browse by <span class="blue">Neighborhood.</span></h2>
-  <p class="section-sub">Every pin shows commission upfront. Click to contact the agent directly.</p>
+  <p class="section-sub">Every pin shows the seller's offered commission. Click any pin to contact the agent directly.</p>
   <div class="map-layout">
     <div class="map-sidebar">
       <div class="map-sidebar-header"><span id="mapCount">Loading...</span><span style="font-size:11px;font-weight:400;opacity:0.75">commissions shown</span></div>
-      <div class="map-filters">
-        <div class="mf-chip active">For Sale</div>
-        <div class="mf-chip" onclick="this.classList.toggle('active')">Price ▾</div>
-        <div class="mf-chip" onclick="this.classList.toggle('active')">Beds ▾</div>
-        <div class="mf-chip" onclick="this.classList.toggle('active')">Type ▾</div>
-      </div>
       <div class="map-list" id="mapListEl"></div>
     </div>
-    <div class="fake-map">
-      <div class="map-grid-lines"></div>
-      <div class="fake-road road-h" style="top:28%"></div>
-      <div class="fake-road road-h" style="top:52%"></div>
-      <div class="fake-road road-h" style="top:73%"></div>
-      <div class="fake-road road-v" style="left:22%"></div>
-      <div class="fake-road road-v" style="left:48%"></div>
-      <div class="fake-road road-v" style="left:70%"></div>
-      <div id="mapPins"></div>
-      <div class="map-legend">
-        <div class="map-legend-row"><div class="legend-dot" style="background:var(--blue)"></div><span>Active listing</span></div>
-        <div class="map-legend-row"><div class="legend-dot" style="background:var(--green)"></div><span>Under $200K</span></div>
-        <div class="map-legend-row"><div class="legend-dot" style="background:var(--goz-accent)"></div><span>New today</span></div>
-      </div>
-    </div>
+    <div id="gozMap"></div>
   </div>
 </section>
 
@@ -997,6 +960,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
@@ -1068,7 +1032,7 @@ async function loadListings() {
     liveListings = [];
   }
   renderListings();
-  renderMapList();
+  renderMapList(); // async — geocodes and places real pins
 }
 
 function getPhoto(listing, index) {
@@ -1128,52 +1092,90 @@ function renderListings() {
 }
 
 // Distribute pins across the fake map based on listing index
-const PIN_POSITIONS = [
-  {top:'18%',left:'14%'},{top:'60%',left:'30%'},{top:'30%',left:'55%'},
-  {top:'65%',left:'60%'},{top:'22%',left:'72%'},{top:'45%',left:'80%'},
-  {top:'78%',left:'45%'},{top:'38%',left:'18%'}
-];
+// ── REAL MAP (Leaflet + OpenStreetMap — no API key required) ──
+let gozMap = null;
+let mapMarkers = [];
 
-function renderMapList() {
+function initMap() {
+  if (gozMap) return;
+  gozMap = L.map('gozMap', { zoomControl: true, scrollWheelZoom: false });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(gozMap);
+}
+
+async function geocodeListing(listing) {
+  try {
+    const q = encodeURIComponent(listing.address + ', ' + listing.city + ', ' + listing.state);
+    const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q=' + q, {
+      headers: { 'Accept-Language': 'en' }
+    });
+    const data = await res.json();
+    if (data.length > 0) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+  } catch(e) {}
+  return null;
+}
+
+async function renderMapList() {
   const el = document.getElementById('mapListEl');
   const count = document.getElementById('mapCount');
-  const pinsEl = document.getElementById('mapPins');
   const items = liveListings.slice(0, 8);
 
-  if (count) count.textContent = `${items.length} home${items.length !== 1 ? 's' : ''} available`;
+  if (count) count.textContent = items.length + ' home' + (items.length !== 1 ? 's' : '') + ' available';
 
   if (!items.length) {
     el.innerHTML = '<div style="padding:20px;text-align:center;color:#999;font-size:13px">No listings yet</div>';
-    if (pinsEl) pinsEl.innerHTML = '';
     return;
   }
 
-  // Sidebar list
   el.innerHTML = items.map((l, i) => {
     const photos = parsePhotos(l.photos);
-    const thumb = photos.length > 0
-      ? `<img src="${photos[0]}" style="width:100%;height:100%;object-fit:cover" data-fallback="${DEMO_PHOTOS[i%DEMO_PHOTOS.length]}" onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback}" />`
-      : `<img src="${DEMO_PHOTOS[i % DEMO_PHOTOS.length]}" style="width:100%;height:100%;object-fit:cover" />`;
-    return `
-    <div class="map-list-item" onclick="window.location.href='listing.html?id=${l.id}'">
-      <div class="map-thumb" style="overflow:hidden;position:relative">${thumb}</div>
-      <div>
-        <div class="mli-price">$${Number(l.price).toLocaleString()}</div>
-        <div class="mli-addr">${l.address}</div>
-        <div class="mli-addr" style="color:#999">${l.city}, ${l.state}</div>
-        ${l.beds || l.baths ? `<div class="mli-specs">${l.beds?l.beds+'bd':''} ${l.baths?'· '+l.baths+'ba':''} ${l.sqft?'· '+Number(l.sqft).toLocaleString()+' sqft':''}</div>` : ''}
-        <div class="mli-commission">\u2713 ${l.commission_rate || '2.5%'} buyer's agent fee — paid by seller</div>
-      </div>
-    </div>`;
+    const src = photos.length > 0 ? photos[0] : DEMO_PHOTOS[i % DEMO_PHOTOS.length];
+    const fb = DEMO_PHOTOS[i % DEMO_PHOTOS.length];
+    return '<div onclick="window.location.href='listing.html?id=' + l.id + ''" style="display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid #D8D8D8;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background=''">'
+      + '<div style="width:76px;height:62px;border-radius:6px;overflow:hidden;flex-shrink:0"><img src="' + src + '" data-fallback="' + fb + '" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" style="width:100%;height:100%;object-fit:cover"/></div>'
+      + '<div>'
+      + '<div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px">$' + Number(l.price).toLocaleString() + '</div>'
+      + '<div style="font-size:12px;color:#6B6B6B;margin-top:1px">' + l.address + '</div>'
+      + '<div style="font-size:12px;color:#999">' + l.city + ', ' + l.state + '</div>'
+      + '<div style="font-size:11px;color:#00843d;font-weight:700;margin-top:3px">&#10003; ' + (l.commission_rate || '2.5%') + ' buyer's agent fee</div>'
+      + '</div></div>';
   }).join('');
 
-  // Map pins from real listings
-  if (pinsEl) {
-    pinsEl.innerHTML = items.map((l, i) => {
-      const pos = PIN_POSITIONS[i % PIN_POSITIONS.length];
-      const price = '$' + (Number(l.price)/1000).toFixed(0) + 'K';
-      return `<div class="map-pin" style="top:${pos.top};left:${pos.left}" onclick="window.location.href='listing.html?id=${l.id}'">${price}</div>`;
-    }).join('');
+  initMap();
+  mapMarkers.forEach(m => m.remove());
+  mapMarkers = [];
+
+  const bounds = [];
+  for (const l of items) {
+    const coords = await geocodeListing(l);
+    if (!coords) continue;
+    bounds.push([coords.lat, coords.lng]);
+    const isLow = l.price < 200000;
+    const color = isLow ? '#00C853' : '#006AFF';
+    const priceLabel = '$' + (Number(l.price)/1000).toFixed(0) + 'K';
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="background:' + color + ';color:white;border-radius:6px;padding:5px 10px;font-family:Nunito,sans-serif;font-weight:900;font-size:12px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.25);white-space:nowrap;position:relative">'
+        + priceLabel
+        + '<div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:' + color + ';border-bottom:none"></div></div>',
+      iconAnchor: [25, 30],
+      popupAnchor: [0, -32]
+    });
+    const popup = '<strong style="font-size:15px;display:block;margin-bottom:3px">$' + Number(l.price).toLocaleString() + '</strong>'
+      + l.address + '<br>' + l.city + ', ' + l.state + '<br>'
+      + (l.beds ? l.beds + 'bd ' : '') + (l.baths ? l.baths + 'ba' : '')
+      + '<div style="color:#00843d;font-weight:700;font-size:11px;margin-top:4px">&#10003; ' + (l.commission_rate || '2.5%') + ' buyer's agent fee — paid by seller</div>'
+      + '<a href="listing.html?id=' + l.id + '" style="display:block;margin-top:8px;background:#006AFF;color:white;text-align:center;padding:7px;border-radius:6px;text-decoration:none;font-weight:700;font-size:12px">View Listing &amp; Contact Agent &rarr;</a>';
+    const marker = L.marker([coords.lat, coords.lng], { icon }).bindPopup(popup).addTo(gozMap);
+    mapMarkers.push(marker);
+  }
+
+  if (bounds.length > 0) {
+    bounds.length === 1 ? gozMap.setView(bounds[0], 13) : gozMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+  } else {
+    gozMap.setView([32.5, -88], 5);
   }
 }
 
