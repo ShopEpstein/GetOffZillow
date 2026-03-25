@@ -825,18 +825,24 @@
             <div class="price-display" id="priceDisplay"></div>
           </div>
           <div class="form-group">
-            <label>Buyer's Agent Commission You're Offering</label>
-            <select id="commission_rate">
-              <option value="1%">1%</option>
-              <option value="1.5%">1.5%</option>
-              <option value="2%">2%</option>
-              <option value="2.5%" selected>2.5%</option>
-              <option value="2.75%">2.75%</option>
-              <option value="3%">3%</option>
-              <option value="3.5%">3.5%</option>
-              <option value="Negotiable">Negotiable</option>
-            </select>
-            <div class="hint">What you'll pay a buyer's agent at closing — shown publicly on your listing. GOZ's 3% marketing fee is separate and only charged to you at closing.</div>
+            <label>Buyer's Agent Commission You're Offering *</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select id="commission_rate_select" onchange="handleCommSelect(this.value)" style="flex:1">
+                <option value="1%">1%</option>
+                <option value="1.5%">1.5%</option>
+                <option value="2%">2%</option>
+                <option value="2.4%">2.4%</option>
+                <option value="2.5%" selected>2.5%</option>
+                <option value="2.75%">2.75%</option>
+                <option value="3%">3%</option>
+                <option value="3.5%">3.5%</option>
+                <option value="Negotiable">Negotiable</option>
+                <option value="custom">Custom %...</option>
+              </select>
+              <input type="text" id="commission_rate_custom" id="commission_rate" placeholder="e.g. 2.4%" style="width:100px;display:none;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none" oninput="syncCustomComm(this.value)" />
+            </div>
+            <input type="hidden" id="commission_rate" value="2.5%" />
+            <div class="hint">What you'll pay a buyer's agent at closing — shown publicly. GOZ's 3% marketing fee is separate, charged to you only at closing.</div>
           </div>
         </div>
         <div class="form-grid-3">
@@ -860,9 +866,14 @@
               <option value="4+">4+</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="sqftGroup">
             <label>Sq Ft</label>
             <input type="number" id="sqft" placeholder="1840" min="1" />
+          </div>
+          <div class="form-group" id="acreageGroup" style="display:none">
+            <label>Acreage</label>
+            <input type="number" id="acreage" placeholder="e.g. 12.5" min="0" step="0.1" />
+            <div class="hint">Total acres — shown on listing instead of sq ft</div>
           </div>
         </div>
         <div class="form-grid-2">
@@ -877,13 +888,23 @@
           </div>
           <div class="form-group">
             <label>Property Type</label>
-            <select id="property_type">
-              <option value="Single Family">Single Family</option>
-              <option value="Condo">Condo / Townhouse</option>
-              <option value="Multi-Family">Multi-Family</option>
-              <option value="Land">Land / Lot</option>
-              <option value="Mobile Home">Mobile Home</option>
-              <option value="Commercial">Commercial</option>
+            <select id="property_type" onchange="togglePropertyType(this.value)">
+              <optgroup label="── RESIDENTIAL ──">
+                <option value="Single Family">Single Family Home</option>
+                <option value="Condo">Condo / Townhouse</option>
+                <option value="Multi-Family">Multi-Family (2–4 units)</option>
+                <option value="Mobile Home">Mobile / Manufactured Home</option>
+              </optgroup>
+              <optgroup label="── LAND ──">
+                <option value="Vacant Land">Vacant Land / Lot</option>
+                <option value="Acreage">Acreage (5+ acres)</option>
+                <option value="Waterfront Land">Waterfront Land</option>
+              </optgroup>
+              <optgroup label="── COMMERCIAL ──">
+                <option value="Commercial">Commercial Building</option>
+                <option value="Industrial">Industrial / Warehouse</option>
+                <option value="Mixed Use">Mixed Use</option>
+              </optgroup>
             </select>
           </div>
           <div class="form-group">
@@ -1055,15 +1076,13 @@ async function init() {
 // ── LISTING TYPE TOGGLE ──
 function toggleListingType(val) {
   const hint = document.getElementById('listingTypeHint');
-  const commGroup = document.getElementById('commission_rate')?.closest('.form-group');
+  const commGroup = document.getElementById('commission_rate_select')?.closest('.form-group');
   if (val === 'rental') {
     hint.textContent = 'Rental listing — flat $29 listing fee';
     hint.style.color = '#006AFF';
     if (commGroup) commGroup.style.opacity = '0.4';
-    const commLabel = document.getElementById('commission_rate')?.previousElementSibling;
-    if (commLabel) commLabel.textContent = 'Monthly Rent ($)';
   } else if (val === 'fsbo') {
-    hint.textContent = 'FSBO — no agent commission. Flat $49 marketing fee only if a GOZ buyer closes with you.';
+    hint.textContent = 'FSBO — you are selling without an agent. Flat $49 GOZ marketing fee only if a GOZ buyer closes.';
     hint.style.color = '#E67E00';
     if (commGroup) commGroup.style.display = 'none';
     let fsboNotice = document.getElementById('fsboNotice');
@@ -1071,23 +1090,72 @@ function toggleListingType(val) {
       fsboNotice = document.createElement('div');
       fsboNotice.id = 'fsboNotice';
       fsboNotice.style.cssText = 'background:#fff8f0;border-left:3px solid #E67E00;padding:12px 16px;border-radius:0 8px 8px 0;font-size:13px;color:#444;line-height:1.6;margin-top:8px';
-      fsboNotice.innerHTML = '<strong style="color:#E67E00">FSBO Listing</strong> — You are selling without an agent. Buyers contact you directly. GOZ charges a flat $49 marketing fee only if a buyer who contacts you through GOZ closes with you. No close, no charge.';
+      fsboNotice.innerHTML = '<strong style="color:#E67E00">FSBO Listing</strong> — Buyers contact you directly. GOZ charges a flat $49 marketing fee only if a buyer who finds you through GOZ closes with you. No close, no charge.';
       commGroup?.parentElement?.appendChild(fsboNotice);
     }
     fsboNotice.style.display = 'block';
   } else {
-    if (commGroup) commGroup.style.display = '';
+    if (commGroup) { commGroup.style.display = ''; commGroup.style.opacity = '1'; }
     const fsboNotice = document.getElementById('fsboNotice');
     if (fsboNotice) fsboNotice.style.display = 'none';
-    hint.textContent = 'Agent listing — 3% marketing fee at closing';
+    hint.textContent = 'Agent listing — GOZ charges you 3% of your commission at closing only';
     hint.style.color = 'var(--gray)';
-    if (commGroup) commGroup.style.opacity = '1';
-    const commLabel = document.getElementById('commission_rate')?.previousElementSibling;
-    if (commLabel) commLabel.textContent = "Buyer's Agent Commission *";
   }
 }
 
-// ── PRICE FORMATTER ──
+// ── CUSTOM COMMISSION ──
+function handleCommSelect(val) {
+  const customInput = document.getElementById('commission_rate_custom');
+  const hidden = document.getElementById('commission_rate');
+  if (val === 'custom') {
+    customInput.style.display = 'block';
+    customInput.focus();
+    // keep hidden at previous value until they type
+  } else {
+    customInput.style.display = 'none';
+    if (hidden) hidden.value = val;
+    updatePriceDisplay();
+  }
+}
+
+function syncCustomComm(val) {
+  const hidden = document.getElementById('commission_rate');
+  // Clean input — allow numbers and decimal
+  let clean = val.replace(/[^0-9.]/g,'');
+  if (clean) {
+    if (hidden) hidden.value = clean + '%';
+  }
+  updatePriceDisplay();
+}
+
+function getCommissionValue() {
+  const hidden = document.getElementById('commission_rate');
+  const select = document.getElementById('commission_rate_select');
+  if (select && select.value !== 'custom') return select.value;
+  return hidden ? hidden.value : '2.5%';
+}
+
+// ── PROPERTY TYPE TOGGLE (sqft vs acreage) ──
+function togglePropertyType(val) {
+  const landTypes = ['Vacant Land','Acreage','Waterfront Land'];
+  const isLand = landTypes.includes(val);
+  const commType = ['Commercial','Industrial','Mixed Use'].includes(val);
+  document.getElementById('sqftGroup').style.display = isLand ? 'none' : '';
+  document.getElementById('acreageGroup').style.display = isLand ? '' : 'none';
+  // Hide beds/baths for land and commercial
+  const bedsGroup = document.getElementById('beds')?.closest('.form-group');
+  const bathsGroup = document.getElementById('baths')?.closest('.form-group');
+  const hideBedBath = isLand || commType;
+  if (bedsGroup) bedsGroup.style.display = hideBedBath ? 'none' : '';
+  if (bathsGroup) bathsGroup.style.display = hideBedBath ? 'none' : '';
+}
+
+
+function updatePriceDisplay() {
+  const priceInput = document.getElementById('price');
+  if (priceInput) formatPrice(priceInput);
+}
+
 function formatPrice(input) {
   const raw = input.value.replace(/[^\d]/g, '');
   input.value = raw ? parseInt(raw).toLocaleString() : '';
@@ -1100,11 +1168,11 @@ function formatPrice(input) {
     } else if (lType === 'rental') {
       disp.textContent = `$${n.toLocaleString()}/mo · Rental listing`;
     } else {
-      const comm = document.getElementById('commission_rate').value;
+      const comm = getCommissionValue();
       const pct = parseFloat(comm) || 2.5;
       const commAmt = Math.round(n * pct / 100);
       const gozFee = Math.round(commAmt * 0.03);
-      disp.textContent = `$${n.toLocaleString()} · ${comm} commission = $${commAmt.toLocaleString()} · GOZ fee: $${gozFee.toLocaleString()}`;
+      disp.textContent = `$${n.toLocaleString()} · ${comm} buyer's agent fee = $${commAmt.toLocaleString()} · Your GOZ fee: $${gozFee.toLocaleString()}`;
     }
   } else { disp.textContent = ''; }
 }
@@ -1425,9 +1493,10 @@ async function submitListing(e) {
     beds: parseInt(document.getElementById('beds').value) || null,
     baths: parseFloat(document.getElementById('baths').value) || null,
     sqft: parseInt(document.getElementById('sqft').value) || null,
+    acreage: parseFloat(document.getElementById('acreage').value) || null,
     description: document.getElementById('description').value.trim() || null,
     listing_type: document.getElementById('listing_type').value || 'for_sale',
-    commission_rate: document.getElementById('commission_rate').value,
+    commission_rate: getCommissionValue(),
     property_type: document.getElementById('property_type').value,
     website_url: document.getElementById('website_url').value.trim() || null,
     photos: photoUrls,
