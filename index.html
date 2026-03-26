@@ -1860,21 +1860,7 @@ async function submitOffer() {
 }
 
 // ── AI CHAT WIDGET ──
-const GOZ_SYSTEM = `You are GOZ AI, the honest real estate assistant for GetOffZillow AI (getoffzillow.com) by TransBid LLC, Pensacola FL. You are direct, helpful, and genuinely on the user's side.
-
-KEY FACTS:
-- GOZ shows buyer agent commissions on every listing BEFORE touring (Zillow hides this)
-- Free for buyers always. Agents pay 3% of their gross commission at closing only (NOT 3% of sale price)
-- Example: $400K sale, 2.5% commission = $10K gross, GOZ fee = $300, agent keeps $9,700
-- FSBO listings: $49 flat fee for owners
-- No lead auctions, no pay-to-rank, listings by recency
-- Buyers DON'T need a buyer's agent. They can contact listing agent directly or use a real estate attorney
-- NAR settlement (Aug 2024): buyers must sign representation agreements before touring, locking in commission rates. GOZ shows this info before any commitment
-- FTC sued Zillow & Redfin 2025 for rental ad suppression. Hagens Berman class action alleges Zillow steers buyers to its mortgage arm
-- Zillow removed flood/wildfire risk data after seller complaints
-- Contact: hello@getoffzillow.com
-
-Answer real estate questions honestly and helpfully. Keep answers concise. If asked about making an offer, tell them to use the Make Offer button on any listing. Don't recommend Zillow, Redfin, or similar platforms.`;
+// GOZ_SYSTEM prompt lives in api/chat.js server-side (never expose in browser)
 
 let chatHistory = [];
 let chatOpen = false;
@@ -1934,19 +1920,17 @@ async function sendChatMessage(override) {
   renderChatMessages();
   showChatTyping();
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    // Proxy route — API key lives on the server, never in the browser
+    const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 600,
-        system: GOZ_SYSTEM,
         messages: chatHistory.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content }))
       })
     });
     const data = await res.json();
     hideChatTyping();
-    const reply = data.content?.[0]?.text || 'Something went wrong. Email hello@getoffzillow.com for help.';
+    const reply = data.reply || data.error || 'Something went wrong. Email hello@getoffzillow.com for help.';
     chatHistory.push({ role: 'assistant', content: reply });
   } catch(e) {
     hideChatTyping();
