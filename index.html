@@ -588,7 +588,7 @@
   </div>
   <ul class="header-nav">
     <li><a href="#listings">Buy</a></li>
-    <li><a href="#buyers">No Agent?</a></li>
+    <li><a href="buyers.html">No Agent?</a></li>
     <li><a href="signup.html">Sell / List Free</a></li>
     <li><a href="#agents">For Agents</a></li>
     <li style="margin-left:8px"><a href="#" onclick="openAccountModal('signin');return false;" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Sign In</a></li>
@@ -601,12 +601,12 @@
 
 <nav class="mobile-menu" id="mobileMenu">
   <a href="#listings">🏠 Buy a Home</a>
-  <a href="#buyers" onclick="closeMobileMenu()">🤝 Buying Without an Agent</a>
+  <a href="buyers.html" onclick="closeMobileMenu()">🤝 Buying Without an Agent</a>
   <a href="signup.html">💰 Sell / List Free</a>
   <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — Sell Without an Agent</a>
   <a href="agents.html" onclick="closeMobileMenu()">🏷️ For Agents — 3% of your commission at close</a>
   <a href="signup.html">📊 My Dashboard</a>
-  <a href="#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
+  <a href="buyers.html#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
   <a href="#" onclick="openAccountModal('signup');return false;" class="mob-cta">List Free — No Fee Until You Close →</a>
   <div style="text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
     <a href="#" onclick="closeMobileMenu();openAccountModal('signin')" style="color:rgba(255,255,255,0.5);font-size:13px;border:none">Already have an account? Sign in →</a>
@@ -757,7 +757,7 @@
         </h2>
         <p class="referral-desc">
           Most lead platforms charge between 25–40% of your commission at closing. On a $10,000 commission, that's $2,500–$4,000 before your broker split.<br><br>
-          GetOffZillow AI charges <strong style="color:white">3% at closing</strong>. No monthly fee. No upfront cost. No lead fee. You keep $9,700.
+          GetOffZillow AI charges a <strong style="color:white">technology marketing fee of 3% of your gross commission</strong> — only at closing. No monthly fee. No upfront cost. No lead fee.
         </p>
         <div class="ref-cta-stack">
           <a href="signup.html" class="btn btn-primary" style="background:var(--ai-green);color:#000;padding:12px 24px">Join as an Agent — Free</a>
@@ -837,13 +837,13 @@
     <div class="fsbo-card">
       <h3>FSBO — For Sale By Owner</h3>
       <p>Selling yourself? We support that. Post a FSBO listing free. Pay a technology marketing fee at closing — 3% of a notional 2.5% commission on your sale price. Your contact info goes straight to buyers. No agent required, no recurring charges, no percentage taken until you decide to close through an agent on our platform.</p>
-      <div class="fsbo-price" style="font-size:36px">~$300</div>
-      <div class="fsbo-price-label">only at closing · ~$300 on a $400K sale · never upfront</div>
+      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px">Technology marketing fee at closing only</div>
+      <div class="fsbo-price-label">3% of a notional 2.5% commission · never upfront · ~$300 on a $400K sale</div>
       <ul style="list-style:none;margin-bottom:20px;">
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Full listing with photos</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Your phone &amp; email shown directly to buyers</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> AI listing writer included</li>
-        <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo @VinHunter or Zelle <a href="mailto:hello@getoffzillow.com" class="__cf_email__" data-cfemail="7d15181111123d1a1809121b1b07141111120a531e1210">[email&#160;protected]</a></li>
+        <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo or Zelle — contact hello@getoffzillow.com</li>
       </ul>
       <a href="#" onclick="selectAccountType('fsbo');openAccountModal('signup');return false;" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;width:100%">List Your Home Free →</a>
     </div>
@@ -1009,7 +1009,7 @@
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">When exactly do I pay the 3%?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing via Venmo @VinHunter or Zelle <a href="mailto:hello@getoffzillow.com" class="__cf_email__" data-cfemail="ef878a838380af888a9b808989958683838098c18c8082">[email&#160;protected]</a>.</div>
+        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing via Venmo or Zelle — contact hello@getoffzillow.com for details.</div>
       </div>
 
       <div class="faq-item">
@@ -1037,7 +1037,7 @@
   <p class="final-cta-sub">Free to join. Free to list. Technology marketing fee of 3% of your commission — only when you close.</p>
   <div class="final-cta-btns">
     <a href="#" onclick="openAccountModal('signup');return false;" class="white-btn">Create Agent Account — Free →</a>
-    <a href="#buyers" class="outline-btn">Buying Without an Agent</a>
+    <a href="buyers.html" class="outline-btn">Buying Without an Agent</a>
     <a href="signup.html" class="outline-btn">Sign In</a>
   </div>
   <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:20px;position:relative;z-index:1">No spam. No lead auction. No data sold. Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com" style="color:rgba(255,255,255,0.4)">hello@getoffzillow.com</a></p>
@@ -1073,9 +1073,9 @@
         <h4>For Buyers</h4>
         <ul>
           <li><a href="#listings">Homes for Sale</a></li>
-          <li><a href="#buyers">Buying Without an Agent</a></li>
+          <li><a href="buyers.html">For Buyers</a></li>
           <li><a href="#map">Search by Map</a></li>
-          <li><a href="#mortgage">Mortgage Calculator</a></li>
+          <li><a href="buyers.html#mortgage">Mortgage Calculator</a></li>
           <li><a href="#compare">Fee Comparison</a></li>
         </ul>
       </div>
@@ -1307,43 +1307,7 @@ async function renderMapList() {
   else gozMap.setView([37.09, -95.71], 4);
 }
 
-function buildTicker() {
-  const items = [
-    {label:'Zillow Flex Fee',val:'40%',cls:'red'},
-    {label:'Agent Pronto Fee',val:'35%',cls:'red'},
-    {label:'OpCity Fee',val:'38%',cls:'red'},
-    {label:'UpNest Fee',val:'30%',cls:'red'},
-    {label:'GetOffZillow AI Fee',val:'3%',cls:'green'},
-    {label:'Savings vs Zillow Flex',val:'37%',cls:'green'},
-    {label:'Savings vs Agent Pronto',val:'32%',cls:'green'},
-    {label:'You Keep of Commission',val:'97%',cls:'green'},
-    {label:'Upfront Cost',val:'$0',cls:'green'},
-  ];
-  const doubled = [...items,...items];
-  document.getElementById('feeTicker').innerHTML = doubled.map(i =>
-    `<div class="fee-tick-item">${i.label}: <span class="highlight ${i.cls}">${i.val}</span></div>`
-  ).join('');
-}
 
-function runCalc() {
-  const price = parseFloat(document.getElementById('calcPrice').value)||0;
-  const down = parseFloat(document.getElementById('calcDown').value)||0;
-  const rate = parseFloat(document.getElementById('calcRate').value)||0;
-  const term = parseInt(document.getElementById('calcTerm').value)||30;
-  const loan = price - down;
-  if (loan<=0||rate<=0) return;
-  const r = rate/100/12;
-  const n = term*12;
-  const payment = (loan*r)/(1-Math.pow(1+r,-n));
-  const estTax = price*0.011/12;
-  const estIns = price*0.005/12;
-  const total = payment+estTax+estIns;
-  const el = document.getElementById('calcResult');
-  el.style.display = 'block';
-  document.getElementById('calcMonthly').textContent = '$'+Math.round(total).toLocaleString();
-  document.getElementById('calcBreakdown').textContent =
-    `P&I $${Math.round(payment).toLocaleString()} + Taxes $${Math.round(estTax).toLocaleString()} + Insurance $${Math.round(estIns).toLocaleString()} · ${rate}% ${term}yr`;
-}
 
 
 
@@ -1731,7 +1695,6 @@ async function sendChatMessage(override) {
 
 function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }
 
-buildTicker();
 loadListings();
 initNavAuth();
 initChat();
@@ -1789,7 +1752,7 @@ initChat();
           </div>
 
           <div id="fsboNote" style="display:none;background:#EBF3FF;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--blue);margin-bottom:16px;line-height:1.5">
-            <strong>FSBO: List free. Pay 3% of a notional 2.5% commission at closing only.</strong> After signup, post your listing from your dashboard. Pay via Venmo @VinHunter or Zelle hello@getoffzillow.com. Your contact info goes directly to buyers — no agent in the middle.
+            <strong>FSBO: List free. Pay 3% of a notional 2.5% commission at closing only.</strong> After signup, post your listing from your dashboard. Pay via Venmo or Zelle — details at hello@getoffzillow.com. Your contact info goes directly to buyers — no agent in the middle.
           </div>
 
           <div class="goz-form-row">
