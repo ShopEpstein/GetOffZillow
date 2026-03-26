@@ -1494,7 +1494,7 @@ async function renderMapList() {
     el.innerHTML = items.map((l,i) => {
       const photos = parsePhotos(l.photos);
       const thumb = photos.length > 0 ? '<img src="' + photos[0] + '" style="width:100%;height:100%;object-fit:cover" data-fallback="' + DEMO_PHOTOS[i%DEMO_PHOTOS.length] + '" onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback}" />' : '<img src="' + DEMO_PHOTOS[i%DEMO_PHOTOS.length] + '" style="width:100%;height:100%;object-fit:cover" />';
-      return '<div class="map-list-item" onclick="window.location.href='listing.html?id=' + l.id + ''"><div class="map-thumb" style="overflow:hidden;position:relative">' + thumb + '</div><div><div class="mli-price">$' + Number(l.price).toLocaleString() + '</div><div class="mli-addr">' + l.address + '</div><div class="mli-addr" style="color:#999">' + l.city + ', ' + l.state + '</div><div class="mli-commission">&#10003; ' + (l.commission_rate || '2.5%') + ' commission shown</div></div></div>';
+      return '<div class="map-list-item" style="cursor:pointer" onclick="location.href=&quot;listing.html?id=' + l.id + '&quot;"><div class="map-thumb" style="overflow:hidden;position:relative">' + thumb + '</div><div><div class="mli-price">$' + Number(l.price).toLocaleString() + '</div><div class="mli-addr">' + l.address + '</div><div class="mli-addr" style="color:#999">' + l.city + ', ' + l.state + '</div><div class="mli-commission">&#10003; ' + (l.commission_rate || '2.5%') + ' commission shown</div></div></div>';
     }).join('');
   }
   const mapEl = document.getElementById('goz-leaflet-map');
