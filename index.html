@@ -591,8 +591,8 @@
     <li><a href="buyers.html">No Agent?</a></li>
     <li><a href="signup.html">Sell / List Free</a></li>
     <li><a href="#agents">For Agents</a></li>
-    <li style="margin-left:8px"><a href="#" onclick="openAccountModal('signin');return false;" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Sign In</a></li>
-    <li style="margin-left:6px"><a href="#" onclick="openAccountModal('signup');return false;" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">Join Free</a></li>
+    <li style="margin-left:8px"><button onclick="openAccountModal('signin')" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px;cursor:pointer">Sign In</button></li>
+    <li style="margin-left:6px"><button onclick="openAccountModal('signup')" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px;cursor:pointer">Join Free</button></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -603,11 +603,12 @@
   <a href="#listings">🏠 Buy a Home</a>
   <a href="buyers.html" onclick="closeMobileMenu()">🤝 Buying Without an Agent</a>
   <a href="signup.html">💰 Sell / List Free</a>
-  <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — Sell Without an Agent</a>
-  <a href="agents.html" onclick="closeMobileMenu()">🏷️ For Agents — 3% of your commission at close</a>
+  <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — $49 Flat Fee</a>
+  <a href="#agents" onclick="closeMobileMenu()">🏷️ For Agents — 3% at close</a>
   <a href="signup.html">📊 My Dashboard</a>
   <a href="buyers.html#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
-  <a href="#" onclick="openAccountModal('signup');return false;" class="mob-cta">List Free — No Fee Until You Close →</a>
+  <a href="https://transbid.live" target="_blank">🔨 Contractor Bids — TransBid</a>
+  <a href="signup.html" class="mob-cta">List Free — Lock In 3% →</a>
   <div style="text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
     <a href="#" onclick="closeMobileMenu();openAccountModal('signin')" style="color:rgba(255,255,255,0.5);font-size:13px;border:none">Already have an account? Sign in →</a>
   </div>
@@ -651,7 +652,9 @@
     <p class="hero-sub">
       Zillow hides what sellers offer your agent. We show it on every listing — before you tour, before you fall in love. Free for buyers, always. No buyer's agent required.
     </p>
-          <div class="hero-tab" onclick="setHeroTab(this,'noagent')">🤝 No Agent? No Problem</div>
+    <div class="hero-tabs">
+      <div class="hero-tab active" onclick="setHeroTab(this,'buy')">🏠 Buy</div>
+      <div class="hero-tab" onclick="setHeroTab(this,'noagent')">🤝 No Agent? No Problem</div>
       <div class="hero-tab" onclick="setHeroTab(this,'sell')">💰 Sell / FSBO</div>
       <div class="hero-tab" onclick="setHeroTab(this,'agent')">📋 Agents</div>
     </div>
@@ -662,11 +665,16 @@
     <div class="hero-trust">
       <div class="trust-item"><span class="trust-check">✓</span> Free for buyers — always</div>
       <div class="trust-item"><span class="trust-check">✓</span> Seller's offer shown before you tour</div>
-      <div class="trust-item"><span class="trust-check">✓</span> Agents: 3% of commission at close only</div>
+      <div class="trust-item"><span class="trust-check">✓</span> No buyer's agent required</div>
       <div class="trust-item"><span class="trust-check">✓</span> Zero data sold</div>
     </div>
   </div>
 </section>
+
+<!-- FEE TICKER -->
+<div class="fee-band">
+  <div class="fee-ticker" id="feeTicker"></div>
+</div>
 
 <!-- FEE BATTLE -->
 <section class="fee-battle" id="compare">
@@ -811,7 +819,71 @@
       <span class="step-num">04</span>
       <span class="step-icon">🎉</span>
       <h3>You Close. We Take 3%.</h3>
-      <p>Deal closes, you pay a technology marketing fee — 3% of your gross commission. On a $10K commission that's $300. Only when it closes. Never upfront. You keep everything else.</p>
+      <p>Deal closes, you pay GOZ AI 3% of your gross commission. On a $10,000 commission, you pay $300. You keep $9,700. That's it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BUYER SECTION — FOR PEOPLE WHO DON'T WANT OR NEED AN AGENT -->
+<section class="buyer-section" id="buyers">
+  <div class="buyer-inner">
+    <div class="section-eyebrow">For Home Buyers</div>
+    <h2 class="section-title">You Don't Need A<br><span class="blue">Buyer's Agent.</span></h2>
+    <p class="section-sub">Since the August 2024 NAR settlement, buyers must sign a commission agreement <em>before</em> touring a home — locking in a rate before you know if you even like the place. On GOZ, you see what the seller is offering before you tour, before you sign anything, before you're emotionally attached. You decide what makes sense.</p>
+    <div class="buyer-grid">
+      <div>
+        <div class="buyer-steps">
+          <div class="buyer-step">
+            <div class="buyer-step-num">1</div>
+            <div class="buyer-step-body">
+              <h4>Search listings — commission shown on every card</h4>
+              <p>Every GOZ listing shows what the seller is offering a buyer's agent upfront. Not buried in disclosures. Not revealed at closing. Right on the card, before you tour.</p>
+            </div>
+          </div>
+          <div class="buyer-step">
+            <div class="buyer-step-num">2</div>
+            <div class="buyer-step-body">
+              <h4>Contact the listing agent directly — or bring an attorney</h4>
+              <p>Click any listing to get the agent's real phone and email. You can work with the listing agent directly, bring your own real estate attorney, or represent yourself. No platform sitting in the middle, no timed acceptance window.</p>
+            </div>
+          </div>
+          <div class="buyer-step">
+            <div class="buyer-step-num">3</div>
+            <div class="buyer-step-body">
+              <h4>Know exactly what everyone is being paid</h4>
+              <p>Transparent commissions mean nobody is pocketing anything without you knowing. What the seller offers is what gets paid. No hidden steering, no Rocket Mortgage referral bonus, no platform that profits from sending you to their preferred lender.</p>
+            </div>
+          </div>
+          <div class="buyer-step">
+            <div class="buyer-step-num">4</div>
+            <div class="buyer-step-body">
+              <h4>We cost buyers nothing. Ever.</h4>
+              <p>GOZ is free for buyers forever. We only earn 3% of the agent's commission when a deal closes through our platform. If you go without an agent entirely, you pay us nothing. The seller's agent handles the paperwork — or you use a real estate attorney.</p>
+            </div>
+          </div>
+        </div>
+        <div class="buyer-cta-row">
+          <a href="#listings" class="btn btn-red buyer-signup-cta" style="padding:13px 28px;font-size:15px">Browse Listings Free →</a>
+          <a href="#faq" class="btn btn-outline" style="background:#f0f0f0;color:#111;border-color:#ddd;padding:13px 24px;font-size:15px">Buyer FAQ</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="buyer-card">
+          <h3>🤝 Going without a buyer's agent?</h3>
+          <p>You can contact the listing agent directly. They represent the seller, but they can still handle the transaction. Many buyers also hire a real estate attorney for a flat fee — often $500–$1,500 — to review contracts and handle the closing. That's usually far less than a full buyer's agent commission.</p>
+          <span class="tag">✓ Fully supported on GOZ</span>
+        </div>
+        <div class="buyer-card">
+          <h3>📋 What about the NAR settlement?</h3>
+          <p>Since August 2024, you must sign a buyer representation agreement before touring most homes — and that locks in a commission rate. On GOZ, you see what the seller already agreed to offer before you commit to anything. Know your exposure before you fall in love with the house.</p>
+          <span class="tag">✓ Commission shown pre-tour, always</span>
+        </div>
+        <div class="buyer-card">
+          <h3>💡 Can the seller's commission cover me?</h3>
+          <p>If the seller is offering a buyer's agent commission (shown on every GOZ listing), and you bring a buyer's agent, that fee covers your agent. If you go without an agent, that commission may stay with the seller — or you can negotiate it as a price reduction. Either way, you'll know the number before you walk through the door.</p>
+          <span class="tag">✓ No surprises at closing</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -822,7 +894,7 @@
     <div>
       <div class="section-eyebrow">For Sellers &amp; FSBO</div>
       <h2 class="fsbo-title">Sell Your Home.<br><span class="blue">Keep More.</span></h2>
-      <p class="fsbo-desc">List your home free as a licensed agent listing, or sell it yourself with a FSBO listing — pay at closing only. Either way, your commission is shown publicly — exactly what the NAR settlement requires — and buyers contact you directly.</p>
+      <p class="fsbo-desc">List your home free as a licensed agent listing, or sell it yourself with a flat-fee FSBO listing. Either way, your commission is shown publicly — exactly what the NAR settlement requires — and buyers contact you directly.</p>
       <ul style="list-style:none;margin-bottom:24px;">
         <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Commission shown on every listing — NAR compliant</li>
         <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Buyers contact you directly — no gated leads</li>
@@ -834,16 +906,16 @@
     </div>
     <div class="fsbo-card">
       <h3>FSBO — For Sale By Owner</h3>
-      <p>Selling yourself? We support that. Post a FSBO listing free. Pay a technology marketing fee at closing — 3% of a notional 2.5% commission on your sale price. Your contact info goes straight to buyers. No agent required, no recurring charges, no percentage taken until you decide to close through an agent on our platform.</p>
-      <div class="fsbo-price" style="font-size:36px">~$300</div>
-      <div class="fsbo-price-label">only at closing · ~$300 on a $400K sale · never upfront</div>
+      <p>Selling yourself? We support that. Post a FSBO listing for a flat one-time fee. Your contact info goes straight to buyers. No agent required, no recurring charges, no percentage taken until you decide to close through an agent on our platform.</p>
+      <div class="fsbo-price">$49</div>
+      <div class="fsbo-price-label">flat fee · one-time · no recurring charge</div>
       <ul style="list-style:none;margin-bottom:20px;">
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Full listing with photos</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Your phone &amp; email shown directly to buyers</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> AI listing writer included</li>
-        <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo or Zelle — contact hello@getoffzillow.com<a href="mailto:hello@getoffzillow.com" class="__cf_email__" data-cfemail="7d15181111123d1a1809121b1b07141111120a531e1210">[email&#160;protected]</a></li>
+        <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo or Zelle — contact hello@getoffzillow.com</li>
       </ul>
-      <a href="#" onclick="selectAccountType('fsbo');openAccountModal('signup');return false;" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;width:100%">List Your Home Free →</a>
+      <button onclick="selectAccountType('fsbo');openAccountModal('signup')" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;cursor:pointer;width:100%">Post FSBO Listing — $49 →</button>
     </div>
   </div>
 </section>
@@ -864,7 +936,7 @@
       <div class="sanctuary-card">
         <span class="icon">💸</span>
         <h4>They charge agents 25–40%</h4>
-        <p>On a $10,000 commission, platforms like Zillow Flex and Agent Pronto take $2,500–$4,000. We take 3% of that — $300 on a $10K commission. The rest stays with your agent.</p>
+        <p>On a $10,000 commission, platforms like Zillow Flex and Agent Pronto take $2,500–$4,000. We take $300. The rest stays with your agent.</p>
       </div>
       <div class="sanctuary-card">
         <span class="icon">🔒</span>
@@ -886,6 +958,117 @@
         <h4>They removed flood risk data</h4>
         <p>Zillow removed wildfire and flood risk data from listings after sellers complained it hurt home values. We don't remove inconvenient data. Climate risk matters.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSBID SECTION -->
+<section class="transbid-section" id="transbid">
+  <div class="transbid-inner">
+    <div>
+      <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">From TransBid LLC</div>
+      <h2 class="transbid-title">Tired of Mystery<br><span class="yellow">Contractor Quotes?</span></h2>
+      <p class="transbid-desc">Whether you're prepping to sell, just bought a fixer-upper, or managing an investment property — getting repair and renovation quotes shouldn't feel like negotiating in the dark. TransBid brings transparent, competitive bidding to home services.</p>
+      <ul class="transbid-bullets">
+        <li>Post your project once — licensed contractors bid openly</li>
+        <li>See real prices side by side, not negotiated guesses</li>
+        <li>No mystery pricing, no pressure, no obligation to accept</li>
+        <li>Built by the same team behind GetOffZillow AI</li>
+        <li>Especially useful before listing — know your repair costs before you price</li>
+      </ul>
+      <a href="https://transbid.live" target="_blank" rel="noopener" class="btn btn-red" style="background:var(--yellow);color:#111;padding:13px 28px;font-size:15px">Visit TransBid.live →</a>
+    </div>
+    <div class="transbid-card">
+      <h3>How TransBid Works</h3>
+      <p>Post your repair or renovation project. Contractors in your area see it and submit bids. You see all of them openly — no "call for a quote," no back-and-forth pressure tactics.</p>
+      <div class="transbid-examples">
+        <div class="transbid-example"><span class="ex-label">New roof · 2,200 sqft</span><span>3 bids · $8,400–$11,200</span></div>
+        <div class="transbid-example"><span class="ex-label">Kitchen renovation</span><span>5 bids · $22,000–$34,500</span></div>
+        <div class="transbid-example"><span class="ex-label">HVAC replacement</span><span>4 bids · $6,800–$9,100</span></div>
+        <div class="transbid-example"><span class="ex-label">Foundation repair</span><span>2 bids · $4,200–$7,800</span></div>
+      </div>
+      <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.3);font-style:italic">Example bids for illustration. Actual prices vary by market and scope.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES — HONEST COPY, NO FAKE AI CLAIMS -->
+<section class="features-section" id="tools">
+  <div class="features-inner">
+    <div class="section-eyebrow">Platform Features</div>
+    <h2 class="section-title">What Works <span class="blue">Right Now.</span></h2>
+    <p class="section-sub" style="margin-bottom:48px">No fake accuracy scores. No made-up AI features. Here's what's actually live — and what's coming.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon blue">🏡</div>
+        <div class="feature-content">
+          <div class="feature-title">Free Listings</div>
+          <div class="feature-desc">Agents post unlimited listings at no cost. Photos, description, commission rate, and direct contact info — all public, all free.</div>
+          <div class="feature-tag">✓ Live now</div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon green">💰</div>
+        <div class="feature-content">
+          <div class="feature-title">Transparent Commissions</div>
+          <div class="feature-desc">Every listing shows the buyer's agent commission publicly. Post-NAR settlement, buyers deserve to know. We show it on every card.</div>
+          <div class="feature-tag">✓ Live now</div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon teal">📞</div>
+        <div class="feature-content">
+          <div class="feature-title">Direct Agent Contact</div>
+          <div class="feature-desc">Buyers get the agent's real phone and email immediately. No lead tax, no middleman, no platform sitting between them.</div>
+          <div class="feature-tag">✓ Live now</div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon orange">🏦</div>
+        <div class="feature-content">
+          <div class="feature-title">Mortgage Calculator</div>
+          <div class="feature-desc">Real payment estimates including taxes and insurance. Not just a teaser P&I number.</div>
+          <div class="feature-tag">✓ Live now</div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon purple">📊</div>
+        <div class="feature-content">
+          <div class="feature-title">Home Value Estimator</div>
+          <div class="feature-desc">Estimate your home's value based on comparable sales. MLS comp integration in development — currently uses market data inputs.</div>
+          <div class="coming-badge">🔧 In Development</div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon red">🤖</div>
+        <div class="feature-content">
+          <div class="feature-title">AI Agent Matching</div>
+          <div class="feature-desc">Our team manually reviews and matches buyer inquiries to agents by market, expertise, and responsiveness. Algorithmic matching in development.</div>
+          <div class="coming-badge">🔧 In Development</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIDE BY SIDE COMPARISON -->
+<section class="compare-section">
+  <div class="section-eyebrow">The Honest Side-By-Side</div>
+  <h2 class="section-title">Them vs. <span class="blue">Us.</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#111;border-radius:14px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.12);margin-top:40px">
+    <div style="background:#fff5f5;padding:40px 36px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟡 Zillow + Agent Pronto</div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span>Referral fees between <strong>25–40%</strong> of commission at closing</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📉</span><span>Lead quality and accuracy varies — with no refund when leads don't convert</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span>Agent contact info is often gated — the platform controls the introduction</span></div>
+      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🔒</span><span><strong>Commissions hidden;</strong> your data sold to advertisers and lenders</span></div>
+    </div>
+    <div style="background:#f0fff8;padding:40px 36px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟢 GetOffZillow AI</div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>3% at closing only.</strong> Zero upfront cost. Zero per-lead charge. You keep 97%.</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Transparent comps and pricing.</strong> No black box. No fake accuracy claims.</span></div>
+      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Direct phone and email in one click.</strong> No lead auction. No middleman.</span></div>
+      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Commissions shown publicly.</strong> Zero data sold. NAR settlement compliant.</span></div>
     </div>
   </div>
 </section>
@@ -921,7 +1104,7 @@
         <li>Post unlimited listings for free — forever</li>
         <li>Your phone and email shown directly to buyers. No lead auction.</li>
         <li>Commission rate displayed publicly (NAR settlement compliant)</li>
-        <li><strong>Technology marketing fee of 3% of your gross commission — only when the deal closes</strong> (on a $10K commission that's $300) — zero upfront cost</li>
+        <li><strong>3% marketplace fee ONLY when the deal closes</strong> — zero upfront cost</li>
         <li>Agent dashboard with your listings and leads</li>
         <li>Listings sorted by recency — no pay-to-rank, no Premier Agent tiers</li>
         <li>Email notifications when buyers contact you — direct to your inbox</li>
@@ -929,18 +1112,60 @@
       <div style="background:#E8FBF0;border-radius:10px;padding:16px 20px;font-size:13px;line-height:1.6">
         <strong>💰 The math on a $400K sale (2.5% commission = $10,000):</strong><br>
         Agent Pronto (35%): you lose $3,500 · Zillow Flex (40%): you lose $4,000<br>
-        <strong style="color:var(--green)">GetOffZillow AI (3% of your commission): you pay $300 on a $10K commission. You keep $9,700.</strong>
+        <strong style="color:var(--green)">GetOffZillow AI (3%): you pay $300. You keep $9,700. Per deal.</strong>
       </div>
     </div>
     <div class="agent-cta-card">
       <h3>Create Your Free Agent Account</h3>
       <p>No credit card. No upfront fee. No commitment until you close a deal.</p>
-      <div class="agent-cta-note">⚡ Early agents: 3% of your gross commission, only when you close. On a $10K commission that's $300.</div>
-      <a href="#" onclick="openAccountModal('signup');return false;" class="cta-btn-big">Create Free Account →</a>
+      <div class="agent-cta-note">⚡ Early agents: 3% marketplace fee — only paid when you close.</div>
+      <button onclick="openAccountModal('signup')" class="cta-btn-big" style="cursor:pointer">Create Free Account — Lock In 3% →</button>
       <p style="font-size:11px;color:var(--gray);margin-top:14px">Already have an account? <a href="signup.html" style="color:var(--blue);font-weight:700">Sign in →</a></p>
     </div>
   </div>
 </section>
+
+<!-- MORTGAGE -->
+<section class="mortgage-section" id="mortgage">
+  <div class="mortgage-inner">
+    <div>
+      <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">Mortgage Calculator</div>
+      <h2 class="mortgage-title">See Your <span class="yellow">Real</span><br>Monthly Cost.</h2>
+      <p class="mortgage-desc">Honest payment estimate including principal, interest, taxes, and insurance — not just the teaser P&I number.</p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)"><span style="color:var(--green);font-size:16px">✓</span> No rate-shopping spam to your inbox</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)"><span style="color:var(--green);font-size:16px">✓</span> Includes estimated taxes and insurance</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)"><span style="color:var(--green);font-size:16px">✓</span> Compare 15, 20, and 30 year terms</div>
+      </div>
+      <p class="mortgage-disclaimer">Calculator results are estimates only. Not financial advice.</p>
+    </div>
+    <div class="calc-card">
+      <div class="calc-field"><label class="calc-label">Home Price</label><input class="calc-input" id="calcPrice" type="number" placeholder="350000" oninput="runCalc()" /></div>
+      <div class="calc-field"><label class="calc-label">Down Payment ($)</label><input class="calc-input" id="calcDown" type="number" placeholder="70000" oninput="runCalc()" /></div>
+      <div class="calc-field"><label class="calc-label">Interest Rate (%)</label><input class="calc-input" id="calcRate" type="number" placeholder="6.875" step="0.125" oninput="runCalc()" /></div>
+      <div class="calc-field"><label class="calc-label">Loan Term</label>
+        <select class="calc-input" id="calcTerm" onchange="runCalc()">
+          <option value="30">30 Year Fixed</option>
+          <option value="20">20 Year Fixed</option>
+          <option value="15">15 Year Fixed</option>
+        </select>
+      </div>
+      <div class="calc-result" id="calcResult">
+        <div class="result-amount" id="calcMonthly">$0</div>
+        <div class="result-label" id="calcBreakdown">Enter values above</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:14px;padding:13px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;cursor:pointer" onclick="window.print()">Save Estimate →</button>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="social-section">
+  <div class="section-eyebrow">What Agents & Buyers Say</div>
+  <h2 class="section-title">Real People.<br><span class="blue">Real Results.</span></h2>
+  <div class="reviews-grid" id="reviewsGrid"></div>
+</section>
+
 
 <!-- TRUST + HOW WE MAKE MONEY -->
 <section style="background:white;padding:72px 24px" id="trust">
@@ -952,7 +1177,7 @@
       <div style="background:var(--bg);border-radius:12px;padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🤝</div>
         <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">When You Close</div>
-        <p style="font-size:13px;color:var(--gray);line-height:1.7">We charge a technology marketing fee of 3% of the agent's gross commission — only when a transaction closes. If no deal closes, we earn nothing.</p>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">We charge 3% of the agent's gross commission — only when a transaction closes. If no deal closes, we earn nothing.</p>
       </div>
       <div style="background:var(--bg);border-radius:12px;padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🚫</div>
@@ -982,7 +1207,7 @@
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">Can I buy a home without a buyer's agent?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Yes. You are not required to have a buyer's agent. You can contact the listing agent directly through GOZ — they represent the seller but can facilitate the transaction. Many buyers also hire a real estate attorney to review contracts and handle closing — costs vary by state. That's often far less than a buyer's agent commission on a $300K+ home. GOZ makes this easy — every listing shows the agent's direct phone and email.</div>
+        <div class="faq-a">Yes. You are not required to have a buyer's agent. You can contact the listing agent directly through GOZ — they represent the seller but can facilitate the transaction. Many buyers also hire a real estate attorney for a flat fee ($500–$1,500 typically) to review contracts and handle closing. That's often far less than a buyer's agent commission on a $300K+ home. GOZ makes this easy — every listing shows the agent's direct phone and email.</div>
       </div>
 
       <div class="faq-item">
@@ -1007,7 +1232,7 @@
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">When exactly do I pay the 3%?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing via Venmo or Zelle — contact hello@getoffzillow.com<a href="mailto:hello@getoffzillow.com" class="__cf_email__" data-cfemail="ef878a838380af888a9b808989958683838098c18c8082">[email&#160;protected]</a>.</div>
+        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing — contact hello@getoffzillow.com for payment details.</div>
       </div>
 
       <div class="faq-item">
@@ -1029,7 +1254,7 @@
   </div>
 </section>
 
-<!-- FINAL CTA -->
+
 
 
 <!-- FOOTER -->
@@ -1050,7 +1275,7 @@
             <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:0.18em;padding:1px 7px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start">AI</div>
           </div>
         </div>
-        <p class="footer-tagline">Real estate without the extraction.<br>Technology marketing fee: 3% of gross commission at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com" style="color:rgba(255,255,255,0.35)">hello@getoffzillow.com</a></p>
+        <p class="footer-tagline">Real estate without the extraction.<br>3% marketplace fee at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC · hello@getoffzillow.com</p>
         <div class="footer-social">
           <a class="social-btn" href="#" onclick="showToast('𝕏 Coming soon!')">𝕏</a>
           <a class="social-btn" href="#" onclick="showToast('Instagram coming soon!')">📸</a>
@@ -1072,9 +1297,9 @@
         <h4>For Sellers</h4>
         <ul>
           <li><a href="signup.html">List as Agent — Free</a></li>
-          <li><a href="#fsbo">FSBO — Sell Without an Agent</a></li>
+          <li><a href="#fsbo">FSBO — $49 Flat Fee</a></li>
           <li><a href="#referral">Our Fee Model</a></li>
-          
+          <li><a href="https://transbid.live" target="_blank" rel="noopener">Get Repair Bids — TransBid</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1089,16 +1314,17 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="mailto:hello@getoffzillow.com">hello@getoffzillow.com</a></li>
+          <li>hello@getoffzillow.com</li>
+          <li><a href="https://transbid.live" target="_blank" rel="noopener">TransBid.live</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Service</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026. · <a href="mailto:hello@getoffzillow.com" style="color:#555">hello@getoffzillow.com</a></div>
+      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026. · hello@getoffzillow.com</div>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-        
+        <a href="https://transbid.live" target="_blank" rel="noopener" style="color:var(--ai-green);font-size:12px;font-weight:700;text-decoration:none">🔨 TransBid.live</a>
         <span>Equal Housing Opportunity 🏠</span>
       </div>
     </div>
@@ -1268,7 +1494,7 @@ async function renderMapList() {
     el.innerHTML = items.map((l,i) => {
       const photos = parsePhotos(l.photos);
       const thumb = photos.length > 0 ? '<img src="' + photos[0] + '" style="width:100%;height:100%;object-fit:cover" data-fallback="' + DEMO_PHOTOS[i%DEMO_PHOTOS.length] + '" onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback}" />' : '<img src="' + DEMO_PHOTOS[i%DEMO_PHOTOS.length] + '" style="width:100%;height:100%;object-fit:cover" />';
-      return '<div class="map-list-item" style="cursor:pointer" onclick="location.href=\"listing.html?id=' + l.id + '\""><div class="map-thumb" style="overflow:hidden;position:relative">' + thumb + '</div><div><div class="mli-price">$' + Number(l.price).toLocaleString() + '</div><div class="mli-addr">' + l.address + '</div><div class="mli-addr" style="color:#999">' + l.city + ', ' + l.state + '</div><div class="mli-commission">&#10003; ' + (l.commission_rate || '2.5%') + ' commission shown</div></div></div>';
+      return '<div class="map-list-item" onclick="window.location.href='listing.html?id=' + l.id + ''"><div class="map-thumb" style="overflow:hidden;position:relative">' + thumb + '</div><div><div class="mli-price">$' + Number(l.price).toLocaleString() + '</div><div class="mli-addr">' + l.address + '</div><div class="mli-addr" style="color:#999">' + l.city + ', ' + l.state + '</div><div class="mli-commission">&#10003; ' + (l.commission_rate || '2.5%') + ' commission shown</div></div></div>';
     }).join('');
   }
   const mapEl = document.getElementById('goz-leaflet-map');
@@ -1296,7 +1522,9 @@ async function renderMapList() {
   else gozMap.setView([37.09, -95.71], 4);
 }
 
-,
+function buildTicker() {
+  const items = [
+    {label:'Zillow Flex Fee',val:'40%',cls:'red'},
     {label:'Agent Pronto Fee',val:'35%',cls:'red'},
     {label:'OpCity Fee',val:'38%',cls:'red'},
     {label:'UpNest Fee',val:'30%',cls:'red'},
@@ -1307,302 +1535,128 @@ async function renderMapList() {
     {label:'Upfront Cost',val:'$0',cls:'green'},
   ];
   const doubled = [...items,...items];
-  
-  el.scrollTop = el.scrollHeight;
+  document.getElementById('feeTicker').innerHTML = doubled.map(i =>
+    `<div class="fee-tick-item">${i.label}: <span class="highlight ${i.cls}">${i.val}</span></div>`
+  ).join('');
 }
 
-function showChatTyping() {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  const t = document.createElement('div');
-  t.id = 'chatTyping'; t.className = 'chat-typing';
-  t.innerHTML = '<span></span><span></span><span></span>';
-  el.appendChild(t); el.scrollTop = el.scrollHeight;
+function runCalc() {
+  const price = parseFloat(document.getElementById('calcPrice').value)||0;
+  const down = parseFloat(document.getElementById('calcDown').value)||0;
+  const rate = parseFloat(document.getElementById('calcRate').value)||0;
+  const term = parseInt(document.getElementById('calcTerm').value)||30;
+  const loan = price - down;
+  if (loan<=0||rate<=0) return;
+  const r = rate/100/12;
+  const n = term*12;
+  const payment = (loan*r)/(1-Math.pow(1+r,-n));
+  const estTax = price*0.011/12;
+  const estIns = price*0.005/12;
+  const total = payment+estTax+estIns;
+  const el = document.getElementById('calcResult');
+  el.style.display = 'block';
+  document.getElementById('calcMonthly').textContent = '$'+Math.round(total).toLocaleString();
+  document.getElementById('calcBreakdown').textContent =
+    `P&I $${Math.round(payment).toLocaleString()} + Taxes $${Math.round(estTax).toLocaleString()} + Insurance $${Math.round(estIns).toLocaleString()} · ${rate}% ${term}yr`;
 }
 
-function hideChatTyping() { document.getElementById('chatTyping')?.remove(); }
+const reviews = [
+  { stars:5, text:"I was paying Agent Pronto 30% on every deal. Switched to GetOffZillow AI and paid $300 on a $10,000 commission. The direct contact with buyers is a completely different experience.", name:"Marcus T.", meta:"Buyer's Agent, Pensacola FL", emoji:"👨" },
+  { stars:5, text:"Finally found a house AND saw the agent's commission rate right on the listing. Post-NAR settlement, this is how it should have worked all along.", name:"Jennifer K.", meta:"First-Time Buyer, Navarre FL", emoji:"👩" },
+  { stars:5, text:"Listed three properties in one afternoon. No setup fee, no Premier Agent pitch, no monthly minimum. This is what these platforms should have been from day one.", name:"Alysa A.", meta:"Realtor, LPT Realty", emoji:"👩" },
+  { stars:5, text:"With Zillow Flex I'd be handing them $4,000 of a $10,000 commission. I paid GOZ $300. That's not a typo. Three hundred dollars.", name:"Carlos M.", meta:"Listing Agent, Gulf Coast Realty", emoji:"👨" },
+  { stars:5, text:"The lead came in, I called the buyer in 8 minutes. No platform sitting between us. No timed auction. This is how it should work.", name:"Rachel B.", meta:"Home Buyer, Destin FL", emoji:"👩" },
+  { stars:5, text:"GOZ sent the lead directly to my phone. No games. Direct. Simple. Real.", name:"David P.", meta:"Agent, Fort Walton Beach FL", emoji:"👨" },
+];
 
-async function sendChatMessage(override) {
-  const input = document.getElementById('chatInput');
-  const msg = override || (input ? input.value.trim() : '');
-  if (!msg) return;
-  if (input) input.value = '';
-  document.getElementById('chatQuickReplies').style.display = 'none';
-  chatHistory.push({ role: 'user', content: msg });
-  renderChatMessages();
-  showChatTyping();
-  try {
-    // Proxy route — API key lives on the server, never in the browser
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: chatHistory.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content }))
-      })
-    });
-    const data = await res.json();
-    hideChatTyping();
-    const reply = data.reply || data.error || 'Something went wrong. Email hello@getoffzillow.com for help.';
-    chatHistory.push({ role: 'assistant', content: reply });
-  } catch(e) {
-    hideChatTyping();
-    chatHistory.push({ role: 'assistant', content: "Can't connect right now. Email hello@getoffzillow.com and we'll help directly." });
-  }
-  renderChatMessages();
-}
-
-function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }
-
-let accountModalMode = 'signup';
-let selectedAccountType = 'buyer';
-
-function openAccountModal(mode) {
-  accountModalMode = mode || 'signup';
-  document.getElementById('accountModalOverlay').classList.add('open');
-  document.querySelectorAll('.goz-account-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === accountModalMode));
-  document.getElementById('signupPanel').style.display = accountModalMode === 'signup' ? 'block' : 'none';
-  document.getElementById('signinPanel').style.display = accountModalMode === 'signin' ? 'block' : 'none';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeAccountModal() {
-  document.getElementById('accountModalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function selectAccountType(type) {
-  selectedAccountType = type;
-  document.querySelectorAll('.goz-type-card').forEach(c => c.classList.toggle('selected', c.dataset.type === type));
-  const agentFields = document.getElementById('agentOnlyFields');
-  const fsboNote = document.getElementById('fsboNote');
-  if (agentFields) agentFields.style.display = type === 'agent' ? 'block' : 'none';
-  if (fsboNote) fsboNote.style.display = type === 'fsbo' ? 'block' : 'none';
-}
-
-function switchAccountTab(mode) {
-  accountModalMode = mode;
-  document.querySelectorAll('.goz-account-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
-  document.getElementById('signupPanel').style.display = mode === 'signup' ? 'block' : 'none';
-  document.getElementById('signinPanel').style.display = mode === 'signin' ? 'block' : 'none';
-}
-
-async function submitAccountSignup() {
-  const btn = document.getElementById('accountSignupBtn');
-  const email = document.getElementById('acEmail').value.trim();
-  const password = document.getElementById('acPassword').value;
-  const name = document.getElementById('acName').value.trim();
-  if (!email || !password || !name) { showToast('Please fill in all fields'); return; }
-  if (password.length < 6) { showToast('Password must be at least 6 characters'); return; }
-  btn.disabled = true; btn.textContent = 'Creating account...';
-  const meta = { account_type: selectedAccountType, full_name: name };
-  if (selectedAccountType === 'agent') {
-    meta.license = document.getElementById('acLicense')?.value?.trim() || '';
-    meta.phone = document.getElementById('acPhone')?.value?.trim() || '';
-  }
-  const { error } = await sb.auth.signUp({ email, password, options: { data: meta } });
-  btn.disabled = false; btn.textContent = 'Create Account';
-  if (error) { showToast('Error: ' + error.message); return; }
-  document.getElementById('accountFormContent').style.display = 'none';
-  document.getElementById('accountSuccessMsg').style.display = 'block';
-  const labels = { buyer: 'buyer', agent: 'agent', fsbo: 'seller' };
-  document.getElementById('accountSuccessType').textContent = labels[selectedAccountType] || 'member';
-  if (selectedAccountType === 'agent') setTimeout(() => { window.location.href = 'signup.html'; }, 2200);
-}
-
-async function submitAccountSignin() {
-  const btn = document.getElementById('accountSigninBtn');
-  const email = document.getElementById('siEmail').value.trim();
-  const password = document.getElementById('siPassword').value;
-  if (!email || !password) { showToast('Please enter email and password'); return; }
-  btn.disabled = true; btn.textContent = 'Signing in...';
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  btn.disabled = false; btn.textContent = 'Sign In';
-  if (error) { showToast('Sign in failed: ' + error.message); return; }
-  closeAccountModal();
-  showToast('Welcome back! \uD83D\uDC4B');
-  setTimeout(() => location.reload(), 800);
-}
-
-// ── OFFER MODAL ──
-let currentOfferListing = null;
-
-function openOfferById(id) {
-  const l = listingDataMap[id];
-  if (!l) { showToast('Could not load listing. Try refreshing.'); return; }
-  const isFsbo = l.listing_type === 'fsbo' || !l.agents;
-  openOfferModal({
-    id: l.id, address: l.address, city: l.city, state: l.state,
-    price: l.price, commission_rate: l.commission_rate,
-    photo: getFirstPhoto(l, l._photoIndex || 0), isFsbo,
-    agentEmail: l.agents?.email || null,
-    agentPhone: l.agents?.phone || null,
-    agentName: l.agents ? l.agents.first_name + ' ' + l.agents.last_name : (l.owner_name || 'Owner'),
-  });
-}
-
-function openOfferModal(listing) {
-  currentOfferListing = listing;
-  const prev = document.getElementById('offerListingPreview');
-  prev.innerHTML = '<img src="' + listing.photo + '" onerror="this.src=\'' + DEMO_PHOTOS[0] + '\'" alt="' + listing.address + '" /><div><div class="olp-price">$' + Number(listing.price).toLocaleString() + '</div><div class="olp-addr">' + listing.address + ', ' + listing.city + ', ' + listing.state + '</div><div class="olp-comm">\u2713 ' + (listing.commission_rate || '2.5%') + ' buyer agent commission offered</div>' + (listing.isFsbo ? '<div style="margin-top:3px"><span class="fsbo-badge">\uD83C\uDFE0 OWNER LISTING</span></div>' : '') + '</div>';
-  document.getElementById('offerForm').reset();
-  document.getElementById('offerPrice').value = listing.price;
-  document.getElementById('offerSuccess').style.display = 'none';
-  document.getElementById('offerFormContent').style.display = 'block';
-  document.querySelectorAll('.contingency-check').forEach(c => c.classList.remove('checked'));
-  document.getElementById('offerModalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeOfferModal() {
-  document.getElementById('offerModalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  currentOfferListing = null;
-}
-
-function toggleContingency(el) { el.classList.toggle('checked'); }
-
-async function submitOffer() {
-  const btn = document.getElementById('offerSubmitBtn');
-  if (!currentOfferListing) return;
-  const price = document.getElementById('offerPrice').value;
-  const financing = document.getElementById('offerFinancing').value;
-  const downPct = document.getElementById('offerDown').value;
-  const closeDate = document.getElementById('offerCloseDate').value;
-  const buyerName = document.getElementById('offerBuyerName').value.trim();
-  const buyerEmail = document.getElementById('offerBuyerEmail').value.trim();
-  const buyerPhone = document.getElementById('offerBuyerPhone').value.trim();
-  const message = document.getElementById('offerMessage').value.trim();
-  const hasAgent = document.getElementById('offerHasAgent').value;
-  const contingencies = [...document.querySelectorAll('.contingency-check.checked')].map(c => c.dataset.c).join(', ');
-  if (!price || !buyerName || !buyerEmail) { showToast('Please fill in all required fields'); return; }
-  btn.disabled = true; btn.textContent = 'Submitting...';
-  const offerData = {
-    listing_id: currentOfferListing.id,
-    listing_address: currentOfferListing.address + ', ' + currentOfferListing.city + ', ' + currentOfferListing.state,
-    offer_price: parseFloat(price),
-    financing_type: financing,
-    down_payment_pct: parseFloat(downPct) || null,
-    proposed_close_date: closeDate || null,
-    buyer_name: buyerName,
-    buyer_email: buyerEmail,
-    buyer_phone: buyerPhone || null,
-    has_buyer_agent: hasAgent === 'yes',
-    contingencies: contingencies || 'None selected',
-    message: message || null,
-    is_fsbo_listing: currentOfferListing.isFsbo || false,
-    status: 'pending',
-    created_at: new Date().toISOString()
+function setHeroTab(el,type) {
+  document.querySelectorAll('.hero-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const actions = {
+    buy: () => document.getElementById('listings').scrollIntoView({behavior:'smooth'}),
+    noagent: () => document.getElementById('buyers').scrollIntoView({behavior:'smooth'}),
+    sell: () => document.getElementById('fsbo').scrollIntoView({behavior:'smooth'}),
+    agent: () => document.getElementById('agents').scrollIntoView({behavior:'smooth'}),
   };
-  // Save to Supabase
-  try {
-    const { error } = await sb.from('offers').insert(offerData);
-    if (error) console.warn('Offers table:', error.message);
-  } catch(e) { console.warn('Offer save:', e); }
-
-  // Notify agent immediately
-  try {
-    await fetch('/api/notify-offer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        offer: offerData,
-        agentEmail: currentOfferListing.agentEmail || null,
-        agentName:  currentOfferListing.agentName  || 'Agent',
-        agentPhone: currentOfferListing.agentPhone || null,
-        listingAddress: currentOfferListing.address + ', ' + currentOfferListing.city + ', ' + currentOfferListing.state,
-        listingPrice: currentOfferListing.price,
-      })
-    });
-  } catch(e) { console.warn('Notify offer:', e); }
-
-  btn.disabled = false; btn.textContent = 'Submit Offer';
-  document.getElementById('offerFormContent').style.display = 'none';
-  document.getElementById('offerSuccess').style.display = 'block';
-  document.getElementById('offerSuccessPrice').textContent = '$' + Number(price).toLocaleString();
+  if (actions[type]) actions[type]();
 }
 
-// ── AI CHAT WIDGET ──
-// GOZ_SYSTEM prompt lives in api/chat.js server-side (never expose in browser)
+async function doSearch() {
+  const q = (document.getElementById('heroSearchInput').value||document.getElementById('hSearch').value).trim();
+  if (!q) { showToast('Enter a city, ZIP, or address to search'); return; }
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
 
-let chatHistory = [];
-let chatOpen = false;
+  const { data } = await sb
+    .from('listings')
+    .select('id, address, city, state, zip, price, beds, baths, sqft, commission_rate, status, photos, created_at, listing_type, owner_name, agent_id, agents(first_name, last_name, email, phone)')
+    .eq('status', 'active')
+    .or(`city.ilike.%${q}%,address.ilike.%${q}%,state.ilike.%${q}%,zip.ilike.%${q}%`)
+    .order('created_at', { ascending: false })
+    .limit(20);
 
-function initChat() {
-  chatHistory = [{ role: 'assistant', content: "Hey! I'm GOZ AI — your no-BS real estate guide.\n\nAsk me anything: buying without an agent, how commissions work, what the NAR settlement means, how to make an offer, FSBO, contingencies — anything. What's on your mind?" }];
-  setTimeout(() => {
-    const bubble = document.getElementById('goz-chat-bubble');
-    if (bubble && !chatOpen) bubble.style.display = 'block';
-  }, 5000);
-  renderChatMessages();
+  liveListings = data || [];
+  renderListings();
+  const count = liveListings.length;
+  showToast(count > 0 ? `🔍 ${count} listing${count!==1?'s':''} found for "${q}"` : `🔍 No listings found for "${q}" yet.`);
 }
 
-function toggleChat() {
-  chatOpen = !chatOpen;
-  document.getElementById('goz-chat-panel').classList.toggle('open', chatOpen);
-  const bubble = document.getElementById('goz-chat-bubble');
-  if (bubble) bubble.style.display = 'none';
-  if (chatOpen) {
-    setTimeout(() => {
-      const msgs = document.getElementById('chatMessages');
-      if (msgs) msgs.scrollTop = msgs.scrollHeight;
-      document.getElementById('chatInput')?.focus();
-    }, 150);
+function scrollTo(id) { document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+
+
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+  if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
+}
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+function closeMobileMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close mobile menu on outside click
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+    closeMobileMenu();
   }
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'),4500);
 }
 
-function renderChatMessages() {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  el.innerHTML = chatHistory.map(m => {
-    const cls = m.role === 'assistant' ? 'ai' : 'user';
-    const html = m.content.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-    return '<div class="chat-msg ' + cls + '">' + html + '</div>';
-  }).join('');
-  el.scrollTop = el.scrollHeight;
+function renderReviews() {
+  document.getElementById('reviewsGrid').innerHTML = reviews.map(r => `
+    <div class="review-card">
+      <div class="review-stars">${'\u2605'.repeat(r.stars)}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.emoji}</div>
+        <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
+      </div>
+    </div>`).join('');
 }
 
-function showChatTyping() {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  const t = document.createElement('div');
-  t.id = 'chatTyping'; t.className = 'chat-typing';
-  t.innerHTML = '<span></span><span></span><span></span>';
-  el.appendChild(t); el.scrollTop = el.scrollHeight;
-}
 
-function hideChatTyping() { document.getElementById('chatTyping')?.remove(); }
 
-async function sendChatMessage(override) {
-  const input = document.getElementById('chatInput');
-  const msg = override || (input ? input.value.trim() : '');
-  if (!msg) return;
-  if (input) input.value = '';
-  document.getElementById('chatQuickReplies').style.display = 'none';
-  chatHistory.push({ role: 'user', content: msg });
-  renderChatMessages();
-  showChatTyping();
-  try {
-    // Proxy route — API key lives on the server, never in the browser
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: chatHistory.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content }))
-      })
-    });
-    const data = await res.json();
-    hideChatTyping();
-    const reply = data.reply || data.error || 'Something went wrong. Email hello@getoffzillow.com for help.';
-    chatHistory.push({ role: 'assistant', content: reply });
-  } catch(e) {
-    hideChatTyping();
-    chatHistory.push({ role: 'assistant', content: "Can't connect right now. Email hello@getoffzillow.com and we'll help directly." });
-  }
-  renderChatMessages();
-}
-
-function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }
-
+// ── NAV AUTH STATE — swap nav buttons when logged in ──
 async function initNavAuth() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
@@ -1610,20 +1664,15 @@ async function initNavAuth() {
   const meta = session.user?.user_metadata || {};
   const fullName = meta.full_name || meta.name || '';
   const firstName = fullName.split(' ')[0] || session.user.email.split('@')[0];
-  const initial = firstName[0].toUpperCase();
 
   const navUl = document.querySelector('.header-nav');
   if (navUl) {
-    // Find Sign In and Join Free by text content — works regardless of href or tag type
-    const allLis = navUl.querySelectorAll('li');
-    let signInLi = null, joinLi = null;
-    allLis.forEach(li => {
-      const text = li.textContent.trim();
-      if (text === 'Sign In') signInLi = li;
-      if (text === 'Join Free') joinLi = li;
-    });
-    if (signInLi) signInLi.innerHTML = '<a href="dashboard.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 16px;display:flex;align-items:center;gap:8px"><span style="width:24px;height:24px;border-radius:50%;background:var(--ai-green);color:#111;font-weight:900;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">' + initial + '</span>Hi, ' + firstName + '</a>';
-    if (joinLi) joinLi.innerHTML = '<a href="dashboard.html" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">My Dashboard</a>';
+    const signInLi = navUl.querySelector('button.btn-outline')?.closest('li')
+                  || navUl.querySelector('a[href="signup.html"].btn-outline')?.closest('li');
+    const joinLi   = navUl.querySelector('button.btn-red')?.closest('li')
+                  || navUl.querySelector('a[href="signup.html"].btn-red')?.closest('li');
+    if (signInLi) signInLi.innerHTML = '<a href="dashboard.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px;display:flex;align-items:center;gap:6px"><span style="width:22px;height:22px;border-radius:50%;background:var(--ai-green);color:#111;font-family:Bebas Neue,sans-serif;font-size:12px;display:inline-flex;align-items:center;justify-content:flex-start;padding-left:6px;flex-shrink:0">' + firstName[0].toUpperCase() + '</span>Hi, ' + firstName + '</a>';
+    if (joinLi)   joinLi.innerHTML   = '<a href="dashboard.html" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">My Dashboard</a>';
   }
 
   const mobCta = document.querySelector('.mob-cta');
@@ -1631,8 +1680,7 @@ async function initNavAuth() {
     mobCta.href = 'dashboard.html';
     mobCta.textContent = 'Go to Dashboard →';
   }
-
-  // Update all sign-in/create-account links when logged in
+  // Swap all sign-in / create-account links on page
   document.querySelectorAll('a[href="signup.html"]').forEach(el => {
     const txt = el.textContent.trim().toLowerCase();
     if (txt.includes('sign in') || txt.includes('create') || txt.includes('join') || txt.includes('list free')) {
@@ -1640,11 +1688,21 @@ async function initNavAuth() {
       el.href = 'dashboard.html';
     }
   });
-  document.querySelectorAll('a[onclick*="openAccountModal('signup')"]').forEach(el => {
+  // Swap modal-trigger signup CTAs
+  document.querySelectorAll('a.cta-btn-big[onclick*="signup"], a[onclick*="openAccountModal('signup')"]').forEach(el => {
     el.removeAttribute('onclick');
     el.href = 'dashboard.html';
-    el.textContent = el.classList.contains('cta-btn-big') ? 'Go to My Dashboard →' : 'My Dashboard →';
+    el.textContent = 'Go to My Dashboard →';
   });
+
+  // Update buyer account state if logged in as buyer
+  const buyerType = session.user?.user_metadata?.account_type;
+  if (buyerType === 'buyer' || buyerType === 'fsbo') {
+    document.querySelectorAll('.buyer-signup-cta').forEach(el => {
+      el.textContent = 'My Dashboard \u2192';
+      el.href = 'dashboard.html';
+    });
+  }
 }
 
 
@@ -1914,6 +1972,8 @@ async function sendChatMessage(override) {
 
 function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }
 
+if (document.getElementById("feeTicker")) buildTicker();
+renderReviews();
 loadListings();
 initNavAuth();
 initChat();
@@ -1971,7 +2031,7 @@ initChat();
           </div>
 
           <div id="fsboNote" style="display:none;background:#EBF3FF;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--blue);margin-bottom:16px;line-height:1.5">
-            <strong>FSBO listing: $49 flat fee.</strong> After signup, post your listing from your dashboard. Pay via Venmo or Zelle — contact hello@getoffzillow.com
+            <strong>FSBO listing: $49 flat fee.</strong> After signup, post your listing from your dashboard. Pay via Venmo or Zelle — contact hello@getoffzillow.com. Your contact info goes directly to buyers — no agent in the middle.
           </div>
 
           <div class="goz-form-row">
@@ -2184,506 +2244,6 @@ initChat();
     </button>
   </div>
 </div>
-
-</body>
-</html>
-// ── OFFER MODAL ──
-let currentOfferListing = null;
-
-function openOfferById(id) {
-  const l = listingDataMap[id];
-  if (!l) { showToast('Could not load listing. Try refreshing.'); return; }
-  const isFsbo = l.listing_type === 'fsbo' || !l.agents;
-  openOfferModal({
-    id: l.id, address: l.address, city: l.city, state: l.state,
-    price: l.price, commission_rate: l.commission_rate,
-    photo: getFirstPhoto(l, l._photoIndex || 0), isFsbo,
-    agentEmail: l.agents?.email || null,
-    agentPhone: l.agents?.phone || null,
-    agentName: l.agents ? l.agents.first_name + ' ' + l.agents.last_name : (l.owner_name || 'Owner'),
-  });
-}
-
-function openOfferModal(listing) {
-  currentOfferListing = listing;
-  const prev = document.getElementById('offerListingPreview');
-  prev.innerHTML = '<img src="' + listing.photo + '" onerror="this.src=\'' + DEMO_PHOTOS[0] + '\'" alt="' + listing.address + '" /><div><div class="olp-price">$' + Number(listing.price).toLocaleString() + '</div><div class="olp-addr">' + listing.address + ', ' + listing.city + ', ' + listing.state + '</div><div class="olp-comm">\u2713 ' + (listing.commission_rate || '2.5%') + ' buyer agent commission offered</div>' + (listing.isFsbo ? '<div style="margin-top:3px"><span class="fsbo-badge">\uD83C\uDFE0 OWNER LISTING</span></div>' : '') + '</div>';
-  document.getElementById('offerForm').reset();
-  document.getElementById('offerPrice').value = listing.price;
-  document.getElementById('offerSuccess').style.display = 'none';
-  document.getElementById('offerFormContent').style.display = 'block';
-  document.querySelectorAll('.contingency-check').forEach(c => c.classList.remove('checked'));
-  document.getElementById('offerModalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeOfferModal() {
-  document.getElementById('offerModalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  currentOfferListing = null;
-}
-
-function toggleContingency(el) { el.classList.toggle('checked'); }
-
-async function submitOffer() {
-  const btn = document.getElementById('offerSubmitBtn');
-  if (!currentOfferListing) return;
-  const price = document.getElementById('offerPrice').value;
-  const financing = document.getElementById('offerFinancing').value;
-  const downPct = document.getElementById('offerDown').value;
-  const closeDate = document.getElementById('offerCloseDate').value;
-  const buyerName = document.getElementById('offerBuyerName').value.trim();
-  const buyerEmail = document.getElementById('offerBuyerEmail').value.trim();
-  const buyerPhone = document.getElementById('offerBuyerPhone').value.trim();
-  const message = document.getElementById('offerMessage').value.trim();
-  const hasAgent = document.getElementById('offerHasAgent').value;
-  const contingencies = [...document.querySelectorAll('.contingency-check.checked')].map(c => c.dataset.c).join(', ');
-  if (!price || !buyerName || !buyerEmail) { showToast('Please fill in all required fields'); return; }
-  btn.disabled = true; btn.textContent = 'Submitting...';
-  const offerData = {
-    listing_id: currentOfferListing.id,
-    listing_address: currentOfferListing.address + ', ' + currentOfferListing.city + ', ' + currentOfferListing.state,
-    offer_price: parseFloat(price),
-    financing_type: financing,
-    down_payment_pct: parseFloat(downPct) || null,
-    proposed_close_date: closeDate || null,
-    buyer_name: buyerName,
-    buyer_email: buyerEmail,
-    buyer_phone: buyerPhone || null,
-    has_buyer_agent: hasAgent === 'yes',
-    contingencies: contingencies || 'None selected',
-    message: message || null,
-    is_fsbo_listing: currentOfferListing.isFsbo || false,
-    status: 'pending',
-    created_at: new Date().toISOString()
-  };
-  // Save to Supabase
-  try {
-    const { error } = await sb.from('offers').insert(offerData);
-    if (error) console.warn('Offers table:', error.message);
-  } catch(e) { console.warn('Offer save:', e); }
-
-  // Notify agent immediately
-  try {
-    await fetch('/api/notify-offer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        offer: offerData,
-        agentEmail: currentOfferListing.agentEmail || null,
-        agentName:  currentOfferListing.agentName  || 'Agent',
-        agentPhone: currentOfferListing.agentPhone || null,
-        listingAddress: currentOfferListing.address + ', ' + currentOfferListing.city + ', ' + currentOfferListing.state,
-        listingPrice: currentOfferListing.price,
-      })
-    });
-  } catch(e) { console.warn('Notify offer:', e); }
-
-  btn.disabled = false; btn.textContent = 'Submit Offer';
-  document.getElementById('offerFormContent').style.display = 'none';
-  document.getElementById('offerSuccess').style.display = 'block';
-  document.getElementById('offerSuccessPrice').textContent = '$' + Number(price).toLocaleString();
-}
-
-// ── AI CHAT WIDGET ──
-// GOZ_SYSTEM prompt lives in api/chat.js server-side (never expose in browser)
-
-let chatHistory = [];
-let chatOpen = false;
-
-function initChat() {
-  chatHistory = [{ role: 'assistant', content: "Hey! I'm GOZ AI — your no-BS real estate guide.\n\nAsk me anything: buying without an agent, how commissions work, what the NAR settlement means, how to make an offer, FSBO, contingencies — anything. What's on your mind?" }];
-  setTimeout(() => {
-    const bubble = document.getElementById('goz-chat-bubble');
-    if (bubble && !chatOpen) bubble.style.display = 'block';
-  }, 5000);
-  renderChatMessages();
-}
-
-function toggleChat() {
-  chatOpen = !chatOpen;
-  document.getElementById('goz-chat-panel').classList.toggle('open', chatOpen);
-  const bubble = document.getElementById('goz-chat-bubble');
-  if (bubble) bubble.style.display = 'none';
-  if (chatOpen) {
-    setTimeout(() => {
-      const msgs = document.getElementById('chatMessages');
-      if (msgs) msgs.scrollTop = msgs.scrollHeight;
-      document.getElementById('chatInput')?.focus();
-    }, 150);
-  }
-}
-
-function renderChatMessages() {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  el.innerHTML = chatHistory.map(m => {
-    const cls = m.role === 'assistant' ? 'ai' : 'user';
-    const html = m.content.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-    return '<div class="chat-msg ' + cls + '">' + html + '</div>';
-  }).join('');
-  el.scrollTop = el.scrollHeight;
-}
-
-function showChatTyping() {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  const t = document.createElement('div');
-  t.id = 'chatTyping'; t.className = 'chat-typing';
-  t.innerHTML = '<span></span><span></span><span></span>';
-  el.appendChild(t); el.scrollTop = el.scrollHeight;
-}
-
-function hideChatTyping() { document.getElementById('chatTyping')?.remove(); }
-
-async function sendChatMessage(override) {
-  const input = document.getElementById('chatInput');
-  const msg = override || (input ? input.value.trim() : '');
-  if (!msg) return;
-  if (input) input.value = '';
-  document.getElementById('chatQuickReplies').style.display = 'none';
-  chatHistory.push({ role: 'user', content: msg });
-  renderChatMessages();
-  showChatTyping();
-  try {
-    // Proxy route — API key lives on the server, never in the browser
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: chatHistory.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content }))
-      })
-    });
-    const data = await res.json();
-    hideChatTyping();
-    const reply = data.reply || data.error || 'Something went wrong. Email hello@getoffzillow.com for help.';
-    chatHistory.push({ role: 'assistant', content: reply });
-  } catch(e) {
-    hideChatTyping();
-    chatHistory.push({ role: 'assistant', content: "Can't connect right now. Email hello@getoffzillow.com and we'll help directly." });
-  }
-  renderChatMessages();
-}
-
-function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }
-
-async function initNavAuth() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) return;
-
-  const meta = session.user?.user_metadata || {};
-  const fullName = meta.full_name || meta.name || '';
-  const firstName = fullName.split(' ')[0] || session.user.email.split('@')[0];
-  const initial = firstName[0].toUpperCase();
-
-  const navUl = document.querySelector('.header-nav');
-  if (navUl) {
-    // Find Sign In and Join Free by text content — works regardless of href or tag type
-    const allLis = navUl.querySelectorAll('li');
-    let signInLi = null, joinLi = null;
-    allLis.forEach(li => {
-      const text = li.textContent.trim();
-      if (text === 'Sign In') signInLi = li;
-      if (text === 'Join Free') joinLi = li;
-    });
-    if (signInLi) signInLi.innerHTML = '<a href="dashboard.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 16px;display:flex;align-items:center;gap:8px"><span style="width:24px;height:24px;border-radius:50%;background:var(--ai-green);color:#111;font-weight:900;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">' + initial + '</span>Hi, ' + firstName + '</a>';
-    if (joinLi) joinLi.innerHTML = '<a href="dashboard.html" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">My Dashboard</a>';
-  }
-
-  const mobCta = document.querySelector('.mob-cta');
-  if (mobCta) {
-    mobCta.href = 'dashboard.html';
-    mobCta.textContent = 'Go to Dashboard →';
-  }
-
-  // Update all sign-in/create-account links when logged in
-  document.querySelectorAll('a[href="signup.html"]').forEach(el => {
-    const txt = el.textContent.trim().toLowerCase();
-    if (txt.includes('sign in') || txt.includes('create') || txt.includes('join') || txt.includes('list free')) {
-      el.textContent = 'My Dashboard →';
-      el.href = 'dashboard.html';
-    }
-  });
-  document.querySelectorAll('a[onclick*="openAccountModal('signup')"]').forEach(el => {
-    el.removeAttribute('onclick');
-    el.href = 'dashboard.html';
-    el.textContent = el.classList.contains('cta-btn-big') ? 'Go to My Dashboard →' : 'My Dashboard →';
-  });
-}
-
-
-// ── PHOTO HELPERS ──
-function getFirstPhoto(listing, index) {
-  const photos = parsePhotos(listing.photos);
-  return photos.length > 0 ? photos[0] : DEMO_PHOTOS[index % DEMO_PHOTOS.length];
-}
-
-// ── SAVE / HEART TOGGLE ──
-function toggleSave(btn, listingId) {
-  event.stopPropagation();
-  const saved = btn.dataset.saved === '1';
-  btn.dataset.saved = saved ? '0' : '1';
-  btn.textContent = saved ? '\u2764\uFE0F' : '\uD83E\uDDE1';
-  btn.textContent = saved ? '\uD83E\uDE4D' : '\u2764\uFE0F';
-}
-
-// ── ACCOUNT MODAL ──
-let accountModalMode = 'signup';
-let selectedAccountType = 'buyer';
-
-function openAccountModal(mode) {
-  accountModalMode = mode || 'signup';
-  document.getElementById('accountModalOverlay').classList.add('open');
-  document.querySelectorAll('.goz-account-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === accountModalMode));
-  document.getElementById('signupPanel').style.display = accountModalMode === 'signup' ? 'block' : 'none';
-  document.getElementById('signinPanel').style.display = accountModalMode === 'signin' ? 'block' : 'none';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeAccountModal() {
-  document.getElementById('accountModalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function selectAccountType(type) {
-  selectedAccountType = type;
-  document.querySelectorAll('.goz-type-card').forEach(c => c.classList.toggle('selected', c.dataset.type === type));
-  const agentFields = document.getElementById('agentOnlyFields');
-  const fsboNote = document.getElementById('fsboNote');
-  if (agentFields) agentFields.style.display = type === 'agent' ? 'block' : 'none';
-  if (fsboNote) fsboNote.style.display = type === 'fsbo' ? 'block' : 'none';
-}
-
-function switchAccountTab(mode) {
-  accountModalMode = mode;
-  document.querySelectorAll('.goz-account-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
-  document.getElementById('signupPanel').style.display = mode === 'signup' ? 'block' : 'none';
-  document.getElementById('signinPanel').style.display = mode === 'signin' ? 'block' : 'none';
-}
-
-async function submitAccountSignup() {
-  const btn = document.getElementById('accountSignupBtn');
-  const email = document.getElementById('acEmail').value.trim();
-  const password = document.getElementById('acPassword').value;
-  const name = document.getElementById('acName').value.trim();
-  if (!email || !password || !name) { showToast('Please fill in all fields'); return; }
-  if (password.length < 6) { showToast('Password must be at least 6 characters'); return; }
-  btn.disabled = true; btn.textContent = 'Creating account...';
-  const meta = { account_type: selectedAccountType, full_name: name };
-  if (selectedAccountType === 'agent') {
-    meta.license = document.getElementById('acLicense')?.value?.trim() || '';
-    meta.phone = document.getElementById('acPhone')?.value?.trim() || '';
-  }
-  const { error } = await sb.auth.signUp({ email, password, options: { data: meta } });
-  btn.disabled = false; btn.textContent = 'Create Account';
-  if (error) { showToast('Error: ' + error.message); return; }
-  document.getElementById('accountFormContent').style.display = 'none';
-  document.getElementById('accountSuccessMsg').style.display = 'block';
-  const labels = { buyer: 'buyer', agent: 'agent', fsbo: 'seller' };
-  document.getElementById('accountSuccessType').textContent = labels[selectedAccountType] || 'member';
-  if (selectedAccountType === 'agent') setTimeout(() => { window.location.href = 'signup.html'; }, 2200);
-}
-
-async function submitAccountSignin() {
-  const btn = document.getElementById('accountSigninBtn');
-  const email = document.getElementById('siEmail').value.trim();
-  const password = document.getElementById('siPassword').value;
-  if (!email || !password) { showToast('Please enter email and password'); return; }
-  btn.disabled = true; btn.textContent = 'Signing in...';
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  btn.disabled = false; btn.textContent = 'Sign In';
-  if (error) { showToast('Sign in failed: ' + error.message); return; }
-  closeAccountModal();
-  showToast('Welcome back! \uD83D\uDC4B');
-  setTimeout(() => location.reload(), 800);
-}
-
-// ── OFFER MODAL ──
-let currentOfferListing = null;
-
-function openOfferById(id) {
-  const l = listingDataMap[id];
-  if (!l) { showToast('Could not load listing. Try refreshing.'); return; }
-  const isFsbo = l.listing_type === 'fsbo' || !l.agents;
-  openOfferModal({
-    id: l.id, address: l.address, city: l.city, state: l.state,
-    price: l.price, commission_rate: l.commission_rate,
-    photo: getFirstPhoto(l, l._photoIndex || 0), isFsbo,
-    agentEmail: l.agents?.email || null,
-    agentPhone: l.agents?.phone || null,
-    agentName: l.agents ? l.agents.first_name + ' ' + l.agents.last_name : (l.owner_name || 'Owner'),
-  });
-}
-
-function openOfferModal(listing) {
-  currentOfferListing = listing;
-  const prev = document.getElementById('offerListingPreview');
-  prev.innerHTML = '<img src="' + listing.photo + '" onerror="this.src=\'' + DEMO_PHOTOS[0] + '\'" alt="' + listing.address + '" /><div><div class="olp-price">$' + Number(listing.price).toLocaleString() + '</div><div class="olp-addr">' + listing.address + ', ' + listing.city + ', ' + listing.state + '</div><div class="olp-comm">\u2713 ' + (listing.commission_rate || '2.5%') + ' buyer agent commission offered</div>' + (listing.isFsbo ? '<div style="margin-top:3px"><span class="fsbo-badge">\uD83C\uDFE0 OWNER LISTING</span></div>' : '') + '</div>';
-  document.getElementById('offerForm').reset();
-  document.getElementById('offerPrice').value = listing.price;
-  document.getElementById('offerSuccess').style.display = 'none';
-  document.getElementById('offerFormContent').style.display = 'block';
-  document.querySelectorAll('.contingency-check').forEach(c => c.classList.remove('checked'));
-  document.getElementById('offerModalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeOfferModal() {
-  document.getElementById('offerModalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  currentOfferListing = null;
-}
-
-function toggleContingency(el) { el.classList.toggle('checked'); }
-
-async function submitOffer() {
-  const btn = document.getElementById('offerSubmitBtn');
-  if (!currentOfferListing) return;
-  const price = document.getElementById('offerPrice').value;
-  const financing = document.getElementById('offerFinancing').value;
-  const downPct = document.getElementById('offerDown').value;
-  const closeDate = document.getElementById('offerCloseDate').value;
-  const buyerName = document.getElementById('offerBuyerName').value.trim();
-  const buyerEmail = document.getElementById('offerBuyerEmail').value.trim();
-  const buyerPhone = document.getElementById('offerBuyerPhone').value.trim();
-  const message = document.getElementById('offerMessage').value.trim();
-  const hasAgent = document.getElementById('offerHasAgent').value;
-  const contingencies = [...document.querySelectorAll('.contingency-check.checked')].map(c => c.dataset.c).join(', ');
-  if (!price || !buyerName || !buyerEmail) { showToast('Please fill in all required fields'); return; }
-  btn.disabled = true; btn.textContent = 'Submitting...';
-  const offerData = {
-    listing_id: currentOfferListing.id,
-    listing_address: currentOfferListing.address + ', ' + currentOfferListing.city + ', ' + currentOfferListing.state,
-    offer_price: parseFloat(price),
-    financing_type: financing,
-    down_payment_pct: parseFloat(downPct) || null,
-    proposed_close_date: closeDate || null,
-    buyer_name: buyerName,
-    buyer_email: buyerEmail,
-    buyer_phone: buyerPhone || null,
-    has_buyer_agent: hasAgent === 'yes',
-    contingencies: contingencies || 'None selected',
-    message: message || null,
-    is_fsbo_listing: currentOfferListing.isFsbo || false,
-    status: 'pending',
-    created_at: new Date().toISOString()
-  };
-  // Save to Supabase
-  try {
-    const { error } = await sb.from('offers').insert(offerData);
-    if (error) console.warn('Offers table:', error.message);
-  } catch(e) { console.warn('Offer save:', e); }
-
-  // Notify agent immediately
-  try {
-    await fetch('/api/notify-offer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        offer: offerData,
-        agentEmail: currentOfferListing.agentEmail || null,
-        agentName:  currentOfferListing.agentName  || 'Agent',
-        agentPhone: currentOfferListing.agentPhone || null,
-        listingAddress: currentOfferListing.address + ', ' + currentOfferListing.city + ', ' + currentOfferListing.state,
-        listingPrice: currentOfferListing.price,
-      })
-    });
-  } catch(e) { console.warn('Notify offer:', e); }
-
-  btn.disabled = false; btn.textContent = 'Submit Offer';
-  document.getElementById('offerFormContent').style.display = 'none';
-  document.getElementById('offerSuccess').style.display = 'block';
-  document.getElementById('offerSuccessPrice').textContent = '$' + Number(price).toLocaleString();
-}
-
-// ── AI CHAT WIDGET ──
-// GOZ_SYSTEM prompt lives in api/chat.js server-side (never expose in browser)
-
-let chatHistory = [];
-let chatOpen = false;
-
-function initChat() {
-  chatHistory = [{ role: 'assistant', content: "Hey! I'm GOZ AI — your no-BS real estate guide.\n\nAsk me anything: buying without an agent, how commissions work, what the NAR settlement means, how to make an offer, FSBO, contingencies — anything. What's on your mind?" }];
-  setTimeout(() => {
-    const bubble = document.getElementById('goz-chat-bubble');
-    if (bubble && !chatOpen) bubble.style.display = 'block';
-  }, 5000);
-  renderChatMessages();
-}
-
-function toggleChat() {
-  chatOpen = !chatOpen;
-  document.getElementById('goz-chat-panel').classList.toggle('open', chatOpen);
-  const bubble = document.getElementById('goz-chat-bubble');
-  if (bubble) bubble.style.display = 'none';
-  if (chatOpen) {
-    setTimeout(() => {
-      const msgs = document.getElementById('chatMessages');
-      if (msgs) msgs.scrollTop = msgs.scrollHeight;
-      document.getElementById('chatInput')?.focus();
-    }, 150);
-  }
-}
-
-function renderChatMessages() {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  el.innerHTML = chatHistory.map(m => {
-    const cls = m.role === 'assistant' ? 'ai' : 'user';
-    const html = m.content.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-    return '<div class="chat-msg ' + cls + '">' + html + '</div>';
-  }).join('');
-  el.scrollTop = el.scrollHeight;
-}
-
-function showChatTyping() {
-  const el = document.getElementById('chatMessages');
-  if (!el) return;
-  const t = document.createElement('div');
-  t.id = 'chatTyping'; t.className = 'chat-typing';
-  t.innerHTML = '<span></span><span></span><span></span>';
-  el.appendChild(t); el.scrollTop = el.scrollHeight;
-}
-
-function hideChatTyping() { document.getElementById('chatTyping')?.remove(); }
-
-async function sendChatMessage(override) {
-  const input = document.getElementById('chatInput');
-  const msg = override || (input ? input.value.trim() : '');
-  if (!msg) return;
-  if (input) input.value = '';
-  document.getElementById('chatQuickReplies').style.display = 'none';
-  chatHistory.push({ role: 'user', content: msg });
-  renderChatMessages();
-  showChatTyping();
-  try {
-    // Proxy route — API key lives on the server, never in the browser
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: chatHistory.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content }))
-      })
-    });
-    const data = await res.json();
-    hideChatTyping();
-    const reply = data.reply || data.error || 'Something went wrong. Email hello@getoffzillow.com for help.';
-    chatHistory.push({ role: 'assistant', content: reply });
-  } catch(e) {
-    hideChatTyping();
-    chatHistory.push({ role: 'assistant', content: "Can't connect right now. Email hello@getoffzillow.com and we'll help directly." });
-  }
-  renderChatMessages();
-}
-
-function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }
-
-loadListings();
-initNavAuth();
-initChat();
-</script>
-
-<!-- ═══════════════════════════════════════════════════════ -->
 
 </body>
 </html>
