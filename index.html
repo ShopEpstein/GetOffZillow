@@ -588,11 +588,11 @@
   </div>
   <ul class="header-nav">
     <li><a href="#listings">Buy</a></li>
-    <li><a href="buyers.html">No Agent?</a></li>
+    <li><a href="#buyers">No Agent?</a></li>
     <li><a href="signup.html">Sell / List Free</a></li>
     <li><a href="#agents">For Agents</a></li>
-    <li style="margin-left:8px"><button onclick="openAccountModal('signin')" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px;cursor:pointer">Sign In</button></li>
-    <li style="margin-left:6px"><button onclick="openAccountModal('signup')" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px;cursor:pointer">Join Free</button></li>
+    <li style="margin-left:8px"><a href="#" onclick="openAccountModal('signin');return false;" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Sign In</a></li>
+    <li style="margin-left:6px"><a href="#" onclick="openAccountModal('signup');return false;" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">Join Free</a></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -601,9 +601,9 @@
 
 <nav class="mobile-menu" id="mobileMenu">
   <a href="#listings">🏠 Buy a Home</a>
-  <a href="buyers.html">🤝 Buying Without an Agent</a>
+  <a href="#buyers" onclick="closeMobileMenu()">🤝 Buying Without an Agent</a>
   <a href="signup.html">💰 Sell / List Free</a>
-  <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — $49 Flat Fee</a>
+  <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — Sell Without an Agent</a>
   <a href="#agents" onclick="closeMobileMenu()">🏷️ For Agents — 3% at close</a>
   <a href="signup.html">📊 My Dashboard</a>
   <a href="#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
@@ -819,7 +819,7 @@
       <span class="step-num">04</span>
       <span class="step-icon">🎉</span>
       <h3>You Close. We Take 3%.</h3>
-      <p>Deal closes, you pay GOZ AI 3% of your gross commission. On a $10,000 commission, you pay $300. You keep $9,700. That's it.</p>
+      <p>Deal closes, you pay a technology marketing fee — ~$300 on a $400K sale. Only when it closes. Never upfront. You keep everything else.</p>
     </div>
   </div>
 </section>
@@ -870,7 +870,7 @@
       <div style="display:flex;flex-direction:column;gap:16px;">
         <div class="buyer-card">
           <h3>🤝 Going without a buyer's agent?</h3>
-          <p>You can contact the listing agent directly. They represent the seller, but they can still handle the transaction. Many buyers also hire a real estate attorney for a flat fee — often $500–$1,500 — to review contracts and handle the closing. That's usually far less than a full buyer's agent commission.</p>
+          <p>You can contact the listing agent directly. They represent the seller, but they can still handle the transaction. Many buyers also hire a real estate attorney to review contracts and handle the closing — costs vary by state but are often far less than a full buyer's agent commission. That's usually far less than a full buyer's agent commission.</p>
           <span class="tag">✓ Fully supported on GOZ</span>
         </div>
         <div class="buyer-card">
@@ -894,7 +894,7 @@
     <div>
       <div class="section-eyebrow">For Sellers &amp; FSBO</div>
       <h2 class="fsbo-title">Sell Your Home.<br><span class="blue">Keep More.</span></h2>
-      <p class="fsbo-desc">List your home free as a licensed agent listing, or sell it yourself with a flat-fee FSBO listing. Either way, your commission is shown publicly — exactly what the NAR settlement requires — and buyers contact you directly.</p>
+      <p class="fsbo-desc">List your home free as a licensed agent listing, or sell it yourself with a FSBO listing — pay at closing only. Either way, your commission is shown publicly — exactly what the NAR settlement requires — and buyers contact you directly.</p>
       <ul style="list-style:none;margin-bottom:24px;">
         <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Commission shown on every listing — NAR compliant</li>
         <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Buyers contact you directly — no gated leads</li>
@@ -906,16 +906,16 @@
     </div>
     <div class="fsbo-card">
       <h3>FSBO — For Sale By Owner</h3>
-      <p>Selling yourself? We support that. Post a FSBO listing for a flat one-time fee. Your contact info goes straight to buyers. No agent required, no recurring charges, no percentage taken until you decide to close through an agent on our platform.</p>
-      <div class="fsbo-price">$49</div>
-      <div class="fsbo-price-label">flat fee · one-time · no recurring charge</div>
+      <p>Selling yourself? We support that. Post a FSBO listing free. Pay a technology marketing fee only at closing (~$300 on a $400K sale). Your contact info goes straight to buyers. No agent required, no recurring charges, no percentage taken until you decide to close through an agent on our platform.</p>
+      <div class="fsbo-price" style="font-size:36px">~$300</div>
+      <div class="fsbo-price-label">only at closing · ~$300 on a $400K sale · never upfront</div>
       <ul style="list-style:none;margin-bottom:20px;">
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Full listing with photos</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Your phone &amp; email shown directly to buyers</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> AI listing writer included</li>
-        <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo @VinHunter or Zelle <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7d15181111123d1a1809121b1b07141111120a531e1210">[email&#160;protected]</a></li>
+        <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo @VinHunter or Zelle <a href="mailto:hello@getoffzillow.com" class="__cf_email__" data-cfemail="7d15181111123d1a1809121b1b07141111120a531e1210">[email&#160;protected]</a></li>
       </ul>
-      <button onclick="selectAccountType('fsbo');openAccountModal('signup')" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;cursor:pointer;width:100%">Post FSBO Listing — $49 →</button>
+      <a href="#" onclick="selectAccountType('fsbo');openAccountModal('signup');return false;" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;width:100%">List Your Home Free →</a>
     </div>
   </div>
 </section>
@@ -1104,7 +1104,7 @@
         <li>Post unlimited listings for free — forever</li>
         <li>Your phone and email shown directly to buyers. No lead auction.</li>
         <li>Commission rate displayed publicly (NAR settlement compliant)</li>
-        <li><strong>3% marketplace fee ONLY when the deal closes</strong> — zero upfront cost</li>
+        <li><strong>technology marketing fee (~$300 on a $400K sale) ONLY when the deal closes</strong> — zero upfront cost</li>
         <li>Agent dashboard with your listings and leads</li>
         <li>Listings sorted by recency — no pay-to-rank, no Premier Agent tiers</li>
         <li>Email notifications when buyers contact you — direct to your inbox</li>
@@ -1118,8 +1118,8 @@
     <div class="agent-cta-card">
       <h3>Create Your Free Agent Account</h3>
       <p>No credit card. No upfront fee. No commitment until you close a deal.</p>
-      <div class="agent-cta-note">⚡ Early agents: 3% marketplace fee — only paid when you close.</div>
-      <button onclick="openAccountModal('signup')" class="cta-btn-big" style="cursor:pointer">Create Free Account — Lock In 3% →</button>
+      <div class="agent-cta-note">⚡ Early agents: technology marketing fee (~$300 on a $400K sale) — only paid when you close.</div>
+      <a href="#" onclick="openAccountModal('signup');return false;" class="cta-btn-big">Create Free Account →</a>
       <p style="font-size:11px;color:var(--gray);margin-top:14px">Already have an account? <a href="signup.html" style="color:var(--blue);font-weight:700">Sign in →</a></p>
     </div>
   </div>
@@ -1177,7 +1177,7 @@
       <div style="background:var(--bg);border-radius:12px;padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🤝</div>
         <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;margin-bottom:8px">When You Close</div>
-        <p style="font-size:13px;color:var(--gray);line-height:1.7">We charge 3% of the agent's gross commission — only when a transaction closes. If no deal closes, we earn nothing.</p>
+        <p style="font-size:13px;color:var(--gray);line-height:1.7">We charge a technology marketing fee — ~$300 on a $400K sale. Only when a transaction closes. If no deal closes, we earn nothing.</p>
       </div>
       <div style="background:var(--bg);border-radius:12px;padding:24px">
         <div style="font-size:28px;margin-bottom:12px">🚫</div>
@@ -1207,7 +1207,7 @@
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">Can I buy a home without a buyer's agent?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Yes. You are not required to have a buyer's agent. You can contact the listing agent directly through GOZ — they represent the seller but can facilitate the transaction. Many buyers also hire a real estate attorney for a flat fee ($500–$1,500 typically) to review contracts and handle closing. That's often far less than a buyer's agent commission on a $300K+ home. GOZ makes this easy — every listing shows the agent's direct phone and email.</div>
+        <div class="faq-a">Yes. You are not required to have a buyer's agent. You can contact the listing agent directly through GOZ — they represent the seller but can facilitate the transaction. Many buyers also hire a real estate attorney to review contracts and handle closing — costs vary by state. That's often far less than a buyer's agent commission on a $300K+ home. GOZ makes this easy — every listing shows the agent's direct phone and email.</div>
       </div>
 
       <div class="faq-item">
@@ -1232,7 +1232,7 @@
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">When exactly do I pay the 3%?<span class="faq-arrow">▾</span></button>
-        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing via Venmo @VinHunter or Zelle <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ef878a838380af888a9b808989958683838098c18c8082">[email&#160;protected]</a>.</div>
+        <div class="faq-a">Only when a transaction closes with a buyer who initially contacted you through GetOffZillow AI. If a buyer reaches out and you never close a deal, you owe nothing. Payment is due within 10 days of closing via Venmo @VinHunter or Zelle <a href="mailto:hello@getoffzillow.com" class="__cf_email__" data-cfemail="ef878a838380af888a9b808989958683838098c18c8082">[email&#160;protected]</a>.</div>
       </div>
 
       <div class="faq-item">
@@ -1259,11 +1259,11 @@
   <h2 class="final-cta-title">A Better Way<br>To Buy, Sell, and List.</h2>
   <p class="final-cta-sub">Free to join. Free to list. We earn 3% only when you close.</p>
   <div class="final-cta-btns">
-    <button onclick="openAccountModal('signup')" class="white-btn" style="cursor:pointer">Create Agent Account — Free →</button>
+    <a href="#" onclick="openAccountModal('signup');return false;" class="white-btn">Create Agent Account — Free →</a>
     <a href="#buyers" class="outline-btn">Buying Without an Agent</a>
     <a href="signup.html" class="outline-btn">Sign In</a>
   </div>
-  <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:20px;position:relative;z-index:1">No spam. No lead auction. No data sold. Pensacola, FL · TransBid LLC · <a href="/cdn-cgi/l/email-protection#650d0009090a250200110a03031f0c09090a124b060a08" style="color:rgba(255,255,255,0.4)"><span class="__cf_email__" data-cfemail="18707d747477587f7d6c777e7e62717474776f367b7775">[email&#160;protected]</span></a></p>
+  <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:20px;position:relative;z-index:1">No spam. No lead auction. No data sold. Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com#650d0009090a250200110a03031f0c09090a124b060a08" style="color:rgba(255,255,255,0.4)">hello@getoffzillow.com</a></p>
 </section>
 
 <!-- FOOTER -->
@@ -1284,7 +1284,7 @@
             <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:0.18em;padding:1px 7px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start">AI</div>
           </div>
         </div>
-        <p class="footer-tagline">Real estate without the extraction.<br>3% marketplace fee at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC · <a href="/cdn-cgi/l/email-protection#f098959c9c9fb09795849f96968a999c9c9f87de939f9d" style="color:rgba(255,255,255,0.35)"><span class="__cf_email__" data-cfemail="3d55585151527d5a5849525b5b47545151524a135e5250">[email&#160;protected]</span></a></p>
+        <p class="footer-tagline">Real estate without the extraction.<br>technology marketing fee (~$300 on a $400K sale) at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com#f098959c9c9fb09795849f96968a999c9c9f87de939f9d" style="color:rgba(255,255,255,0.35)">hello@getoffzillow.com</a></p>
         <div class="footer-social">
           <a class="social-btn" href="#" onclick="showToast('𝕏 Coming soon!')">𝕏</a>
           <a class="social-btn" href="#" onclick="showToast('Instagram coming soon!')">📸</a>
@@ -1306,7 +1306,7 @@
         <h4>For Sellers</h4>
         <ul>
           <li><a href="signup.html">List as Agent — Free</a></li>
-          <li><a href="#fsbo">FSBO — $49 Flat Fee</a></li>
+          <li><a href="#fsbo">FSBO — Sell Without an Agent</a></li>
           <li><a href="#referral">Our Fee Model</a></li>
           <li><a href="https://transbid.live" target="_blank" rel="noopener">Get Repair Bids — TransBid</a></li>
         </ul>
@@ -1323,7 +1323,7 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="/cdn-cgi/l/email-protection#761e131a1a19361113021910100c1f1a1a19015815191b"><span class="__cf_email__" data-cfemail="a7cfc2cbcbc8e7c0c2d3c8c1c1ddcecbcbc8d089c4c8ca">[email&#160;protected]</span></a></li>
+          <li><a href="mailto:hello@getoffzillow.com#761e131a1a19361113021910100c1f1a1a19015815191b">hello@getoffzillow.com</a></li>
           <li><a href="https://transbid.live" target="_blank" rel="noopener">TransBid.live</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Service</a></li>
@@ -1331,7 +1331,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026. · <a href="/cdn-cgi/l/email-protection#660e030a0a09260103120900001c0f0a0a09114805090b" style="color:#555"><span class="__cf_email__" data-cfemail="1078757c7c7f507775647f76766a797c7c7f673e737f7d">[email&#160;protected]</span></a></div>
+      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026. · <a href="mailto:hello@getoffzillow.com#660e030a0a09260103120900001c0f0a0a09114805090b" style="color:#555">hello@getoffzillow.com</a></div>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
         <a href="https://transbid.live" target="_blank" rel="noopener" style="color:var(--ai-green);font-size:12px;font-weight:700;text-decoration:none">🔨 TransBid.live</a>
         <span>Equal Housing Opportunity 🏠</span>
@@ -1342,7 +1342,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const { createClient } = supabase;
 const sb = createClient(
@@ -2016,7 +2016,7 @@ initChat();
             <div class="goz-type-card" data-type="fsbo" onclick="selectAccountType('fsbo')">
               <span class="tc-icon">🪧</span>
               <span class="tc-label">Selling My Home</span>
-              <span class="tc-desc">List FSBO for $49, no agent needed</span>
+              <span class="tc-desc">List FSBO for ~$300 at closing, no agent needed</span>
             </div>
             <div class="goz-type-card" data-type="agent" onclick="selectAccountType('agent')">
               <span class="tc-icon">📋</span>
@@ -2026,7 +2026,7 @@ initChat();
           </div>
 
           <div id="fsboNote" style="display:none;background:#EBF3FF;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--blue);margin-bottom:16px;line-height:1.5">
-            <strong>FSBO listing: $49 flat fee.</strong> After signup, post your listing from your dashboard. Pay via Venmo @VinHunter or Zelle hello@getoffzillow.com. Your contact info goes directly to buyers — no agent in the middle.
+            <strong>FSBO: List free. Pay ~$300 at closing only.</strong> After signup, post your listing from your dashboard. Pay via Venmo @VinHunter or Zelle hello@getoffzillow.com. Your contact info goes directly to buyers — no agent in the middle.
           </div>
 
           <div class="goz-form-row">
