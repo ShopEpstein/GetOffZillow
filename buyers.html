@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Search homes on GOZ — free for buyers. Buyer's agent fee shown on every listing, paid by the seller not you. Contact agents directly, no middlemen, no data sold.">
+<meta name="description" content="Search homes on GOZ — free for buyers, always. Commission shown before you tour. No lender steering. No data sold. No pay-to-rank. Real estate without the extraction.">
 <title>For Buyers — GOZ | GetOffZillow AI</title>
 <meta name="theme-color" content="#0D0D0D">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0D0D0D;--cream:#F4F1EB;--cream2:#EAE6DC;--green:#00FF9D;--green-dim:#00CC7A;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--navy:#0a1f44;--gold:#C9A84C;--white:#fff;--text:#1A1A1A;--gray:#6B6B6B;--border:#D4CFC4}
+:root{--ink:#0D0D0D;--cream:#F4F1EB;--cream2:#EAE6DC;--green:#00FF9D;--green-dim:#00CC7A;--green-dark:#00843d;--red:#E8341C;--blue:#006AFF;--navy:#0a1f44;--white:#fff;--text:#1A1A1A;--gray:#6B6B6B;--border:#D4CFC4}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -24,8 +24,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .nav-link:hover{color:var(--green)}
 .btn-blue{background:var(--blue);color:white;padding:9px 20px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;transition:background 0.2s;display:inline-block}
 .btn-blue:hover{background:#0050CC}
-.btn-outline{background:transparent;color:rgba(255,255,255,0.7);padding:9px 18px;border-radius:8px;font-weight:500;font-size:13px;text-decoration:none;border:1px solid rgba(255,255,255,0.2);display:inline-block;transition:all 0.2s}
-.btn-outline:hover{border-color:var(--green);color:var(--green)}
+.btn-green{background:var(--green);color:var(--ink);padding:9px 18px;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;display:inline-block;transition:all 0.2s}
+.btn-green:hover{background:#00e88a}
 .hero{background:var(--blue);padding:100px 32px;position:relative;overflow:hidden;color:white}
 .hero::before{content:'';position:absolute;bottom:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 70%);pointer-events:none}
 .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:80px;align-items:center}
@@ -44,7 +44,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .search-input::placeholder{color:rgba(255,255,255,0.4)}
 .search-btn{width:100%;background:white;color:var(--blue);border:none;padding:13px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all 0.2s}
 .search-btn:hover{background:rgba(255,255,255,0.9)}
-.search-note{font-size:11px;color:rgba(255,255,255,0.4);text-align:center;margin-top:10px;font-family:'Space Mono',monospace}
 .section{padding:88px 32px}
 .section-inner{max-width:1100px;margin:0 auto}
 .eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gray);margin-bottom:14px;display:block}
@@ -54,7 +53,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .section-h2 .green{color:var(--green-dark)}
 .section-h2.white{color:white}
 .section-sub{font-size:15px;color:var(--gray);line-height:1.7;font-weight:300;max-width:540px;margin-bottom:48px}
-.section-sub.light{color:rgba(255,255,255,0.5)}
+/* DIFF GRID */
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-radius:14px;overflow:hidden;margin-top:40px}
 .diff-card{padding:40px 36px;background:white}
 .diff-card.them{background:#fff8f8}
@@ -62,19 +61,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .diff-label{font-family:'Bebas Neue',sans-serif;font-size:28px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
 .diff-label.them{color:var(--red)}
 .diff-label.us{color:var(--green-dark)}
-.diff-item{display:flex;gap:12px;margin-bottom:16px;font-size:15px;line-height:1.5;align-items:flex-start}
-.diff-item .di{font-size:18px;flex-shrink:0}
+.diff-item{display:flex;gap:12px;margin-bottom:16px;font-size:14px;line-height:1.6;align-items:flex-start}
+.diff-item .di{font-size:18px;flex-shrink:0;margin-top:1px}
+/* HOW GRID */
 .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
 .how-card{background:white;border-radius:14px;padding:28px;border:1px solid var(--border);position:relative}
 .how-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(0,0,0,0.04);position:absolute;top:12px;right:16px;line-height:1}
 .how-icon{font-size:28px;margin-bottom:14px;display:block}
 .how-title{font-weight:600;font-size:16px;margin-bottom:8px;color:var(--ink)}
 .how-desc{font-size:13px;color:var(--gray);line-height:1.7;font-weight:300}
-.nar-box{background:var(--ink);border-radius:14px;padding:36px 40px;color:white;margin-top:48px}
-.nar-box h3{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.04em;margin-bottom:12px;color:var(--green)}
-.nar-box p{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;font-weight:300;max-width:640px}
-.nar-box strong{color:white;font-weight:500}
-.calc-section{background:var(--navy);color:white;padding:88px 32px}
+/* ALERT BOX */
+.alert-box{background:var(--ink);border-radius:14px;padding:36px 40px;color:white;margin-top:48px}
+.alert-box h3{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.04em;margin-bottom:12px;color:var(--green)}
+.alert-box p{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;font-weight:300;max-width:700px}
+.alert-box strong{color:white;font-weight:500}
+/* ISSUES GRID */
+.issues-section{background:var(--navy);padding:88px 32px;color:white}
+.issues-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.issue-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px}
+.issue-card .icon{font-size:28px;display:block;margin-bottom:12px}
+.issue-card h4{font-weight:600;font-size:15px;color:white;margin-bottom:8px}
+.issue-card p{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;font-weight:300}
+.issue-card .source{font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.3);margin-top:8px}
+/* CALC */
+.calc-section{background:var(--navy);padding:88px 32px}
 .calc-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
 .calc-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:28px}
 .calc-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.5);display:block;margin-bottom:6px}
@@ -84,41 +94,70 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .calc-result{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:18px;display:none;margin-top:4px}
 .result-num{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--green);line-height:1}
 .result-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;font-family:'Space Mono',monospace}
-.calc-btn{width:100%;margin-top:12px;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:background 0.2s}
-.calc-btn:hover{background:#0050CC}
+/* LISTINGS */
 .listings-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
 .listing-card{background:white;border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.07);transition:transform 0.2s,box-shadow 0.2s;border:1px solid rgba(0,0,0,0.06)}
 .listing-card:hover{transform:translateY(-3px);box-shadow:0 6px 24px rgba(0,0,0,0.1)}
 .listing-img{height:160px;position:relative;overflow:hidden;background:linear-gradient(135deg,#c8d8f0,#a8c0e8)}
 .listing-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block}
-.listing-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.15))}
-.commission-banner{position:absolute;bottom:0;left:0;right:0;z-index:1;background:rgba(0,132,61,0.9);color:white;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:5px 10px;letter-spacing:0.05em}
+.commission-banner{position:absolute;bottom:0;left:0;right:0;z-index:1;background:rgba(0,132,61,0.92);color:white;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:5px 10px;letter-spacing:0.05em}
 .listing-body{padding:14px}
-.listing-price{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ink);letter-spacing:0.02em}
+.listing-price{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ink)}
 .listing-addr{font-size:13px;font-weight:500;color:var(--ink);margin-top:5px}
 .listing-city{font-size:12px;color:var(--gray);margin-top:1px}
 .listing-specs{display:flex;gap:10px;margin-top:8px;font-size:12px;color:var(--gray);border-top:1px solid rgba(0,0,0,0.06);padding-top:8px}
-.contact-btn{display:block;width:100%;margin-top:10px;padding:9px;background:var(--blue);color:white;border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;text-align:center;text-decoration:none;transition:background 0.2s}
-.contact-btn:hover{background:#0050CC}
+.listing-actions{display:flex;gap:8px;padding:0 14px 14px}
+.btn-view{flex:1;padding:8px;border:1.5px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:12px;cursor:pointer;background:white;color:var(--ink);text-align:center;text-decoration:none;display:block;transition:all 0.15s}
+.btn-view:hover{border-color:var(--blue);color:var(--blue)}
+.btn-offer{flex:1;padding:8px;background:var(--green);border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:12px;cursor:pointer;color:#000;transition:all 0.15s}
+.btn-offer:hover{background:#00e88a}
 .skeleton-card{background:white;border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,0.06)}
 .skeleton-img{height:160px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
 .skeleton-body{padding:14px}
 .skeleton-line{height:14px;background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:4px;margin-bottom:8px}
 .skeleton-line.short{width:60%}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* CTA */
 .cta-section{background:var(--blue);padding:88px 32px;text-align:center;color:white}
 .cta-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,72px);line-height:0.9;margin-bottom:16px}
 .cta-sub{font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6;font-weight:300}
-.cta-big{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--blue);padding:15px 36px;border-radius:10px;font-weight:700;font-size:16px;text-decoration:none;transition:all 0.2s}
-.cta-big:hover{background:rgba(255,255,255,0.92);transform:translateY(-1px)}
+/* OFFER MODAL */
+.goz-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.goz-modal-overlay.open{display:flex}
+.goz-modal{background:white;border-radius:16px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.3);position:relative}
+.goz-modal-header{padding:24px 28px 0;display:flex;align-items:flex-start;justify-content:space-between}
+.goz-modal-header h2{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--ink);line-height:1}
+.goz-modal-header p{font-size:13px;color:var(--gray);margin-top:4px}
+.goz-modal-close{width:32px;height:32px;border-radius:50%;background:#f4f4f4;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:12px}
+.goz-modal-body{padding:20px 28px 28px}
+.goz-form-row{margin-bottom:16px}
+.goz-form-row label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray);margin-bottom:5px}
+.goz-form-row input,.goz-form-row select,.goz-form-row textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;background:white;color:var(--ink);-webkit-appearance:none}
+.goz-form-row input:focus,.goz-form-row select:focus,.goz-form-row textarea:focus{border-color:var(--blue)}
+.goz-form-row textarea{resize:vertical;min-height:80px}
+.goz-form-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.goz-form-submit{width:100%;padding:14px;background:var(--green);color:#000;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.goz-form-submit:hover{background:#00e88a}
+.goz-form-submit:disabled{background:#ddd;color:#999;cursor:not-allowed}
+.goz-form-note{font-size:11px;color:var(--gray);text-align:center;margin-top:10px;line-height:1.6}
+.offer-listing-preview{background:#f9f9f9;border-radius:10px;padding:14px 16px;margin-bottom:20px;display:flex;gap:12px;align-items:center}
+.offer-listing-preview img{width:56px;height:42px;object-fit:cover;border-radius:6px;flex-shrink:0}
+.olp-price{font-family:'Bebas Neue',sans-serif;font-size:17px}
+.olp-addr{font-size:12px;color:var(--gray)}
+.olp-comm{font-size:11px;color:var(--green-dark);font-weight:700}
+.contingency-checks{display:flex;gap:8px;flex-wrap:wrap}
+.contingency-check{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px;font-weight:500;transition:all 0.15s;user-select:none}
+.contingency-check.checked{border-color:var(--green-dark);background:#E8FBF0;color:var(--green-dark)}
+.goz-success{text-align:center;padding:20px 0}
+.goz-success .success-icon{font-size:52px;display:block;margin-bottom:12px}
+.goz-success h3{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--ink);margin-bottom:8px}
+.goz-success p{font-size:14px;color:var(--gray);line-height:1.6}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:white;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 4px 24px rgba(0,0,0,0.3);z-index:9999;max-width:340px;transform:translateY(80px);opacity:0;transition:all 0.3s;border-left:3px solid var(--blue)}
+.toast.show{transform:translateY(0);opacity:1}
 .footer-simple{background:#080808;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25)}
 .footer-simple a{color:rgba(255,255,255,0.35);text-decoration:none}
 .footer-simple a:hover{color:white}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:white;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 4px 24px rgba(0,0,0,0.3);z-index:9999;max-width:340px;transform:translateY(80px);opacity:0;transition:all 0.3s;border-left:3px solid var(--blue)}
-.toast.show{transform:translateY(0);opacity:1}
-@media(max-width:1024px){.hero-inner,.calc-inner{grid-template-columns:1fr;gap:40px}.listings-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.hero{padding:60px 20px}.section{padding:60px 20px}.diff-grid,.how-grid{grid-template-columns:1fr}.listings-grid{grid-template-columns:1fr 1fr}.nav-right .btn-outline{display:none}}
-@media(max-width:480px){.listings-grid{grid-template-columns:1fr}}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;margin-left:auto}
 .hamburger span{display:block;width:22px;height:2px;background:white;border-radius:2px;transition:all 0.3s}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
@@ -126,10 +165,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
 .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .mobile-nav{display:none;position:fixed;inset:0;top:60px;background:var(--ink);z-index:250;padding:20px 24px;flex-direction:column;gap:0;overflow-y:auto}
 .mobile-nav.open{display:flex}
-.mobile-nav a{display:block;padding:16px 0;font-size:17px;font-weight:500;color:rgba(255,255,255,0.8);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.07);transition:color 0.2s}
+.mobile-nav a{display:block;padding:16px 0;font-size:17px;font-weight:500;color:rgba(255,255,255,0.8);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.07)}
 .mobile-nav a:hover{color:var(--green)}
-.mobile-nav .mob-cta{margin-top:20px;background:var(--green);color:var(--ink)!important;padding:16px!important;border-radius:8px;text-align:center;font-size:15px;font-weight:700;border:none;display:block;text-decoration:none}
-@media(max-width:768px){.nav-right a:not(.btn-green):not(.btn-blue){display:none}.hamburger{display:flex}}
+.mobile-nav .mob-cta{margin-top:20px;background:var(--green);color:var(--ink)!important;padding:16px!important;border-radius:8px;text-align:center;font-size:15px;font-weight:700;display:block}
+@media(max-width:1024px){.hero-inner,.calc-inner{grid-template-columns:1fr;gap:40px}.listings-grid,.issues-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.hero{padding:60px 20px}.section{padding:60px 20px}.diff-grid,.how-grid{grid-template-columns:1fr}.listings-grid{grid-template-columns:1fr 1fr}.issues-section{padding:60px 20px}.nav-right .btn-green{display:none}.hamburger{display:flex}}
+@media(max-width:480px){.listings-grid{grid-template-columns:1fr}.issues-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -144,6 +185,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   <div class="nav-right">
     <a href="index.html" class="nav-link">Home</a>
     <a href="agents.html" class="nav-link">For Agents</a>
+    <a href="directory.html" class="nav-link">Find an Agent</a>
     <a href="#listings" class="btn-blue">Browse Listings</a>
   </div>
   <button class="hamburger" id="mobileHamburger" onclick="toggleMobileNav()" aria-label="Menu">
@@ -159,56 +201,111 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   <a href="signup.html" class="mob-cta">List Free →</a>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
     <div>
       <span class="hero-eyebrow">For Home Buyers</span>
       <h1 class="hero-h1">Search Homes.<br>See Who Gets<br>Paid What.<br>Free. Always.</h1>
-      <p class="hero-desc">Since August 2024, buyers must sign an agent agreement before touring homes — locking in what they'll pay their agent. If the seller offers less, <strong>you could owe the difference out of pocket.</strong> Zillow still hides this number. GOZ shows it on every listing, before you click, before you tour, before you fall in love with the house.</p>
+      <p class="hero-desc">Since August 2024, you must sign an agent agreement before touring homes — locking in what you'll pay your agent. If the seller offers less, <strong>you could owe the difference out of pocket.</strong> Zillow still hides this number. We show it on every listing, before you click, before you tour, before you fall in love with the house.</p>
       <div class="hero-trust">
         <span class="trust-chip">Free for buyers — always</span>
-        <span class="trust-chip">Seller's offer shown before you call</span>
+        <span class="trust-chip">Commission shown before you tour</span>
         <span class="trust-chip">No account needed to browse</span>
         <span class="trust-chip">Contact agents directly</span>
+        <span class="trust-chip">No lender steering</span>
+        <span class="trust-chip">Zero data sold</span>
       </div>
     </div>
     <div class="search-hero">
       <h3>Search Listings</h3>
-      <p>Buyer's agent fee shown on every result — paid by seller, not you</p>
-      <input class="search-input" id="buyerSearch" type="text" placeholder="City, ZIP, or address...">
+      <p>Commission shown on every result — before you tour</p>
+      <input class="search-input" id="buyerSearch" type="text" placeholder="City, ZIP, or address..." onkeypress="if(event.key==='Enter')doSearch()">
       <button class="search-btn" onclick="doSearch()">Find Homes →</button>
+      <p style="font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:10px;font-family:'Space Mono',monospace">No account needed · Free forever</p>
     </div>
   </div>
 </section>
 
+<!-- WHAT'S ACTUALLY HAPPENING -->
+<section class="issues-section">
+  <div class="section-inner">
+    <span class="eyebrow light">What's Actually Going On</span>
+    <h2 class="section-h2 white" style="margin-bottom:12px">The Industry Has<br><span style="color:var(--green)">Serious Problems.</span></h2>
+    <p style="font-size:15px;color:rgba(255,255,255,0.55);max-width:600px;line-height:1.7;font-weight:300;margin-bottom:0">These aren't complaints. They're documented, sourced, and costing buyers real money. Here's what you should know before you start your search.</p>
+    <div class="issues-grid" style="margin-top:40px">
+      <div class="issue-card">
+        <span class="icon">🙈</span>
+        <h4>Commissions Hidden Until You're Already In</h4>
+        <p>Zillow, Redfin, and Realtor.com don't show you what the seller is offering the buyer's agent. You find out after you've toured, after you've fallen in love, after you've signed a buyer rep agreement locking you in. GOZ shows it before any of that.</p>
+        <div class="source">NAR Settlement, Aug 2024</div>
+      </div>
+      <div class="issue-card">
+        <span class="icon">🏦</span>
+        <h4>Your Agent Might Be Working for Their Lender</h4>
+        <p>A federal class-action (Hagens Berman, 2024) alleges Zillow's Premier Agent program steers buyers toward Zillow Home Loans — creating a financial incentive for agents to push a specific lender over a better deal for you. GOZ has no mortgage arm. No referral bonuses. No conflict of interest.</p>
+        <div class="source">Hagens Berman class-action, 2024</div>
+      </div>
+      <div class="issue-card">
+        <span class="icon">⚖️</span>
+        <h4>Federal Scrutiny Is Growing</h4>
+        <p>The FTC sued Zillow and Redfin in 2025 for allegedly coordinating to suppress competition in rental advertising. RICO claims are being explored in separate litigation. The largest real estate platforms are under more legal pressure than at any point in their history.</p>
+        <div class="source">FTC complaint, 2025</div>
+      </div>
+      <div class="issue-card">
+        <span class="icon">💸</span>
+        <h4>Lead Auctions Mean You Get Whoever Paid Most</h4>
+        <p>Zillow's Premier Agent lets agents pay to appear in your ZIP code. When you click "contact agent," your info goes to whoever won that auction — not necessarily the most experienced, available, or appropriate agent for your situation. GOZ shows agents directly. No auction. No middleman.</p>
+        <div class="source">Zillow Premier Agent program</div>
+      </div>
+      <div class="issue-card">
+        <span class="icon">🌊</span>
+        <h4>Flood and Climate Risk Was Hidden From You</h4>
+        <p>Zillow removed wildfire and flood risk data from listings in 2024 after sellers complained it hurt home values. They chose seller revenue over your ability to make an informed decision about the biggest purchase of your life. We don't remove inconvenient data.</p>
+        <div class="source">Grist, 2024</div>
+      </div>
+      <div class="issue-card">
+        <span class="icon">🔒</span>
+        <h4>You Are the Product</h4>
+        <p>Your search history, your home preferences, your financial signals, and your contact info are monetized — sold to advertisers, lenders, and data brokers. Our only revenue is a technology marketing fee when a deal closes. Your data is not ours to sell.</p>
+        <div class="source">Zillow privacy policy / data practices</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THEM VS US -->
 <section class="section" style="background:white">
   <div class="section-inner">
     <span class="eyebrow">Why GOZ Is Different</span>
-    <h2 class="section-h2">What You See on <span class="accent">Other Platforms</span><br>vs. What You Get Here.</h2>
+    <h2 class="section-h2">What You Get on<br>Other Platforms vs. <span class="green">Here.</span></h2>
     <div class="diff-grid">
       <div class="diff-card them">
         <div class="diff-label them">Other Platforms</div>
-        <div class="diff-item"><span class="di">🙈</span><span>What the seller is offering your agent — hidden. You find out at the negotiating table or at closing, after you're already emotionally invested.</span></div>
-        <div class="diff-item"><span class="di">📋</span><span>Click "contact agent" → your info goes to 3–5 agents simultaneously → inbox flooded with competing calls from agents optimizing for their referral fee</span></div>
-        <div class="diff-item"><span class="di">🏦</span><span>Lender-referred agents (Rocket Mortgage, Zillow Home Loans) are optimizing for the lender's deal — not yours. You may be steered toward homes or areas that don't fit your needs.</span></div>
-        <div class="diff-item"><span class="di">💰</span><span>Platform profits from your data — sold to lenders, advertisers, data brokers</span></div>
+        <div class="diff-item"><span class="di">🙈</span><span>Commission offer hidden until you're already emotionally committed to the house and locked into a buyer rep agreement</span></div>
+        <div class="diff-item"><span class="di">📋</span><span>Your info goes to multiple agents simultaneously — whoever paid most for your ZIP code, not whoever is best for you</span></div>
+        <div class="diff-item"><span class="di">🏦</span><span>Lender-referred agents (Rocket Mortgage, Zillow Home Loans) may be optimizing for their lender's deal, not yours — and you'd never know</span></div>
+        <div class="diff-item"><span class="di">⚖️</span><span>FTC lawsuit (2025), active RICO litigation, class-actions — the largest platforms are under federal scrutiny for anti-competitive practices</span></div>
+        <div class="diff-item"><span class="di">💰</span><span>Your search data, contact info, and financial signals are sold to advertisers, lenders, and data brokers</span></div>
       </div>
       <div class="diff-card us">
         <div class="diff-label us">GOZ</div>
-        <div class="diff-item"><span class="di">✅</span><span>What the seller is offering your agent — <strong>shown on every listing card, before you click, before you tour.</strong> Know your exposure before you're attached to the house.</span></div>
-        <div class="diff-item"><span class="di">✅</span><span>One message goes to one agent — their real phone and email, not a lead distribution system</span></div>
-        <div class="diff-item"><span class="di">✅</span><span>Your cost to search and contact: $0. Always. We charge agents a small fee only when a deal closes.</span></div>
-        <div class="diff-item"><span class="di">✅</span><span>We don't sell your data. Ever.</span></div>
+        <div class="diff-item"><span class="di">✅</span><span><strong>Commission shown on every listing card</strong> — before you click, before you tour, before you fall in love. Know your exposure before you're attached.</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>One message goes to one agent — their real phone and email. No lead distribution. No timed acceptance window. You choose who you talk to.</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>No mortgage arm. No lender partnerships. No referral bonuses. Our only revenue is a technology marketing fee (~$300 on a $400K sale) paid by the agent at closing.</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>Independent. Bootstrapped. Not subject to the conflicts that come with being a publicly traded platform with a mortgage product to push.</span></div>
+        <div class="diff-item"><span class="di">✅</span><span>Zero data sold. We don't remove inconvenient data. NAR settlement compliant by design. Buyers pay nothing, ever.</span></div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- LISTINGS -->
 <section class="section" style="background:var(--cream)" id="listings">
   <div class="section-inner">
     <span class="eyebrow">Active Listings</span>
     <h2 class="section-h2">Homes for Sale.<br><span class="green">Commission Shown. Always.</span></h2>
-    <p class="section-sub">Every listing shows what the seller is offering your agent — before you call, before you tour, before you fall in love with the house. Free to search, free to contact.</p>
+    <p class="section-sub">Every listing shows what the seller is offering — before you call, before you tour, before you fall in love. Free to search. Free to contact. Make an offer directly through the platform.</p>
     <div class="listings-grid" id="listingGrid">
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
@@ -218,43 +315,45 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
   </div>
 </section>
 
+<!-- HOW IT WORKS -->
 <section class="section" style="background:white">
   <div class="section-inner">
     <span class="eyebrow">How It Works for Buyers</span>
-    <h2 class="section-h2">Three Steps to<br><span class="accent">Your Next Home.</span></h2>
+    <h2 class="section-h2">Simple. Transparent.<br><span class="accent">No Surprises.</span></h2>
     <div class="how-grid">
       <div class="how-card">
         <span class="how-num">1</span>
         <span class="how-icon">🔍</span>
         <h3 class="how-title">Search Without an Account</h3>
-        <p class="how-desc">Browse by city, ZIP, or neighborhood. No sign-up required. Every listing shows price, commission rate, specs, and the agent's contact info.</p>
+        <p class="how-desc">Browse by city, ZIP, or neighborhood. No sign-up required. Every listing shows price, commission rate, specs, and the agent's direct contact info — before you click anything.</p>
       </div>
       <div class="how-card">
         <span class="how-num">2</span>
-        <span class="how-icon">👆</span>
-        <h3 class="how-title">See the Fee. Before You Tour.</h3>
-        <p class="how-desc">Since August 2024, buyers must sign a buyer's agent agreement before touring homes — locking in what they'll pay their agent. If the seller offers less than that amount, you could owe the difference. Most platforms still hide what the seller is offering. GOZ shows it on every listing card, before you click, before you drive out there, before you fall in love.</p>
+        <span class="how-icon">👁️</span>
+        <h3 class="how-title">See the Fee Before You Tour</h3>
+        <p class="how-desc">Since August 2024, you must sign a buyer rep agreement before touring — locking in commission before you know if you like the house. GOZ shows what the seller is offering before any of that happens. Know your exposure first.</p>
       </div>
       <div class="how-card">
         <span class="how-num">3</span>
         <span class="how-icon">📞</span>
-        <h3 class="how-title">Contact the Agent Directly</h3>
-        <p class="how-desc">Click "Contact Agent" on any listing. Your message goes to that one agent — their real phone and email. No lead auction, no competing agents, and critically: no lender-referred agent who's optimizing for Rocket Mortgage's deal instead of yours. You pick who you talk to.</p>
+        <h3 class="how-title">Contact One Agent. Directly.</h3>
+        <p class="how-desc">Your message goes to that one agent — their real phone and email. No lead auction, no competing calls. No lender-referred agent optimizing for someone else's deal. You pick who you talk to.</p>
       </div>
     </div>
-    <div class="nar-box">
-      <h3>Why This Number Matters More Than It Used To</h3>
-      <p>In August 2024, the NAR settlement changed the rules. Buyers must now sign a buyer's agent agreement <strong>before touring homes</strong> — locking in a commission rate upfront. If the seller's offer is lower than what you agreed to pay your agent, <strong>you may owe the difference at closing.</strong> On a $400,000 home, that gap could be thousands of dollars out of your pocket — and you'd have no idea until you were already emotionally committed to the house. Zillow, Realtor.com, and Homes.com still don't show what each seller is offering your agent. GOZ shows it on every listing card, before you click, before you tour, before you fall in love. That's not a feature. That's the whole point.</p>
+    <div class="alert-box">
+      <h3>Why the NAR Settlement Changed Everything for Buyers</h3>
+      <p>Before August 2024, you could tour homes and then decide whether to use a buyer's agent. Now you must sign a buyer representation agreement <strong>before touring</strong> — locking in what you'll pay your agent upfront. If the seller is only offering 2% and you agreed to 3%, <strong>you may owe the 1% difference at closing.</strong> On a $400,000 home, that's $4,000 out of your pocket — and most platforms still don't show you what each seller is offering before you commit. GOZ does. That's not a feature. That's the whole point.</p>
     </div>
   </div>
 </section>
 
+<!-- MORTGAGE CALC -->
 <section class="calc-section" id="mortgage">
   <div class="calc-inner">
     <div>
-      <span class="eyebrow light">Mortgage Calculator</span>
+      <span class="eyebrow light" style="color:rgba(255,255,255,0.35)">Mortgage Calculator</span>
       <h2 class="section-h2 white" style="margin-bottom:16px">Know Your<br>Real Monthly Cost.</h2>
-      <p class="section-sub light" style="margin-bottom:0">Principal, interest, estimated taxes, and insurance — not just the teaser number. No spam, no rate-shopping emails, no lender calls.</p>
+      <p style="font-size:15px;color:rgba(255,255,255,0.5);line-height:1.7;font-weight:300;margin-bottom:0">Principal, interest, estimated taxes, and insurance — not just the teaser P&I number. No spam, no rate-shopping emails, no lender calls. We don't have a lender to push you toward.</p>
       <p style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:16px;font-style:italic;font-family:'Space Mono',monospace">Estimates only. Not financial advice.</p>
     </div>
     <div class="calc-card">
@@ -274,20 +373,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
         <div class="result-num" id="calcMonthly">$0</div>
         <div class="result-sub" id="calcBreakdown">Enter values above</div>
       </div>
-      <button class="calc-btn" onclick="window.print()">Save Estimate →</button>
+      <button style="width:100%;margin-top:12px;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;cursor:pointer" onclick="window.print()">Save Estimate →</button>
     </div>
   </div>
 </section>
 
+<!-- CTA -->
 <section class="cta-section">
-  <h2 class="cta-h2">Ready to Find<br>Your Home?</h2>
-  <p class="cta-sub">Search listings with every agent fee shown upfront. Contact agents directly. Free. Always.</p>
-  <a href="index.html#listings" class="cta-big">Search Homes Now →</a>
-  <p style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:20px;font-family:'Space Mono',monospace">Are you an agent? <a href="agents.html" style="color:rgba(255,255,255,0.5)">List your properties free →</a></p>
+  <h2 class="cta-h2">See What Zillow<br>Won't Show You.</h2>
+  <p class="cta-sub">Every commission, every listing, before you tour. Free for buyers. Always.</p>
+  <a href="#listings" class="btn-green" style="padding:15px 36px;font-size:16px;border-radius:10px">Search Homes Now →</a>
+  <p style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:20px;font-family:'Space Mono',monospace">
+    Are you an agent? <a href="agents.html" style="color:rgba(255,255,255,0.5)">List free, pay ~$300 at closing only →</a>
+  </p>
 </section>
 
 <div class="footer-simple">
-  <div>© 2026 GOZ · GetOffZillow AI · TransBid LLC · Pensacola FL</div>
+  <div>© 2026 GOZ · GetOffZillow AI · TransBid LLC · Pensacola FL · hello@getoffzillow.com</div>
   <div style="display:flex;gap:20px">
     <a href="index.html">Home</a>
     <a href="agents.html">For Agents</a>
@@ -295,48 +397,323 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);o
     <a href="privacy.html">Privacy</a>
   </div>
 </div>
+
+<!-- OFFER MODAL -->
+<div class="goz-modal-overlay" id="offerModalOverlay" onclick="if(event.target===this)closeOfferModal()">
+  <div class="goz-modal">
+    <div class="goz-modal-header">
+      <div><h2>Make an Offer</h2><p>Sent directly to the agent. No middlemen.</p></div>
+      <button class="goz-modal-close" onclick="closeOfferModal()">✕</button>
+    </div>
+    <div class="goz-modal-body">
+      <div class="offer-listing-preview" id="offerListingPreview"></div>
+      <div id="offerSuccess" style="display:none">
+        <div class="goz-success">
+          <span class="success-icon">✅</span>
+          <h3>Offer Submitted!</h3>
+          <p>Your offer of <strong id="offerSuccessPrice"></strong> has been sent directly to the agent. They'll contact you at the email and phone you provided. Follow up within 24–48 hours if you don't hear back.</p>
+          <button onclick="closeOfferModal()" style="margin-top:20px;padding:12px 28px;background:var(--green);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;cursor:pointer">Done</button>
+        </div>
+      </div>
+      <div id="offerFormContent">
+        <form id="offerForm" onsubmit="return false">
+          <div class="goz-form-2col">
+            <div class="goz-form-row"><label>Offer Price ($) *</label><input id="offerPrice" type="number" placeholder="350000"/></div>
+            <div class="goz-form-row"><label>Financing Type</label><select id="offerFinancing"><option value="conventional">Conventional</option><option value="cash">Cash</option><option value="fha">FHA</option><option value="va">VA Loan</option><option value="usda">USDA</option><option value="other">Other</option></select></div>
+          </div>
+          <div class="goz-form-2col">
+            <div class="goz-form-row"><label>Down Payment (%)</label><input id="offerDown" type="number" placeholder="20" min="0" max="100" step="0.5"/></div>
+            <div class="goz-form-row"><label>Proposed Close Date</label><input id="offerCloseDate" type="date"/></div>
+          </div>
+          <div class="goz-form-row">
+            <label>Contingencies (tap to toggle)</label>
+            <div class="contingency-checks">
+              <div class="contingency-check checked" data-c="Inspection" onclick="this.classList.toggle('checked')">🔍 Inspection</div>
+              <div class="contingency-check checked" data-c="Financing" onclick="this.classList.toggle('checked')">🏦 Financing</div>
+              <div class="contingency-check checked" data-c="Appraisal" onclick="this.classList.toggle('checked')">📊 Appraisal</div>
+              <div class="contingency-check" data-c="Home Sale" onclick="this.classList.toggle('checked')">🏠 Home Sale</div>
+            </div>
+          </div>
+          <div class="goz-form-row"><label>Do you have a buyer's agent?</label><select id="offerHasAgent"><option value="no">No — going direct</option><option value="yes">Yes — I have representation</option><option value="attorney">Using a real estate attorney</option></select></div>
+          <div style="border-top:1px solid var(--border);margin:16px 0;padding-top:16px">
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray);margin-bottom:12px">Your Contact Info</p>
+            <div class="goz-form-row"><label>Full Name *</label><input id="offerBuyerName" type="text" placeholder="Jane Smith"/></div>
+            <div class="goz-form-2col">
+              <div class="goz-form-row"><label>Email *</label><input id="offerBuyerEmail" type="email" placeholder="jane@example.com"/></div>
+              <div class="goz-form-row"><label>Phone</label><input id="offerBuyerPhone" type="tel" placeholder="(555) 000-0000"/></div>
+            </div>
+          </div>
+          <div class="goz-form-row"><label>Message (optional)</label><textarea id="offerMessage" placeholder="Hi, I'm very interested in this property..."></textarea></div>
+          <button class="goz-form-submit" id="offerSubmitBtn" onclick="submitOffer()">Submit Offer →</button>
+          <p class="goz-form-note">GetOffZillow AI is a technology marketing platform — not a licensed brokerage. This is not a legally binding contract. A formal Purchase &amp; Sale Agreement is required before any deal is binding.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const { createClient } = window.supabase || supabase;
-const sb = createClient('https://pneixwmkphakoxmzkblx.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0');
-const DEMO=['https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop','https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop','https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop','https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'];
-function parsePhotos(r){if(!r)return[];if(Array.isArray(r))return r.filter(Boolean);if(typeof r==='string'){if(r.startsWith('['))try{const p=JSON.parse(r);return Array.isArray(p)?p.filter(Boolean):[]}catch(e){}if(r.startsWith('{')&&r.endsWith('}'))return r.slice(1,-1).split(',').map(s=>s.trim().replace(/^"|"$/g,'')).filter(s=>s.startsWith('http'));if(r.startsWith('http'))return[r]}return[]}
+const sb = createClient(
+  'https://pneixwmkphakoxmzkblx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuZWl4d21rcGhha294bXprYmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNjE2NDAsImV4cCI6MjA4OTYzNzY0MH0.SDwzNkVCehQQqDkmj_516iFD-jphjGF1u43l19SAN_0'
+);
+
+const DEMO = [
+  'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+  'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+  'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+  'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
+];
+
+function parsePhotos(r) {
+  if (!r) return [];
+  if (Array.isArray(r)) return r.filter(Boolean);
+  if (typeof r === 'string') {
+    if (r.startsWith('[')) try { const p = JSON.parse(r); return Array.isArray(p) ? p.filter(Boolean) : []; } catch(e) {}
+    if (r.startsWith('{') && r.endsWith('}')) return r.slice(1,-1).split(',').map(s=>s.trim().replace(/^"|"$/g,'')).filter(s=>s.startsWith('http'));
+    if (r.startsWith('http')) return [r];
+  }
+  return [];
+}
+
+const listingMap = {};
+
 async function loadListings() {
   try {
-    const {data} = await sb.from('listings').select('id,address,city,state,price,beds,baths,commission_rate,photos,created_at,agents(first_name,last_name)').eq('status','active').order('featured',{ascending:false}).order('created_at',{ascending:false}).limit(8);
+    const { data } = await sb
+      .from('listings')
+      .select('id,address,city,state,price,beds,baths,sqft,commission_rate,photos,created_at,listing_type,owner_name,agent_id,agents(first_name,last_name,email,phone)')
+      .eq('status','active')
+      .order('created_at',{ascending:false})
+      .limit(8);
+
     const grid = document.getElementById('listingGrid');
-    if (!data||!data.length) { grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><div style="font-size:40px;margin-bottom:12px">🏡</div><p style="font-size:15px;font-weight:300">No listings yet. <a href="agents.html" style="color:var(--blue)">Agents — list your first property free →</a></p></div>'; return; }
-    grid.innerHTML = data.map((l,i) => {
-      const photos=parsePhotos(l.photos);const src=photos.length?photos[0]:DEMO[i%DEMO.length];const fb=DEMO[i%DEMO.length];const agentName=l.agents?`${l.agents.first_name} ${l.agents.last_name[0]}.`:'GOZ Agent';
-      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'"><div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy"><div class="commission-banner">✓ ${l.commission_rate||'2.5%'} buyer's agent fee — paid by seller</div></div><div class="listing-body"><div class="listing-price">$${Number(l.price).toLocaleString()}</div><div class="listing-addr">${l.address}</div><div class="listing-city">${l.city}, ${l.state}</div><div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div><a class="contact-btn" href="listing.html?id=${l.id}">View & Contact ${agentName} →</a></div></div>`;
+    if (!data || !data.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><div style="font-size:40px;margin-bottom:12px">🏡</div><p style="font-size:15px;font-weight:300">No listings yet. <a href="agents.html" style="color:var(--blue)">Agents — list your first property free →</a></p></div>';
+      return;
+    }
+
+    data.forEach((l, i) => { listingMap[l.id] = { ...l, _idx: i }; });
+
+    grid.innerHTML = data.map((l, i) => {
+      const photos = parsePhotos(l.photos);
+      const src = photos.length ? photos[0] : DEMO[i % DEMO.length];
+      const fb = DEMO[i % DEMO.length];
+      const isFsbo = l.listing_type === 'fsbo' || !l.agents;
+      const agentName = isFsbo ? (l.owner_name || 'Owner') : (l.agents ? `${l.agents.first_name} ${l.agents.last_name[0]}.` : 'GOZ Agent');
+      const sqft = l.sqft ? Number(l.sqft).toLocaleString() : '';
+      return `<div class="listing-card">
+        <div class="listing-img" onclick="window.location.href='listing.html?id=${l.id}'" style="cursor:pointer">
+          <img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy">
+          <div class="commission-banner">✓ ${l.commission_rate||'2.5%'} commission shown</div>
+        </div>
+        <div class="listing-body" onclick="window.location.href='listing.html?id=${l.id}'" style="cursor:pointer">
+          <div class="listing-price">$${Number(l.price).toLocaleString()}</div>
+          <div class="listing-addr">${l.address}</div>
+          <div class="listing-city">${l.city}, ${l.state}</div>
+          <div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''} ${sqft?`<span>📐 ${sqft}</span>`:''}</div>
+        </div>
+        <div class="listing-actions">
+          <a class="btn-view" href="listing.html?id=${l.id}">View Details</a>
+          <button class="btn-offer" onclick="openOfferById('${l.id}')">Make Offer</button>
+        </div>
+      </div>`;
     }).join('');
   } catch(e) { console.error(e); }
 }
+
 async function doSearch() {
   const q = document.getElementById('buyerSearch').value.trim();
   if (!q) { showToast('Enter a city, ZIP, or address'); return; }
   document.getElementById('listings')?.scrollIntoView({behavior:'smooth'});
   try {
-    const {data} = await sb.from('listings').select('id,address,city,state,price,beds,baths,commission_rate,photos,created_at,agents(first_name,last_name)').eq('status','active').or(`city.ilike.%${q}%,address.ilike.%${q}%,zip.ilike.%${q}%`).order('created_at',{ascending:false}).limit(20);
-    const grid = document.getElementById('listingGrid');
-    if (!data||!data.length) { grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><p style="font-size:15px;font-weight:300">No listings found for "${q}" yet.</p></div>`; showToast(`No listings found for "${q}"`); return; }
-    grid.innerHTML = data.map((l,i) => {
-      const photos=parsePhotos(l.photos);const src=photos.length?photos[0]:DEMO[i%DEMO.length];const fb=DEMO[i%DEMO.length];const agentName=l.agents?`${l.agents.first_name} ${l.agents.last_name[0]}.`:'GOZ Agent';
-      return `<div class="listing-card" onclick="window.location.href='listing.html?id=${l.id}'"><div class="listing-img"><img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy"><div class="commission-banner">✓ ${l.commission_rate||'2.5%'} buyer's agent fee — paid by seller</div></div><div class="listing-body"><div class="listing-price">$${Number(l.price).toLocaleString()}</div><div class="listing-addr">${l.address}</div><div class="listing-city">${l.city}, ${l.state}</div><div class="listing-specs">${l.beds?`<span>🛏 ${l.beds}bd</span>`:''} ${l.baths?`<span>🚿 ${l.baths}ba</span>`:''}</div><a class="contact-btn" href="listing.html?id=${l.id}">Contact ${agentName} →</a></div></div>`;
+    const { data } = await sb
+      .from('listings')
+      .select('id,address,city,state,price,beds,baths,sqft,commission_rate,photos,created_at,listing_type,owner_name,agents(first_name,last_name,email,phone)')
+      .eq('status','active')
+      .or(`city.ilike.%${q}%,address.ilike.%${q}%,zip.ilike.%${q}%`)
+      .order('created_at',{ascending:false})
+      .limit(20);
+
+    if (!data || !data.length) {
+      document.getElementById('listingGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--gray)"><p>No listings found for "${q}" yet.</p></div>`;
+      showToast(`No listings found for "${q}"`);
+      return;
+    }
+    data.forEach((l, i) => { listingMap[l.id] = { ...l, _idx: i }; });
+    document.getElementById('listingGrid').innerHTML = data.map((l,i) => {
+      const photos = parsePhotos(l.photos);
+      const src = photos.length ? photos[0] : DEMO[i%DEMO.length];
+      const fb = DEMO[i%DEMO.length];
+      const agentName = l.agents ? `${l.agents.first_name} ${l.agents.last_name[0]}.` : 'GOZ Agent';
+      return `<div class="listing-card">
+        <div class="listing-img" onclick="window.location.href='listing.html?id=${l.id}'" style="cursor:pointer">
+          <img src="${src}" alt="${l.address}" data-fallback="${fb}" onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback" loading="lazy">
+          <div class="commission-banner">✓ ${l.commission_rate||'2.5%'} commission shown</div>
+        </div>
+        <div class="listing-body" onclick="window.location.href='listing.html?id=${l.id}'" style="cursor:pointer">
+          <div class="listing-price">$${Number(l.price).toLocaleString()}</div>
+          <div class="listing-addr">${l.address}</div>
+          <div class="listing-city">${l.city}, ${l.state}</div>
+        </div>
+        <div class="listing-actions">
+          <a class="btn-view" href="listing.html?id=${l.id}">View Details</a>
+          <button class="btn-offer" onclick="openOfferById('${l.id}')">Make Offer</button>
+        </div>
+      </div>`;
     }).join('');
     showToast(`${data.length} listing${data.length!==1?'s':''} found for "${q}"`);
   } catch(e) { showToast('Search failed. Try again.'); }
 }
+
+// ── OFFER MODAL ──
+let currentOffer = null;
+
+function openOfferById(id) {
+  const l = listingMap[id];
+  if (!l) { showToast('Could not load listing. Try refreshing.'); return; }
+  const photos = parsePhotos(l.photos);
+  const isFsbo = l.listing_type === 'fsbo' || !l.agents;
+  currentOffer = {
+    id: l.id,
+    address: l.address,
+    city: l.city,
+    state: l.state,
+    price: l.price,
+    commission_rate: l.commission_rate,
+    photo: photos.length ? photos[0] : DEMO[l._idx % DEMO.length],
+    isFsbo,
+    agentEmail: l.agents?.email || null,
+    agentPhone: l.agents?.phone || null,
+    agentName: l.agents ? `${l.agents.first_name} ${l.agents.last_name}` : (l.owner_name || 'Owner'),
+    agent_id: l.agent_id || null,
+  };
+  document.getElementById('offerListingPreview').innerHTML = `
+    <img src="${currentOffer.photo}" onerror="this.src='${DEMO[0]}'" alt="${currentOffer.address}">
+    <div>
+      <div class="olp-price">$${Number(currentOffer.price).toLocaleString()}</div>
+      <div class="olp-addr">${currentOffer.address}, ${currentOffer.city}, ${currentOffer.state}</div>
+      <div class="olp-comm">✓ ${currentOffer.commission_rate || '2.5%'} commission offered by seller</div>
+      ${isFsbo ? '<div style="margin-top:3px;font-size:11px;color:var(--blue);font-weight:700">🏠 OWNER LISTING</div>' : ''}
+    </div>`;
+  document.getElementById('offerForm').reset();
+  document.getElementById('offerPrice').value = currentOffer.price;
+  document.getElementById('offerSuccess').style.display = 'none';
+  document.getElementById('offerFormContent').style.display = 'block';
+  document.querySelectorAll('.contingency-check').forEach(c => {
+    c.classList.toggle('checked', ['Inspection','Financing','Appraisal'].includes(c.dataset.c));
+  });
+  document.getElementById('offerModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOfferModal() {
+  document.getElementById('offerModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentOffer = null;
+}
+
+async function submitOffer() {
+  const btn = document.getElementById('offerSubmitBtn');
+  if (!currentOffer) return;
+  const price = document.getElementById('offerPrice').value;
+  const buyerName = document.getElementById('offerBuyerName').value.trim();
+  const buyerEmail = document.getElementById('offerBuyerEmail').value.trim();
+  const buyerPhone = document.getElementById('offerBuyerPhone').value.trim();
+  const message = document.getElementById('offerMessage').value.trim();
+  const financing = document.getElementById('offerFinancing').value;
+  const downPct = document.getElementById('offerDown').value;
+  const closeDate = document.getElementById('offerCloseDate').value;
+  const hasAgent = document.getElementById('offerHasAgent').value;
+  const contingencies = [...document.querySelectorAll('.contingency-check.checked')].map(c=>c.dataset.c).join(', ');
+
+  if (!price || !buyerName || !buyerEmail) { showToast('Please fill in all required fields'); return; }
+
+  btn.disabled = true; btn.textContent = 'Submitting...';
+
+  const offerData = {
+    listing_id: currentOffer.id,
+    listing_address: currentOffer.address + ', ' + currentOffer.city + ', ' + currentOffer.state,
+    offer_price: parseFloat(price),
+    financing_type: financing,
+    down_payment_pct: parseFloat(downPct) || null,
+    proposed_close_date: closeDate || null,
+    buyer_name: buyerName,
+    buyer_email: buyerEmail,
+    buyer_phone: buyerPhone || null,
+    has_buyer_agent: hasAgent === 'yes',
+    contingencies: contingencies || 'None',
+    message: message || null,
+    is_fsbo_listing: currentOffer.isFsbo || false,
+    status: 'pending',
+    created_at: new Date().toISOString()
+  };
+
+  // Save to Supabase
+  try {
+    const { error } = await sb.from('offers').insert(offerData);
+    if (error) console.warn('Offers table:', error.message);
+  } catch(e) { console.warn('Offer save:', e); }
+
+  // Notify agent via API
+  try {
+    await fetch('/api/notify-offer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        offer: offerData,
+        agentEmail: currentOffer.agentEmail,
+        agentName: currentOffer.agentName,
+        agentPhone: currentOffer.agentPhone,
+        listingAddress: currentOffer.address + ', ' + currentOffer.city + ', ' + currentOffer.state,
+        listingPrice: currentOffer.price,
+      })
+    });
+  } catch(e) { console.warn('Notification:', e); }
+
+  btn.disabled = false; btn.textContent = 'Submit Offer';
+  document.getElementById('offerFormContent').style.display = 'none';
+  document.getElementById('offerSuccess').style.display = 'block';
+  document.getElementById('offerSuccessPrice').textContent = '$' + Number(price).toLocaleString();
+}
+
 function runCalc() {
-  const price=parseFloat(document.getElementById('calcPrice').value)||0;const down=parseFloat(document.getElementById('calcDown').value)||0;const rate=parseFloat(document.getElementById('calcRate').value)||0;const term=parseInt(document.getElementById('calcTerm').value)||30;const loan=price-down;if(loan<=0||rate<=0)return;const r=rate/100/12,n=term*12;const payment=(loan*r)/(1-Math.pow(1+r,-n));const estTax=price*0.011/12,estIns=price*0.005/12;const total=payment+estTax+estIns;const el=document.getElementById('calcResult');el.style.display='block';document.getElementById('calcMonthly').textContent='$'+Math.round(total).toLocaleString();document.getElementById('calcBreakdown').textContent=`P&I $${Math.round(payment).toLocaleString()} + Tax $${Math.round(estTax).toLocaleString()} + Ins $${Math.round(estIns).toLocaleString()}`;
+  const price=parseFloat(document.getElementById('calcPrice').value)||0;
+  const down=parseFloat(document.getElementById('calcDown').value)||0;
+  const rate=parseFloat(document.getElementById('calcRate').value)||0;
+  const term=parseInt(document.getElementById('calcTerm').value)||30;
+  const loan=price-down;
+  if(loan<=0||rate<=0)return;
+  const r=rate/100/12,n=term*12;
+  const payment=(loan*r)/(1-Math.pow(1+r,-n));
+  const estTax=price*0.011/12,estIns=price*0.005/12;
+  const total=payment+estTax+estIns;
+  document.getElementById('calcResult').style.display='block';
+  document.getElementById('calcMonthly').textContent='$'+Math.round(total).toLocaleString();
+  document.getElementById('calcBreakdown').textContent=`P&I $${Math.round(payment).toLocaleString()} + Tax $${Math.round(estTax).toLocaleString()} + Ins $${Math.round(estIns).toLocaleString()}`;
 }
+
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),4000)}
-loadListings();
-function toggleMobileNav() {
-  const btn=document.getElementById('mobileHamburger');const nav=document.getElementById('mobileNav');if(!btn||!nav)return;btn.classList.toggle('open');nav.classList.toggle('open');document.body.style.overflow=nav.classList.contains('open')?'hidden':'';
+
+function toggleMobileNav(){
+  const btn=document.getElementById('mobileHamburger');
+  const nav=document.getElementById('mobileNav');
+  if(!btn||!nav)return;
+  btn.classList.toggle('open');nav.classList.toggle('open');
+  document.body.style.overflow=nav.classList.contains('open')?'hidden':'';
 }
-document.addEventListener('click',e=>{const btn=document.getElementById('mobileHamburger');const nav=document.getElementById('mobileNav');if(nav&&btn&&nav.classList.contains('open')&&!nav.contains(e.target)&&!btn.contains(e.target)){btn.classList.remove('open');nav.classList.remove('open');document.body.style.overflow='';}});
+document.addEventListener('click',e=>{
+  const btn=document.getElementById('mobileHamburger');
+  const nav=document.getElementById('mobileNav');
+  if(nav&&btn&&nav.classList.contains('open')&&!nav.contains(e.target)&&!btn.contains(e.target)){
+    btn.classList.remove('open');nav.classList.remove('open');document.body.style.overflow='';
+  }
+});
+
+loadListings();
 </script>
 </body>
 </html>
