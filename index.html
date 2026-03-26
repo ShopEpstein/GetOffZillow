@@ -691,7 +691,7 @@
         <th>Lead Auction?</th>
         <th>Transparent Commissions?</th>
         <th>Free Listings?</th>
-        <th class="goz-col">GetOffZillow AI <span class="winner-badge">★ Best</span></th>
+        <th class="goz-col">GetOffZillow AI</th>
       </tr>
     </thead>
     <tbody>
@@ -1741,25 +1741,41 @@ async function initNavAuth() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
 
+  // Get display name from metadata or email
+  const meta = session.user?.user_metadata || {};
+  const fullName = meta.full_name || meta.name || '';
+  const firstName = fullName.split(' ')[0] || session.user.email.split('@')[0];
+  const accountType = meta.account_type || 'agent';
+
   const navUl = document.querySelector('.header-nav');
   if (navUl) {
-    const signInLi = navUl.querySelector('a[href="signup.html"].btn-outline')?.closest('li');
-    const listLi = navUl.querySelector('a[href="signup.html"].btn-red')?.closest('li');
-    if (signInLi) signInLi.innerHTML = '<a href="dashboard.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px">Dashboard</a>';
-    if (listLi) listLi.innerHTML = '<a href="#" onclick="sb.auth.signOut().then(()=>location.reload())" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">Sign Out</a>';
+    // Replace Sign In button with greeting + dashboard link
+    const signInLi = navUl.querySelector('button.btn-outline')?.closest('li')
+                  || navUl.querySelector('a[href="signup.html"].btn-outline')?.closest('li');
+    const joinLi = navUl.querySelector('button.btn-red')?.closest('li')
+                || navUl.querySelector('a[href="signup.html"].btn-red')?.closest('li');
+
+    if (signInLi) {
+      signInLi.innerHTML = `<a href="dashboard.html" class="btn btn-outline" style="height:38px;line-height:38px;padding:0 18px;display:flex;align-items:center;gap:6px">
+        <span style="width:22px;height:22px;border-radius:50%;background:var(--ai-green);color:#111;font-family:'Bebas Neue',sans-serif;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">${firstName[0].toUpperCase()}</span>
+        Hi, ${firstName}
+      </a>`;
+    }
+    if (joinLi) {
+      joinLi.innerHTML = '<a href="dashboard.html" class="btn btn-red" style="height:38px;line-height:38px;padding:0 18px">My Dashboard</a>';
+    }
   }
 
   const mobCta = document.querySelector('.mob-cta');
   if (mobCta) {
     mobCta.href = 'dashboard.html';
-    mobCta.textContent = 'Go to Dashboard \u2192';
+    mobCta.textContent = `Hi ${firstName} — Go to Dashboard →`;
   }
 
-  // Update buyer account state if logged in as buyer
-  const buyerType = session.user?.user_metadata?.account_type;
-  if (buyerType === 'buyer' || buyerType === 'fsbo') {
+  // Update buyer-specific CTAs
+  if (accountType === 'buyer' || accountType === 'fsbo') {
     document.querySelectorAll('.buyer-signup-cta').forEach(el => {
-      el.textContent = 'My Dashboard \u2192';
+      el.textContent = 'My Dashboard →';
       el.href = 'dashboard.html';
     });
   }
@@ -1924,10 +1940,49 @@ async function submitOffer() {
     status: 'pending',
     created_at: new Date().toISOString()
   };
+  // 1. Save to Supabase offers table
+  let offerSaved = false;
   try {
     const { error } = await sb.from('offers').insert(offerData);
     if (error) console.warn('Offers table note:', error.message);
-  } catch(e) { console.warn('Offer log:', e); }
+    else offerSaved = true;
+  } catch(e) { console.warn('Offer save:', e); }
+
+  // 2. Get agent contact info for notification
+  let agentEmail = null;
+  let agentName = 'Agent';
+  let agentPhone = null;
+  if (currentOfferListing.id) {
+    try {
+      const { data: listing } = await sb
+        .from('listings')
+        .select('agent_id, agents(first_name, last_name, email, phone)')
+        .eq('id', currentOfferListing.id)
+        .single();
+      if (listing?.agents) {
+        agentEmail = listing.agents.email;
+        agentPhone = listing.agents.phone;
+        agentName = listing.agents.first_name + ' ' + listing.agents.last_name;
+      }
+    } catch(e) { console.warn('Agent lookup:', e); }
+  }
+
+  // 3. Send notification via API
+  try {
+    await fetch('/api/notify-offer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        offer: offerData,
+        agentEmail,
+        agentName,
+        agentPhone,
+        listingAddress: currentOfferListing.address + ', ' + currentOfferListing.city + ', ' + currentOfferListing.state,
+        listingPrice: currentOfferListing.price,
+      })
+    });
+  } catch(e) { console.warn('Notification send:', e); }
+
   btn.disabled = false; btn.textContent = 'Submit Offer';
   document.getElementById('offerFormContent').style.display = 'none';
   document.getElementById('offerSuccess').style.display = 'block';
