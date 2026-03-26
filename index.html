@@ -607,7 +607,6 @@
   <a href="agents.html" onclick="closeMobileMenu()">🏷️ For Agents — 3% of your commission at close</a>
   <a href="signup.html">📊 My Dashboard</a>
   <a href="#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
-  <a href="https://transbid.live" target="_blank">🔨 Contractor Bids — TransBid</a>
   <a href="#" onclick="openAccountModal('signup');return false;" class="mob-cta">List Free — No Fee Until You Close →</a>
   <div style="text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1)">
     <a href="#" onclick="closeMobileMenu();openAccountModal('signin')" style="color:rgba(255,255,255,0.5);font-size:13px;border:none">Already have an account? Sign in →</a>
@@ -665,16 +664,11 @@
     <div class="hero-trust">
       <div class="trust-item"><span class="trust-check">✓</span> Free for buyers — always</div>
       <div class="trust-item"><span class="trust-check">✓</span> Seller's offer shown before you tour</div>
-      <div class="trust-item"><span class="trust-check">✓</span> No buyer's agent required</div>
+      <div class="trust-item"><span class="trust-check">✓</span> Agents: 3% of commission at close only</div>
       <div class="trust-item"><span class="trust-check">✓</span> Zero data sold</div>
     </div>
   </div>
 </section>
-
-<!-- FEE TICKER -->
-<div class="fee-band">
-  <div class="fee-ticker" id="feeTicker"></div>
-</div>
 
 <!-- FEE BATTLE -->
 <section class="fee-battle" id="compare">
@@ -824,70 +818,6 @@
   </div>
 </section>
 
-<!-- BUYER SECTION — FOR PEOPLE WHO DON'T WANT OR NEED AN AGENT -->
-<section class="buyer-section" id="buyers">
-  <div class="buyer-inner">
-    <div class="section-eyebrow">For Home Buyers</div>
-    <h2 class="section-title">You Don't Need A<br><span class="blue">Buyer's Agent.</span></h2>
-    <p class="section-sub">Since the August 2024 NAR settlement, buyers must sign a commission agreement <em>before</em> touring a home — locking in a rate before you know if you even like the place. On GOZ, you see what the seller is offering before you tour, before you sign anything, before you're emotionally attached. You decide what makes sense.</p>
-    <div class="buyer-grid">
-      <div>
-        <div class="buyer-steps">
-          <div class="buyer-step">
-            <div class="buyer-step-num">1</div>
-            <div class="buyer-step-body">
-              <h4>Search listings — commission shown on every card</h4>
-              <p>Every GOZ listing shows what the seller is offering a buyer's agent upfront. Not buried in disclosures. Not revealed at closing. Right on the card, before you tour.</p>
-            </div>
-          </div>
-          <div class="buyer-step">
-            <div class="buyer-step-num">2</div>
-            <div class="buyer-step-body">
-              <h4>Contact the listing agent directly — or bring an attorney</h4>
-              <p>Click any listing to get the agent's real phone and email. You can work with the listing agent directly, bring your own real estate attorney, or represent yourself. No platform sitting in the middle, no timed acceptance window.</p>
-            </div>
-          </div>
-          <div class="buyer-step">
-            <div class="buyer-step-num">3</div>
-            <div class="buyer-step-body">
-              <h4>Know exactly what everyone is being paid</h4>
-              <p>Transparent commissions mean nobody is pocketing anything without you knowing. What the seller offers is what gets paid. No hidden steering, no Rocket Mortgage referral bonus, no platform that profits from sending you to their preferred lender.</p>
-            </div>
-          </div>
-          <div class="buyer-step">
-            <div class="buyer-step-num">4</div>
-            <div class="buyer-step-body">
-              <h4>We cost buyers nothing. Ever.</h4>
-              <p>GOZ is free for buyers forever. We earn a technology marketing fee from the agent only when a deal closes. If you go without an agent entirely, you pay us nothing.</p>
-            </div>
-          </div>
-        </div>
-        <div class="buyer-cta-row">
-          <a href="#listings" class="btn btn-red buyer-signup-cta" style="padding:13px 28px;font-size:15px">Browse Listings Free →</a>
-          <a href="#faq" class="btn btn-outline" style="background:#f0f0f0;color:#111;border-color:#ddd;padding:13px 24px;font-size:15px">Buyer FAQ</a>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div class="buyer-card">
-          <h3>🤝 Going without a buyer's agent?</h3>
-          <p>You can contact the listing agent directly. They represent the seller, but they can still handle the transaction. Many buyers also hire a real estate attorney to review contracts and handle the closing — costs vary by state but are typically far less than a full buyer's agent commission.</p>
-          <span class="tag">✓ Fully supported on GOZ</span>
-        </div>
-        <div class="buyer-card">
-          <h3>📋 What about the NAR settlement?</h3>
-          <p>Since August 2024, you must sign a buyer representation agreement before touring most homes — and that locks in a commission rate. On GOZ, you see what the seller already agreed to offer before you commit to anything. Know your exposure before you fall in love with the house.</p>
-          <span class="tag">✓ Commission shown pre-tour, always</span>
-        </div>
-        <div class="buyer-card">
-          <h3>💡 Can the seller's commission cover me?</h3>
-          <p>If the seller is offering a buyer's agent commission (shown on every GOZ listing), and you bring a buyer's agent, that fee covers your agent. If you go without an agent, that commission may stay with the seller — or you can negotiate it as a price reduction. Either way, you'll know the number before you walk through the door.</p>
-          <span class="tag">✓ No surprises at closing</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- FSBO SECTION -->
 <section class="fsbo-band" id="fsbo">
   <div class="fsbo-inner">
@@ -962,117 +892,6 @@
   </div>
 </section>
 
-<!-- TRANSBID SECTION -->
-<section class="transbid-section" id="transbid">
-  <div class="transbid-inner">
-    <div>
-      <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">From TransBid LLC</div>
-      <h2 class="transbid-title">Tired of Mystery<br><span class="yellow">Contractor Quotes?</span></h2>
-      <p class="transbid-desc">Whether you're prepping to sell, just bought a fixer-upper, or managing an investment property — getting repair and renovation quotes shouldn't feel like negotiating in the dark. TransBid brings transparent, competitive bidding to home services.</p>
-      <ul class="transbid-bullets">
-        <li>Post your project once — licensed contractors bid openly</li>
-        <li>See real prices side by side, not negotiated guesses</li>
-        <li>No mystery pricing, no pressure, no obligation to accept</li>
-        <li>Built by the same team behind GetOffZillow AI</li>
-        <li>Especially useful before listing — know your repair costs before you price</li>
-      </ul>
-      <a href="https://transbid.live" target="_blank" rel="noopener" class="btn btn-red" style="background:var(--yellow);color:#111;padding:13px 28px;font-size:15px">Visit TransBid.live →</a>
-    </div>
-    <div class="transbid-card">
-      <h3>How TransBid Works</h3>
-      <p>Post your repair or renovation project. Contractors in your area see it and submit bids. You see all of them openly — no "call for a quote," no back-and-forth pressure tactics.</p>
-      <div class="transbid-examples">
-        <div class="transbid-example"><span class="ex-label">New roof · 2,200 sqft</span><span>3 bids · $8,400–$11,200</span></div>
-        <div class="transbid-example"><span class="ex-label">Kitchen renovation</span><span>5 bids · $22,000–$34,500</span></div>
-        <div class="transbid-example"><span class="ex-label">HVAC replacement</span><span>4 bids · $6,800–$9,100</span></div>
-        <div class="transbid-example"><span class="ex-label">Foundation repair</span><span>2 bids · $4,200–$7,800</span></div>
-      </div>
-      <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.3);font-style:italic">Example bids for illustration. Actual prices vary by market and scope.</div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES — HONEST COPY, NO FAKE AI CLAIMS -->
-<section class="features-section" id="tools">
-  <div class="features-inner">
-    <div class="section-eyebrow">Platform Features</div>
-    <h2 class="section-title">What Works <span class="blue">Right Now.</span></h2>
-    <p class="section-sub" style="margin-bottom:48px">No fake accuracy scores. No made-up AI features. Here's what's actually live — and what's coming.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon blue">🏡</div>
-        <div class="feature-content">
-          <div class="feature-title">Free Listings</div>
-          <div class="feature-desc">Agents post unlimited listings at no cost. Photos, description, commission rate, and direct contact info — all public, all free.</div>
-          <div class="feature-tag">✓ Live now</div>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon green">💰</div>
-        <div class="feature-content">
-          <div class="feature-title">Transparent Commissions</div>
-          <div class="feature-desc">Every listing shows the buyer's agent commission publicly. Post-NAR settlement, buyers deserve to know. We show it on every card.</div>
-          <div class="feature-tag">✓ Live now</div>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon teal">📞</div>
-        <div class="feature-content">
-          <div class="feature-title">Direct Agent Contact</div>
-          <div class="feature-desc">Buyers get the agent's real phone and email immediately. No lead tax, no middleman, no platform sitting between them.</div>
-          <div class="feature-tag">✓ Live now</div>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon orange">🏦</div>
-        <div class="feature-content">
-          <div class="feature-title">Mortgage Calculator</div>
-          <div class="feature-desc">Real payment estimates including taxes and insurance. Not just a teaser P&I number.</div>
-          <div class="feature-tag">✓ Live now</div>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon purple">📊</div>
-        <div class="feature-content">
-          <div class="feature-title">Home Value Estimator</div>
-          <div class="feature-desc">Estimate your home's value based on comparable sales. MLS comp integration in development — currently uses market data inputs.</div>
-          <div class="coming-badge">🔧 In Development</div>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon red">🤖</div>
-        <div class="feature-content">
-          <div class="feature-title">AI Agent Matching</div>
-          <div class="feature-desc">Our team manually reviews and matches buyer inquiries to agents by market, expertise, and responsiveness. Algorithmic matching in development.</div>
-          <div class="coming-badge">🔧 In Development</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SIDE BY SIDE COMPARISON -->
-<section class="compare-section">
-  <div class="section-eyebrow">The Honest Side-By-Side</div>
-  <h2 class="section-title">Them vs. <span class="blue">Us.</span></h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#111;border-radius:14px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.12);margin-top:40px">
-    <div style="background:#fff5f5;padding:40px 36px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟡 Zillow + Agent Pronto</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span>Referral fees between <strong>25–40%</strong> of commission at closing</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📉</span><span>Lead quality and accuracy varies — with no refund when leads don't convert</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span>Agent contact info is often gated — the platform controls the introduction</span></div>
-      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🔒</span><span><strong>Commissions hidden;</strong> your data sold to advertisers and lenders</span></div>
-    </div>
-    <div style="background:#f0fff8;padding:40px 36px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟢 GetOffZillow AI</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>3% at closing only.</strong> Zero upfront cost. Zero per-lead charge. You keep 97%.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Transparent comps and pricing.</strong> No black box. No fake accuracy claims.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Direct phone and email in one click.</strong> No lead auction. No middleman.</span></div>
-      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Commissions shown publicly.</strong> Zero data sold. NAR settlement compliant.</span></div>
-    </div>
-  </div>
-</section>
-
 <!-- MAP SECTION -->
 <section class="map-section" id="map">
   <div class="section-eyebrow">Search by Map</div>
@@ -1124,44 +943,6 @@
     </div>
   </div>
 </section>
-
-<!-- MORTGAGE -->
-<section class="mortgage-section" id="mortgage">
-  <div class="mortgage-inner">
-    <div>
-      <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">Mortgage Calculator</div>
-      <h2 class="mortgage-title">See Your <span class="yellow">Real</span><br>Monthly Cost.</h2>
-      <p class="mortgage-desc">Honest payment estimate including principal, interest, taxes, and insurance — not just the teaser P&I number.</p>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)"><span style="color:var(--green);font-size:16px">✓</span> No rate-shopping spam to your inbox</div>
-        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)"><span style="color:var(--green);font-size:16px">✓</span> Includes estimated taxes and insurance</div>
-        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.7)"><span style="color:var(--green);font-size:16px">✓</span> Compare 15, 20, and 30 year terms</div>
-      </div>
-      <p class="mortgage-disclaimer">Calculator results are estimates only. Not financial advice.</p>
-    </div>
-    <div class="calc-card">
-      <div class="calc-field"><label class="calc-label">Home Price</label><input class="calc-input" id="calcPrice" type="number" placeholder="350000" oninput="runCalc()" /></div>
-      <div class="calc-field"><label class="calc-label">Down Payment ($)</label><input class="calc-input" id="calcDown" type="number" placeholder="70000" oninput="runCalc()" /></div>
-      <div class="calc-field"><label class="calc-label">Interest Rate (%)</label><input class="calc-input" id="calcRate" type="number" placeholder="6.875" step="0.125" oninput="runCalc()" /></div>
-      <div class="calc-field"><label class="calc-label">Loan Term</label>
-        <select class="calc-input" id="calcTerm" onchange="runCalc()">
-          <option value="30">30 Year Fixed</option>
-          <option value="20">20 Year Fixed</option>
-          <option value="15">15 Year Fixed</option>
-        </select>
-      </div>
-      <div class="calc-result" id="calcResult">
-        <div class="result-amount" id="calcMonthly">$0</div>
-        <div class="result-label" id="calcBreakdown">Enter values above</div>
-      </div>
-      <button class="btn btn-primary" style="width:100%;margin-top:14px;padding:13px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:900;font-size:15px;cursor:pointer" onclick="window.print()">Save Estimate →</button>
-    </div>
-  </div>
-</section>
-
-<!-- REVIEWS -->
-
-
 
 <!-- TRUST + HOW WE MAKE MONEY -->
 <section style="background:white;padding:72px 24px" id="trust">
@@ -1259,7 +1040,7 @@
     <a href="#buyers" class="outline-btn">Buying Without an Agent</a>
     <a href="signup.html" class="outline-btn">Sign In</a>
   </div>
-  <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:20px;position:relative;z-index:1">No spam. No lead auction. No data sold. Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com#650d0009090a250200110a03031f0c09090a124b060a08" style="color:rgba(255,255,255,0.4)">hello@getoffzillow.com</a></p>
+  <p style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:20px;position:relative;z-index:1">No spam. No lead auction. No data sold. Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com" style="color:rgba(255,255,255,0.4)">hello@getoffzillow.com</a></p>
 </section>
 
 <!-- FOOTER -->
@@ -1280,7 +1061,7 @@
             <div style="display:inline-flex;background:#00FF9D;color:#111;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:0.18em;padding:1px 7px;clip-path:polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%);margin-top:2px;align-self:flex-start">AI</div>
           </div>
         </div>
-        <p class="footer-tagline">Real estate without the extraction.<br>Technology marketing fee: 3% of gross commission at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com#f098959c9c9fb09795849f96968a999c9c9f87de939f9d" style="color:rgba(255,255,255,0.35)">hello@getoffzillow.com</a></p>
+        <p class="footer-tagline">Real estate without the extraction.<br>Technology marketing fee: 3% of gross commission at closing. Zero data sold. Free listings. Always.<br>Pensacola, FL · TransBid LLC · <a href="mailto:hello@getoffzillow.com" style="color:rgba(255,255,255,0.35)">hello@getoffzillow.com</a></p>
         <div class="footer-social">
           <a class="social-btn" href="#" onclick="showToast('𝕏 Coming soon!')">𝕏</a>
           <a class="social-btn" href="#" onclick="showToast('Instagram coming soon!')">📸</a>
@@ -1304,7 +1085,7 @@
           <li><a href="signup.html">List as Agent — Free</a></li>
           <li><a href="#fsbo">FSBO — Sell Without an Agent</a></li>
           <li><a href="#referral">Our Fee Model</a></li>
-          <li><a href="https://transbid.live" target="_blank" rel="noopener">Get Repair Bids — TransBid</a></li>
+          
         </ul>
       </div>
       <div class="footer-col">
@@ -1319,17 +1100,16 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="mailto:hello@getoffzillow.com#761e131a1a19361113021910100c1f1a1a19015815191b">hello@getoffzillow.com</a></li>
-          <li><a href="https://transbid.live" target="_blank" rel="noopener">TransBid.live</a></li>
+          <li><a href="mailto:hello@getoffzillow.com">hello@getoffzillow.com</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Service</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026. · <a href="mailto:hello@getoffzillow.com#660e030a0a09260103120900001c0f0a0a09114805090b" style="color:#555">hello@getoffzillow.com</a></div>
+      <div>© 2026 GetOffZillow AI / TransBid LLC, Pensacola FL. Not affiliated with Zillow Group, Inc. or Agent Pronto LLC.<br>All competitor fee data sourced from public documentation. Rates as of early 2026. · <a href="mailto:hello@getoffzillow.com" style="color:#555">hello@getoffzillow.com</a></div>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-        <a href="https://transbid.live" target="_blank" rel="noopener" style="color:var(--ai-green);font-size:12px;font-weight:700;text-decoration:none">🔨 TransBid.live</a>
+        
         <span>Equal Housing Opportunity 🏠</span>
       </div>
     </div>
