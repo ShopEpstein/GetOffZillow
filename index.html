@@ -603,7 +603,7 @@
   <a href="#listings">🏠 Buy a Home</a>
   <a href="buyers.html" onclick="closeMobileMenu()">🤝 Buying Without an Agent</a>
   <a href="signup.html">💰 Sell / List Free</a>
-  <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — $49 Flat Fee</a>
+  <a href="#fsbo" onclick="closeMobileMenu()">📋 FSBO — Sell Without an Agent</a>
   <a href="#agents" onclick="closeMobileMenu()">🏷️ For Agents — 3% at close</a>
   <a href="signup.html">📊 My Dashboard</a>
   <a href="buyers.html#mortgage" onclick="closeMobileMenu()">🏦 Mortgage Calculator</a>
@@ -647,17 +647,12 @@
       <div class="hero-logo-ai-row">
         <div class="hero-logo-ai-badge">AI</div>
       </div>
-      <div class="hero-logo-tagline">Real Estate Intelligence — No Middlemen</div>
+      <div class="hero-logo-tagline">Real Estate Without The Extraction</div>
     </div>
     <p class="hero-sub">
-      Zillow hides what sellers offer your agent. We show it on every listing — before you tour, before you fall in love. Free for buyers, always. No buyer's agent required.
+      Hidden commissions. Lead auctions. Lender steering. Data sold to the highest bidder. We built GOZ as a sanctuary — show every commission before you tour, agents keep what they earn, zero data sold. Ever.
     </p>
-    <div class="hero-tabs">
-      <div class="hero-tab active" onclick="setHeroTab(this,'buy')">🏠 Buy</div>
-      <div class="hero-tab" onclick="setHeroTab(this,'noagent')">🤝 No Agent? No Problem</div>
-      <div class="hero-tab" onclick="setHeroTab(this,'sell')">💰 Sell / FSBO</div>
-      <div class="hero-tab" onclick="setHeroTab(this,'agent')">📋 Agents</div>
-    </div>
+
     <div class="hero-search">
       <input id="heroSearchInput" type="text" placeholder="Enter city, ZIP, or address..." />
       <button class="hero-search-btn" onclick="doSearch()">Search Homes</button>
@@ -665,7 +660,7 @@
     <div class="hero-trust">
       <div class="trust-item"><span class="trust-check">✓</span> Free for buyers — always</div>
       <div class="trust-item"><span class="trust-check">✓</span> Seller's offer shown before you tour</div>
-      <div class="trust-item"><span class="trust-check">✓</span> No buyer's agent required</div>
+      <div class="trust-item"><span class="trust-check">✓</span> Agents: 3% of commission at close only</div>
       <div class="trust-item"><span class="trust-check">✓</span> Zero data sold</div>
     </div>
   </div>
@@ -894,7 +889,7 @@
     <div>
       <div class="section-eyebrow">For Sellers &amp; FSBO</div>
       <h2 class="fsbo-title">Sell Your Home.<br><span class="blue">Keep More.</span></h2>
-      <p class="fsbo-desc">List your home free as a licensed agent listing, or sell it yourself with a flat-fee FSBO listing. Either way, your commission is shown publicly — exactly what the NAR settlement requires — and buyers contact you directly.</p>
+      <p class="fsbo-desc">List your home free as a licensed agent listing, or sell it yourself with a FSBO listing — pay at closing only. Either way, your commission is shown publicly — exactly what the NAR settlement requires — and buyers contact you directly.</p>
       <ul style="list-style:none;margin-bottom:24px;">
         <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Commission shown on every listing — NAR compliant</li>
         <li style="display:flex;gap:10px;font-size:14px;margin-bottom:10px;line-height:1.5;align-items:flex-start"><span style="color:var(--green);font-weight:900">✓</span> Buyers contact you directly — no gated leads</li>
@@ -907,15 +902,15 @@
     <div class="fsbo-card">
       <h3>FSBO — For Sale By Owner</h3>
       <p>Selling yourself? We support that. Post a FSBO listing for a flat one-time fee. Your contact info goes straight to buyers. No agent required, no recurring charges, no percentage taken until you decide to close through an agent on our platform.</p>
-      <div class="fsbo-price">$49</div>
-      <div class="fsbo-price-label">flat fee · one-time · no recurring charge</div>
+      <div style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px">Technology marketing fee — only at closing</div>
+      <div class="fsbo-price-label">3% of a notional 2.5% commission · never upfront</div>
       <ul style="list-style:none;margin-bottom:20px;">
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Full listing with photos</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Your phone &amp; email shown directly to buyers</li>
         <li style="display:flex;gap:10px;font-size:13px;margin-bottom:8px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> AI listing writer included</li>
         <li style="display:flex;gap:10px;font-size:13px;align-items:flex-start;color:var(--gray)"><span style="color:var(--green);font-weight:900">✓</span> Pay via Venmo or Zelle — contact hello@getoffzillow.com</li>
       </ul>
-      <button onclick="selectAccountType('fsbo');openAccountModal('signup')" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;cursor:pointer;width:100%">Post FSBO Listing — $49 →</button>
+      <button onclick="selectAccountType('fsbo');openAccountModal('signup')" class="btn btn-red" style="display:block;text-align:center;padding:14px;font-size:15px;background:var(--ai-green);color:#000;cursor:pointer;width:100%">List Your Home Free →</button>
     </div>
   </div>
 </section>
@@ -1051,28 +1046,6 @@
   </div>
 </section>
 
-<!-- SIDE BY SIDE COMPARISON -->
-<section class="compare-section">
-  <div class="section-eyebrow">The Honest Side-By-Side</div>
-  <h2 class="section-title">Them vs. <span class="blue">Us.</span></h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#111;border-radius:14px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.12);margin-top:40px">
-    <div style="background:#fff5f5;padding:40px 36px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟡 Zillow + Agent Pronto</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💸</span><span>Referral fees between <strong>25–40%</strong> of commission at closing</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📉</span><span>Lead quality and accuracy varies — with no refund when leads don't convert</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🙈</span><span>Agent contact info is often gated — the platform controls the introduction</span></div>
-      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">🔒</span><span><strong>Commissions hidden;</strong> your data sold to advertisers and lenders</span></div>
-    </div>
-    <div style="background:#f0fff8;padding:40px 36px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);margin-bottom:24px;padding-bottom:16px;border-bottom:3px solid #111">🟢 GetOffZillow AI</div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>3% at closing only.</strong> Zero upfront cost. Zero per-lead charge. You keep 97%.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Transparent comps and pricing.</strong> No black box. No fake accuracy claims.</span></div>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Direct phone and email in one click.</strong> No lead auction. No middleman.</span></div>
-      <div style="display:flex;gap:14px;font-size:15px;line-height:1.5;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">✅</span><span><strong>Commissions shown publicly.</strong> Zero data sold. NAR settlement compliant.</span></div>
-    </div>
-  </div>
-</section>
-
 <!-- MAP SECTION -->
 <section class="map-section" id="map">
   <div class="section-eyebrow">Search by Map</div>
@@ -1160,11 +1133,7 @@
 </section>
 
 <!-- REVIEWS -->
-<section class="social-section">
-  <div class="section-eyebrow">What Agents & Buyers Say</div>
-  <h2 class="section-title">Real People.<br><span class="blue">Real Results.</span></h2>
-  <div class="reviews-grid" id="reviewsGrid"></div>
-</section>
+
 
 
 <!-- TRUST + HOW WE MAKE MONEY -->
@@ -1297,7 +1266,7 @@
         <h4>For Sellers</h4>
         <ul>
           <li><a href="signup.html">List as Agent — Free</a></li>
-          <li><a href="#fsbo">FSBO — $49 Flat Fee</a></li>
+          <li><a href="#fsbo">FSBO — Sell Without an Agent</a></li>
           <li><a href="#referral">Our Fee Model</a></li>
           <li><a href="https://transbid.live" target="_blank" rel="noopener">Get Repair Bids — TransBid</a></li>
         </ul>
@@ -1642,17 +1611,7 @@ function showToast(msg) {
   t._t = setTimeout(()=>t.classList.remove('show'),4500);
 }
 
-function renderReviews() {
-  document.getElementById('reviewsGrid').innerHTML = reviews.map(r => `
-    <div class="review-card">
-      <div class="review-stars">${'\u2605'.repeat(r.stars)}</div>
-      <p class="review-text">"${r.text}"</p>
-      <div class="review-author">
-        <div class="review-avatar">${r.emoji}</div>
-        <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
-      </div>
-    </div>`).join('');
-}
+
 
 
 
@@ -1973,7 +1932,6 @@ async function sendChatMessage(override) {
 function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }
 
 if (document.getElementById("feeTicker")) buildTicker();
-renderReviews();
 loadListings();
 initNavAuth();
 initChat();
@@ -2021,7 +1979,7 @@ initChat();
             <div class="goz-type-card" data-type="fsbo" onclick="selectAccountType('fsbo')">
               <span class="tc-icon">🪧</span>
               <span class="tc-label">Selling My Home</span>
-              <span class="tc-desc">List FSBO for $49, no agent needed</span>
+              <span class="tc-desc">List free. Tech fee = 3% of 2.5% of sale price at closing</span>
             </div>
             <div class="goz-type-card" data-type="agent" onclick="selectAccountType('agent')">
               <span class="tc-icon">📋</span>
@@ -2031,7 +1989,7 @@ initChat();
           </div>
 
           <div id="fsboNote" style="display:none;background:#EBF3FF;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--blue);margin-bottom:16px;line-height:1.5">
-            <strong>FSBO listing: $49 flat fee.</strong> After signup, post your listing from your dashboard. Pay via Venmo or Zelle — contact hello@getoffzillow.com. Your contact info goes directly to buyers — no agent in the middle.
+            <strong>FSBO: List free. Pay 3% of a notional 2.5% commission at closing only.</strong> After signup, post your listing from your dashboard. Pay via Venmo or Zelle — contact hello@getoffzillow.com. Your contact info goes directly to buyers — no agent in the middle.
           </div>
 
           <div class="goz-form-row">
