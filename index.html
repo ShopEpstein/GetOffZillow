@@ -1689,7 +1689,7 @@ async function initNavAuth() {
     }
   });
   // Swap modal-trigger signup CTAs
-  document.querySelectorAll('a.cta-btn-big[onclick*="signup"], a[onclick*="openAccountModal('signup')"]').forEach(el => {
+  document.querySelectorAll('a.cta-btn-big, a[onclick*="openAccountModal"]').forEach(el => {
     el.removeAttribute('onclick');
     el.href = 'dashboard.html';
     el.textContent = 'Go to My Dashboard →';
@@ -1812,7 +1812,7 @@ function openOfferById(id) {
 function openOfferModal(listing) {
   currentOfferListing = listing;
   const prev = document.getElementById('offerListingPreview');
-  prev.innerHTML = '<img src="' + listing.photo + '" onerror="this.src=\'' + DEMO_PHOTOS[0] + '\'" alt="' + listing.address + '" /><div><div class="olp-price">$' + Number(listing.price).toLocaleString() + '</div><div class="olp-addr">' + listing.address + ', ' + listing.city + ', ' + listing.state + '</div><div class="olp-comm">\u2713 ' + (listing.commission_rate || '2.5%') + ' buyer agent commission offered</div>' + (listing.isFsbo ? '<div style="margin-top:3px"><span class="fsbo-badge">\uD83C\uDFE0 OWNER LISTING</span></div>' : '') + '</div>';
+  prev.innerHTML = '<img src="' + listing.photo + '" onerror="this.onerror=null;this.src=\"' + DEMO_PHOTOS[0] + '\"" alt="listing" /><div><div class="olp-price">$' + Number(listing.price).toLocaleString() + '</div><div class="olp-addr">' + listing.address + ', ' + listing.city + ', ' + listing.state + '</div><div class="olp-comm">&#10003; ' + (listing.commission_rate || '2.5%') + ' buyer agent commission offered</div>' + (listing.isFsbo ? '<div style="margin-top:3px"><span class="fsbo-badge">&#127968; OWNER LISTING</span></div>' : '') + '</div>';
   document.getElementById('offerForm').reset();
   document.getElementById('offerPrice').value = listing.price;
   document.getElementById('offerSuccess').style.display = 'none';
